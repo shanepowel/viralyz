@@ -1,0 +1,183 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum PlanTier {
+  FREE
+  LITE
+  CREATOR_GROWTH
+  CREATOR_PRO
+  ENTERPRISE
+}
+
+enum Platform {
+  INSTAGRAM
+  TIKTOK
+  YOUTUBE
+  TWITTER
+  LINKEDIN
+}
+
+enum ToolType {
+  VIRALITY_PREDICTOR
+  SCRIPT_ENHANCER
+  COMPETITOR_TRACKER
+  VIDEO_ANALYSIS
+  PROFILE_ANALYSIS
+  SEO_CAPTION
+  THUMBNAIL_GENERATOR
+  CONTENT_PLANNER
+  AUTO_DM
+  BIO_STORE
+}
+
+enum ContentStatus {
+  DRAFT
+  READY
+  PUBLISHED
+  ARCHIVED
+}
+
+model User {
+  id            String    @id @default(cuid())
+  clerkId       String    @unique
+  email         String    @unique
+  name          String?
+  imageUrl      String?
+  planTier      PlanTier  @default(FREE)
+  creditsUsed   Int       @default(0)
+  creditsLimit  Int       @default(12)
+  stripeId      String?   @unique
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+
+  projects      Project[]
+  usageLogs     UsageLog[]
+
+  @@index([clerkId])
+  @@index([email])
+}
+
+model Project {
+  id          String   @id @default(cuid())
+  userId      String
+  name        String
+  niche       String?
+  platform    Platform @default(INSTAGRAM)
+  handle      String?
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  user         User          @relation(fields: [userId], references: [id], onDelete: Cascade)
+  competitors  Competitor[]
+  contents     Content[]
+  bioStore     BioStore?
+  autoDmRules  AutoDmRule[]
+
+  @@index([userId])
+}
+
+model Competitor {
+  id          String   @id @default(cuid())
+  projectId   String
+  handle      String
+  platform    Platform
+  displayName String?
+  avatarUrl   String?
+  followers   Int?
+  lastSynced  DateTime?
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  project Project @relation(fields: [projectId], references: [id], onDelete: Cascade)
+
+  @@unique([projectId, handle, platform])
+  @@index([projectId])
+}
+
+model Content {
+  id          String        @id @default(cuid())
+  projectId   String
+  toolType    ToolType
+  title       String?
+  input       Json?
+  output      Json?
+  status      ContentStatus @default(DRAFT)
+  viralityScore Float?
+  createdAt   DateTime      @default(now())
+  updatedAt   DateTime      @updatedAt
+
+  project Project @relation(fields: [projectId], references: [id], onDelete: Cascade)
+
+  @@index([projectId])
+  @@index([toolType])
+}
+
+model BioStore {
+  id          String   @id @default(cuid())
+  projectId   String   @unique
+  slug        String   @unique
+  title       String
+  description String?
+  theme       Json?
+  isPublished Boolean  @default(false)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  project Project       @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  links   BioStoreLink[]
+
+  @@index([slug])
+}
+
+model BioStoreLink {
+  id         String   @id @default(cuid())
+  bioStoreId String
+  label      String
+  url        String
+  position   Int      @default(0)
+  clicks     Int      @default(0)
+  isActive   Boolean  @default(true)
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+
+  bioStore BioStore @relation(fields: [bioStoreId], references: [id], onDelete: Cascade)
+
+  @@index([bioStoreId])
+}
+
+model AutoDmRule {
+  id          String   @id @default(cuid())
+  projectId   String
+  name        String
+  trigger     String
+  message     String
+  isActive    Boolean  @default(true)
+  sentCount   Int      @default(0)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  project Project @relation(fields: [projectId], references: [id], onDelete: Cascade)
+
+  @@index([projectId])
+}
+
+model UsageLog {
+  id        String   @id @default(cuid())
+  userId    String
+  toolType  ToolType
+  credits   Int      @default(1)
+  metadata  Json?
+  createdAt DateTime @default(now())
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+  @@index([toolType])
+  @@index([createdAt])
+}
