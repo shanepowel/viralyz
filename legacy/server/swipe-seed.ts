@@ -1,0 +1,273 @@
+import { bulkInsertSwipePosts, countSwipePosts } from "./storage-extras";
+import type { InsertSwipePost } from "@shared/schema";
+
+const SEED: InsertSwipePost[] = [
+  {
+    text: "I quit my $180k job to sell pickles. Here's what nobody tells you about leaving big tech.",
+    platform: "tiktok",
+    niche: "business",
+    format: "talking_head",
+    hookType: "contrarian",
+    viralScore: 94,
+    scoreBreakdown: { hook: 19, structure: 18, emotion: 19, clarity: 19, cta: 19 },
+    whyItWorks: "Specific dollar amount triggers status curiosity. 'Pickles' is absurd enough to feel real. 'Nobody tells you' promises insider info — the highest-converting opener pattern on TikTok.",
+    creatorHandle: "@exittech",
+    tags: ["career", "money", "story"],
+  },
+  {
+    text: "Stop scrolling. If you're under 30 and have $1,000, do this before April.",
+    platform: "tiktok",
+    niche: "finance",
+    format: "talking_head",
+    hookType: "stop_scrolling",
+    viralScore: 91,
+    scoreBreakdown: { hook: 20, structure: 18, emotion: 17, clarity: 18, cta: 18 },
+    whyItWorks: "Pattern interrupt + specific demographic + specific number + urgency deadline. Four high-intent triggers in 17 words.",
+    creatorHandle: "@moneyhabits",
+    tags: ["finance", "urgency"],
+  },
+  {
+    text: "POV: you opened ChatGPT in 2023 and now you're charging $5k for what used to take you 40 hours.",
+    platform: "instagram",
+    niche: "business",
+    format: "reel",
+    hookType: "pov",
+    viralScore: 89,
+    scoreBreakdown: { hook: 18, structure: 17, emotion: 18, clarity: 18, cta: 18 },
+    whyItWorks: "POV format invites the viewer in. Concrete before/after numbers (40h → $5k) make the transformation feel real, not hypey.",
+    creatorHandle: "@aifounder",
+    tags: ["ai", "freelance"],
+  },
+  {
+    text: "3 things I wish I knew before launching my first SaaS (and lost $40k learning):",
+    platform: "linkedin",
+    niche: "business",
+    format: "carousel",
+    hookType: "listicle",
+    viralScore: 87,
+    scoreBreakdown: { hook: 17, structure: 18, emotion: 17, clarity: 18, cta: 17 },
+    whyItWorks: "Specific number + curiosity gap + vulnerable loss admission = trust. The price tag in the hook anchors the value of what follows.",
+    creatorHandle: "@indiehacker",
+    tags: ["saas", "lessons"],
+  },
+  {
+    text: "I read 47 books on productivity so you don't have to. Here's the only system that actually worked:",
+    platform: "youtube",
+    niche: "productivity",
+    format: "long_form",
+    hookType: "promise",
+    viralScore: 90,
+    scoreBreakdown: { hook: 19, structure: 18, emotion: 17, clarity: 19, cta: 17 },
+    whyItWorks: "Effort proxy (47 books) builds authority. 'So you don't have to' frames the value as a gift. 'The only system' creates implicit ranking.",
+    creatorHandle: "@deepwork",
+    tags: ["books", "productivity"],
+  },
+  {
+    text: "Founders: your landing page doesn't need 'innovation.' It needs this one sentence at the top.",
+    platform: "twitter",
+    niche: "business",
+    format: "thread",
+    hookType: "callout",
+    viralScore: 86,
+    scoreBreakdown: { hook: 18, structure: 16, emotion: 17, clarity: 18, cta: 17 },
+    whyItWorks: "Direct address ('Founders:') filters audience instantly. Negation of jargon ('innovation') signals real talk. 'One sentence' promises a tactical, copyable takeaway.",
+    creatorHandle: "@growthhack",
+    tags: ["copywriting", "saas"],
+  },
+  {
+    text: "Day 1 of trying every viral cooking hack until I find one that actually doesn't suck.",
+    platform: "tiktok",
+    niche: "food",
+    format: "series",
+    hookType: "series_kickoff",
+    viralScore: 88,
+    scoreBreakdown: { hook: 18, structure: 17, emotion: 18, clarity: 18, cta: 17 },
+    whyItWorks: "Series framing primes return visits. 'Doesn't suck' is honest, anti-influencer language that drives trust with skeptical Gen Z.",
+    creatorHandle: "@kitchencheck",
+    tags: ["cooking", "series"],
+  },
+  {
+    text: "If you're a creator under 10k followers, please stop doing this. It's killing your reach.",
+    platform: "instagram",
+    niche: "creator",
+    format: "reel",
+    hookType: "warning",
+    viralScore: 92,
+    scoreBreakdown: { hook: 20, structure: 18, emotion: 18, clarity: 18, cta: 18 },
+    whyItWorks: "Niche-specific filter + emotional warning + reach-related stakes (the #1 fear of small creators). Triple-bound emotional payload.",
+    creatorHandle: "@reelschool",
+    tags: ["growth", "algorithm"],
+  },
+  {
+    text: "I rebuilt my entire morning routine in 7 days and my anxiety dropped by 80%. Here's the exact schedule:",
+    platform: "youtube",
+    niche: "wellness",
+    format: "long_form",
+    hookType: "transformation",
+    viralScore: 89,
+    scoreBreakdown: { hook: 19, structure: 18, emotion: 18, clarity: 17, cta: 17 },
+    whyItWorks: "Specific timeline + specific result + 'exact schedule' promise. Numbers stack (7, 80%) to make outcome feel measurable.",
+    creatorHandle: "@calmer",
+    tags: ["routines", "mental_health"],
+  },
+  {
+    text: "Nobody talks about this, but the difference between $10k and $100k months is one boring habit.",
+    platform: "twitter",
+    niche: "business",
+    format: "thread",
+    hookType: "secret",
+    viralScore: 88,
+    scoreBreakdown: { hook: 19, structure: 17, emotion: 17, clarity: 18, cta: 17 },
+    whyItWorks: "Status gap framing (10x income jump) + curiosity gap + word 'boring' subverts expectation of a sexy answer.",
+    creatorHandle: "@incomenotes",
+    tags: ["money", "habits"],
+  },
+  {
+    text: "Watch me redesign this hideous SaaS dashboard in 60 seconds (with 1 single Tailwind trick):",
+    platform: "tiktok",
+    niche: "design",
+    format: "screen_capture",
+    hookType: "demo",
+    viralScore: 85,
+    scoreBreakdown: { hook: 17, structure: 17, emotion: 16, clarity: 18, cta: 17 },
+    whyItWorks: "Visual transformation promise + time constraint + specific tool mention = saveable, shareable utility content.",
+    creatorHandle: "@uifix",
+    tags: ["design", "tailwind"],
+  },
+  {
+    text: "Reading is dead. Here's what high-performers actually do with information in 2026.",
+    platform: "linkedin",
+    niche: "productivity",
+    format: "long_post",
+    hookType: "contrarian",
+    viralScore: 87,
+    scoreBreakdown: { hook: 19, structure: 17, emotion: 16, clarity: 17, cta: 18 },
+    whyItWorks: "Sacred-cow attack ('reading is dead') triggers comments. 'High-performers' is aspirational targeting. Year stamp adds urgency.",
+    creatorHandle: "@thinkfast",
+    tags: ["learning", "leadership"],
+  },
+  {
+    text: "Tell me you're a junior PM without telling me you're a junior PM. I'll start: 'I made a roadmap.'",
+    platform: "twitter",
+    niche: "business",
+    format: "tweet",
+    hookType: "meme_format",
+    viralScore: 84,
+    scoreBreakdown: { hook: 18, structure: 16, emotion: 17, clarity: 17, cta: 16 },
+    whyItWorks: "Proven viral meme template + niche identity humor invites quote-tweets and replies. Low-effort, high-engagement format.",
+    creatorHandle: "@pmlife",
+    tags: ["pm", "humor"],
+  },
+  {
+    text: "The 30-second rule that doubled my close rate (and most salespeople refuse to do it):",
+    platform: "linkedin",
+    niche: "sales",
+    format: "long_post",
+    hookType: "rule",
+    viralScore: 86,
+    scoreBreakdown: { hook: 18, structure: 18, emotion: 16, clarity: 18, cta: 16 },
+    whyItWorks: "Time-bounded rule + outcome metric (doubled close rate) + 'most refuse' creates exclusivity and ego hook.",
+    creatorHandle: "@closersclub",
+    tags: ["sales", "tactics"],
+  },
+  {
+    text: "I asked 100 millionaires their #1 daily habit. 87 said the same thing. It's not what you think.",
+    platform: "youtube",
+    niche: "finance",
+    format: "long_form",
+    hookType: "survey",
+    viralScore: 90,
+    scoreBreakdown: { hook: 19, structure: 18, emotion: 17, clarity: 18, cta: 18 },
+    whyItWorks: "Big sample size (100) + lopsided result (87/100) + curiosity flip ('not what you think') = perfect retention triple-stack.",
+    creatorHandle: "@wealthstack",
+    tags: ["habits", "wealth"],
+  },
+  {
+    text: "POV: you sent the 'just bumping this' email and they actually replied for once.",
+    platform: "instagram",
+    niche: "creator",
+    format: "reel",
+    hookType: "pov",
+    viralScore: 83,
+    scoreBreakdown: { hook: 17, structure: 16, emotion: 18, clarity: 17, cta: 15 },
+    whyItWorks: "Universal pain + small triumph = pure dopamine relate-bait. Best for sound-driven Reels with reaction face.",
+    creatorHandle: "@worklife",
+    tags: ["work", "humor"],
+  },
+  {
+    text: "Stop posting 'value content' on LinkedIn. Here's what actually grows your account in 2026:",
+    platform: "linkedin",
+    niche: "creator",
+    format: "long_post",
+    hookType: "contrarian",
+    viralScore: 88,
+    scoreBreakdown: { hook: 19, structure: 18, emotion: 17, clarity: 18, cta: 16 },
+    whyItWorks: "Attacks the platform's own buzzword ('value content') — instant comment bait. Year stamp adds freshness signal.",
+    creatorHandle: "@linkedinlab",
+    tags: ["growth", "linkedin"],
+  },
+  {
+    text: "I trained an AI on every viral video from 2025. It told me to do exactly 3 things differently.",
+    platform: "tiktok",
+    niche: "creator",
+    format: "talking_head",
+    hookType: "ai_authority",
+    viralScore: 91,
+    scoreBreakdown: { hook: 20, structure: 18, emotion: 17, clarity: 18, cta: 18 },
+    whyItWorks: "AI-as-oracle framing is currently the highest-CTR opener. Specific count (3) sets up a satisfying delivery.",
+    creatorHandle: "@growthbot",
+    tags: ["ai", "growth"],
+  },
+  {
+    text: "If your hook starts with 'In this video,' I have bad news for you.",
+    platform: "youtube",
+    niche: "creator",
+    format: "shorts",
+    hookType: "callout",
+    viralScore: 85,
+    scoreBreakdown: { hook: 18, structure: 16, emotion: 17, clarity: 18, cta: 16 },
+    whyItWorks: "Specific anti-pattern callout makes the viewer self-check immediately. 'Bad news for you' adds emotional stakes in 4 words.",
+    creatorHandle: "@yt_growth",
+    tags: ["youtube", "hooks"],
+  },
+  {
+    text: "What I eat in a day as a 32-year-old founder running on 5 hours of sleep (don't copy this).",
+    platform: "instagram",
+    niche: "wellness",
+    format: "reel",
+    hookType: "day_in_life",
+    viralScore: 86,
+    scoreBreakdown: { hook: 18, structure: 17, emotion: 18, clarity: 17, cta: 16 },
+    whyItWorks: "Age + identity stack (founder) + transparent vulnerability ('don't copy') subverts the typical 'aspirational' WIEAD format and wins trust.",
+    creatorHandle: "@foundereats",
+    tags: ["routine", "wellness"],
+  },
+];
+
+export async function seedSwipePostsIfEmpty() {
+  try {
+    const count = await countSwipePosts();
+    if (count > 0) return;
+    const inserted = await bulkInsertSwipePosts(SEED);
+    console.log(`[swipe-file] Seeded ${inserted} starter posts.`);
+  } catch (e) {
+    console.warn("[swipe-file] Seed skipped:", (e as Error).message);
+  }
+}
+
+// Weekly ingestion stub: in production this would scrape/import fresh top
+// posts from each platform. For now it's a heartbeat the cron can hook into.
+export async function runWeeklySwipeIngestion() {
+  console.log("[swipe-file] Weekly ingestion tick (stub) — no new posts ingested.");
+}
+
+let weeklyTimer: NodeJS.Timeout | null = null;
+export function startWeeklySwipeIngestion() {
+  if (weeklyTimer) return;
+  const WEEK_MS = 7 * 24 * 60 * 60 * 1000;
+  weeklyTimer = setInterval(() => {
+    runWeeklySwipeIngestion().catch((e) =>
+      console.warn("[swipe-file] weekly ingestion error:", e)
+    );
+  }, WEEK_MS);
+}

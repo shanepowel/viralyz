@@ -26,6 +26,8 @@ coverage
 out/
 build
 dist
+legacy/dist
+legacy/node_modules
 
 
 # Debug
