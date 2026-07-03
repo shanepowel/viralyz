@@ -1,33 +1,38 @@
 import type { Metadata } from "next";
-import { Geist, Geist_Mono } from "next/font/google";
-import { APP_DESCRIPTION, APP_NAME } from "@repo/config";
+import { Inter, Outfit } from "next/font/google";
+import { APP_DESCRIPTION, APP_NAME, APP_TAGLINE } from "@repo/config";
 import "./globals.css";
 
-const geistSans = Geist({
+const inter = Inter({
   subsets: ["latin"],
-  variable: "--font-geist-sans",
+  variable: "--font-inter",
 });
 
-const geistMono = Geist_Mono({
+const outfit = Outfit({
   subsets: ["latin"],
-  variable: "--font-geist-mono",
+  variable: "--font-outfit",
 });
 
 export const metadata: Metadata = {
   title: {
-    default: `${APP_NAME} — AI toolkit for short-form creators`,
+    default: `${APP_NAME} — ${APP_TAGLINE}`,
     template: `%s | ${APP_NAME}`,
   },
   description: APP_DESCRIPTION,
   keywords: [
     "viral content",
-    "short-form video",
-    "Instagram",
+    "viral score",
     "TikTok",
     "YouTube Shorts",
-    "AI content tools",
+    "Instagram Reels",
+    "content analysis",
     "creator tools",
   ],
+  openGraph: {
+    title: `${APP_NAME} — ${APP_TAGLINE}`,
+    description: APP_DESCRIPTION,
+    type: "website",
+  },
 };
 
 export default function RootLayout({
@@ -37,7 +42,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" className="dark">
-      <body className={`${geistSans.variable} ${geistMono.variable} antialiased`}>
+      <body className={`${inter.variable} ${outfit.variable} antialiased aurora-bg min-h-screen`}>
         {children}
       </body>
     </html>

@@ -236,7 +236,8 @@ export const PLANS: PlanDefinition[] = [
 ];
 
 export const APP_NAME = "Viralyz";
-export const APP_TAGLINE =
-  "All-in-one AI toolkit for short-form creators";
+export const APP_TAGLINE = "Grammarly for Viral Content";
 export const APP_DESCRIPTION =
-  "Grow faster with AI-powered Auto DMs, competitor tracking, viral scripts, thumbnails, video analysis, SEO captions, content planning, and BioStore.";
+  "Know your content will go viral before you post it. AI-powered content analysis with Viral Scores.";
+
+export * from "./marketing";

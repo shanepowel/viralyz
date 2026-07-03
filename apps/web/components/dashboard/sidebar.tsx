@@ -8,7 +8,6 @@ import {
   LayoutDashboard,
   MessageCircle,
   Settings,
-  Sparkles,
   Store,
   TrendingUp,
   UserCircle,
