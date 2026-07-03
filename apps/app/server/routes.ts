@@ -4,12 +4,11 @@ import { storage } from "./storage";
 import { insertContentSchema, insertCommentSchema, insertTribePostSchema, type InsertSwipePost } from "@shared/schema";
 import { z } from "zod";
 import { fromError } from "zod-validation-error";
-import { setupAuth, registerAuthRoutes, isAuthenticated } from "./auth";
+import { setupAuth, registerAuthRoutes, isAuthenticated } from "./replit_integrations/auth";
 import { registerObjectStorageRoutes } from "./replit_integrations/object_storage";
 import { registerAutopilotRoutes } from "./autopilot-routes";
 import { registerIntelligenceRoutes } from "./intelligence-routes";
 import { analyzeContent, saveAnalysis, getRecentAnalyses, getAllAnalyses, getAnalysis, getUserStats, decrementUserCredits } from "./analysis";
-import { getAnalyticsDashboard } from "./analytics";
 import { generateHooks, rewriteCaption, generateTrends, generateIdeas, repurposeForPlatforms } from "./ai-tools";
 import { lintCaption } from "./lint";
 import { extractBrandVoice, generateThumbnailIdeas, renderThumbnail } from "./ai-vision";
@@ -59,9 +58,12 @@ import { randomBytes } from "crypto";
 import bcrypt from "bcrypt";
 
 const isAdmin = async (req: Request, res: Response, next: NextFunction) => {
-  const userId = (req.user as any)?.claims?.sub || (req.user as any)?.id || (req as any).session?.userId;
-  if (!userId) {
+  if (!req.isAuthenticated() || !req.user) {
     return res.status(401).json({ error: "Unauthorized" });
+  }
+  const userId = (req.user as any).claims?.sub || (req.user as any).id;
+  if (!userId) {
+    return res.status(401).json({ error: "Invalid user session" });
   }
   const user = await storage.getUser(userId);
   if (!user || user.role !== 'admin') {
@@ -308,39 +310,21 @@ export async function registerRoutes(
   app.post("/api/analyze", isAuthenticated, async (req, res) => {
     try {
       const userId = (req.user as any).claims?.sub || (req.user as any).id;
-      const { title, description, platform, contentType, fileUrl, thumbnailUrl } = req.body;
+      const { title, description, platform, contentType } = req.body;
 
-      if (!title && !description && !fileUrl) {
-        return res.status(400).json({ error: "Please provide a title, description, or file to analyze" });
+      if (!title && !description) {
+        return res.status(400).json({ error: "Please provide a title or description to analyze" });
       }
 
-      const enrichedDescription = [
-        description || "",
-        fileUrl ? `Attached media: ${fileUrl}` : "",
-      ]
-        .filter(Boolean)
-        .join("\n\n");
+      // Analyze content using OpenAI
+      const result = await analyzeContent(title, description, platform, contentType);
+      
+      // Save to database
+      const analysis = await saveAnalysis(userId, title, description, platform, contentType, result);
 
-      const result = await analyzeContent(
-        title,
-        enrichedDescription,
-        platform,
-        contentType,
-      );
-
-      const analysis = await saveAnalysis(
-        userId,
-        title,
-        enrichedDescription,
-        platform,
-        contentType,
-        result,
-        { fileUrl, thumbnailUrl },
-      );
-
-      res.json({
+      res.json({ 
         id: analysis.id,
-        ...result,
+        ...result 
       });
     } catch (error) {
       console.error("Analysis error:", error);
@@ -389,18 +373,6 @@ export async function registerRoutes(
       res.json(stats);
     } catch (error) {
       res.status(500).json({ error: "Failed to fetch user stats" });
-    }
-  });
-
-  app.get("/api/analytics", isAuthenticated, async (req, res) => {
-    try {
-      const userId = (req.user as any).claims?.sub || (req.user as any).id;
-      const platform = (req.query.platform as string) || "tiktok";
-      const dashboard = await getAnalyticsDashboard(userId, platform);
-      res.json(dashboard);
-    } catch (error) {
-      console.error("Analytics error:", error);
-      res.status(500).json({ error: "Failed to fetch analytics" });
     }
   });
 

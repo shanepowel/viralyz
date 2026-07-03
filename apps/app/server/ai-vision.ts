@@ -1,5 +1,10 @@
-import { openai, OPENAI_CHAT_MODEL } from "./lib/openai";
+import OpenAI from "openai";
 import { generateImageBuffer } from "./replit_integrations/image";
+
+const openai = new OpenAI({
+  apiKey: process.env.AI_INTEGRATIONS_OPENAI_API_KEY,
+  baseURL: process.env.AI_INTEGRATIONS_OPENAI_BASE_URL,
+});
 
 const clamp = (n: unknown, min: number, max: number, fb: number): number => {
   const v = typeof n === "number" && Number.isFinite(n) ? n : Number(n);
@@ -27,7 +32,7 @@ function parseJson<T>(content: string): T {
 
 async function callJson<T>(systemPrompt: string, userPrompt: string, maxTokens = 1500): Promise<T> {
   const r = await openai.chat.completions.create({
-    model: OPENAI_CHAT_MODEL,
+    model: "gpt-4o",
     messages: [
       { role: "system", content: systemPrompt + " Always respond with valid JSON only." },
       { role: "user", content: userPrompt },
