@@ -1,5 +1,5 @@
-import { APP_NAME } from "@repo/config";
 import Link from "next/link";
+import { APP_NAME } from "@repo/config";
 import { TrendingUp } from "lucide-react";
 
 export function SiteFooter() {
@@ -13,10 +13,10 @@ export function SiteFooter() {
           <span className="font-display font-semibold">{APP_NAME}</span>
         </Link>
         <div className="flex gap-8 text-sm text-muted-foreground">
-          <Link href={`${process.env.NEXT_PUBLIC_APP_URL || "http://localhost:5000"}/privacy`} className="hover:text-foreground">
+          <Link href="/privacy" className="hover:text-foreground">
             Privacy
           </Link>
-          <Link href={`${process.env.NEXT_PUBLIC_APP_URL || "http://localhost:5000"}/terms`} className="hover:text-foreground">
+          <Link href="/terms" className="hover:text-foreground">
             Terms
           </Link>
         </div>

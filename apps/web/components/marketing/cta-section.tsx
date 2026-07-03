@@ -1,9 +1,6 @@
-import Link from "next/link";
+import { AppCtaLink } from "@/components/marketing/app-cta-link";
 import { MARKETING_HERO } from "@repo/config";
-import { Button } from "@/components/ui/button";
 import { ArrowRight } from "lucide-react";
-
-const appUrl = process.env.NEXT_PUBLIC_APP_URL || "http://localhost:5000";
 
 export function CtaSection() {
   return (
@@ -13,12 +10,10 @@ export function CtaSection() {
         <p className="mx-auto mt-4 max-w-xl text-lg text-muted-foreground">
           Join 10,000+ creators who know their content will perform before they post.
         </p>
-        <Link href={`${appUrl}/analyze`} className="mt-8 inline-block">
-          <Button size="lg">
-            {MARKETING_HERO.primaryCta}
-            <ArrowRight className="h-5 w-5" />
-          </Button>
-        </Link>
+        <AppCtaLink href="/analyze" size="lg" className="mt-8">
+          {MARKETING_HERO.primaryCta}
+          <ArrowRight className="h-5 w-5" />
+        </AppCtaLink>
       </div>
     </section>
   );

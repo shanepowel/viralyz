@@ -1,9 +1,6 @@
-import Link from "next/link";
 import { MARKETING_PLANS } from "@repo/config";
-import { Button } from "@/components/ui/button";
+import { AppCtaLink } from "@/components/marketing/app-cta-link";
 import { Check } from "lucide-react";
-
-const appUrl = process.env.NEXT_PUBLIC_APP_URL || "http://localhost:5000";
 
 export function PricingSection() {
   return (
@@ -19,9 +16,7 @@ export function PricingSection() {
             <div
               key={plan.id}
               className={`relative flex flex-col rounded-2xl p-8 ${
-                plan.popular
-                  ? "card-base card-pop border-primary/40"
-                  : "card-base"
+                plan.popular ? "card-base card-pop border-primary/40" : "card-base"
               }`}
             >
               {plan.popular && (
@@ -45,14 +40,13 @@ export function PricingSection() {
                   </li>
                 ))}
               </ul>
-              <Link href={plan.id === "team" ? `${appUrl}/contact` : `${appUrl}/api/login`}>
-                <Button
-                  variant={plan.popular ? "default" : "outline"}
-                  className="w-full"
-                >
-                  {plan.cta}
-                </Button>
-              </Link>
+              <AppCtaLink
+                href={plan.id === "team" ? "/contact" : "/sign-in"}
+                variant={plan.popular ? "default" : "outline"}
+                className="w-full"
+              >
+                {plan.cta}
+              </AppCtaLink>
             </div>
           ))}
         </div>

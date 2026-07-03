@@ -1,9 +1,12 @@
+import { Slot } from "@radix-ui/react-slot";
 import { cn } from "@/lib/utils";
 
 const variants = {
-  default: "bg-primary text-primary-foreground hover:bg-primary/90 shadow-[0_0_40px_-8px_hsl(var(--primary)/0.6)]",
+  default:
+    "bg-primary text-primary-foreground hover:bg-primary/90 shadow-[0_0_40px_-8px_hsl(var(--primary)/0.6)]",
   secondary: "bg-secondary text-secondary-foreground hover:bg-secondary/80",
-  outline: "border border-white/10 bg-white/[0.03] hover:bg-white/[0.06] hover:border-white/20",
+  outline:
+    "border border-white/10 bg-white/[0.03] hover:bg-white/[0.06] hover:border-white/20",
   ghost: "hover:bg-white/[0.06] text-foreground",
 } as const;
 
@@ -13,23 +16,38 @@ const sizes = {
   lg: "h-12 px-8 text-base",
 } as const;
 
+export function buttonStyles({
+  variant = "default",
+  size = "default",
+  className,
+}: {
+  variant?: keyof typeof variants;
+  size?: keyof typeof sizes;
+  className?: string;
+} = {}) {
+  return cn(
+    "inline-flex items-center justify-center gap-2 rounded-full font-semibold transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background disabled:pointer-events-none disabled:opacity-50",
+    variants[variant],
+    sizes[size],
+    className,
+  );
+}
+
 export function Button({
   className,
   variant = "default",
   size = "default",
+  asChild = false,
   ...props
-}: React.ButtonHTMLAttributes<HTMLButtonElement> & {
+}: React.ComponentProps<"button"> & {
   variant?: keyof typeof variants;
   size?: keyof typeof sizes;
+  asChild?: boolean;
 }) {
+  const Comp = asChild ? Slot : "button";
   return (
-    <button
-      className={cn(
-        "inline-flex items-center justify-center gap-2 rounded-full font-semibold transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background disabled:pointer-events-none disabled:opacity-50",
-        variants[variant],
-        sizes[size],
-        className,
-      )}
+    <Comp
+      className={buttonStyles({ variant, size, className })}
       {...props}
     />
   );

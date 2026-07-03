@@ -1,10 +1,8 @@
 import Link from "next/link";
 import { MARKETING_EYEBROW, MARKETING_HERO, MARKETING_PLATFORMS } from "@repo/config";
-import { Button } from "@/components/ui/button";
+import { AppCtaLink } from "@/components/marketing/app-cta-link";
 import { ArrowRight, Play, Sparkles } from "lucide-react";
 import { ViralScorePreview } from "./viral-score-preview";
-
-const appUrl = process.env.NEXT_PUBLIC_APP_URL || "http://localhost:5000";
 
 export function HeroSection() {
   return (
@@ -27,18 +25,14 @@ export function HeroSection() {
           </p>
 
           <div className="mt-8 flex flex-col gap-4 sm:flex-row">
-            <Link href={`${appUrl}/analyze`}>
-              <Button size="lg" className="w-full sm:w-auto">
-                {MARKETING_HERO.primaryCta}
-                <ArrowRight className="h-5 w-5" />
-              </Button>
-            </Link>
-            <Link href={`${appUrl}/analyze`}>
-              <Button variant="outline" size="lg" className="w-full sm:w-auto">
-                <Play className="h-4 w-4" />
-                {MARKETING_HERO.secondaryCta}
-              </Button>
-            </Link>
+            <AppCtaLink href="/analyze" size="lg" className="w-full sm:w-auto">
+              {MARKETING_HERO.primaryCta}
+              <ArrowRight className="h-5 w-5" />
+            </AppCtaLink>
+            <AppCtaLink href="/analyze" variant="outline" size="lg" className="w-full sm:w-auto">
+              <Play className="h-4 w-4" />
+              {MARKETING_HERO.secondaryCta}
+            </AppCtaLink>
           </div>
 
           <p className="mt-4 text-sm text-muted-foreground">{MARKETING_HERO.trustLine}</p>

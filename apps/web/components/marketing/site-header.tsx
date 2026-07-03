@@ -1,9 +1,7 @@
 import Link from "next/link";
 import { APP_NAME } from "@repo/config";
-import { Button } from "@/components/ui/button";
+import { AppCtaLink } from "@/components/marketing/app-cta-link";
 import { TrendingUp } from "lucide-react";
-
-const appUrl = process.env.NEXT_PUBLIC_APP_URL || "http://localhost:5000";
 
 export function SiteHeader() {
   return (
@@ -32,14 +30,12 @@ export function SiteHeader() {
         </nav>
 
         <div className="flex items-center gap-3">
-          <Link href={`${appUrl}/api/login`}>
-            <Button variant="ghost" size="sm">
-              Sign in
-            </Button>
-          </Link>
-          <Link href={`${appUrl}/analyze`}>
-            <Button size="sm">Analyze free</Button>
-          </Link>
+          <AppCtaLink href="/sign-in" variant="ghost" size="sm">
+            Sign in
+          </AppCtaLink>
+          <AppCtaLink href="/analyze" size="sm">
+            Analyze free
+          </AppCtaLink>
         </div>
       </div>
     </header>
