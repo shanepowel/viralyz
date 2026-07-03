@@ -40,9 +40,9 @@ const PROVIDER_META: Record<ProviderId, { label: string; envHint: string; iconBg
   instagram: {
     label: "Instagram",
     envHint: "INSTAGRAM_CLIENT_ID / INSTAGRAM_CLIENT_SECRET",
-    iconBg: "bg-gradient-to-br from-fuchsia-500/30 to-amber-500/30",
-    iconClass: "text-fuchsia-200",
-    buttonClass: "bg-gradient-to-r from-fuchsia-500 to-amber-500 hover:opacity-90 text-white border-0",
+    iconBg: "bg-gradient-to-br from-amber-500/30 to-amber-500/30",
+    iconClass: "text-amber-200",
+    buttonClass: "bg-gradient-to-r from-amber-500 to-amber-500 hover:opacity-90 text-white border-0",
   },
 };
 
@@ -230,7 +230,7 @@ export default function SettingsPage() {
           className="bg-slate-900/50 border border-slate-800/50 rounded-2xl p-6"
         >
           <div className="flex items-center gap-2 mb-6">
-            <User className="h-5 w-5 text-indigo-400" />
+            <User className="h-5 w-5 text-orange-400" />
             <h2 className="font-semibold">Profile</h2>
           </div>
           <div className="flex items-center gap-6">
@@ -241,7 +241,7 @@ export default function SettingsPage() {
                 className="h-20 w-20 rounded-full"
               />
             ) : (
-              <div className="h-20 w-20 rounded-full bg-indigo-500/20 flex items-center justify-center text-indigo-400 text-2xl font-semibold">
+              <div className="h-20 w-20 rounded-full bg-orange-500/20 flex items-center justify-center text-orange-400 text-2xl font-semibold">
                 {user?.firstName?.[0] || 'U'}
               </div>
             )}
@@ -249,7 +249,7 @@ export default function SettingsPage() {
               <div className="text-xl font-medium">{user?.firstName} {user?.lastName}</div>
               <div className="text-slate-400">{user?.email}</div>
               <div className="mt-2">
-                <span className="px-3 py-1 rounded-full bg-indigo-500/20 text-indigo-400 text-sm">
+                <span className="px-3 py-1 rounded-full bg-orange-500/20 text-orange-400 text-sm">
                   {(user as any)?.plan === 'pro' ? 'Pro Plan' : 'Free Plan'}
                 </span>
               </div>
@@ -274,11 +274,11 @@ export default function SettingsPage() {
           <div className="bg-slate-800/30 rounded-xl p-4 mb-6">
             <div className="flex items-center justify-between mb-3">
               <span className="text-slate-400">Credits Remaining</span>
-              <span className="text-2xl font-bold text-indigo-400">{(user as any)?.creditsRemaining ?? 10}</span>
+              <span className="text-2xl font-bold text-orange-400">{(user as any)?.creditsRemaining ?? 10}</span>
             </div>
             <div className="w-full h-2 bg-slate-700 rounded-full overflow-hidden">
               <div 
-                className="h-full bg-gradient-to-r from-indigo-500 to-purple-500"
+                className="h-full bg-gradient-to-r from-orange-500 to-amber-500"
                 style={{ width: `${Math.min(100, ((user as any)?.creditsRemaining ?? 10) * 10)}%` }}
               />
             </div>
@@ -291,7 +291,7 @@ export default function SettingsPage() {
                 key={plan.name}
                 className={`rounded-xl p-4 border ${
                   plan.current 
-                    ? 'border-indigo-500 bg-indigo-500/10' 
+                    ? 'border-orange-500 bg-orange-500/10' 
                     : plan.popular 
                     ? 'border-emerald-500/50 bg-slate-800/30' 
                     : 'border-slate-700 bg-slate-800/30'
@@ -344,7 +344,7 @@ export default function SettingsPage() {
                   </div>
                 ) : (
                   <Button 
-                    className="w-full bg-indigo-600 hover:bg-indigo-700"
+                    className="w-full bg-orange-600 hover:bg-orange-700"
                     onClick={() => {
                       setShowPayPal(plan.name);
                       toast({
@@ -369,13 +369,13 @@ export default function SettingsPage() {
           className="bg-slate-900/50 border border-slate-800/50 rounded-2xl p-6"
         >
           <div className="flex items-center gap-2 mb-4">
-            <Link className="h-5 w-5 text-purple-400" />
+            <Link className="h-5 w-5 text-amber-400" />
             <h2 className="font-semibold">Connected accounts</h2>
           </div>
 
-          <div className="bg-indigo-500/10 border border-indigo-500/30 rounded-xl p-4 mb-6">
+          <div className="bg-orange-500/10 border border-orange-500/30 rounded-xl p-4 mb-6">
             <div className="flex items-start gap-3">
-              <Info className="h-5 w-5 text-indigo-400 mt-0.5 flex-shrink-0" />
+              <Info className="h-5 w-5 text-orange-400 mt-0.5 flex-shrink-0" />
               <div>
                 <p className="text-sm text-slate-300 mb-1">
                   <strong>Autopilot needs publishing access.</strong> Connect LinkedIn so the agent can post on your behalf — only after you approve each draft.
@@ -420,7 +420,7 @@ export default function SettingsPage() {
           className="bg-slate-900/50 border border-slate-800/50 rounded-2xl p-6"
         >
           <div className="flex items-center gap-2 mb-4">
-            <Clock className="h-5 w-5 text-indigo-400" />
+            <Clock className="h-5 w-5 text-orange-400" />
             <h2 className="font-semibold">Timezone</h2>
           </div>
           <p className="text-sm text-slate-400 mb-3">
@@ -458,7 +458,7 @@ export default function SettingsPage() {
           <div className="space-y-4">
             <div className="flex items-center justify-between py-2" data-testid="row-pref-email-digests">
               <div className="flex items-start gap-3">
-                <Mail className="h-5 w-5 text-indigo-400 mt-0.5" />
+                <Mail className="h-5 w-5 text-orange-400 mt-0.5" />
                 <div>
                   <div className="font-medium">Weekly email digest</div>
                   <div className="text-sm text-slate-400">A Monday recap with your top scores, scheduled posts, and prediction accuracy.</div>
@@ -473,7 +473,7 @@ export default function SettingsPage() {
                   onChange={(e) => updatePrefs.mutate(e.target.checked)}
                   data-testid="toggle-email-digests"
                 />
-                <div className="w-11 h-6 bg-slate-700 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-indigo-600"></div>
+                <div className="w-11 h-6 bg-slate-700 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-orange-600"></div>
               </label>
             </div>
             <div className="pt-2">
@@ -500,7 +500,7 @@ export default function SettingsPage() {
                 </div>
                 <label className="relative inline-flex items-center cursor-pointer">
                   <input type="checkbox" defaultChecked className="sr-only peer" />
-                  <div className="w-11 h-6 bg-slate-700 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-indigo-600"></div>
+                  <div className="w-11 h-6 bg-slate-700 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-orange-600"></div>
                 </label>
               </div>
             ))}

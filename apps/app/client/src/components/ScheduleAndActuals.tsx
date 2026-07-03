@@ -156,18 +156,18 @@ export function ScheduleAndActuals({
   const accuracy = Math.max(0, 100 - Math.abs(delta));
 
   const inputCls =
-    "w-full bg-slate-800/50 border border-slate-700 rounded-lg py-2 px-3 text-white text-sm placeholder:text-slate-500 focus:outline-none focus:ring-2 focus:ring-indigo-500/50";
+    "w-full bg-slate-800/50 border border-slate-700 rounded-lg py-2 px-3 text-white text-sm placeholder:text-slate-500 focus:outline-none focus:ring-2 focus:ring-orange-500/50";
 
   return (
     <div className="bg-slate-900/50 border border-slate-800/50 rounded-2xl p-6 space-y-6" data-testid="schedule-and-actuals">
       <div>
         <div className="flex items-center justify-between mb-4">
           <div className="flex items-center gap-2">
-            <CalendarIcon className="h-5 w-5 text-indigo-400" />
+            <CalendarIcon className="h-5 w-5 text-orange-400" />
             <h3 className="font-semibold">Schedule this post</h3>
           </div>
           {savedScheduledFor && (
-            <span className="text-xs px-2 py-1 rounded-full bg-indigo-500/20 text-indigo-300" data-testid="badge-status">
+            <span className="text-xs px-2 py-1 rounded-full bg-orange-500/20 text-orange-300" data-testid="badge-status">
               {status === "posted" ? "Posted" : "Scheduled"}
             </span>
           )}
@@ -184,7 +184,7 @@ export function ScheduleAndActuals({
           <Button
             onClick={handleSchedule}
             disabled={scheduleMutation.isPending}
-            className="bg-indigo-600 hover:bg-indigo-700"
+            className="bg-orange-600 hover:bg-orange-700"
             data-testid="button-schedule"
           >
             {scheduleMutation.isPending ? (
@@ -292,13 +292,13 @@ export function ScheduleAndActuals({
           {showVsReality && (
             <div className="mt-5 bg-slate-800/40 border border-slate-700/50 rounded-xl p-4" data-testid="card-prediction-vs-reality">
               <div className="flex items-center gap-2 mb-3">
-                <BarChart3 className="h-4 w-4 text-indigo-400" />
+                <BarChart3 className="h-4 w-4 text-orange-400" />
                 <h4 className="text-sm font-semibold">Prediction vs. Reality</h4>
               </div>
               <div className="grid grid-cols-3 gap-3 text-center">
                 <div>
                   <div className="text-xs text-slate-400 mb-1">Predicted</div>
-                  <div className="text-2xl font-bold text-indigo-400" data-testid="text-predicted-score">
+                  <div className="text-2xl font-bold text-orange-400" data-testid="text-predicted-score">
                     {predictedScore}
                   </div>
                 </div>

@@ -11,7 +11,7 @@ const MY_COURSES = [
     title: "Cinematography Masterclass 101",
     instructor: "Mike Astro",
     progress: 35,
-    gradient: "from-blue-600 via-purple-600 to-pink-500",
+    gradient: "from-blue-600 via-amber-600 to-pink-500",
     lastLesson: "The Three Point Lighting Setup"
   },
   {
@@ -40,7 +40,7 @@ const RECOMMENDED_COURSES = [
     instructor: "Story Tellers",
     rating: 4.8,
     students: "8.5k",
-    gradient: "from-indigo-500 via-purple-500 to-pink-500",
+    gradient: "from-orange-500 via-amber-500 to-pink-500",
     category: "Writing"
   },
     {

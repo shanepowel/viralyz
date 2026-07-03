@@ -158,15 +158,15 @@ export default function SharePage() {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-gray-900 via-purple-900/20 to-gray-900 flex items-center justify-center">
-        <Loader2 className="h-8 w-8 animate-spin text-purple-500" />
+      <div className="min-h-screen bg-gradient-to-br from-gray-900 via-amber-900/20 to-gray-900 flex items-center justify-center">
+        <Loader2 className="h-8 w-8 animate-spin text-amber-500" />
       </div>
     );
   }
 
   if (error) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-gray-900 via-purple-900/20 to-gray-900 flex items-center justify-center p-4">
+      <div className="min-h-screen bg-gradient-to-br from-gray-900 via-amber-900/20 to-gray-900 flex items-center justify-center p-4">
         <Card className="max-w-md w-full">
           <CardContent className="pt-6 text-center">
             <XCircle className="h-12 w-12 text-red-500 mx-auto mb-4" />
@@ -186,14 +186,14 @@ export default function SharePage() {
 
   if (requiresPassword) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-gray-900 via-purple-900/20 to-gray-900 flex items-center justify-center p-4">
+      <div className="min-h-screen bg-gradient-to-br from-gray-900 via-amber-900/20 to-gray-900 flex items-center justify-center p-4">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
         >
           <Card className="max-w-md w-full">
             <CardHeader className="text-center">
-              <Lock className="h-12 w-12 text-purple-500 mx-auto mb-2" />
+              <Lock className="h-12 w-12 text-amber-500 mx-auto mb-2" />
               <CardTitle>Password Protected</CardTitle>
               <p className="text-sm text-muted-foreground">
                 This analysis requires a password to view
@@ -213,7 +213,7 @@ export default function SharePage() {
                 />
                 <Button 
                   type="submit" 
-                  className="w-full bg-gradient-to-r from-purple-600 to-pink-600"
+                  className="w-full bg-gradient-to-r from-amber-600 to-pink-600"
                   disabled={verifying || !password.trim()}
                   data-testid="button-verify-password"
                 >
@@ -245,7 +245,7 @@ export default function SharePage() {
   ];
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-gray-900 via-purple-900/20 to-gray-900">
+    <div className="min-h-screen bg-gradient-to-br from-gray-900 via-amber-900/20 to-gray-900">
       <div className="max-w-4xl mx-auto px-4 py-8">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
@@ -255,7 +255,7 @@ export default function SharePage() {
           <div className="flex items-center justify-between">
             <div>
               <div className="flex items-center gap-2 text-sm text-muted-foreground mb-1">
-                <Zap className="h-4 w-4 text-purple-500" />
+                <Zap className="h-4 w-4 text-amber-500" />
                 Viralyz Analysis
               </div>
               <h1 className="text-2xl font-bold">{analysis.title || "Content Analysis"}</h1>
@@ -268,7 +268,7 @@ export default function SharePage() {
             </Link>
           </div>
 
-          <Card className="border-purple-500/20">
+          <Card className="border-amber-500/20">
             <CardContent className="pt-6">
               <div className="flex flex-col md:flex-row items-center gap-8">
                 <ScoreRing score={analysis.viralScore} size={140} />
@@ -322,7 +322,7 @@ export default function SharePage() {
               Want to analyze your own content?
             </p>
             <Link href="/">
-              <Button className="bg-gradient-to-r from-purple-600 to-pink-600">
+              <Button className="bg-gradient-to-r from-amber-600 to-pink-600">
                 <Zap className="h-4 w-4 mr-2" />
                 Get Started with Viralyz
               </Button>

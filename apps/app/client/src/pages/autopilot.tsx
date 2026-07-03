@@ -134,10 +134,10 @@ function AccuracySection() {
             {data.topLearnings.map((s, i) => (
               <li
                 key={i}
-                className="text-sm text-slate-200 rounded-md border border-indigo-500/20 bg-indigo-500/5 p-3"
+                className="text-sm text-slate-200 rounded-md border border-orange-500/20 bg-orange-500/5 p-3"
                 data-testid={`text-learning-${i}`}
               >
-                <span className="text-indigo-300 font-medium mr-2">#{i + 1}</span>
+                <span className="text-orange-300 font-medium mr-2">#{i + 1}</span>
                 {s}
               </li>
             ))}
@@ -187,12 +187,12 @@ const PLATFORM_CHAR_LIMIT: Record<PlatformId, number> = {
 
 const STATUS_LABEL: Record<string, { label: string; tone: string }> = {
   pending: { label: "Queued", tone: "bg-slate-500/15 text-slate-300 border-slate-500/30" },
-  running: { label: "Drafting", tone: "bg-indigo-500/15 text-indigo-300 border-indigo-500/30" },
-  awaiting_idea: { label: "Pick angle", tone: "bg-fuchsia-500/15 text-fuchsia-300 border-fuchsia-500/30" },
+  running: { label: "Drafting", tone: "bg-orange-500/15 text-orange-300 border-orange-500/30" },
+  awaiting_idea: { label: "Pick angle", tone: "bg-amber-500/15 text-amber-300 border-amber-500/30" },
   awaiting_approval: { label: "Needs you", tone: "bg-amber-500/15 text-amber-300 border-amber-500/30" },
   approved: { label: "Approved", tone: "bg-emerald-500/15 text-emerald-300 border-emerald-500/30" },
   rejected: { label: "Rejected", tone: "bg-rose-500/15 text-rose-300 border-rose-500/30" },
-  posting: { label: "Posting", tone: "bg-indigo-500/15 text-indigo-300 border-indigo-500/30" },
+  posting: { label: "Posting", tone: "bg-orange-500/15 text-orange-300 border-orange-500/30" },
   posted: { label: "Posted", tone: "bg-cyan-500/15 text-cyan-300 border-cyan-500/30" },
   measuring: { label: "Measuring", tone: "bg-cyan-500/15 text-cyan-300 border-cyan-500/30" },
   complete: { label: "Complete", tone: "bg-emerald-500/15 text-emerald-300 border-emerald-500/30" },
@@ -275,7 +275,7 @@ function NewMissionDialog({ onCreated }: { onCreated: (missionId?: string) => vo
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
-        <Button data-testid="button-new-mission" className="gap-2 bg-gradient-to-r from-indigo-500 to-fuchsia-500 hover:from-indigo-400 hover:to-fuchsia-400 text-white border-0 shadow-[0_0_24px_-8px_rgba(168,85,247,0.6)]">
+        <Button data-testid="button-new-mission" className="gap-2 bg-gradient-to-r from-orange-500 to-amber-500 hover:from-orange-400 hover:to-amber-400 text-white border-0 shadow-[0_0_24px_-8px_rgba(245, 158, 11,0.6)]">
           <Plus className="h-4 w-4" /> New mission
         </Button>
       </DialogTrigger>
@@ -410,7 +410,7 @@ function NewMissionDialog({ onCreated }: { onCreated: (missionId?: string) => vo
           <Button variant="ghost" onClick={() => setOpen(false)}>Cancel</Button>
           <Button data-testid="button-create-mission" onClick={() => create.mutate()}
             disabled={!form.name || !form.brief || create.isPending}
-            className="gap-2 bg-gradient-to-r from-indigo-500 to-fuchsia-500 text-white">
+            className="gap-2 bg-gradient-to-r from-orange-500 to-amber-500 text-white">
             {create.isPending && <Loader2 className="h-4 w-4 animate-spin" />} Launch mission
           </Button>
         </DialogFooter>
@@ -445,15 +445,15 @@ function IdeaSelectionCard({ run, mission, onChange }: { run: MissionRun; missio
   });
   return (
     <motion.div initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }}
-      className="card-pop p-5 space-y-4 border-fuchsia-500/20"
+      className="card-pop p-5 space-y-4 border-amber-500/20"
       data-testid={`idea-gate-${run.id}`}
     >
       <div className="flex items-start gap-3">
-        <div className="h-10 w-10 rounded-lg bg-gradient-to-br from-indigo-500/30 to-fuchsia-500/30 flex items-center justify-center shrink-0">
-          <Sparkles className="h-5 w-5 text-fuchsia-300" />
+        <div className="h-10 w-10 rounded-lg bg-gradient-to-br from-orange-500/30 to-amber-500/30 flex items-center justify-center shrink-0">
+          <Sparkles className="h-5 w-5 text-amber-300" />
         </div>
         <div>
-          <div className="text-eyebrow text-fuchsia-300 mb-1">Pick the angle · Gate 1 of 2</div>
+          <div className="text-eyebrow text-amber-300 mb-1">Pick the angle · Gate 1 of 2</div>
           <div className="text-h3">Which idea should I draft?</div>
           <p className="text-sm text-slate-400">Mission: {mission?.name || "LinkedIn"}. Pick one and I'll write it up for your approval.</p>
         </div>
@@ -470,7 +470,7 @@ function IdeaSelectionCard({ run, mission, onChange }: { run: MissionRun; missio
               onClick={() => { setPicking(i); select.mutate(i); }}
               disabled={select.isPending}
               data-testid={`button-pick-idea-${run.id}-${i}`}
-              className="text-left rounded-lg border border-white/10 hover:border-indigo-500/40 hover:bg-indigo-500/[0.04] p-3 transition-all disabled:opacity-50"
+              className="text-left rounded-lg border border-white/10 hover:border-orange-500/40 hover:bg-orange-500/[0.04] p-3 transition-all disabled:opacity-50"
             >
               <div className="flex items-start gap-3">
                 <div className="text-[10px] uppercase tracking-wider text-slate-500 pt-1 w-8">#{i + 1}</div>
@@ -479,7 +479,7 @@ function IdeaSelectionCard({ run, mission, onChange }: { run: MissionRun; missio
                   {idea.hook && <div className="text-xs text-slate-400 line-clamp-2">"{idea.hook}"</div>}
                 </div>
                 {picking === i && select.isPending ? (
-                  <Loader2 className="h-4 w-4 animate-spin text-indigo-300" />
+                  <Loader2 className="h-4 w-4 animate-spin text-orange-300" />
                 ) : (
                   <ChevronRight className="h-4 w-4 text-slate-500" />
                 )}
@@ -548,10 +548,10 @@ function WhyThisDraft({ runId }: { runId: string }) {
   const selectedIdeaIndex = data?.run?.selectedIdeaIndex ?? null;
 
   return (
-    <div className="rounded-lg border border-indigo-500/20 bg-indigo-500/[0.03]" data-testid={`why-this-draft-${runId}`}>
+    <div className="rounded-lg border border-orange-500/20 bg-orange-500/[0.03]" data-testid={`why-this-draft-${runId}`}>
       <button
         onClick={() => setOpen(!open)}
-        className="w-full flex items-center gap-2 px-3 py-2 text-left text-xs font-medium text-indigo-200 hover:bg-indigo-500/[0.06] rounded-lg transition-colors"
+        className="w-full flex items-center gap-2 px-3 py-2 text-left text-xs font-medium text-orange-200 hover:bg-orange-500/[0.06] rounded-lg transition-colors"
         data-testid={`button-why-${runId}`}
       >
         <Sparkles className="h-3.5 w-3.5" />
@@ -621,7 +621,7 @@ function WhyThisDraft({ runId }: { runId: string }) {
                       <div className="flex items-start gap-2">
                         <span className={cn(
                           "text-[10px] font-semibold w-7 text-right pt-0.5",
-                          (h.score ?? 0) >= 80 ? "text-emerald-300" : (h.score ?? 0) >= 60 ? "text-indigo-300" : "text-slate-400"
+                          (h.score ?? 0) >= 80 ? "text-emerald-300" : (h.score ?? 0) >= 60 ? "text-orange-300" : "text-slate-400"
                         )}>{h.score ?? "—"}</span>
                         <div className="flex-1 min-w-0">
                           <div className="text-slate-100">"{h.text}"</div>
@@ -647,7 +647,7 @@ function WhyThisDraft({ runId }: { runId: string }) {
             <div data-testid={`why-score-${runId}`}>
               <div className="text-eyebrow text-slate-500 mb-1.5 inline-flex items-center gap-1.5">
                 <Sparkles className="h-3 w-3" /> Analysis breakdown
-                {viralScore != null && <span className="text-indigo-300">· predicted {viralScore}</span>}
+                {viralScore != null && <span className="text-orange-300">· predicted {viralScore}</span>}
               </div>
               <div className="grid grid-cols-2 sm:grid-cols-5 gap-1.5">
                 {Object.entries(breakdown).map(([k, v]) => (
@@ -658,7 +658,7 @@ function WhyThisDraft({ runId }: { runId: string }) {
                   >
                     <div className={cn(
                       "text-sm font-semibold",
-                      (v ?? 0) >= 80 ? "text-emerald-300" : (v ?? 0) >= 60 ? "text-indigo-300" : "text-slate-300"
+                      (v ?? 0) >= 80 ? "text-emerald-300" : (v ?? 0) >= 60 ? "text-orange-300" : "text-slate-300"
                     )}>{v}</div>
                     <div className="text-[10px] text-slate-500 capitalize">{k}</div>
                   </div>
@@ -744,7 +744,7 @@ function ApprovalCard({ run, mission, onChange }: { run: MissionRun; mission?: M
           {run.finalHashtags && run.finalHashtags.length > 0 && (
             <div className="flex flex-wrap gap-1.5 mt-2">
               {run.finalHashtags.map((t, i) => (
-                <span key={i} className="text-[11px] px-1.5 py-0.5 rounded bg-indigo-500/10 text-indigo-300">{t.startsWith("#") ? t : `#${t}`}</span>
+                <span key={i} className="text-[11px] px-1.5 py-0.5 rounded bg-orange-500/10 text-orange-300">{t.startsWith("#") ? t : `#${t}`}</span>
               ))}
             </div>
           )}
@@ -766,8 +766,8 @@ function ApprovalCard({ run, mission, onChange }: { run: MissionRun; mission?: M
       <WhyThisDraft runId={run.id} />
 
       {showRegen && (
-        <div className="rounded-lg border border-fuchsia-500/20 bg-fuchsia-500/[0.04] p-3 space-y-2" data-testid={`regen-panel-${run.id}`}>
-          <div className="text-xs text-fuchsia-200">Tell the agent what to do differently:</div>
+        <div className="rounded-lg border border-amber-500/20 bg-amber-500/[0.04] p-3 space-y-2" data-testid={`regen-panel-${run.id}`}>
+          <div className="text-xs text-amber-200">Tell the agent what to do differently:</div>
           <Textarea value={feedback} onChange={(e) => setFeedback(e.target.value)} placeholder="e.g. punchier hook, less salesy, focus on the data point"
             className="bg-white/5 border-white/10 min-h-[80px] text-sm" data-testid={`textarea-feedback-${run.id}`} />
           <div className="flex items-center gap-2">
@@ -776,7 +776,7 @@ function ApprovalCard({ run, mission, onChange }: { run: MissionRun; mission?: M
             <Button size="sm" variant="ghost" className="text-rose-300" onClick={() => reject.mutate()} disabled={reject.isPending} data-testid={`button-reject-only-${run.id}`}>
               Reject only
             </Button>
-            <Button size="sm" className="bg-gradient-to-r from-indigo-500 to-fuchsia-500 text-white border-0"
+            <Button size="sm" className="bg-gradient-to-r from-orange-500 to-amber-500 text-white border-0"
               onClick={() => regenerate.mutate()} disabled={regenerate.isPending} data-testid={`button-regenerate-${run.id}`}>
               {regenerate.isPending ? <Loader2 className="h-4 w-4 animate-spin mr-1.5" /> : <Sparkles className="h-4 w-4 mr-1.5" />}
               Regenerate with feedback
@@ -839,11 +839,11 @@ function MissionCard({ mission, onChange }: { mission: Mission; onChange: () => 
     onSuccess: () => { toast({ title: "Mission archived" }); onChange(); },
   });
   return (
-    <div className="card-base p-4 hover:border-indigo-500/30 transition-all cursor-pointer" data-testid={`mission-card-${mission.id}`} onClick={() => navigate(`/autopilot/${mission.id}`)}>
+    <div className="card-base p-4 hover:border-orange-500/30 transition-all cursor-pointer" data-testid={`mission-card-${mission.id}`} onClick={() => navigate(`/autopilot/${mission.id}`)}>
       <div className="flex items-start justify-between gap-3">
         <div className="flex-1 min-w-0">
           <div className="flex items-center gap-2 mb-1">
-            <Linkedin className="h-3.5 w-3.5 text-indigo-300" />
+            <Linkedin className="h-3.5 w-3.5 text-orange-300" />
             <span className="text-eyebrow text-slate-500">{mission.cadence} · {mission.postsPerWeek}/week</span>
             {mission.status === "paused" && <Badge className="bg-slate-700 text-slate-200 text-[9px]">Paused</Badge>}
           </div>
@@ -859,7 +859,7 @@ function MissionCard({ mission, onChange }: { mission: Mission; onChange: () => 
       <div className="flex items-center gap-3 text-xs text-slate-500 mt-3 pt-3 border-t border-white/[0.04]">
         {mission.useBrandVoice && <span className="inline-flex items-center gap-1"><Sparkles className="h-3 w-3" /> Brand voice</span>}
         {mission.nextRunAt && <span>Next: {new Date(mission.nextRunAt).toLocaleDateString()}</span>}
-        <span className="ml-auto inline-flex items-center text-indigo-300">Open <ChevronRight className="h-3 w-3" /></span>
+        <span className="ml-auto inline-flex items-center text-orange-300">Open <ChevronRight className="h-3 w-3" /></span>
       </div>
     </div>
   );
@@ -888,14 +888,14 @@ function PlatformStatusCard({ platform, status }: { platform: PlatformId; status
   }
   if (!status.connected) {
     return (
-      <div className="card-base p-4 border-indigo-500/20" data-testid={`${platform}-connect`}>
+      <div className="card-base p-4 border-orange-500/20" data-testid={`${platform}-connect`}>
         <div className="flex items-center gap-3">
-          <Linkedin className="h-5 w-5 text-indigo-300" />
+          <Linkedin className="h-5 w-5 text-orange-300" />
           <div className="flex-1">
             <div className="font-medium">Connect your {label}</div>
             <p className="text-sm text-slate-400">Authorize Viralyz to publish on your behalf.</p>
           </div>
-          <Button data-testid={`button-connect-${platform}`} asChild className="bg-indigo-600 hover:bg-indigo-500 text-white border-0">
+          <Button data-testid={`button-connect-${platform}`} asChild className="bg-orange-600 hover:bg-orange-500 text-white border-0">
             <a href={`/api/${platform}/connect`}>Connect</a>
           </Button>
         </div>
@@ -944,8 +944,8 @@ function StepCard({ step }: { step: StepRow }) {
           <div className="text-[11px] text-slate-500 flex items-center gap-2 flex-wrap">
             <span>{step.status}</span>
             {dur !== null && <span>· {dur}ms</span>}
-            {!!step.tokenCost && <span className="text-indigo-300">· ~{step.tokenCost} tok</span>}
-            {!!step.creditCost && <span className="text-fuchsia-300">· {step.creditCost} cr</span>}
+            {!!step.tokenCost && <span className="text-orange-300">· ~{step.tokenCost} tok</span>}
+            {!!step.creditCost && <span className="text-amber-300">· {step.creditCost} cr</span>}
             {step.error && <span className="text-rose-300">· {step.error.slice(0, 60)}</span>}
           </div>
         </div>
@@ -954,8 +954,8 @@ function StepCard({ step }: { step: StepRow }) {
       {open && (
         <div className="mt-2 space-y-2 text-[11px]">
           {step.reasoning && (
-            <div className="rounded bg-indigo-500/[0.06] border border-indigo-500/20 p-2 text-slate-200" data-testid={`step-reasoning-${step.id}`}>
-              <span className="text-indigo-300">reasoning:</span> {step.reasoning}
+            <div className="rounded bg-orange-500/[0.06] border border-orange-500/20 p-2 text-slate-200" data-testid={`step-reasoning-${step.id}`}>
+              <span className="text-orange-300">reasoning:</span> {step.reasoning}
             </div>
           )}
           <div className="grid sm:grid-cols-2 gap-2">
@@ -1002,10 +1002,10 @@ function RunInspector({ runId, mission, onChange }: { runId: string; mission?: M
       <div className="flex items-center gap-2 flex-wrap">
         <StatusPill status={run.status} />
         <div className="text-xs text-slate-400">Run · {new Date(run.createdAt).toLocaleString()}</div>
-        {run.predictedScore != null && <div className="text-xs text-indigo-300">predicted {run.predictedScore}</div>}
+        {run.predictedScore != null && <div className="text-xs text-orange-300">predicted {run.predictedScore}</div>}
         {run.actualImpressions != null && <div className="text-xs text-cyan-300">{run.actualImpressions.toLocaleString()} views</div>}
-        {tokens > 0 && <div className="text-xs text-indigo-300" data-testid={`run-tokens-${runId}`}>~{tokens.toLocaleString()} tok</div>}
-        {credits > 0 && <div className="text-xs text-fuchsia-300" data-testid={`run-credits-${runId}`}>{credits} cr</div>}
+        {tokens > 0 && <div className="text-xs text-orange-300" data-testid={`run-tokens-${runId}`}>~{tokens.toLocaleString()} tok</div>}
+        {credits > 0 && <div className="text-xs text-amber-300" data-testid={`run-credits-${runId}`}>{credits} cr</div>}
         <div className="flex-1" />
         {!terminal && run.status !== "paused" && (
           <Button size="sm" variant="ghost" className="h-7 px-2 text-slate-300" onClick={() => ctl.mutate("pause")} disabled={ctl.isPending} data-testid={`button-pause-run-${runId}`}>
@@ -1066,7 +1066,7 @@ function MissionInspectorPage({ missionId, onBack }: { missionId: string; onBack
           eyebrow="Mission"
           title={
             <span className="inline-flex items-center gap-2">
-              <Bot className="h-6 w-6 text-indigo-300" /> {mission?.name || "Mission"}
+              <Bot className="h-6 w-6 text-orange-300" /> {mission?.name || "Mission"}
             </span>
           }
           description={mission?.brief}
@@ -1075,8 +1075,8 @@ function MissionInspectorPage({ missionId, onBack }: { missionId: string; onBack
           <div className="grid grid-cols-4 gap-3 text-center" data-testid="mission-cost-summary">
             <div className="card-base p-3"><div className="text-h3 text-slate-100">{cost.runs}</div><div className="text-meta">Runs</div></div>
             <div className="card-base p-3"><div className="text-h3 text-slate-100">{cost.steps}</div><div className="text-meta">Steps</div></div>
-            <div className="card-base p-3"><div className="text-h3 text-indigo-300">~{cost.tokens.toLocaleString()}</div><div className="text-meta">Tokens</div></div>
-            <div className="card-base p-3"><div className="text-h3 text-fuchsia-300">{cost.credits}</div><div className="text-meta">Credits</div></div>
+            <div className="card-base p-3"><div className="text-h3 text-orange-300">~{cost.tokens.toLocaleString()}</div><div className="text-meta">Tokens</div></div>
+            <div className="card-base p-3"><div className="text-h3 text-amber-300">{cost.credits}</div><div className="text-meta">Credits</div></div>
           </div>
         )}
         <div className="space-y-3">
@@ -1145,7 +1145,7 @@ function AutopilotHomePage() {
           eyebrow="Autopilot · v0"
           title={
             <span className="inline-flex items-center gap-3">
-              <Bot className="h-7 w-7 text-indigo-300" />
+              <Bot className="h-7 w-7 text-orange-300" />
               Your autonomous growth agent
             </span>
           }
@@ -1187,7 +1187,7 @@ function AutopilotHomePage() {
           <section className="space-y-3" data-testid="section-awaiting-idea">
             <div className="flex items-center justify-between">
               <h2 className="text-h2">Pick the angle</h2>
-              <span className="text-meta text-fuchsia-300">{awaitingIdea.length} ready to choose</span>
+              <span className="text-meta text-amber-300">{awaitingIdea.length} ready to choose</span>
             </div>
             <div className="grid lg:grid-cols-2 gap-4">
               {awaitingIdea.map((r) => (

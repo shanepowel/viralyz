@@ -15,12 +15,12 @@ interface StatTileProps {
 }
 
 const toneMap: Record<string, string> = {
-  indigo: "bg-indigo-500/15 text-indigo-300",
+  indigo: "bg-orange-500/15 text-orange-300",
   emerald: "bg-emerald-500/15 text-emerald-300",
   amber: "bg-amber-500/15 text-amber-300",
   rose: "bg-rose-500/15 text-rose-300",
   cyan: "bg-cyan-500/15 text-cyan-300",
-  purple: "bg-purple-500/15 text-purple-300",
+  purple: "bg-amber-500/15 text-amber-300",
 };
 
 export function StatTile({ icon: Icon, label, value, hint, tone = "indigo", delay = 0, className, testId }: StatTileProps) {

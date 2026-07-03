@@ -467,14 +467,14 @@ function StatCard({ icon: Icon, label, value, color, loading }: StatCardProps) {
     blue: 'from-blue-500/20 to-blue-500/5 border-blue-500/30',
     pink: 'from-pink-500/20 to-pink-500/5 border-pink-500/30',
     green: 'from-green-500/20 to-green-500/5 border-green-500/30',
-    purple: 'from-purple-500/20 to-purple-500/5 border-purple-500/30',
+    purple: 'from-amber-500/20 to-amber-500/5 border-amber-500/30',
   };
 
   const iconColors = {
     blue: 'text-blue-400',
     pink: 'text-pink-400',
     green: 'text-green-400',
-    purple: 'text-purple-400',
+    purple: 'text-amber-400',
   };
 
   return (

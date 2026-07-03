@@ -55,7 +55,7 @@
 }
 
 :root {
-  /* Viralyz dark theme — premium near-black with violet primary */
+  /* Viralyz dark theme — premium near-black with orange (brand) primary */
   --background: 240 12% 3%;
   --foreground: 0 0% 98%;
 
@@ -65,7 +65,7 @@
   --popover: 240 10% 6%;
   --popover-foreground: 0 0% 98%;
 
-  --primary: 262 83% 62%;
+  --primary: 12 79% 57%;
   --primary-foreground: 0 0% 100%;
 
   --secondary: 240 5% 12%;
@@ -82,18 +82,18 @@
 
   --border: 240 5% 14%;
   --input: 240 5% 14%;
-  --ring: 262 83% 62%;
+  --ring: 12 79% 57%;
 
   --radius: 0.875rem;
 
   --sidebar: 240 12% 3%;
   --sidebar-foreground: 0 0% 98%;
-  --sidebar-primary: 262 83% 62%;
+  --sidebar-primary: 12 79% 57%;
   --sidebar-primary-foreground: 0 0% 100%;
   --sidebar-accent: 240 5% 12%;
   --sidebar-accent-foreground: 0 0% 98%;
   --sidebar-border: 240 5% 14%;
-  --sidebar-ring: 262 83% 62%;
+  --sidebar-ring: 12 79% 57%;
 }
 
 @layer base {
@@ -154,7 +154,7 @@
 
   /* Text gradients */
   .text-gradient {
-    @apply bg-clip-text text-transparent bg-gradient-to-r from-violet-300 via-fuchsia-300 to-cyan-300;
+    @apply bg-clip-text text-transparent bg-gradient-to-r from-orange-300 via-amber-300 to-cyan-300;
   }
   .text-gradient-primary {
     @apply bg-clip-text text-transparent bg-gradient-to-br from-white via-white to-white/60;
@@ -165,16 +165,16 @@
     @apply transition-all duration-300;
   }
   .hover-glow:hover {
-    box-shadow: 0 0 0 1px rgba(167, 139, 250, 0.15), 0 20px 60px -20px rgba(124, 58, 237, 0.35);
+    box-shadow: 0 0 0 1px rgba(232, 93, 59, 0.18), 0 20px 60px -20px rgba(232, 93, 59, 0.35);
   }
 
   /* Aurora mesh background (fixed layer behind app) */
   .aurora-bg {
     background-color: hsl(240 12% 3%);
     background-image:
-      radial-gradient(ellipse 80% 60% at 12% 0%, rgba(124, 58, 237, 0.22), transparent 60%),
+      radial-gradient(ellipse 80% 60% at 12% 0%, rgba(232, 93, 59, 0.22), transparent 60%),
       radial-gradient(ellipse 70% 60% at 90% 10%, rgba(34, 211, 238, 0.10), transparent 60%),
-      radial-gradient(ellipse 70% 60% at 50% 110%, rgba(236, 72, 153, 0.10), transparent 60%);
+      radial-gradient(ellipse 70% 60% at 50% 110%, rgba(245, 158, 11, 0.10), transparent 60%);
   }
 
   /* Faint dot grid for headers / hero panels */
@@ -252,7 +252,7 @@
   --motion-base: 220ms;
   --motion-slow: 380ms;
   --shadow-soft: 0 1px 0 0 rgba(255,255,255,0.04) inset, 0 18px 48px -24px rgba(0,0,0,0.7);
-  --shadow-pop: 0 1px 0 0 rgba(255,255,255,0.06) inset, 0 30px 80px -28px rgba(124,58,237,0.45);
+  --shadow-pop: 0 1px 0 0 rgba(255,255,255,0.06) inset, 0 30px 80px -28px rgba(232,93,59,0.45);
 }
 
 /* Typographic scale — strict 4/8 grid */

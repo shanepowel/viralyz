@@ -115,7 +115,7 @@ function ConfidenceBadge({ pct }: { pct: number }) {
 }
 
 function SignalTypeIcon({ type }: { type: string }) {
-  if (type === "hiring") return <Briefcase className="h-4 w-4 text-indigo-600" />;
+  if (type === "hiring") return <Briefcase className="h-4 w-4 text-orange-600" />;
   if (type === "funding") return <DollarSign className="h-4 w-4 text-emerald-600" />;
   if (type === "podcast") return <Mic className="h-4 w-4 text-rose-600" />;
   return <Link2 className="h-4 w-4 text-stone-500" />;
@@ -201,7 +201,7 @@ function WhyNowSection({
         <div className="mt-5 grid md:grid-cols-3 gap-3">
           <div className="rounded-xl border border-stone-200 bg-white p-4" data-testid="panel-hiring-signals">
             <div className="flex items-center gap-2 text-sm font-semibold text-stone-900 mb-2">
-              <Briefcase className="h-4 w-4 text-indigo-600" /> Hiring <span className="text-stone-400 font-normal">({hiring.length})</span>
+              <Briefcase className="h-4 w-4 text-orange-600" /> Hiring <span className="text-stone-400 font-normal">({hiring.length})</span>
             </div>
             {hiring.length === 0 ? (
               <div className="text-xs text-stone-500 italic">None detected.</div>
@@ -212,7 +212,7 @@ function WhyNowSection({
                     <a href={h.url || "#"} target="_blank" rel="noreferrer" className="text-stone-800 hover:text-[#E85D3B] font-medium">
                       {h.title}
                     </a>
-                    {h.isGtmRole && <span className="ml-1 inline-flex items-center rounded bg-indigo-50 border border-indigo-200 px-1 py-0 text-[10px] text-indigo-700">GTM</span>}
+                    {h.isGtmRole && <span className="ml-1 inline-flex items-center rounded bg-orange-50 border border-orange-200 px-1 py-0 text-[10px] text-orange-700">GTM</span>}
                     <div className="text-stone-500">{[h.department, h.location].filter(Boolean).join(" · ")}</div>
                   </li>
                 ))}

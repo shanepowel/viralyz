@@ -207,7 +207,7 @@ export default function CaptionStudio() {
                 {result.variants.map((v, i) => (
                   <div key={i} className="card-base card-hover p-5" data-testid={`variant-${i}`}>
                     <div className="flex items-center justify-between mb-2">
-                      <span className="capitalize text-eyebrow text-indigo-300">{v.tone}</span>
+                      <span className="capitalize text-eyebrow text-orange-300">{v.tone}</span>
                       <Button
                         size="sm"
                         variant="ghost"

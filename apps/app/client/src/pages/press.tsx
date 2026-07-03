@@ -69,12 +69,12 @@ export default function Press() {
           </div>
         </div>
 
-        <div className="bg-indigo-500/10 border border-indigo-500/30 rounded-2xl p-6">
+        <div className="bg-orange-500/10 border border-orange-500/30 rounded-2xl p-6">
           <h2 className="text-xl font-semibold mb-4">Media Contact</h2>
           <p className="text-slate-400 mb-4">For press inquiries, interviews, or additional information:</p>
           <div className="flex items-center gap-3">
-            <Mail className="h-5 w-5 text-indigo-400" />
-            <a href="mailto:press@viralyz.app" className="text-indigo-400 hover:text-indigo-300 transition-colors">
+            <Mail className="h-5 w-5 text-orange-400" />
+            <a href="mailto:press@viralyz.app" className="text-orange-400 hover:text-orange-300 transition-colors">
               press@viralyz.app
             </a>
           </div>

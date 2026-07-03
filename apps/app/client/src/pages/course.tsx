@@ -102,9 +102,9 @@ export default function Course() {
         {/* Main Content Area */}
         <div className="lg:col-span-2 space-y-6">
           {/* Video Player */}
-          <div className="relative aspect-video rounded-2xl overflow-hidden bg-gradient-to-br from-purple-900 via-blue-900 to-cyan-900 border border-white/10 shadow-2xl">
+          <div className="relative aspect-video rounded-2xl overflow-hidden bg-gradient-to-br from-amber-900 via-blue-900 to-cyan-900 border border-white/10 shadow-2xl">
              <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent z-10 pointer-events-none" />
-             <div className="absolute inset-0 bg-[radial-gradient(circle_at_30%_50%,rgba(168,85,247,0.3),transparent_50%)]" />
+             <div className="absolute inset-0 bg-[radial-gradient(circle_at_30%_50%,rgba(245, 158, 11,0.3),transparent_50%)]" />
              <div className="absolute inset-0 bg-[radial-gradient(circle_at_70%_70%,rgba(34,211,238,0.2),transparent_50%)]" />
              <div className="absolute inset-0 flex items-center justify-center z-20">
                 <div className="rounded-full bg-white/20 p-4 backdrop-blur-md cursor-pointer hover:scale-110 transition-transform">
@@ -173,7 +173,7 @@ export default function Course() {
                       <div className="text-xs text-muted-foreground uppercase tracking-wider">Total Duration</div>
                    </div>
                    <div className="p-4 rounded-xl bg-white/5 border border-white/10 text-center">
-                      <div className="text-2xl font-bold text-purple-400 mb-1">Cert</div>
+                      <div className="text-2xl font-bold text-amber-400 mb-1">Cert</div>
                       <div className="text-xs text-muted-foreground uppercase tracking-wider">On Completion</div>
                    </div>
                 </div>

@@ -11,11 +11,11 @@ import { ViralyzWordmark } from "@/components/ViralyzWordmark";
 
 const PLATFORMS = [
   { value: "tiktok", label: "TikTok", color: "from-pink-500 to-rose-500" },
-  { value: "instagram", label: "Instagram", color: "from-fuchsia-500 to-orange-400" },
+  { value: "instagram", label: "Instagram", color: "from-amber-500 to-orange-400" },
   { value: "youtube", label: "YouTube", color: "from-red-500 to-orange-500" },
   { value: "twitter", label: "X / Twitter", color: "from-slate-400 to-slate-200" },
   { value: "linkedin", label: "LinkedIn", color: "from-sky-500 to-blue-500" },
-  { value: "twitch", label: "Twitch", color: "from-purple-500 to-violet-500" },
+  { value: "twitch", label: "Twitch", color: "from-amber-500 to-orange-500" },
 ];
 
 const GOALS = [
@@ -81,7 +81,7 @@ export default function Onboarding() {
                 key={i}
                 className={cn(
                   "h-1.5 rounded-full transition-all duration-300",
-                  i <= step ? "w-8 bg-indigo-400" : "w-4 bg-white/10"
+                  i <= step ? "w-8 bg-orange-400" : "w-4 bg-white/10"
                 )}
               />
             ))}
@@ -109,7 +109,7 @@ export default function Onboarding() {
                     className={cn(
                       "p-4 rounded-xl border text-left transition-all",
                       platform === p.value
-                        ? "border-indigo-400 bg-indigo-500/10"
+                        ? "border-orange-400 bg-orange-500/10"
                         : "border-white/[0.06] hover:border-white/[0.12]"
                     )}
                     data-testid={`button-platform-${p.value}`}
@@ -176,16 +176,16 @@ export default function Onboarding() {
                     className={cn(
                       "w-full p-4 rounded-xl border text-left transition-all flex items-center gap-3",
                       goal === g.value
-                        ? "border-indigo-400 bg-indigo-500/10"
+                        ? "border-orange-400 bg-orange-500/10"
                         : "border-white/[0.06] hover:border-white/[0.12]"
                     )}
                     data-testid={`button-goal-${g.value}`}
                   >
                     <div className="h-9 w-9 rounded-lg bg-white/[0.05] flex items-center justify-center">
-                      <g.icon className="h-4 w-4 text-indigo-300" />
+                      <g.icon className="h-4 w-4 text-orange-300" />
                     </div>
                     <span className="font-medium flex-1">{g.label}</span>
-                    {goal === g.value && <Check className="h-4 w-4 text-indigo-300" />}
+                    {goal === g.value && <Check className="h-4 w-4 text-orange-300" />}
                   </button>
                 ))}
               </div>
@@ -271,7 +271,7 @@ export default function Onboarding() {
           <Button
             onClick={next}
             disabled={!canNext || save.isPending}
-            className="bg-indigo-600 hover:bg-indigo-500"
+            className="bg-orange-600 hover:bg-orange-500"
             data-testid="button-next"
           >
             {save.isPending

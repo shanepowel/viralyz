@@ -117,7 +117,7 @@ export function Navigation() {
               {user?.profileImageUrl ? (
                 <img src={user.profileImageUrl} alt={user.firstName || 'User'} className="h-10 w-10 rounded-full" />
               ) : (
-                <div className="h-10 w-10 rounded-full bg-gradient-to-tr from-purple-500 to-cyan-500 flex items-center justify-center text-white font-bold">
+                <div className="h-10 w-10 rounded-full bg-gradient-to-tr from-amber-500 to-cyan-500 flex items-center justify-center text-white font-bold">
                   {user?.firstName?.[0] || 'U'}
                 </div>
               )}

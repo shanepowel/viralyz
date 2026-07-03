@@ -113,7 +113,7 @@ export default function Thumbnails() {
             <Button
               onClick={() => generateIdeas.mutate()}
               disabled={!topic.trim() || generateIdeas.isPending}
-              className="bg-indigo-600 hover:bg-indigo-500 h-11"
+              className="bg-orange-600 hover:bg-orange-500 h-11"
               data-testid="button-generate-ideas"
             >
               {generateIdeas.isPending ? "Brainstorming..." : <><Sparkles className="h-4 w-4 mr-1.5" /> Brainstorm</>}
@@ -148,7 +148,7 @@ export default function Thumbnails() {
                   <Button
                     onClick={() => renderOne.mutate({ ...idea, idx })}
                     disabled={renderingIdx === idx}
-                    className="w-full bg-indigo-600 hover:bg-indigo-500"
+                    className="w-full bg-orange-600 hover:bg-orange-500"
                     data-testid={`button-render-${idx}`}
                   >
                     {renderingIdx === idx ? "Rendering..." : <><Wand2 className="h-4 w-4 mr-1.5" /> Render this (1 credit)</>}

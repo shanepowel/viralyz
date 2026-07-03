@@ -31,7 +31,7 @@ const HEATMAP_PLATFORMS = ["tiktok", "instagram", "youtube", "twitter", "linkedi
 
 function multiplierTone(m: number): string {
   if (m >= 1.4) return "bg-emerald-500/20 text-emerald-200 border-emerald-400/30";
-  if (m >= 1.1) return "bg-indigo-500/15 text-indigo-200 border-indigo-400/30";
+  if (m >= 1.1) return "bg-orange-500/15 text-orange-200 border-orange-400/30";
   if (m >= 0.9) return "bg-slate-500/10 text-slate-300 border-slate-400/20";
   return "bg-rose-500/10 text-rose-200 border-rose-400/20";
 }
@@ -148,7 +148,7 @@ export default function CalendarPage() {
           description="Schedule your analyses, plan your week, and never miss a post."
           actions={
             <Link href="/analyze">
-              <Button className="bg-indigo-600 hover:bg-indigo-500">
+              <Button className="bg-orange-600 hover:bg-orange-500">
                 <Plus className="h-4 w-4 mr-1.5" /> Schedule a post
               </Button>
             </Link>
@@ -209,7 +209,7 @@ export default function CalendarPage() {
                       inMonth(d)
                         ? "border-white/[0.06] bg-white/[0.02]"
                         : "border-white/[0.03] bg-white/[0.01] opacity-40",
-                      isToday(d) && "ring-1 ring-indigo-400/60"
+                      isToday(d) && "ring-1 ring-orange-400/60"
                     )}
                     data-testid={`cell-${key}`}
                   >

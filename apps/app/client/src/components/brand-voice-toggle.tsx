@@ -30,7 +30,7 @@ export function BrandVoiceToggle({ enabled, onChange }: BrandVoiceToggleProps) {
   return (
     <div className="flex items-center justify-between gap-3 rounded-xl border border-white/[0.06] bg-white/[0.025] px-4 py-3">
       <div className="flex items-center gap-3 min-w-0">
-        <div className="h-8 w-8 rounded-lg bg-purple-500/15 text-purple-300 flex items-center justify-center shrink-0">
+        <div className="h-8 w-8 rounded-lg bg-amber-500/15 text-amber-300 flex items-center justify-center shrink-0">
           <Mic2 className="h-4 w-4" />
         </div>
         <div className="min-w-0">
@@ -40,7 +40,7 @@ export function BrandVoiceToggle({ enabled, onChange }: BrandVoiceToggleProps) {
           ) : (
             <div className="text-meta">
               No profile yet —{" "}
-              <Link href="/brand-voice" className="text-purple-300 hover:text-purple-200 underline">
+              <Link href="/brand-voice" className="text-amber-300 hover:text-amber-200 underline">
                 train one
               </Link>
             </div>

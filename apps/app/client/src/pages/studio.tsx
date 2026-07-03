@@ -479,7 +479,7 @@ export default function Studio() {
 
               <div className="rounded-2xl border border-white/10 bg-white/5 p-6">
                 <div className="flex items-center gap-3 mb-4">
-                  <div className="h-10 w-10 rounded-xl bg-gradient-to-br from-purple-500 to-pink-500 flex items-center justify-center">
+                  <div className="h-10 w-10 rounded-xl bg-gradient-to-br from-amber-500 to-pink-500 flex items-center justify-center">
                     <Hash className="h-5 w-5 text-white" />
                   </div>
                   <div>
@@ -492,7 +492,7 @@ export default function Studio() {
                     <button
                       key={tag}
                       onClick={() => applyOptimization('hashtag', tag)}
-                      className="px-3 py-1.5 rounded-lg bg-white/5 border border-white/10 text-sm text-white hover:bg-purple-500/20 hover:border-purple-500/50 transition-all"
+                      className="px-3 py-1.5 rounded-lg bg-white/5 border border-white/10 text-sm text-white hover:bg-amber-500/20 hover:border-amber-500/50 transition-all"
                       data-testid={`hashtag-${tag.substring(1)}`}
                     >
                       {tag}

@@ -52,7 +52,7 @@ export default function AnalyticsPage() {
   const getHeatColor = (value: number) => {
     if (value >= 9) return "bg-emerald-500";
     if (value >= 7) return "bg-emerald-600/80";
-    if (value >= 5) return "bg-indigo-500/60";
+    if (value >= 5) return "bg-orange-500/60";
     if (value >= 3) return "bg-slate-600";
     return "bg-slate-700";
   };
@@ -61,7 +61,7 @@ export default function AnalyticsPage() {
     return (
       <DashboardLayout>
         <div className="flex h-64 items-center justify-center">
-          <Loader2 className="h-8 w-8 animate-spin text-indigo-400" />
+          <Loader2 className="h-8 w-8 animate-spin text-orange-400" />
         </div>
       </DashboardLayout>
     );
@@ -88,7 +88,7 @@ export default function AnalyticsPage() {
               value: String(stats?.totalAnalyses ?? 0),
               change: stats?.improvement ? `+${stats.improvement}` : "—",
               icon: BarChart3,
-              color: "indigo",
+              color: "orange",
             },
             {
               label: "Avg Viral Score",
@@ -120,8 +120,8 @@ export default function AnalyticsPage() {
               className="bg-slate-900/50 border border-slate-800/50 rounded-2xl p-6"
             >
               <div className="flex items-center gap-3 mb-4">
-                <div className="h-10 w-10 rounded-xl bg-indigo-500/20 flex items-center justify-center">
-                  <stat.icon className="h-5 w-5 text-indigo-400" />
+                <div className="h-10 w-10 rounded-xl bg-orange-500/20 flex items-center justify-center">
+                  <stat.icon className="h-5 w-5 text-orange-400" />
                 </div>
                 <span className="text-slate-400 text-sm">{stat.label}</span>
               </div>
@@ -141,14 +141,14 @@ export default function AnalyticsPage() {
             className="bg-slate-900/50 border border-slate-800/50 rounded-2xl p-6"
           >
             <h3 className="font-semibold mb-4 flex items-center gap-2">
-              <TrendingUp className="h-5 w-5 text-indigo-400" />
+              <TrendingUp className="h-5 w-5 text-orange-400" />
               Score Trend
             </h3>
             <div className="h-48 flex items-end justify-between gap-2">
               {(scoreTrend.length > 0 ? scoreTrend : [{ date: "", score: 0 }]).map((point, i) => (
                 <div key={`${point.date}-${i}`} className="flex-1 flex flex-col items-center gap-2">
                   <div
-                    className={`w-full rounded-t-lg ${point.score >= 80 ? "bg-emerald-500" : point.score >= 60 ? "bg-indigo-500" : "bg-amber-500"}`}
+                    className={`w-full rounded-t-lg ${point.score >= 80 ? "bg-emerald-500" : point.score >= 60 ? "bg-orange-500" : "bg-amber-500"}`}
                     style={{ height: `${Math.max(point.score, 5)}%` }}
                   />
                   <span className="text-xs text-slate-500">{i + 1}</span>

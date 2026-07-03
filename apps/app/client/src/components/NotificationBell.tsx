@@ -101,14 +101,14 @@ export function NotificationBell() {
                   <div
                     className={cn(
                       "px-4 py-3 cursor-pointer transition-colors",
-                      n.readAt ? "opacity-70" : "bg-indigo-500/[0.04]",
+                      n.readAt ? "opacity-70" : "bg-orange-500/[0.04]",
                       "hover:bg-white/[0.04]"
                     )}
                     onClick={() => !n.readAt && markRead.mutate(n.id)}
                     data-testid={`notification-${n.id}`}
                   >
                     <div className="flex items-start gap-3">
-                      <div className={cn("h-2 w-2 rounded-full mt-1.5 shrink-0", n.readAt ? "bg-transparent" : "bg-indigo-400")} />
+                      <div className={cn("h-2 w-2 rounded-full mt-1.5 shrink-0", n.readAt ? "bg-transparent" : "bg-orange-400")} />
                       <div className="flex-1 min-w-0">
                         <div className="font-medium text-sm text-white">{n.title}</div>
                         {n.body && <div className="text-xs text-slate-400 mt-0.5 line-clamp-2">{n.body}</div>}

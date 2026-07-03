@@ -263,7 +263,7 @@ export default function Analyze() {
     const tone = scoreTone(score * 5);
     const fillColor: Record<string, string> = {
       emerald: "bg-emerald-400",
-      indigo: "bg-indigo-400",
+      indigo: "bg-orange-400",
       amber: "bg-amber-400",
       rose: "bg-rose-400",
       slate: "bg-slate-500",
@@ -330,7 +330,7 @@ export default function Analyze() {
               className="flex items-center justify-center py-20"
             >
               <div className="text-center">
-                <Loader2 className="h-12 w-12 text-indigo-400 animate-spin mx-auto mb-4" />
+                <Loader2 className="h-12 w-12 text-orange-400 animate-spin mx-auto mb-4" />
                 <p className="text-slate-400">Loading analysis…</p>
               </div>
             </motion.div>
@@ -360,10 +360,10 @@ export default function Analyze() {
                   className={cn(
                     "border-2 border-dashed rounded-2xl p-8 text-center transition-all relative",
                     isDragging
-                      ? 'border-indigo-400 bg-indigo-500/10 scale-[1.01]'
+                      ? 'border-orange-400 bg-orange-500/10 scale-[1.01]'
                       : file
                       ? 'border-emerald-500/50 bg-emerald-500/[0.04]'
-                      : 'border-white/[0.10] hover:border-indigo-500/40'
+                      : 'border-white/[0.10] hover:border-orange-500/40'
                   )}
                 >
                   <input
@@ -375,10 +375,10 @@ export default function Analyze() {
                   />
                   {isDragging ? (
                     <>
-                      <div className="h-14 w-14 rounded-2xl bg-indigo-500/20 flex items-center justify-center mx-auto mb-3 animate-pulse">
-                        <Upload className="h-7 w-7 text-indigo-300" />
+                      <div className="h-14 w-14 rounded-2xl bg-orange-500/20 flex items-center justify-center mx-auto mb-3 animate-pulse">
+                        <Upload className="h-7 w-7 text-orange-300" />
                       </div>
-                      <h3 className="text-h3 mb-1 text-indigo-300">Drop it right here</h3>
+                      <h3 className="text-h3 mb-1 text-orange-300">Drop it right here</h3>
                       <p className="text-slate-400 text-sm">Release to add your file</p>
                     </>
                   ) : file ? (
@@ -393,7 +393,7 @@ export default function Analyze() {
                     </>
                   ) : (
                     <>
-                      <div className="h-14 w-14 rounded-2xl bg-indigo-500/15 text-indigo-300 flex items-center justify-center mx-auto mb-3">
+                      <div className="h-14 w-14 rounded-2xl bg-orange-500/15 text-orange-300 flex items-center justify-center mx-auto mb-3">
                         <Upload className="h-7 w-7" />
                       </div>
                       <h3 className="text-h3 mb-1 text-white">Drag & drop your file here</h3>
@@ -419,7 +419,7 @@ export default function Analyze() {
                         value={url}
                         onChange={(e) => setUrl(e.target.value)}
                         placeholder="https://youtube.com/watch?v=…"
-                        className="w-full bg-white/[0.04] border border-white/[0.08] rounded-xl py-2.5 pl-11 pr-4 text-white placeholder:text-slate-500 focus:outline-none focus:ring-2 focus:ring-indigo-500/50"
+                        className="w-full bg-white/[0.04] border border-white/[0.08] rounded-xl py-2.5 pl-11 pr-4 text-white placeholder:text-slate-500 focus:outline-none focus:ring-2 focus:ring-orange-500/50"
                         data-testid="url-input"
                       />
                     </div>
@@ -432,7 +432,7 @@ export default function Analyze() {
                       value={title}
                       onChange={(e) => setTitle(e.target.value)}
                       placeholder="My awesome video…"
-                      className="w-full bg-white/[0.04] border border-white/[0.08] rounded-xl py-2.5 px-4 text-white placeholder:text-slate-500 focus:outline-none focus:ring-2 focus:ring-indigo-500/50"
+                      className="w-full bg-white/[0.04] border border-white/[0.08] rounded-xl py-2.5 px-4 text-white placeholder:text-slate-500 focus:outline-none focus:ring-2 focus:ring-orange-500/50"
                       data-testid="title-input"
                     />
                   </div>
@@ -444,7 +444,7 @@ export default function Analyze() {
                       onChange={(e) => setDescription(e.target.value)}
                       placeholder="What's your video about?"
                       rows={3}
-                      className="w-full bg-white/[0.04] border border-white/[0.08] rounded-xl py-2.5 px-4 text-white placeholder:text-slate-500 focus:outline-none focus:ring-2 focus:ring-indigo-500/50 resize-none"
+                      className="w-full bg-white/[0.04] border border-white/[0.08] rounded-xl py-2.5 px-4 text-white placeholder:text-slate-500 focus:outline-none focus:ring-2 focus:ring-orange-500/50 resize-none"
                       data-testid="description-input"
                     />
                   </div>
@@ -459,7 +459,7 @@ export default function Analyze() {
                           className={cn(
                             "px-3.5 py-2 rounded-lg border text-sm transition-colors",
                             selectedPlatform === p.id
-                              ? 'bg-indigo-500/20 border-indigo-500/40 text-indigo-200'
+                              ? 'bg-orange-500/20 border-orange-500/40 text-orange-200'
                               : 'bg-white/[0.025] border-white/[0.06] text-slate-400 hover:text-white hover:border-white/[0.12]'
                           )}
                           data-testid={`platform-${p.id}`}
@@ -475,7 +475,7 @@ export default function Analyze() {
                 <Button
                   onClick={handleAnalyze}
                   disabled={!file && !url && !title && !description}
-                  className="w-full mt-6 bg-indigo-600 hover:bg-indigo-500 py-6 text-base"
+                  className="w-full mt-6 bg-orange-600 hover:bg-orange-500 py-6 text-base"
                   data-testid="button-analyze-now"
                 >
                   <Sparkles className="h-5 w-5 mr-2" />
@@ -507,7 +507,7 @@ export default function Analyze() {
 
                 <div className="w-full h-2 bg-white/[0.06] rounded-full overflow-hidden mb-8">
                   <motion.div
-                    className="h-full bg-gradient-to-r from-indigo-500 to-cyan-400"
+                    className="h-full bg-gradient-to-r from-orange-500 to-cyan-400"
                     initial={{ width: 0 }}
                     animate={{ width: `${analysisProgress}%` }}
                     transition={{ duration: 0.3 }}
@@ -523,7 +523,7 @@ export default function Analyze() {
                         {isCompleted ? (
                           <Check className="h-5 w-5 text-emerald-400" />
                         ) : isCurrent ? (
-                          <Loader2 className="h-5 w-5 text-indigo-400 animate-spin" />
+                          <Loader2 className="h-5 w-5 text-orange-400 animate-spin" />
                         ) : (
                           <div className="h-5 w-5 rounded-full border-2 border-white/[0.10]" />
                         )}
@@ -573,7 +573,7 @@ export default function Analyze() {
 
               <div className="grid md:grid-cols-2 gap-6">
                 <div className="card-base card-pop p-7 relative overflow-hidden">
-                  <div className="absolute -top-20 -right-20 h-60 w-60 rounded-full bg-indigo-500/10 blur-3xl" />
+                  <div className="absolute -top-20 -right-20 h-60 w-60 rounded-full bg-orange-500/10 blur-3xl" />
                   <div className="text-eyebrow mb-4 flex items-center gap-1.5">
                     <Target className="h-3 w-3" /> Latest Viral Score
                   </div>
@@ -633,7 +633,7 @@ export default function Analyze() {
                 <div className="space-y-3">
                   {result.top3Fixes.map((fix, i) => (
                     <div key={i} className="rounded-xl bg-white/[0.03] border border-white/[0.06] p-4 flex items-start gap-4">
-                      <div className="h-9 w-9 rounded-lg bg-indigo-500/15 text-indigo-300 flex items-center justify-center font-bold flex-shrink-0">
+                      <div className="h-9 w-9 rounded-lg bg-orange-500/15 text-orange-300 flex items-center justify-center font-bold flex-shrink-0">
                         {i + 1}
                       </div>
                       <div className="flex-1 min-w-0">
@@ -677,7 +677,7 @@ export default function Analyze() {
               <div className="flex gap-4 flex-wrap">
                 <Button
                   onClick={() => setStep('upload')}
-                  className="flex-1 bg-indigo-600 hover:bg-indigo-500 py-6"
+                  className="flex-1 bg-orange-600 hover:bg-orange-500 py-6"
                   data-testid="button-reanalyze"
                 >
                   <RefreshCw className="h-5 w-5 mr-2" />

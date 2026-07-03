@@ -110,7 +110,7 @@ export function ShareDialog({ analysisId, analysisTitle, trigger }: ShareDialogP
       <DialogContent className="sm:max-w-md">
         <DialogHeader>
           <DialogTitle className="flex items-center gap-2">
-            <Link2 className="h-5 w-5 text-purple-500" />
+            <Link2 className="h-5 w-5 text-amber-500" />
             Share Analysis
           </DialogTitle>
           <DialogDescription>
@@ -202,7 +202,7 @@ export function ShareDialog({ analysisId, analysisTitle, trigger }: ShareDialogP
             </div>
 
             <Button
-              className="w-full bg-gradient-to-r from-purple-600 to-pink-600"
+              className="w-full bg-gradient-to-r from-amber-600 to-pink-600"
               onClick={() => createShareMutation.mutate()}
               disabled={createShareMutation.isPending || (usePassword && !password.trim())}
               data-testid="button-create-share-link"

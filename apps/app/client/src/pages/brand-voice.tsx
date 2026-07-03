@@ -87,7 +87,7 @@ export default function BrandVoice() {
           title="Brand Voice"
           description="Train Viralyz on your past posts so every AI suggestion sounds like you."
           actions={
-            <Button onClick={() => setOpen(true)} className="bg-indigo-600 hover:bg-indigo-500" data-testid="button-add-voice">
+            <Button onClick={() => setOpen(true)} className="bg-orange-600 hover:bg-orange-500" data-testid="button-add-voice">
               <Plus className="h-4 w-4 mr-1.5" /> New voice
             </Button>
           }
@@ -103,7 +103,7 @@ export default function BrandVoice() {
             title="No brand voice yet"
             description="Paste 3-5 of your best posts and we'll capture your tone, vocabulary, and signature moves."
             action={
-              <Button onClick={() => setOpen(true)} className="bg-indigo-600 hover:bg-indigo-500">
+              <Button onClick={() => setOpen(true)} className="bg-orange-600 hover:bg-orange-500">
                 <Plus className="h-4 w-4 mr-1.5" /> Train your voice
               </Button>
             }
@@ -124,7 +124,7 @@ export default function BrandVoice() {
                     <div className="flex items-center gap-2">
                       <h3 className="text-h3">{p.name}</h3>
                       {p.isDefault && (
-                        <span className="text-[10px] px-2 py-0.5 rounded-full bg-indigo-500/15 text-indigo-300 inline-flex items-center gap-1">
+                        <span className="text-[10px] px-2 py-0.5 rounded-full bg-orange-500/15 text-orange-300 inline-flex items-center gap-1">
                           <Star className="h-3 w-3 fill-current" /> Default
                         </span>
                       )}
@@ -161,7 +161,7 @@ export default function BrandVoice() {
                     <ul className="space-y-1">
                       {p.signatureMoves.slice(0, 3).map((m, i) => (
                         <li key={i} className="text-xs text-slate-300 flex gap-2">
-                          <Sparkles className="h-3 w-3 text-indigo-400 mt-0.5 shrink-0" /> {m}
+                          <Sparkles className="h-3 w-3 text-orange-400 mt-0.5 shrink-0" /> {m}
                         </li>
                       ))}
                     </ul>
@@ -216,7 +216,7 @@ export default function BrandVoice() {
               <div className="flex items-center justify-between mb-1.5">
                 <label className="text-eyebrow">Sample posts ({validSamples.length}/3–10 required)</label>
                 <button
-                  className="text-xs text-indigo-300 hover:text-indigo-200 disabled:opacity-40"
+                  className="text-xs text-orange-300 hover:text-orange-200 disabled:opacity-40"
                   onClick={() => setSamples([...samples, ""])}
                   disabled={samples.length >= 10}
                 >
@@ -249,7 +249,7 @@ export default function BrandVoice() {
             <Button
               onClick={() => create.mutate()}
               disabled={!canSave || create.isPending}
-              className="w-full bg-indigo-600 hover:bg-indigo-500"
+              className="w-full bg-orange-600 hover:bg-orange-500"
               data-testid="button-save-voice"
             >
               {create.isPending

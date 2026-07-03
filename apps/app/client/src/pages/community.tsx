@@ -62,7 +62,7 @@ export default function Community() {
 
   const getScoreColor = (score: number) => {
     if (score >= 80) return "text-emerald-400";
-    if (score >= 60) return "text-indigo-400";
+    if (score >= 60) return "text-orange-400";
     if (score >= 40) return "text-amber-400";
     return "text-slate-400";
   };
@@ -92,7 +92,7 @@ export default function Community() {
           animate={{ opacity: 1, y: 0 }}
         >
           <div className="flex items-center gap-3 mb-2">
-            <Users className="h-8 w-8 text-indigo-400" />
+            <Users className="h-8 w-8 text-orange-400" />
             <h1 className="text-3xl font-bold" data-testid="text-community-title">Community</h1>
           </div>
           <p className="text-slate-400">Discover creators, follow their journey, and learn from the best</p>
@@ -110,7 +110,7 @@ export default function Community() {
               placeholder="Search creators..."
               value={search}
               onChange={(e) => setSearch(e.target.value)}
-              className="w-full pl-12 pr-4 py-3 bg-slate-900/50 border border-slate-800/50 rounded-xl text-white placeholder-slate-500 focus:outline-none focus:border-indigo-500/50 focus:ring-1 focus:ring-indigo-500/30 transition-colors"
+              className="w-full pl-12 pr-4 py-3 bg-slate-900/50 border border-slate-800/50 rounded-xl text-white placeholder-slate-500 focus:outline-none focus:border-orange-500/50 focus:ring-1 focus:ring-orange-500/30 transition-colors"
               data-testid="input-search-creators"
             />
           </div>
@@ -155,16 +155,16 @@ export default function Community() {
                           <img
                             src={creator.profileImageUrl}
                             alt=""
-                            className="h-14 w-14 rounded-full object-cover ring-2 ring-slate-800 group-hover:ring-indigo-500/30 transition-all"
+                            className="h-14 w-14 rounded-full object-cover ring-2 ring-slate-800 group-hover:ring-orange-500/30 transition-all"
                           />
                         ) : (
-                          <div className="h-14 w-14 rounded-full bg-gradient-to-br from-indigo-500 to-purple-600 flex items-center justify-center text-white text-xl font-bold ring-2 ring-slate-800 group-hover:ring-indigo-500/30 transition-all">
+                          <div className="h-14 w-14 rounded-full bg-gradient-to-br from-orange-500 to-amber-600 flex items-center justify-center text-white text-xl font-bold ring-2 ring-slate-800 group-hover:ring-orange-500/30 transition-all">
                             {creator.firstName?.[0] || "?"}
                           </div>
                         )}
                         <div>
                           <div className="flex items-center gap-2">
-                            <span className="font-semibold text-white group-hover:text-indigo-300 transition-colors">
+                            <span className="font-semibold text-white group-hover:text-orange-300 transition-colors">
                               {creator.firstName || "Anonymous"} {creator.lastName?.[0] ? `${creator.lastName[0]}.` : ""}
                             </span>
                             {creator.plan === "pro" && (
@@ -191,7 +191,7 @@ export default function Community() {
                       <div className="text-xs text-slate-500">Avg Score</div>
                     </div>
                     <div className="bg-slate-800/40 rounded-lg p-3 text-center">
-                      <div className="text-lg font-bold text-indigo-400">
+                      <div className="text-lg font-bold text-orange-400">
                         {Number(creator.followerCount)}
                       </div>
                       <div className="text-xs text-slate-500">Followers</div>
@@ -221,7 +221,7 @@ export default function Community() {
                         </Button>
                         <Button
                           size="icon"
-                          className="bg-indigo-600 hover:bg-indigo-700"
+                          className="bg-orange-600 hover:bg-orange-700"
                           data-testid={`button-follow-${creator.id}`}
                           onClick={() => followMutation.mutate(creator.id)}
                           disabled={followMutation.isPending}

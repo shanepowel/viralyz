@@ -37,8 +37,8 @@ const DAYS = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
 function heatColor(mult: number): string {
   if (mult >= 1.6) return "bg-emerald-500/90";
   if (mult >= 1.3) return "bg-emerald-500/60";
-  if (mult >= 1.1) return "bg-indigo-500/60";
-  if (mult >= 0.9) return "bg-indigo-500/25";
+  if (mult >= 1.1) return "bg-orange-500/60";
+  if (mult >= 0.9) return "bg-orange-500/25";
   if (mult >= 0.7) return "bg-slate-700/60";
   return "bg-slate-800/60";
 }
@@ -90,7 +90,7 @@ export default function InsightsPage() {
               className={cn(
                 "px-3 py-1.5 rounded-full text-sm font-medium border transition-colors",
                 platform === p
-                  ? "bg-indigo-500/20 border-indigo-400/40 text-indigo-100"
+                  ? "bg-orange-500/20 border-orange-400/40 text-orange-100"
                   : "border-white/10 text-slate-400 hover:text-white hover:border-white/20"
               )}
               data-testid={`tab-platform-${p}`}
@@ -109,7 +109,7 @@ export default function InsightsPage() {
           >
             <div className="flex items-center justify-between mb-4">
               <h3 className="text-h3 flex items-center gap-2">
-                <Clock className="h-4 w-4 text-indigo-300" /> Heatmap · {PLATFORM_LABEL[platform]}
+                <Clock className="h-4 w-4 text-orange-300" /> Heatmap · {PLATFORM_LABEL[platform]}
               </h3>
               <span className="text-meta">Times shown in {tz}</span>
             </div>
@@ -160,7 +160,7 @@ export default function InsightsPage() {
                     </div>
                     <span>Peak</span>
                     <span className="ml-4 inline-flex items-center gap-1.5">
-                      <span className="h-3 w-3 rounded-sm bg-indigo-500/40 ring-1 ring-amber-300/60" /> Personalized from your posts
+                      <span className="h-3 w-3 rounded-sm bg-orange-500/40 ring-1 ring-amber-300/60" /> Personalized from your posts
                     </span>
                   </div>
                 </div>
@@ -212,7 +212,7 @@ export default function InsightsPage() {
 
             <div className="card-base p-5">
               <h3 className="text-h3 mb-2 flex items-center gap-2">
-                <Sparkles className="h-4 w-4 text-indigo-300" /> How this works
+                <Sparkles className="h-4 w-4 text-orange-300" /> How this works
               </h3>
               <p className="text-sm text-slate-400 leading-relaxed">
                 We start from a curated baseline by platform & niche, then blend in your own posted actuals (views &amp; likes per dow/hour) as you log them. The more posts you publish &amp; track, the more personal the heatmap becomes.

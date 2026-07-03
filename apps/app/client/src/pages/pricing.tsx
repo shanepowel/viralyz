@@ -179,7 +179,7 @@ export default function Pricing() {
 
       <section className="py-24 px-6">
         <div className="max-w-4xl mx-auto text-center">
-          <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} className="p-12 rounded-3xl bg-gradient-to-br from-primary/20 via-accent/10 to-purple-500/10 border border-white/10">
+          <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} className="p-12 rounded-3xl bg-gradient-to-br from-primary/20 via-accent/10 to-amber-500/10 border border-white/10">
             <h2 className="text-3xl md:text-4xl font-bold font-display mb-4">Still have questions?</h2>
             <p className="text-white/60 mb-8">Our team is here to help you find the perfect plan</p>
             <Link href="/contact">

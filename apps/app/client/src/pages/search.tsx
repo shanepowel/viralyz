@@ -117,7 +117,7 @@ function Section({ title, icon: Icon, children }: { title: string; icon: any; ch
   return (
     <div>
       <div className="flex items-center gap-2 mb-3">
-        <Icon className="h-4 w-4 text-indigo-300" />
+        <Icon className="h-4 w-4 text-orange-300" />
         <h2 className="text-h3">{title}</h2>
       </div>
       <div className="space-y-2">{children}</div>

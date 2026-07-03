@@ -32,8 +32,8 @@ function contentToFeedItem(content: Content): FeedItemProps {
 const platformIcons = [
   { name: 'YouTube', color: 'from-red-500 to-red-600', letter: 'Y' },
   { name: 'TikTok', color: 'from-black to-gray-800', letter: 'T' },
-  { name: 'Instagram', color: 'from-purple-500 via-pink-500 to-orange-500', letter: 'I' },
-  { name: 'Twitch', color: 'from-purple-600 to-purple-700', letter: 'Tw' },
+  { name: 'Instagram', color: 'from-amber-500 via-pink-500 to-orange-500', letter: 'I' },
+  { name: 'Twitch', color: 'from-amber-600 to-amber-700', letter: 'Tw' },
   { name: 'Twitter', color: 'from-gray-700 to-black', letter: 'X' },
 ];
 
@@ -84,7 +84,7 @@ export default function Home() {
           >
             {/* Animated gradient background */}
             <div className="absolute inset-0 bg-gradient-to-r from-primary/20 via-accent/10 to-primary/20 animate-gradient-x" />
-            <div className="absolute inset-0 bg-[radial-gradient(circle_at_30%_50%,rgba(168,85,247,0.15),transparent_50%)]" />
+            <div className="absolute inset-0 bg-[radial-gradient(circle_at_30%_50%,rgba(245, 158, 11,0.15),transparent_50%)]" />
             
             <div className="relative p-4 flex items-center justify-between">
               <div>

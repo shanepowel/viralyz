@@ -116,7 +116,7 @@ export default function Profile() {
   const getScoreColor = (score: number | null) => {
     if (!score) return "text-slate-400";
     if (score >= 80) return "text-emerald-400";
-    if (score >= 60) return "text-indigo-400";
+    if (score >= 60) return "text-orange-400";
     if (score >= 40) return "text-amber-400";
     return "text-red-400";
   };
@@ -124,7 +124,7 @@ export default function Profile() {
   const getScoreBg = (score: number | null) => {
     if (!score) return "bg-slate-500/20";
     if (score >= 80) return "bg-emerald-500/20";
-    if (score >= 60) return "bg-indigo-500/20";
+    if (score >= 60) return "bg-orange-500/20";
     if (score >= 40) return "bg-amber-500/20";
     return "bg-red-500/20";
   };
@@ -193,7 +193,7 @@ export default function Profile() {
                 className="h-24 w-24 rounded-full object-cover ring-4 ring-slate-800"
               />
             ) : (
-              <div className="h-24 w-24 rounded-full bg-gradient-to-br from-indigo-500 to-purple-600 flex items-center justify-center text-white text-3xl font-bold ring-4 ring-slate-800">
+              <div className="h-24 w-24 rounded-full bg-gradient-to-br from-orange-500 to-amber-600 flex items-center justify-center text-white text-3xl font-bold ring-4 ring-slate-800">
                 {profile.firstName?.[0] || "?"}
               </div>
             )}
@@ -229,7 +229,7 @@ export default function Profile() {
                   disabled={followMutation.isPending}
                   className={profile.isFollowing
                     ? "bg-slate-800 hover:bg-slate-700 text-white"
-                    : "bg-indigo-600 hover:bg-indigo-700"
+                    : "bg-orange-600 hover:bg-orange-700"
                   }
                   data-testid="button-follow-toggle"
                 >
@@ -251,7 +251,7 @@ export default function Profile() {
 
           <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 mt-8">
             <div className="bg-slate-800/40 rounded-xl p-4 text-center">
-              <BarChart3 className="h-5 w-5 text-indigo-400 mx-auto mb-2" />
+              <BarChart3 className="h-5 w-5 text-orange-400 mx-auto mb-2" />
               <div className="text-2xl font-bold text-white">{Number(profile.totalAnalyses)}</div>
               <div className="text-xs text-slate-500">Analyses</div>
             </div>
@@ -263,7 +263,7 @@ export default function Profile() {
               <div className="text-xs text-slate-500">Avg Score</div>
             </div>
             <div className="bg-slate-800/40 rounded-xl p-4 text-center">
-              <Users className="h-5 w-5 text-purple-400 mx-auto mb-2" />
+              <Users className="h-5 w-5 text-amber-400 mx-auto mb-2" />
               <div className="text-2xl font-bold text-white">{Number(profile.followerCount)}</div>
               <div className="text-xs text-slate-500">Followers</div>
             </div>
@@ -294,7 +294,7 @@ export default function Profile() {
                   <div
                     className={`flex items-center gap-4 p-4 rounded-xl transition-colors cursor-pointer ${
                       selectedAnalysis === analysis.id
-                        ? "bg-indigo-500/10 border border-indigo-500/20"
+                        ? "bg-orange-500/10 border border-orange-500/20"
                         : "bg-slate-800/30 hover:bg-slate-800/50"
                     }`}
                     onClick={() => setSelectedAnalysis(selectedAnalysis === analysis.id ? null : analysis.id)}
@@ -317,7 +317,7 @@ export default function Profile() {
                       <Button
                         variant="ghost"
                         size="sm"
-                        className="text-indigo-400 hover:text-indigo-300"
+                        className="text-orange-400 hover:text-orange-300"
                         onClick={(e) => e.stopPropagation()}
                         data-testid={`button-view-analysis-${analysis.id}`}
                       >
@@ -351,12 +351,12 @@ export default function Profile() {
                               commentMutation.mutate();
                             }
                           }}
-                          className="flex-1 px-3 py-2 bg-slate-900/50 border border-slate-700 rounded-lg text-sm text-white placeholder-slate-500 focus:outline-none focus:border-indigo-500/50"
+                          className="flex-1 px-3 py-2 bg-slate-900/50 border border-slate-700 rounded-lg text-sm text-white placeholder-slate-500 focus:outline-none focus:border-orange-500/50"
                           data-testid="input-comment"
                         />
                         <Button
                           size="sm"
-                          className="bg-indigo-600 hover:bg-indigo-700"
+                          className="bg-orange-600 hover:bg-orange-700"
                           disabled={!commentText.trim() || commentMutation.isPending}
                           onClick={() => commentMutation.mutate()}
                           data-testid="button-submit-comment"
@@ -380,14 +380,14 @@ export default function Profile() {
                               {comment.profileImageUrl ? (
                                 <img src={comment.profileImageUrl} alt="" className="h-8 w-8 rounded-full" />
                               ) : (
-                                <div className="h-8 w-8 rounded-full bg-indigo-500/20 flex items-center justify-center text-indigo-400 text-sm font-semibold">
+                                <div className="h-8 w-8 rounded-full bg-orange-500/20 flex items-center justify-center text-orange-400 text-sm font-semibold">
                                   {comment.firstName?.[0] || "?"}
                                 </div>
                               )}
                               <div className="flex-1 min-w-0">
                                 <div className="flex items-center gap-2 mb-1">
                                   <Link href={`/profile/${comment.userId}`}>
-                                    <span className="text-sm font-medium text-white hover:text-indigo-300 cursor-pointer">
+                                    <span className="text-sm font-medium text-white hover:text-orange-300 cursor-pointer">
                                       {comment.firstName || "Anonymous"}
                                     </span>
                                   </Link>

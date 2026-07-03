@@ -64,10 +64,10 @@ const manualTools = [
 const STATUS_LABEL: Record<string, { label: string; tone: string }> = {
   awaiting_approval: { label: "Needs you", tone: "bg-amber-500/15 text-amber-300 border-amber-500/30" },
   approved: { label: "Approved", tone: "bg-emerald-500/15 text-emerald-300 border-emerald-500/30" },
-  posting: { label: "Posting", tone: "bg-indigo-500/15 text-indigo-300 border-indigo-500/30" },
+  posting: { label: "Posting", tone: "bg-orange-500/15 text-orange-300 border-orange-500/30" },
   posted: { label: "Posted", tone: "bg-cyan-500/15 text-cyan-300 border-cyan-500/30" },
   complete: { label: "Complete", tone: "bg-emerald-500/15 text-emerald-300 border-emerald-500/30" },
-  running: { label: "Drafting", tone: "bg-indigo-500/15 text-indigo-300 border-indigo-500/30" },
+  running: { label: "Drafting", tone: "bg-orange-500/15 text-orange-300 border-orange-500/30" },
   pending: { label: "Queued", tone: "bg-slate-500/15 text-slate-300 border-slate-500/30" },
   failed: { label: "Failed", tone: "bg-rose-500/15 text-rose-300 border-rose-500/30" },
 };
@@ -106,13 +106,13 @@ export default function Dashboard() {
           eyebrow={`${greeting}, ${name}`}
           title={
             <span className="inline-flex items-center gap-3">
-              <Bot className="h-7 w-7 text-indigo-300" />
+              <Bot className="h-7 w-7 text-orange-300" />
               Mission Control
             </span>
           }
           description="Here's what your agent is working on right now."
           actions={
-            <Button asChild className="gap-2 bg-gradient-to-r from-indigo-500 to-fuchsia-500 hover:from-indigo-400 hover:to-fuchsia-400 text-white border-0 shadow-[0_0_24px_-8px_rgba(168,85,247,0.6)]" data-testid="button-new-mission-dash">
+            <Button asChild className="gap-2 bg-gradient-to-r from-orange-500 to-amber-500 hover:from-orange-400 hover:to-amber-400 text-white border-0 shadow-[0_0_24px_-8px_rgba(245, 158, 11,0.6)]" data-testid="button-new-mission-dash">
               <Link href="/autopilot"><Plus className="h-4 w-4" /> New mission</Link>
             </Button>
           }
@@ -127,14 +127,14 @@ export default function Dashboard() {
 
         {/* Top row: agent status + LinkedIn */}
         <div className="grid md:grid-cols-3 gap-4">
-          <Link href="/autopilot" className="card-pop p-5 block hover:border-indigo-500/40 transition-all md:col-span-2" data-testid="card-agent-status">
+          <Link href="/autopilot" className="card-pop p-5 block hover:border-orange-500/40 transition-all md:col-span-2" data-testid="card-agent-status">
               <div className="flex items-center justify-between">
                 <div className="flex items-center gap-3">
                   <div className={cn(
-                    "h-12 w-12 rounded-xl flex items-center justify-center shrink-0 shadow-[0_0_24px_-4px_rgba(168,85,247,0.5)]",
+                    "h-12 w-12 rounded-xl flex items-center justify-center shrink-0 shadow-[0_0_24px_-4px_rgba(245, 158, 11,0.5)]",
                     autopilot?.paused
                       ? "bg-slate-700"
-                      : "bg-gradient-to-br from-indigo-500 to-fuchsia-500",
+                      : "bg-gradient-to-br from-orange-500 to-amber-500",
                   )}>
                     <Bot className="h-6 w-6 text-white" />
                   </div>
@@ -155,7 +155,7 @@ export default function Dashboard() {
                   <div className="text-[10px] uppercase tracking-wider text-slate-500 mt-1">Awaiting you</div>
                 </div>
                 <div className="rounded-lg bg-white/[0.03] border border-white/[0.06] p-3 text-center">
-                  <div className="text-2xl font-bold text-indigo-300">{autopilot?.activeMissions || 0}</div>
+                  <div className="text-2xl font-bold text-orange-300">{autopilot?.activeMissions || 0}</div>
                   <div className="text-[10px] uppercase tracking-wider text-slate-500 mt-1">Active missions</div>
                 </div>
                 <div className="rounded-lg bg-white/[0.03] border border-white/[0.06] p-3 text-center">
@@ -196,7 +196,7 @@ export default function Dashboard() {
               <h2 className="text-h2 inline-flex items-center gap-2">
                 <Clock className="h-5 w-5 text-amber-400 animate-pulse" /> Waiting on you
               </h2>
-              <Link href="/autopilot" className="text-sm text-indigo-300 hover:text-indigo-200">Open queue <ArrowRight className="inline h-3.5 w-3.5" /></Link>
+              <Link href="/autopilot" className="text-sm text-orange-300 hover:text-orange-200">Open queue <ArrowRight className="inline h-3.5 w-3.5" /></Link>
             </div>
             <div className="space-y-2">
               {awaiting.slice(0, 3).map((r) => {
@@ -244,16 +244,16 @@ export default function Dashboard() {
           <div className="card-pop p-8" data-testid="empty-state-no-missions">
             <div className="grid md:grid-cols-[1fr_auto] gap-6 items-center">
               <div>
-                <div className="text-eyebrow text-fuchsia-300 mb-2">Get started in 60 seconds</div>
+                <div className="text-eyebrow text-amber-300 mb-2">Get started in 60 seconds</div>
                 <h3 className="text-h2 mb-2">Launch your first mission</h3>
                 <p className="text-slate-400 mb-4">Tell the agent your audience, niche, and goal. It'll draft the first post within minutes — you just approve.</p>
-                <Button asChild className="gap-2 bg-gradient-to-r from-indigo-500 to-fuchsia-500 text-white border-0">
+                <Button asChild className="gap-2 bg-gradient-to-r from-orange-500 to-amber-500 text-white border-0">
                   <Link href="/autopilot"><Bot className="h-4 w-4" /> Launch a mission</Link>
                 </Button>
               </div>
               <div className="hidden md:flex items-center justify-center">
-                <div className="h-32 w-32 rounded-2xl bg-gradient-to-br from-indigo-500/20 to-fuchsia-500/20 border border-white/10 flex items-center justify-center shadow-[0_0_60px_-12px_rgba(168,85,247,0.4)]">
-                  <Bot className="h-16 w-16 text-indigo-300" />
+                <div className="h-32 w-32 rounded-2xl bg-gradient-to-br from-orange-500/20 to-amber-500/20 border border-white/10 flex items-center justify-center shadow-[0_0_60px_-12px_rgba(245, 158, 11,0.4)]">
+                  <Bot className="h-16 w-16 text-orange-300" />
                 </div>
               </div>
             </div>
@@ -290,8 +290,8 @@ export default function Dashboard() {
           </div>
           <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
             {manualTools.map((t) => (
-              <Link key={t.href} href={t.href} className="card-base p-4 hover:border-indigo-500/30 transition-all flex flex-col items-start gap-2 cursor-pointer" data-testid={`tool-${t.title.toLowerCase().replace(/\s+/g, '-')}`}>
-                <t.icon className="h-5 w-5 text-indigo-300" />
+              <Link key={t.href} href={t.href} className="card-base p-4 hover:border-orange-500/30 transition-all flex flex-col items-start gap-2 cursor-pointer" data-testid={`tool-${t.title.toLowerCase().replace(/\s+/g, '-')}`}>
+                <t.icon className="h-5 w-5 text-orange-300" />
                 <div className="text-sm font-medium">{t.title}</div>
               </Link>
             ))}

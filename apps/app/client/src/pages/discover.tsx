@@ -122,7 +122,7 @@ export default function Discover() {
         {/* Trending Content Grid */}
         <section>
           <div className="flex items-center gap-2 mb-4">
-            <Hash className="h-5 w-5 text-purple-400" />
+            <Hash className="h-5 w-5 text-amber-400" />
             <h2 className="text-lg font-bold text-white">Explore Content</h2>
           </div>
           

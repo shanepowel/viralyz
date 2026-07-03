@@ -221,13 +221,13 @@ export default function RepurposePage() {
                 onChange={(e) => { setSourceText(e.target.value); setSourceAnalysisId(null); }}
                 rows={6}
                 placeholder="Paste your draft caption, script, or post here…"
-                className="w-full bg-white/[0.03] border border-white/10 rounded-xl p-3 text-sm text-white placeholder:text-slate-500 focus:outline-none focus:ring-2 focus:ring-indigo-500/50 resize-none"
+                className="w-full bg-white/[0.03] border border-white/10 rounded-xl p-3 text-sm text-white placeholder:text-slate-500 focus:outline-none focus:ring-2 focus:ring-orange-500/50 resize-none"
                 data-testid="input-source-text"
               />
               <div className="text-meta mt-1 flex items-center justify-between">
                 <span>{sourceText.length} chars (min 20)</span>
                 {sourceAnalysisId && (
-                  <span className="inline-flex items-center gap-1 text-indigo-300">
+                  <span className="inline-flex items-center gap-1 text-orange-300">
                     <Sparkles className="h-3 w-3" /> From analysis · prefilled
                   </span>
                 )}
@@ -247,7 +247,7 @@ export default function RepurposePage() {
                       className={cn(
                         "px-3 py-1.5 rounded-full border text-sm transition-colors",
                         on
-                          ? "bg-indigo-500/20 border-indigo-400/50 text-indigo-200"
+                          ? "bg-orange-500/20 border-orange-400/50 text-orange-200"
                           : "bg-white/[0.03] border-white/10 text-slate-300 hover:border-white/20"
                       )}
                       data-testid={`chip-platform-${p.id}`}
@@ -279,7 +279,7 @@ export default function RepurposePage() {
                 Use my Brand Voice
                 {!hasDefaultBV && (
                   <Link href="/brand-voice">
-                    <span className="text-indigo-300 underline ml-1">Set up</span>
+                    <span className="text-orange-300 underline ml-1">Set up</span>
                   </Link>
                 )}
               </label>
@@ -287,7 +287,7 @@ export default function RepurposePage() {
               <Button
                 onClick={() => repurposeMutation.mutate()}
                 disabled={!canSubmit}
-                className="bg-indigo-600 hover:bg-indigo-500"
+                className="bg-orange-600 hover:bg-orange-500"
                 data-testid="button-repurpose"
               >
                 {repurposeMutation.isPending ? (
@@ -334,7 +334,7 @@ export default function RepurposePage() {
           >
             <div className="card-base p-5">
               <h3 className="text-h3 mb-3 flex items-center gap-2">
-                <Sparkles className="h-4 w-4 text-indigo-300" /> Why use this
+                <Sparkles className="h-4 w-4 text-orange-300" /> Why use this
               </h3>
               <ul className="space-y-2 text-sm text-slate-300">
                 <li className="flex items-start gap-2"><CheckCircle2 className="h-4 w-4 text-emerald-400 mt-0.5 shrink-0" />Each variant is independently scored, not blindly rewritten.</li>
@@ -402,7 +402,7 @@ export default function RepurposePage() {
               <X className="h-4 w-4 mr-1.5" />Cancel
             </Button>
             <Button
-              className="bg-indigo-600 hover:bg-indigo-500"
+              className="bg-orange-600 hover:bg-orange-500"
               disabled={!scheduleDate || scheduleMutation.isPending}
               onClick={() => scheduling && scheduleMutation.mutate({ variantId: scheduling.id, when: scheduleDate })}
               data-testid="button-confirm-schedule"
@@ -437,7 +437,7 @@ function VariantCard({
             </span>
           )}
           {draftSaved && (
-            <span className="text-[10px] uppercase tracking-wide bg-indigo-500/15 text-indigo-300 border border-indigo-500/30 rounded-full px-2 py-0.5">
+            <span className="text-[10px] uppercase tracking-wide bg-orange-500/15 text-orange-300 border border-orange-500/30 rounded-full px-2 py-0.5">
               draft
             </span>
           )}
@@ -452,7 +452,7 @@ function VariantCard({
       {variant.hashtags && variant.hashtags.length > 0 && (
         <div className="flex flex-wrap gap-1">
           {variant.hashtags.map((h, i) => (
-            <span key={i} className="text-[11px] text-indigo-300 bg-indigo-500/10 border border-indigo-500/20 rounded px-1.5 py-0.5">
+            <span key={i} className="text-[11px] text-orange-300 bg-orange-500/10 border border-orange-500/20 rounded px-1.5 py-0.5">
               {h}
             </span>
           ))}
@@ -460,7 +460,7 @@ function VariantCard({
       )}
 
       {variant.platformNote && (
-        <div className="text-xs text-slate-400 italic border-l-2 border-indigo-500/40 pl-2">
+        <div className="text-xs text-slate-400 italic border-l-2 border-orange-500/40 pl-2">
           Platform-tuned because: {variant.platformNote}
         </div>
       )}
@@ -502,7 +502,7 @@ function VariantCard({
         </Button>
         <Button
           size="sm"
-          className="bg-indigo-600 hover:bg-indigo-500"
+          className="bg-orange-600 hover:bg-orange-500"
           onClick={onSchedule}
           disabled={scheduled}
           title={errorFlags.length > 0 ? "Heads up: this variant has lint errors" : undefined}
@@ -513,7 +513,7 @@ function VariantCard({
         </Button>
         {variant.scheduledAnalysisId && (
           <Link href={`/analyze/${variant.scheduledAnalysisId}`}>
-            <Button size="sm" variant="ghost" className="text-indigo-300">
+            <Button size="sm" variant="ghost" className="text-orange-300">
               Open <ArrowRight className="h-3 w-3 ml-1" />
             </Button>
           </Link>

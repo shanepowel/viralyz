@@ -112,7 +112,7 @@ export default function HookLab() {
                     className={cn(
                       "px-3.5 py-2 rounded-lg text-sm font-medium capitalize transition-colors border",
                       platform === p
-                        ? "bg-indigo-500/20 text-indigo-200 border-indigo-500/40"
+                        ? "bg-orange-500/20 text-orange-200 border-orange-500/40"
                         : "bg-white/[0.025] text-slate-400 border-white/[0.06] hover:text-white hover:border-white/[0.12]"
                     )}
                   >
@@ -136,7 +136,7 @@ export default function HookLab() {
           <Button
             onClick={() => mutation.mutate()}
             disabled={!topic.trim() || mutation.isPending}
-            className="w-full bg-indigo-600 hover:bg-indigo-500"
+            className="w-full bg-orange-600 hover:bg-orange-500"
             data-testid="button-generate-hooks"
           >
             {mutation.isPending ? (

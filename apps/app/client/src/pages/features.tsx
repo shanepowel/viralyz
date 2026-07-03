@@ -124,8 +124,8 @@ export default function Features() {
 
           <motion.div initial={{ opacity: 0, y: 40 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} className="grid lg:grid-cols-2 gap-12 items-center">
             <div className="space-y-6">
-              <div className="h-14 w-14 rounded-2xl bg-purple-500/20 flex items-center justify-center">
-                <BookOpen className="h-7 w-7 text-purple-400" />
+              <div className="h-14 w-14 rounded-2xl bg-amber-500/20 flex items-center justify-center">
+                <BookOpen className="h-7 w-7 text-amber-400" />
               </div>
               <h2 className="text-3xl md:text-4xl font-bold font-display">Creator Courses</h2>
               <p className="text-white/60 text-lg leading-relaxed">
@@ -135,8 +135,8 @@ export default function Features() {
               <ul className="space-y-3">
                 {["Drag-and-drop course builder", "Progress tracking for students", "Certificates & achievements", "Multiple pricing tiers"].map((item, i) => (
                   <li key={i} className="flex items-center gap-3 text-white/80">
-                    <div className="h-5 w-5 rounded-full bg-purple-500/20 flex items-center justify-center">
-                      <Zap className="h-3 w-3 text-purple-400" />
+                    <div className="h-5 w-5 rounded-full bg-amber-500/20 flex items-center justify-center">
+                      <Zap className="h-3 w-3 text-amber-400" />
                     </div>
                     {item}
                   </li>
@@ -144,10 +144,10 @@ export default function Features() {
               </ul>
             </div>
             <div className="relative">
-              <div className="aspect-video rounded-2xl overflow-hidden border border-white/10 bg-gradient-to-br from-purple-500/30 via-card to-pink-500/20 flex items-center justify-center">
+              <div className="aspect-video rounded-2xl overflow-hidden border border-white/10 bg-gradient-to-br from-amber-500/30 via-card to-pink-500/20 flex items-center justify-center">
                 <div className="text-center">
-                  <div className="h-16 w-16 mx-auto rounded-2xl bg-purple-500/20 backdrop-blur flex items-center justify-center mb-3">
-                    <BookOpen className="h-8 w-8 text-purple-400" />
+                  <div className="h-16 w-16 mx-auto rounded-2xl bg-amber-500/20 backdrop-blur flex items-center justify-center mb-3">
+                    <BookOpen className="h-8 w-8 text-amber-400" />
                   </div>
                   <div className="flex items-center justify-center gap-1">
                     {[1,2,3,4,5].map(i => (
@@ -156,7 +156,7 @@ export default function Features() {
                   </div>
                 </div>
               </div>
-              <div className="absolute -bottom-4 -right-4 h-20 w-20 bg-purple-500/30 rounded-full blur-2xl" />
+              <div className="absolute -bottom-4 -right-4 h-20 w-20 bg-amber-500/30 rounded-full blur-2xl" />
             </div>
           </motion.div>
         </div>
@@ -197,7 +197,7 @@ export default function Features() {
 
       <section className="py-24 px-6">
         <div className="max-w-4xl mx-auto text-center">
-          <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} className="p-12 rounded-3xl bg-gradient-to-br from-primary/20 via-accent/10 to-purple-500/10 border border-white/10">
+          <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} className="p-12 rounded-3xl bg-gradient-to-br from-primary/20 via-accent/10 to-amber-500/10 border border-white/10">
             <h2 className="text-3xl md:text-4xl font-bold font-display mb-4">Ready to get started?</h2>
             <p className="text-white/60 mb-8">Join thousands of creators already using Viralyz</p>
             <a href="/api/login">

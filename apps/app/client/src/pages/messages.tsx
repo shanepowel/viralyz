@@ -156,7 +156,7 @@ export default function Messages() {
       <div className="max-w-6xl mx-auto" data-testid="page-messages">
         <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="mb-6">
           <div className="flex items-center gap-3 mb-2">
-            <MessageSquare className="h-8 w-8 text-indigo-400" />
+            <MessageSquare className="h-8 w-8 text-orange-400" />
             <h1 className="text-3xl font-bold" data-testid="text-messages-title">Messages</h1>
           </div>
           <p className="text-slate-400">Chat with other creators in the community</p>
@@ -180,7 +180,7 @@ export default function Messages() {
                     placeholder="Search conversations..."
                     value={search}
                     onChange={(e) => setSearch(e.target.value)}
-                    className="w-full pl-9 pr-3 py-2 bg-slate-800/50 border border-slate-700/50 rounded-lg text-sm text-white placeholder-slate-500 focus:outline-none focus:border-indigo-500/50"
+                    className="w-full pl-9 pr-3 py-2 bg-slate-800/50 border border-slate-700/50 rounded-lg text-sm text-white placeholder-slate-500 focus:outline-none focus:border-orange-500/50"
                     data-testid="input-search-conversations"
                   />
                 </div>
@@ -211,7 +211,7 @@ export default function Messages() {
                       key={conv.id}
                       onClick={() => setSelectedConversation(conv.id)}
                       className={`w-full px-4 py-3 flex items-center gap-3 hover:bg-slate-800/40 transition-colors text-left ${
-                        selectedConversation === conv.id ? "bg-slate-800/60 border-l-2 border-indigo-500" : ""
+                        selectedConversation === conv.id ? "bg-slate-800/60 border-l-2 border-orange-500" : ""
                       }`}
                       data-testid={`conversation-${conv.id}`}
                     >
@@ -222,7 +222,7 @@ export default function Messages() {
                           className="h-10 w-10 rounded-full object-cover flex-shrink-0"
                         />
                       ) : (
-                        <div className="h-10 w-10 rounded-full bg-gradient-to-br from-indigo-500 to-purple-600 flex items-center justify-center text-white text-sm font-bold flex-shrink-0">
+                        <div className="h-10 w-10 rounded-full bg-gradient-to-br from-orange-500 to-amber-600 flex items-center justify-center text-white text-sm font-bold flex-shrink-0">
                           {conv.otherUser?.firstName?.[0] || "?"}
                         </div>
                       )}
@@ -246,7 +246,7 @@ export default function Messages() {
                               : "No messages yet"}
                           </p>
                           {conv.unreadCount > 0 && (
-                            <span className="ml-2 flex-shrink-0 h-5 min-w-[20px] px-1.5 rounded-full bg-indigo-500 text-white text-xs flex items-center justify-center font-medium">
+                            <span className="ml-2 flex-shrink-0 h-5 min-w-[20px] px-1.5 rounded-full bg-orange-500 text-white text-xs flex items-center justify-center font-medium">
                               {conv.unreadCount}
                             </span>
                           )}
@@ -274,7 +274,7 @@ export default function Messages() {
                     {selectedUser?.profileImageUrl ? (
                       <img src={selectedUser.profileImageUrl} alt="" className="h-8 w-8 rounded-full object-cover" />
                     ) : (
-                      <div className="h-8 w-8 rounded-full bg-gradient-to-br from-indigo-500 to-purple-600 flex items-center justify-center text-white text-xs font-bold">
+                      <div className="h-8 w-8 rounded-full bg-gradient-to-br from-orange-500 to-amber-600 flex items-center justify-center text-white text-xs font-bold">
                         {selectedUser?.firstName?.[0] || "?"}
                       </div>
                     )}
@@ -300,7 +300,7 @@ export default function Messages() {
                               msg.senderProfileImage ? (
                                 <img src={msg.senderProfileImage} alt="" className="h-6 w-6 rounded-full object-cover flex-shrink-0" />
                               ) : (
-                                <div className="h-6 w-6 rounded-full bg-gradient-to-br from-indigo-500 to-purple-600 flex items-center justify-center text-white text-[10px] font-bold flex-shrink-0">
+                                <div className="h-6 w-6 rounded-full bg-gradient-to-br from-orange-500 to-amber-600 flex items-center justify-center text-white text-[10px] font-bold flex-shrink-0">
                                   {msg.senderFirstName?.[0] || "?"}
                                 </div>
                               )
@@ -308,12 +308,12 @@ export default function Messages() {
                             <div
                               className={`px-3 py-2 rounded-2xl text-sm ${
                                 isOwn
-                                  ? "bg-indigo-600 text-white rounded-br-md"
+                                  ? "bg-orange-600 text-white rounded-br-md"
                                   : "bg-slate-800 text-slate-200 rounded-bl-md"
                               }`}
                             >
                               <p className="whitespace-pre-wrap break-words">{msg.text}</p>
-                              <p className={`text-[10px] mt-1 ${isOwn ? "text-indigo-200" : "text-slate-500"}`}>
+                              <p className={`text-[10px] mt-1 ${isOwn ? "text-orange-200" : "text-slate-500"}`}>
                                 {formatTime(msg.createdAt)}
                               </p>
                             </div>
@@ -333,13 +333,13 @@ export default function Messages() {
                         onKeyDown={handleKeyDown}
                         placeholder="Type a message..."
                         rows={1}
-                        className="flex-1 px-4 py-2.5 bg-slate-800/50 border border-slate-700/50 rounded-xl text-white placeholder-slate-500 focus:outline-none focus:border-indigo-500/50 resize-none text-sm"
+                        className="flex-1 px-4 py-2.5 bg-slate-800/50 border border-slate-700/50 rounded-xl text-white placeholder-slate-500 focus:outline-none focus:border-orange-500/50 resize-none text-sm"
                         style={{ maxHeight: "120px" }}
                         data-testid="input-message"
                       />
                       <Button
                         size="icon"
-                        className="bg-indigo-600 hover:bg-indigo-700 rounded-xl h-10 w-10 flex-shrink-0"
+                        className="bg-orange-600 hover:bg-orange-700 rounded-xl h-10 w-10 flex-shrink-0"
                         onClick={handleSend}
                         disabled={!messageText.trim() || sendMutation.isPending}
                         data-testid="button-send-message"

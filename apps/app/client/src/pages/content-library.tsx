@@ -64,7 +64,7 @@ const NICHE_FILTERS = ["all", "fitness", "finance", "tech", "lifestyle", "educat
 const COLUMNS: { id: BoardStatus; label: string; icon: typeof Lightbulb; tone: string; hint: string }[] = [
   { id: "idea",      label: "Idea",      icon: Lightbulb,     tone: "from-amber-500/15 to-amber-500/[0.02] border-amber-500/20", hint: "Capture sparks" },
   { id: "draft",     label: "Draft",     icon: PenLine,       tone: "from-slate-500/15 to-slate-500/[0.02] border-slate-400/20", hint: "Write & analyze" },
-  { id: "ready",     label: "Ready",     icon: CheckCircle2,  tone: "from-indigo-500/15 to-indigo-500/[0.02] border-indigo-500/20", hint: "Approved to ship" },
+  { id: "ready",     label: "Ready",     icon: CheckCircle2,  tone: "from-orange-500/15 to-orange-500/[0.02] border-orange-500/20", hint: "Approved to ship" },
   { id: "scheduled", label: "Scheduled", icon: CalendarClock, tone: "from-cyan-500/15 to-cyan-500/[0.02] border-cyan-500/20", hint: "On the calendar" },
   { id: "posted",    label: "Posted",    icon: BarChart3,     tone: "from-emerald-500/15 to-emerald-500/[0.02] border-emerald-500/20", hint: "Predicted vs actual" },
 ];
@@ -277,7 +277,7 @@ export default function ContentLibrary() {
                 </button>
               </div>
               <Link href="/analyze">
-                <Button className="bg-indigo-600 hover:bg-indigo-500" data-testid="button-new-analysis">
+                <Button className="bg-orange-600 hover:bg-orange-500" data-testid="button-new-analysis">
                   <Plus className="h-4 w-4 mr-1.5" /> New
                 </Button>
               </Link>
@@ -311,7 +311,7 @@ export default function ContentLibrary() {
                   className={cn(
                     "px-3 py-1.5 rounded-lg text-xs font-medium border transition-colors capitalize",
                     platformFilter === p
-                      ? "bg-indigo-500/20 border-indigo-400/40 text-indigo-200"
+                      ? "bg-orange-500/20 border-orange-400/40 text-orange-200"
                       : "bg-white/[0.02] border-white/[0.06] text-slate-300 hover:bg-white/[0.05]"
                   )}
                   data-testid={`filter-platform-${p}`}
@@ -329,7 +329,7 @@ export default function ContentLibrary() {
                   className={cn(
                     "px-3 py-1.5 rounded-lg text-xs font-medium border transition-colors capitalize",
                     nicheFilter === n
-                      ? "bg-purple-500/20 border-purple-400/40 text-purple-200"
+                      ? "bg-amber-500/20 border-amber-400/40 text-amber-200"
                       : "bg-white/[0.02] border-white/[0.06] text-slate-300 hover:bg-white/[0.05]"
                   )}
                   data-testid={`filter-niche-${n}`}
@@ -521,7 +521,7 @@ function Column({ col, count, items, loading, onDelete, onSchedule, onActuals }:
       className={cn(
         "rounded-2xl border bg-gradient-to-b p-2 min-h-[400px] flex flex-col transition-colors",
         col.tone,
-        isOver && "ring-2 ring-indigo-400/60"
+        isOver && "ring-2 ring-orange-400/60"
       )}
       data-testid={`column-${col.id}`}
     >
@@ -591,7 +591,7 @@ function Card({ item, dragging, listeners, attributes, onDelete, onSchedule, onA
     <div
       className={cn(
         "card-base p-3 group hover:border-white/15 transition-colors",
-        dragging && "shadow-2xl ring-1 ring-indigo-400/50"
+        dragging && "shadow-2xl ring-1 ring-orange-400/50"
       )}
       data-testid={`card-${item.id}`}
     >
@@ -607,7 +607,7 @@ function Card({ item, dragging, listeners, attributes, onDelete, onSchedule, onA
         </button>
         <div className="flex-1 min-w-0">
           <Link href={`/analyze/${item.id}`}>
-            <div className="text-sm font-medium text-white truncate hover:text-indigo-300 cursor-pointer" data-testid={`title-${item.id}`}>
+            <div className="text-sm font-medium text-white truncate hover:text-orange-300 cursor-pointer" data-testid={`title-${item.id}`}>
               {item.title || "Untitled"}
             </div>
           </Link>
@@ -700,7 +700,7 @@ function ListView({ items, isLoading, onDelete }: { items: BoardItem[]; isLoadin
         icon={Sparkles}
         title="No content yet"
         description="Score your first draft to start building your pipeline."
-        action={<Link href="/analyze"><Button className="bg-indigo-600 hover:bg-indigo-500"><Plus className="h-4 w-4 mr-1.5" /> Analyze</Button></Link>}
+        action={<Link href="/analyze"><Button className="bg-orange-600 hover:bg-orange-500"><Plus className="h-4 w-4 mr-1.5" /> Analyze</Button></Link>}
       />
     );
   }
@@ -725,7 +725,7 @@ function ListView({ items, isLoading, onDelete }: { items: BoardItem[]; isLoadin
                 </div>
                 <div className="min-w-0 flex-1">
                   <Link href={`/analyze/${it.id}`}>
-                    <div className="text-sm font-medium truncate hover:text-indigo-300 cursor-pointer">{it.title || "Untitled"}</div>
+                    <div className="text-sm font-medium truncate hover:text-orange-300 cursor-pointer">{it.title || "Untitled"}</div>
                   </Link>
                   <div className="text-[11px] text-slate-400 capitalize">{it.targetPlatform || "—"} · {new Date(it.updatedAt).toLocaleDateString()}</div>
                 </div>

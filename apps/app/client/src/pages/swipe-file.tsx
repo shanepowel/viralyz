@@ -41,7 +41,7 @@ interface Facets {
 
 const PLATFORM_TONES: Record<string, string> = {
   tiktok: "bg-pink-500/15 text-pink-300 border-pink-400/30",
-  instagram: "bg-purple-500/15 text-purple-300 border-purple-400/30",
+  instagram: "bg-amber-500/15 text-amber-300 border-amber-400/30",
   youtube: "bg-red-500/15 text-red-300 border-red-400/30",
   twitter: "bg-sky-500/15 text-sky-300 border-sky-400/30",
   linkedin: "bg-blue-500/15 text-blue-300 border-blue-400/30",
@@ -171,7 +171,7 @@ export default function SwipeFile() {
               onClick={() => setSavedOnly((v) => !v)}
               className={cn(
                 savedOnly
-                  ? "bg-indigo-600 hover:bg-indigo-500"
+                  ? "bg-orange-600 hover:bg-orange-500"
                   : "border-white/10 hover:bg-white/[0.04]"
               )}
               data-testid="button-saved-toggle"
@@ -284,12 +284,12 @@ export default function SwipeFile() {
                         e.stopPropagation();
                         saveMutation.mutate({ id: s.id, saved: !!s.saved });
                       }}
-                      className="text-slate-400 hover:text-indigo-300 transition-colors p-1 -m-1"
+                      className="text-slate-400 hover:text-orange-300 transition-colors p-1 -m-1"
                       data-testid={`button-save-${s.id}`}
                       aria-label={s.saved ? "Unsave" : "Save"}
                     >
                       {s.saved ? (
-                        <BookmarkCheck className="h-4 w-4 text-indigo-300 fill-indigo-300/30" />
+                        <BookmarkCheck className="h-4 w-4 text-orange-300 fill-orange-300/30" />
                       ) : (
                         <Bookmark className="h-4 w-4" />
                       )}
@@ -301,7 +301,7 @@ export default function SwipeFile() {
                   </p>
 
                   <div className="text-[11px] text-slate-400 leading-relaxed line-clamp-2 mb-3 italic" data-testid={`text-why-${s.id}`}>
-                    <span className="text-indigo-300 not-italic font-semibold">Why it works · </span>
+                    <span className="text-orange-300 not-italic font-semibold">Why it works · </span>
                     {s.whyItWorks}
                   </div>
 
@@ -436,7 +436,7 @@ export default function SwipeFile() {
                   </div>
                 </div>
 
-                <div className="card-base p-4 mb-5 bg-gradient-to-br from-indigo-500/10 to-transparent border-indigo-500/20">
+                <div className="card-base p-4 mb-5 bg-gradient-to-br from-orange-500/10 to-transparent border-orange-500/20">
                   <div className="text-eyebrow mb-1 flex items-center gap-1.5">
                     <TrendingUp className="h-3 w-3" /> Why it works
                   </div>
@@ -451,7 +451,7 @@ export default function SwipeFile() {
                     data-testid="button-save-detail"
                   >
                     {activeSwipe.saved ? (
-                      <><BookmarkCheck className="h-4 w-4 mr-1.5 text-indigo-300" /> Saved</>
+                      <><BookmarkCheck className="h-4 w-4 mr-1.5 text-orange-300" /> Saved</>
                     ) : (
                       <><Bookmark className="h-4 w-4 mr-1.5" /> Save</>
                     )}
@@ -475,7 +475,7 @@ export default function SwipeFile() {
 
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
                   <Link href={remixHookHref(activeSwipe)}>
-                    <Button className="w-full bg-indigo-600 hover:bg-indigo-500" data-testid="button-remix-hook">
+                    <Button className="w-full bg-orange-600 hover:bg-orange-500" data-testid="button-remix-hook">
                       <Zap className="h-4 w-4 mr-1.5" /> Remix in Hook Lab
                     </Button>
                   </Link>
@@ -515,7 +515,7 @@ function FilterChips({
         className={cn(
           "px-2 py-1 rounded-md border transition-colors",
           value === "all"
-            ? "bg-indigo-500/15 text-indigo-200 border-indigo-400/30"
+            ? "bg-orange-500/15 text-orange-200 border-orange-400/30"
             : "bg-white/[0.03] text-slate-400 border-white/[0.06] hover:text-white"
         )}
         data-testid={`${testId}-all`}
@@ -529,7 +529,7 @@ function FilterChips({
           className={cn(
             "px-2 py-1 rounded-md border capitalize transition-colors",
             value === o
-              ? "bg-indigo-500/15 text-indigo-200 border-indigo-400/30"
+              ? "bg-orange-500/15 text-orange-200 border-orange-400/30"
               : "bg-white/[0.03] text-slate-400 border-white/[0.06] hover:text-white"
           )}
           data-testid={`${testId}-${o}`}

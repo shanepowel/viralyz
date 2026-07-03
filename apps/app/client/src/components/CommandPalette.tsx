@@ -86,11 +86,11 @@ export function CommandPalette({ open, onOpenChange }: CommandPaletteProps) {
 
         <CommandGroup heading="Quick actions">
           <CommandItem onSelect={() => go("/analyze")} data-testid="cmd-quick-analyze">
-            <Plus className="h-4 w-4 mr-2 text-indigo-400" />
+            <Plus className="h-4 w-4 mr-2 text-orange-400" />
             New analysis
           </CommandItem>
           <CommandItem onSelect={() => go("/hook-lab")}>
-            <Zap className="h-4 w-4 mr-2 text-indigo-400" />
+            <Zap className="h-4 w-4 mr-2 text-orange-400" />
             Generate hooks
           </CommandItem>
           <CommandItem onSelect={() => go("/ideas")}>
@@ -114,7 +114,7 @@ export function CommandPalette({ open, onOpenChange }: CommandPaletteProps) {
               <CommandGroup heading="Analyses">
                 {results.analyses.map((a) => (
                   <CommandItem key={a.id} onSelect={() => go(`/analyze/${a.id}`)} value={`analysis-${a.id} ${a.title || ""}`}>
-                    <Sparkles className="h-4 w-4 mr-2 text-indigo-400" />
+                    <Sparkles className="h-4 w-4 mr-2 text-orange-400" />
                     <span className="flex-1 truncate">{a.title || "Untitled"}</span>
                     {typeof a.viralScore === "number" && (
                       <span className="text-xs text-slate-400 ml-2">{a.viralScore}</span>
@@ -137,7 +137,7 @@ export function CommandPalette({ open, onOpenChange }: CommandPaletteProps) {
               <CommandGroup heading="Hooks">
                 {results.hooks.map((h) => (
                   <CommandItem key={h.id} onSelect={() => go("/hook-lab")} value={`hook-${h.id} ${h.topic}`}>
-                    <Zap className="h-4 w-4 mr-2 text-indigo-400" />
+                    <Zap className="h-4 w-4 mr-2 text-orange-400" />
                     <span className="flex-1 truncate">{h.topic}</span>
                   </CommandItem>
                 ))}

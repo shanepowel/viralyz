@@ -88,8 +88,8 @@ export default function Contact() {
                   </div>
                   
                   <div className="flex items-start gap-4">
-                    <div className="h-12 w-12 rounded-xl bg-purple-500/20 flex items-center justify-center shrink-0">
-                      <MapPin className="h-5 w-5 text-purple-400" />
+                    <div className="h-12 w-12 rounded-xl bg-amber-500/20 flex items-center justify-center shrink-0">
+                      <MapPin className="h-5 w-5 text-amber-400" />
                     </div>
                     <div>
                       <h3 className="font-bold mb-1">Office</h3>

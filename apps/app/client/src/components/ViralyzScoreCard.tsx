@@ -21,7 +21,7 @@ const gradeColors = {
   S: 'from-yellow-400 to-orange-500',
   A: 'from-green-400 to-emerald-500',
   B: 'from-blue-400 to-cyan-500',
-  C: 'from-purple-400 to-violet-500',
+  C: 'from-amber-400 to-orange-500',
   D: 'from-orange-400 to-red-400',
   F: 'from-red-500 to-red-700',
 };

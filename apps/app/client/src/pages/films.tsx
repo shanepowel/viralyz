@@ -34,7 +34,7 @@ const FILMS = [
   {
     id: 1,
     title: "The Last Cybercafe",
-    gradient: "from-blue-600 via-purple-600 to-pink-500",
+    gradient: "from-blue-600 via-amber-600 to-pink-500",
     duration: "45:20",
     author: "Digital Frontier",
     views: "1.2M",
@@ -43,7 +43,7 @@ const FILMS = [
   {
     id: 2,
     title: "Neon Rain: A Short Film",
-    gradient: "from-cyan-500 via-blue-600 to-purple-700",
+    gradient: "from-cyan-500 via-blue-600 to-amber-700",
     duration: "12:15",
     author: "Night Owl Studios",
     views: "890K",
@@ -78,8 +78,8 @@ export default function Films() {
     <Shell>
       {/* Featured Hero with Countdown */}
       <div className="relative mb-12 overflow-hidden rounded-3xl border border-white/10 bg-black/40 aspect-video md:aspect-[21/9] group">
-        <div className="absolute inset-0 bg-gradient-to-br from-purple-900 via-blue-900 to-cyan-900 opacity-60 transition-transform duration-1000 group-hover:scale-105">
-          <div className="absolute inset-0 bg-[radial-gradient(circle_at_30%_50%,rgba(168,85,247,0.3),transparent_50%)]" />
+        <div className="absolute inset-0 bg-gradient-to-br from-amber-900 via-blue-900 to-cyan-900 opacity-60 transition-transform duration-1000 group-hover:scale-105">
+          <div className="absolute inset-0 bg-[radial-gradient(circle_at_30%_50%,rgba(245, 158, 11,0.3),transparent_50%)]" />
           <div className="absolute inset-0 bg-[radial-gradient(circle_at_70%_70%,rgba(34,211,238,0.2),transparent_50%)]" />
         </div>
         <div className="absolute inset-0 bg-gradient-to-t from-background via-background/60 to-transparent" />
@@ -171,7 +171,7 @@ export default function Films() {
         <section>
             <h2 className="text-2xl font-bold font-display text-white mb-6">Continue Watching</h2>
             <div className="relative overflow-hidden rounded-2xl border border-white/10 bg-white/5 p-6 flex flex-col md:flex-row items-center gap-6">
-                <div className="relative aspect-video w-full md:w-64 shrink-0 overflow-hidden rounded-lg bg-gradient-to-br from-purple-600 via-blue-600 to-cyan-600">
+                <div className="relative aspect-video w-full md:w-64 shrink-0 overflow-hidden rounded-lg bg-gradient-to-br from-amber-600 via-blue-600 to-cyan-600">
                      <div className="absolute inset-0 bg-black/20" />
                      <div className="absolute bottom-0 left-0 h-1 w-[65%] bg-primary" />
                      <div className="absolute inset-0 flex items-center justify-center">

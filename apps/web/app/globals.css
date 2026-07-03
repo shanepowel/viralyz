@@ -30,7 +30,7 @@
   --foreground: 0 0% 98%;
   --card: 240 10% 6%;
   --card-foreground: 0 0% 98%;
-  --primary: 262 83% 62%;
+  --primary: 12 79% 57%;
   --primary-foreground: 0 0% 100%;
   --secondary: 240 5% 12%;
   --secondary-foreground: 0 0% 98%;
@@ -39,7 +39,7 @@
   --accent: 188 95% 55%;
   --accent-foreground: 240 12% 3%;
   --border: 240 5% 14%;
-  --ring: 262 83% 62%;
+  --ring: 12 79% 57%;
   --radius: 0.875rem;
 }
 
@@ -125,8 +125,8 @@ a {
 .text-gradient {
   background: linear-gradient(
     to right,
-    rgb(196 181 253),
-    rgb(240 171 252),
+    rgb(253 186 116),
+    rgb(251 146 60),
     rgb(103 232 249)
   );
   -webkit-background-clip: text;
@@ -145,7 +145,7 @@ a {
 .aurora-bg {
   background-color: hsl(240 12% 3%);
   background-image:
-    radial-gradient(ellipse 80% 60% at 12% 0%, rgb(124 58 237 / 0.22), transparent 60%),
+    radial-gradient(ellipse 80% 60% at 12% 0%, rgb(232 93 59 / 0.22), transparent 60%),
     radial-gradient(ellipse 70% 60% at 90% 10%, rgb(34 211 238 / 0.1), transparent 60%),
     radial-gradient(ellipse 70% 60% at 50% 110%, rgb(236 72 153 / 0.1), transparent 60%);
 }

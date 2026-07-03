@@ -138,7 +138,7 @@ export function CalendarSlotPicker({ platform, value, onChange }: Props) {
   const multiplierBadge = (mult?: number) => {
     if (mult === undefined) return "";
     if (mult >= 1.4) return "bg-emerald-500/20 text-emerald-200 border-emerald-400/40";
-    if (mult >= 1.1) return "bg-indigo-500/15 text-indigo-200 border-indigo-400/30";
+    if (mult >= 1.1) return "bg-orange-500/15 text-orange-200 border-orange-400/30";
     if (mult >= 0.9) return "bg-slate-500/10 text-slate-300 border-slate-400/20";
     return "bg-slate-700/30 text-slate-400 border-slate-600/40";
   };
@@ -191,7 +191,7 @@ export function CalendarSlotPicker({ platform, value, onChange }: Props) {
               key={key}
               className={cn(
                 "rounded-lg border p-1.5 min-h-[120px]",
-                isToday ? "border-indigo-400/40 bg-indigo-500/[0.04]" : "border-white/[0.06] bg-white/[0.02]"
+                isToday ? "border-orange-400/40 bg-orange-500/[0.04]" : "border-white/[0.06] bg-white/[0.02]"
               )}
             >
               <div className="text-[10px] uppercase tracking-wide text-slate-400 text-center">
@@ -225,7 +225,7 @@ export function CalendarSlotPicker({ platform, value, onChange }: Props) {
                         past
                           ? "opacity-40 cursor-not-allowed border-white/5 text-slate-500"
                           : active
-                          ? "bg-indigo-500/30 border-indigo-400 text-white"
+                          ? "bg-orange-500/30 border-orange-400 text-white"
                           : taken
                           ? "border-amber-400/30 bg-amber-500/10 text-amber-200 hover:bg-amber-500/20"
                           : multiplierBadge(mult) + " hover:brightness-125"
@@ -245,7 +245,7 @@ export function CalendarSlotPicker({ platform, value, onChange }: Props) {
       {heatmap && (
         <div className="text-meta flex items-center gap-2 pt-1">
           <Star className="h-3 w-3 text-emerald-300 fill-emerald-300" />
-          Starred = top 3 slots from your <a href="/insights" className="text-indigo-300 hover:underline">best-time heatmap</a>
+          Starred = top 3 slots from your <a href="/insights" className="text-orange-300 hover:underline">best-time heatmap</a>
         </div>
       )}
     </div>
