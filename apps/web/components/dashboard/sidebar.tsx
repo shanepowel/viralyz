@@ -8,7 +8,6 @@ import {
   LayoutDashboard,
   MessageCircle,
   Settings,
-  Sparkles,
   Store,
   TrendingUp,
   UserCircle,
@@ -31,13 +30,13 @@ const iconMap = {
 
 export function DashboardSidebar() {
   return (
-    <aside className="flex h-full w-64 flex-col border-r border-border bg-card">
-      <div className="flex h-16 items-center gap-2 border-b border-border px-4">
+    <aside className="flex h-full w-64 flex-col border-r border-white/[0.06] bg-card/80 backdrop-blur-xl">
+      <div className="flex h-16 items-center gap-2 border-b border-white/[0.06] px-4">
         <Link href="/" className="flex items-center gap-2">
-          <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-primary">
-            <Sparkles className="h-4 w-4 text-primary-foreground" />
+          <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-gradient-to-br from-primary to-accent">
+            <TrendingUp className="h-4 w-4 text-white" />
           </div>
-          <span className="font-bold">{APP_NAME}</span>
+          <span className="font-display font-bold">{APP_NAME}</span>
         </Link>
       </div>
 
@@ -70,7 +69,7 @@ export function DashboardSidebar() {
         </div>
       </nav>
 
-      <div className="border-t border-border p-4">
+      <div className="border-t border-white/[0.06] p-4">
         <Link
           href="/dashboard/settings"
           className="flex items-center gap-3 rounded-lg px-3 py-2 text-sm text-muted-foreground transition-colors hover:bg-secondary hover:text-foreground"
