@@ -61,9 +61,9 @@ export default function HomePage() {
                 Sign in
               </Button>
             </Link>
-            <Link href="/dashboard">
+            <Link href={process.env.NEXT_PUBLIC_APP_URL || "http://localhost:5000"}>
               <Button size="sm">
-                Get Started Free
+                Open App
                 <ArrowRight className="ml-2 h-4 w-4" />
               </Button>
             </Link>
@@ -86,12 +86,12 @@ export default function HomePage() {
               {APP_DESCRIPTION}
             </p>
             <div className="flex flex-col items-center justify-center gap-4 sm:flex-row">
-              <Link href="/dashboard">
-                <Button size="lg" className="glow">
-                  Try It For Free
-                  <ArrowRight className="ml-2 h-5 w-5" />
-                </Button>
-              </Link>
+            <Link href={process.env.NEXT_PUBLIC_APP_URL || "http://localhost:5000"}>
+              <Button size="lg" className="glow">
+                Open Viralyz App
+                <ArrowRight className="ml-2 h-5 w-5" />
+              </Button>
+            </Link>
               <a href="#tools">
                 <Button variant="outline" size="lg">
                   Explore Tools

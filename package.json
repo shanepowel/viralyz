@@ -4,12 +4,12 @@
   "scripts": {
     "build": "turbo run build",
     "dev": "turbo run dev",
+    "dev:app": "turbo run dev --filter=app",
+    "dev:web": "turbo run dev --filter=web",
     "lint": "turbo run lint",
     "format": "prettier --write \"**/*.{ts,tsx,md}\"",
     "check-types": "turbo run check-types",
-    "db:generate": "turbo run db:generate --filter=@repo/database",
-    "db:push": "turbo run db:push --filter=@repo/database",
-    "db:studio": "turbo run db:studio --filter=@repo/database"
+    "db:push": "turbo run db:push --filter=app"
   },
   "devDependencies": {
     "prettier": "^3.7.4",

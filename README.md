@@ -1,111 +1,97 @@
 # Viralyz
 
-All-in-one AI toolkit for short-form creators. Rebuilt from the ground up on a modern, production-ready stack.
+All-in-one AI toolkit for short-form creators — rebuilt for production outside Replit.
 
-## Features
+## Architecture
 
-Viralyz bundles 10 creator tools into one platform:
-
-| Tool | Description |
-|------|-------------|
-| **Virality Predictor** | Score content ideas before publishing |
-| **Script Enhancer** | AI-powered short-form script writing |
-| **Competitor Tracker** | Monitor competitor performance |
-| **Video Analysis** | Hook, pacing, and structure feedback |
-| **Profile Analysis** | Social profile growth audits |
-| **SEO / Caption Generator** | Platform-optimized captions & hashtags |
-| **Thumbnail Generator** | AI thumbnail creation |
-| **Content Planner** | Weekly content calendar |
-| **Instagram Auto DM** | Automated lead nurturing |
-| **BioStore** | Link-in-bio storefront with analytics |
-
-## Tech Stack
-
-| Layer | Technology |
-|-------|------------|
-| Monorepo | [Turborepo](https://turbo.build) + pnpm workspaces |
-| Frontend | [Next.js 16](https://nextjs.org) (App Router), React 19, TypeScript |
-| Styling | [Tailwind CSS v4](https://tailwindcss.com) |
-| Database | [PostgreSQL](https://www.postgresql.org) + [Prisma](https://www.prisma.io) |
-| Auth | [Clerk](https://clerk.com) (planned) |
-| AI | OpenAI / Anthropic via Vercel AI SDK (planned) |
-| Payments | [Stripe](https://stripe.com) (planned) |
-| Deployment | [Vercel](https://vercel.com) |
-
-## Project Structure
+| App | Port | Purpose |
+|-----|------|---------|
+| `apps/app` | 5000 | Full Viralyz product (Express API + React UI) |
+| `apps/web` | 3000 | Marketing site (Next.js) |
 
 ```
 viralyz/
 ├── apps/
-│   └── web/                 # Next.js application (landing + dashboard)
+│   ├── app/          # Main product (from Replit source)
+│   │   ├── client/   # React + Vite frontend
+│   │   ├── server/   # Express API, AI tools, autopilot, intelligence
+│   │   └── shared/   # Drizzle schema (single source of truth)
+│   └── web/          # Next.js marketing landing
 ├── packages/
-│   ├── config/              # Shared constants (tools, pricing plans)
-│   ├── database/            # Prisma schema & client
-│   ├── ui/                  # Shared UI components
-│   ├── eslint-config/       # Shared ESLint config
-│   └── typescript-config/   # Shared TypeScript config
-├── turbo.json
-├── package.json
-└── .env.example
+│   └── config/       # Shared constants
+└── turbo.json
 ```
 
-## Getting Started
+## Features
 
-### Prerequisites
+### Creator tools (all API-backed)
+- **Analyze** — viral content scoring with file upload
+- **Hook Lab** — AI hook generation
+- **Caption Studio** — platform-native caption rewriting
+- **Ideas** — content idea generator
+- **Thumbnails** — AI thumbnail concepts + rendering
+- **Trends** — niche trend radar
+- **Swipe File** — searchable inspiration library
+- **Repurpose** — cross-platform content variants
+- **Brand Voice** — tone extraction and injection
+- **Calendar & Content Library** — kanban + scheduling
+- **Analytics** — real stats from your analyses
+- **Insights** — best-time-to-post heatmap
 
-- Node.js 20+
-- pnpm 9+
-- PostgreSQL database (local, [Neon](https://neon.tech), or [Supabase](https://supabase.com))
+### Platform features
+- **Autopilot** — autonomous content agent with approval gates
+- **Intelligence** — competitor tracking, digests, signal correlation
+- **Community** — creators, follows, DMs
+- **PayPal billing** — subscription upgrades
 
-### Setup
+## Quick start
 
 ```bash
 # Install dependencies
 pnpm install
 
-# Copy environment variables
-cp .env.example .env
+# Configure environment
+cp .env.example apps/app/.env
+# Edit apps/app/.env — set DATABASE_URL, SESSION_SECRET, OPENAI_API_KEY
 
-# Generate Prisma client
-pnpm db:generate
-
-# Push schema to database (development)
+# Create database schema
 pnpm db:push
 
-# Start development server
+# Start everything (app on :5000, marketing on :3000)
 pnpm dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) for the landing page and [http://localhost:3000/dashboard](http://localhost:3000/dashboard) for the app shell.
+- **App:** http://localhost:5000
+- **Marketing:** http://localhost:3000
+- **Login (dev mode):** http://localhost:5000/api/login
 
-### Scripts
+Dev auth auto-creates a demo user with 500 credits. No Replit required.
+
+## Scripts
 
 | Command | Description |
 |---------|-------------|
-| `pnpm dev` | Start all apps in development |
-| `pnpm build` | Build all packages and apps |
-| `pnpm lint` | Lint all packages |
-| `pnpm db:generate` | Generate Prisma client |
-| `pnpm db:push` | Push schema to database |
-| `pnpm db:studio` | Open Prisma Studio |
+| `pnpm dev` | Start app + marketing site |
+| `pnpm dev:app` | Start Viralyz app only |
+| `pnpm dev:web` | Start marketing site only |
+| `pnpm db:push` | Push Drizzle schema to Postgres |
+| `pnpm build` | Build all apps |
 
-## Environment Variables
+## Off-Replit changes
 
-See [`.env.example`](.env.example) for all required variables. At minimum for local development:
+| Replit feature | Replacement |
+|----------------|-------------|
+| Replit Auth | Dev session auth (`AUTH_MODE=dev`) — swap for Clerk later |
+| AI Integrations | Direct OpenAI API (`OPENAI_API_KEY`) |
+| Object Storage | Local filesystem (`USE_LOCAL_STORAGE=true`) |
 
-- `DATABASE_URL` — PostgreSQL connection string
+See `apps/app/HANDOFF.md` for the original migration guide.
 
-## Roadmap
+## Deployment
 
-- [x] Monorepo scaffolding & environment setup
-- [x] Landing page with pricing
-- [x] Dashboard shell with all 10 tools
-- [x] Prisma data model
-- [ ] Clerk authentication
-- [ ] AI tool implementations (Vercel AI SDK)
-- [ ] Stripe subscription billing
-- [ ] Social platform integrations (Instagram, TikTok)
-- [ ] Background jobs for competitor sync (Inngest / Trigger.dev)
+- **App:** Deploy `apps/app` to Railway, Render, or Fly.io (Node server + Postgres)
+- **Marketing:** Deploy `apps/web` to Vercel
+- Set `AUTH_MODE` to your OIDC provider or integrate Clerk
 
 ## License
 
