@@ -113,16 +113,13 @@ The Next.js marketing site (`apps/web`) deploys to Vercel.
 
 | Setting | Value |
 |---------|-------|
-| Project | `viralyz` |
+| Project | [`viralyz`](https://vercel.com/shanerad1s-projects/viralyz) |
 | Team | `shanerad1s-projects` |
-| Root directory | `apps/web` |
-| Framework | Next.js |
+| Config | Root `vercel.json` → `@vercel/next` builder for `apps/web` |
 
-**Vercel project settings**
+**Preview (feature branch):** deploys automatically on push to `cursor/viralyz-modern-stack-d12f`.
 
-1. Connect the GitHub repo `shanepowel/viralyz`
-2. Set **Root Directory** to `apps/web` (monorepo)
-3. Build/install commands are in `apps/web/vercel.json` (Turbo filter for `web`)
+**Production:** merge to `main` to update `viralyz.vercel.app`.
 
 **Environment variables** (Vercel → Project → Settings → Environment Variables)
 
