@@ -107,9 +107,42 @@ See `apps/app/HANDOFF.md` for the original migration guide.
 
 ## Deployment
 
-- **App:** Deploy `apps/app` to Railway, Render, or Fly.io (Node server + Postgres)
-- **Marketing:** Deploy `apps/web` to Vercel
-- Set `AUTH_MODE` to your OIDC provider or integrate Clerk
+### Marketing site (Vercel)
+
+The Next.js marketing site (`apps/web`) deploys to Vercel.
+
+| Setting | Value |
+|---------|-------|
+| Project | `viralyz` |
+| Team | `shanerad1s-projects` |
+| Root directory | `apps/web` |
+| Framework | Next.js |
+
+**Vercel project settings**
+
+1. Connect the GitHub repo `shanepowel/viralyz`
+2. Set **Root Directory** to `apps/web` (monorepo)
+3. Build/install commands are in `apps/web/vercel.json` (Turbo filter for `web`)
+
+**Environment variables** (Vercel → Project → Settings → Environment Variables)
+
+| Variable | Scope | Notes |
+|----------|-------|-------|
+| `NEXT_PUBLIC_APP_URL` | Production, Preview | URL of the main Viralyz app (see below) |
+
+Until the Express app is hosted, set `NEXT_PUBLIC_APP_URL` to your local tunnel or future API host.
+
+### Main app (Express + React)
+
+Deploy `apps/app` to Railway, Render, or Fly.io (Node server + Postgres). Required env vars:
+
+- `DATABASE_URL` — Neon pooled connection string
+- `SESSION_SECRET` — long random string
+- `AUTH_MODE=dev` (or your OIDC provider)
+- `OPENAI_API_KEY`
+- `APP_URL` — public URL of the deployed app
+
+After the app is live, set `NEXT_PUBLIC_APP_URL` on Vercel to that URL so marketing CTAs link correctly.
 
 ## License
 
