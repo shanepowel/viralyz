@@ -5,7 +5,7 @@
  * just hired a Head of Demand Gen + their content shifted toward enterprise
  * positioning." Correlations are regenerated wholesale per competitor.
  */
-import { openai, OPENAI_CHAT_MODEL } from "../lib/openai";
+import OpenAI from "openai";
 import { db } from "../db";
 import { and, desc, eq, gte } from "drizzle-orm";
 import {
@@ -17,6 +17,10 @@ import {
   type IntelSignalCorrelation,
 } from "@shared/schema";
 
+const openai = new OpenAI({
+  apiKey: process.env.AI_INTEGRATIONS_OPENAI_API_KEY,
+  baseURL: process.env.AI_INTEGRATIONS_OPENAI_BASE_URL,
+});
 
 type SignalRef = { type: "hiring" | "funding" | "podcast"; id: string; label: string };
 
@@ -61,7 +65,7 @@ export async function correlateSignals(competitorId: string): Promise<IntelSigna
   // Always clear stale correlations so removed signals don't linger.
   await db.delete(intelSignalCorrelations).where(eq(intelSignalCorrelations.competitorId, competitorId));
 
-  if (signalRefs.length === 0 || themes.length === 0 || !process.env.OPENAI_API_KEY && !process.env.AI_INTEGRATIONS_OPENAI_API_KEY) {
+  if (signalRefs.length === 0 || themes.length === 0 || !process.env.AI_INTEGRATIONS_OPENAI_API_KEY) {
     return [];
   }
 
@@ -71,7 +75,7 @@ export async function correlateSignals(competitorId: string): Promise<IntelSigna
   let parsed: { correlations?: Array<{ signalIndex?: number; headline?: string; explanation?: string; confidence?: number; relatedThemes?: string[] }> } = {};
   try {
     const resp = await openai.chat.completions.create({
-      model: OPENAI_CHAT_MODEL,
+      model: "gpt-4o",
       messages: [
         {
           role: "system",

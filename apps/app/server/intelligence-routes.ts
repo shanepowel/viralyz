@@ -3,7 +3,7 @@ import { z } from "zod";
 import { fromError } from "zod-validation-error";
 import { db } from "./db";
 import { and, desc, eq, gte, lt } from "drizzle-orm";
-import { isAuthenticated } from "./auth";
+import { isAuthenticated } from "./replit_integrations/auth";
 import {
   intelCompetitors,
   intelCompetitorPosts,

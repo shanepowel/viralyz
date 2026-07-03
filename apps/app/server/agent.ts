@@ -10,7 +10,7 @@
  * column is reserved for a future release — even when set to "auto" the
  * runtime still requires an explicit user click to approve before posting.
  */
-import { openai, OPENAI_CHAT_MODEL } from "./lib/openai";
+import OpenAI from "openai";
 import { db } from "./db";
 import { and, asc, desc, eq, gte, isNull, lte, or } from "drizzle-orm";
 import {
@@ -45,6 +45,10 @@ import {
 // dispatcher above.
 import { getConnectionForUser, findRecentPostByText } from "./integrations/linkedin";
 
+const openai = new OpenAI({
+  apiKey: process.env.AI_INTEGRATIONS_OPENAI_API_KEY,
+  baseURL: process.env.AI_INTEGRATIONS_OPENAI_BASE_URL,
+});
 
 const HOUR_MS = 60 * 60 * 1000;
 const DAY_MS = 24 * HOUR_MS;
@@ -129,7 +133,7 @@ async function critiqueAndRefine(args: {
   let toolArg: any = null;
   try {
     const resp = await openai.chat.completions.create({
-      model: OPENAI_CHAT_MODEL,
+      model: "gpt-4o",
       messages: [{ role: "system", content: sys }, { role: "user", content: user }],
       tools,
       tool_choice: "required",
@@ -765,7 +769,7 @@ async function _refreshAccuracySummary(userId: string): Promise<void> {
           insight: r.insight,
         }));
         const resp = await openai.chat.completions.create({
-          model: OPENAI_CHAT_MODEL,
+          model: "gpt-4o",
           messages: [
             { role: "system", content: "You analyze prediction-vs-actual data for a content agent. Reply ONLY as JSON: { learnings: string[] } with the three most actionable patterns. Each learning is one sentence." },
             { role: "user", content: JSON.stringify(compact) },

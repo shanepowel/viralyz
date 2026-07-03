@@ -3,8 +3,12 @@
  * one optional OpenAI batch for ambiguous titles. Cached on engager name in
  * a process-local Map to avoid re-classification across digest cycles.
  */
-import { openai, OPENAI_CHAT_MODEL } from "../lib/openai";
+import OpenAI from "openai";
 
+const openai = new OpenAI({
+  apiKey: process.env.AI_INTEGRATIONS_OPENAI_API_KEY,
+  baseURL: process.env.AI_INTEGRATIONS_OPENAI_BASE_URL,
+});
 
 export type Engager = { name: string; title?: string; company?: string };
 export type QualifiedEngager = Engager & { qualified: boolean };
@@ -40,7 +44,7 @@ export async function qualifyEngagers(engagers: Engager[]): Promise<QualifiedEng
       ambiguous.push(e);
     }
   }
-  if (ambiguous.length === 0 || !process.env.OPENAI_API_KEY && !process.env.AI_INTEGRATIONS_OPENAI_API_KEY) {
+  if (ambiguous.length === 0 || !process.env.AI_INTEGRATIONS_OPENAI_API_KEY) {
     for (const e of ambiguous) {
       cache.set(`${e.name}::${e.title || ""}`, false);
       out.push({ ...e, qualified: false });
@@ -51,7 +55,7 @@ export async function qualifyEngagers(engagers: Engager[]): Promise<QualifiedEng
   try {
     const list = ambiguous.map((e, i) => `${i + 1}. ${e.name} - ${e.title || "(no title)"}${e.company ? ` @ ${e.company}` : ""}`).join("\n");
     const resp = await openai.chat.completions.create({
-      model: OPENAI_CHAT_MODEL,
+      model: "gpt-4o-mini",
       messages: [
         {
           role: "system",

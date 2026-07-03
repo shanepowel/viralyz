@@ -156,43 +156,6 @@ export default function Analyze() {
           await new Promise(resolve => setTimeout(resolve, 600));
         }
       };
-
-      let fileUrl: string | undefined;
-      let thumbnailUrl: string | undefined;
-
-      if (file) {
-        const uploadMeta = await fetch("/api/uploads/request-url", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          credentials: "include",
-          body: JSON.stringify({
-            name: file.name,
-            size: file.size,
-            contentType: file.type || "application/octet-stream",
-          }),
-        });
-
-        if (!uploadMeta.ok) {
-          throw new Error("Failed to upload file");
-        }
-
-        const { uploadURL, objectPath } = await uploadMeta.json();
-        const uploadPut = await fetch(uploadURL, {
-          method: "PUT",
-          body: file,
-          headers: { "Content-Type": file.type || "application/octet-stream" },
-        });
-
-        if (!uploadPut.ok) {
-          throw new Error("Failed to store uploaded file");
-        }
-
-        fileUrl = objectPath;
-        if (file.type.startsWith("image/")) {
-          thumbnailUrl = objectPath;
-        }
-      }
-
       const [apiResult] = await Promise.all([
         fetch('/api/analyze', {
           method: 'POST',
@@ -202,9 +165,7 @@ export default function Analyze() {
             title: title || 'Untitled Content',
             description: description || '',
             platform: selectedPlatform,
-            contentType: file ? (file.type.startsWith('video/') ? 'video' : 'image') : 'video',
-            fileUrl,
-            thumbnailUrl,
+            contentType: file ? (file.type.startsWith('video/') ? 'video' : 'image') : 'video'
           })
         }).then(async (res) => {
           if (!res.ok) {

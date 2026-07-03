@@ -1,7 +1,12 @@
-import { openai, OPENAI_CHAT_MODEL } from "./lib/openai";
+import OpenAI from "openai";
 import { db } from "./db";
 import { contentAnalyses, analysisHistory, users } from "@shared/schema";
 import { eq, desc } from "drizzle-orm";
+
+const openai = new OpenAI({
+  apiKey: process.env.AI_INTEGRATIONS_OPENAI_API_KEY,
+  baseURL: process.env.AI_INTEGRATIONS_OPENAI_BASE_URL,
+});
 
 export interface AnalysisResult {
   viralScore: number;
@@ -76,7 +81,7 @@ export async function analyzeContent(
 
   try {
     const response = await openai.chat.completions.create({
-      model: OPENAI_CHAT_MODEL,
+      model: "gpt-4o",
       messages: [
         {
           role: "system",
@@ -116,8 +121,7 @@ export async function saveAnalysis(
   description: string,
   platform: string,
   contentType: string,
-  result: AnalysisResult,
-  media?: { fileUrl?: string; thumbnailUrl?: string },
+  result: AnalysisResult
 ) {
   const [analysis] = await db.insert(contentAnalyses).values({
     userId,
@@ -125,8 +129,6 @@ export async function saveAnalysis(
     description,
     targetPlatform: platform,
     contentType,
-    fileUrl: media?.fileUrl,
-    thumbnailUrl: media?.thumbnailUrl,
     viralScore: result.viralScore,
     hookScore: result.hookScore,
     visualScore: result.visualScore,

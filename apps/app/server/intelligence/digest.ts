@@ -3,7 +3,7 @@
  * to extract themes + amplifiers, computes qualified engagement totals and
  * velocity vs trailing 4-week average, then upserts the digest row.
  */
-import { openai, OPENAI_CHAT_MODEL } from "../lib/openai";
+import OpenAI from "openai";
 import { db } from "../db";
 import { and, eq, gte, lt, desc, sql } from "drizzle-orm";
 import {
@@ -15,6 +15,10 @@ import {
 } from "@shared/schema";
 import { qualifyEngagers } from "./qualify";
 
+const openai = new OpenAI({
+  apiKey: process.env.AI_INTEGRATIONS_OPENAI_API_KEY,
+  baseURL: process.env.AI_INTEGRATIONS_OPENAI_BASE_URL,
+});
 
 export function isoWeekStart(d: Date = new Date()): Date {
   // Monday 00:00 UTC of the ISO week containing d.
@@ -40,7 +44,7 @@ async function synthesizeThemesAndAmplifiers(posts: IntelCompetitorPost[]): Prom
   amplifiers: Array<{ name: string; title?: string; reach: number }>;
 }> {
   if (posts.length === 0) return { themes: [], amplifiers: [] };
-  if (!process.env.OPENAI_API_KEY && !process.env.AI_INTEGRATIONS_OPENAI_API_KEY) {
+  if (!process.env.AI_INTEGRATIONS_OPENAI_API_KEY) {
     return { themes: [], amplifiers: [] };
   }
   const lines = posts
@@ -48,7 +52,7 @@ async function synthesizeThemesAndAmplifiers(posts: IntelCompetitorPost[]): Prom
     .join("\n\n");
   try {
     const resp = await openai.chat.completions.create({
-      model: OPENAI_CHAT_MODEL,
+      model: "gpt-4o",
       messages: [
         {
           role: "system",
