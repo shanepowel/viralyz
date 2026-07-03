@@ -44,6 +44,24 @@ viralyz/
 - **Community** — creators, follows, DMs
 - **PayPal billing** — subscription upgrades
 
+## Database (Neon)
+
+Viralyz uses PostgreSQL via Drizzle ORM. **Neon** is the recommended host.
+
+| Setting | Value |
+|---------|-------|
+| Project | `viralyz` |
+| Project ID | `wispy-firefly-07574961` |
+| Database | `neondb` |
+| Region | `us-west-2` |
+
+1. Open [Neon Console](https://console.neon.tech) → project **viralyz**
+2. Copy the **pooled** connection string (must include `?sslmode=require`)
+3. Set `DATABASE_URL` in `apps/app/.env`
+4. Push schema: `pnpm db:push`
+
+Schema is already applied on the main branch. For fresh environments, run `pnpm db:push` after setting `DATABASE_URL`.
+
 ## Quick start
 
 ```bash
