@@ -56,12 +56,12 @@ export default function HomePage() {
             </a>
           </nav>
           <div className="flex items-center gap-3">
-            <Link href="/dashboard">
+            <Link href="/sign-in">
               <Button variant="ghost" size="sm">
                 Sign in
               </Button>
             </Link>
-            <Link href={process.env.NEXT_PUBLIC_APP_URL || "http://localhost:5000"}>
+            <Link href="/analyze">
               <Button size="sm">
                 Open App
                 <ArrowRight className="ml-2 h-4 w-4" />
@@ -86,9 +86,9 @@ export default function HomePage() {
               {APP_DESCRIPTION}
             </p>
             <div className="flex flex-col items-center justify-center gap-4 sm:flex-row">
-            <Link href={process.env.NEXT_PUBLIC_APP_URL || "http://localhost:5000"}>
+            <Link href="/analyze">
               <Button size="lg" className="glow">
-                Open Viralyz App
+                Analyze Your Content
                 <ArrowRight className="ml-2 h-5 w-5" />
               </Button>
             </Link>
@@ -176,7 +176,7 @@ export default function HomePage() {
                       </li>
                     ))}
                   </ul>
-                  <Link href="/dashboard" className="block">
+                  <Link href="/sign-in" className="block">
                     <Button
                       variant={plan.popular ? "default" : "outline"}
                       className="w-full"
@@ -198,7 +198,7 @@ export default function HomePage() {
             <p className="mb-8 text-muted-foreground">
               Join thousands of creators using {APP_NAME} to grow their audience.
             </p>
-            <Link href="/dashboard">
+            <Link href="/sign-in">
               <Button size="lg">
                 Get Started, It&apos;s Free!
                 <ArrowRight className="ml-2 h-5 w-5" />

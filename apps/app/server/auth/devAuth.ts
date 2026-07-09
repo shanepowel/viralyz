@@ -88,10 +88,18 @@ export async function setupDevAuth(app: Express): Promise<void> {
   });
 
   app.get("/api/login", async (req, res) => {
-    const user = await ensureDevUser();
-    req.session.userId = user.id;
-    hydrateUser(req);
-    res.redirect(process.env.APP_URL || "/");
+    try {
+      const user = await ensureDevUser();
+      req.session.userId = user.id;
+      hydrateUser(req);
+      res.redirect(process.env.APP_URL || "/");
+    } catch (error) {
+      console.error("[auth] login failed:", error);
+      res.status(503).json({
+        message:
+          "Sign-in is temporarily unavailable. Check DATABASE_URL and run db:push.",
+      });
+    }
   });
 
   app.get("/api/logout", (req, res) => {
