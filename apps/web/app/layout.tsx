@@ -33,6 +33,9 @@ export const metadata: Metadata = {
     description: APP_DESCRIPTION,
     type: "website",
   },
+};
+
+export const viewport: Viewport = {
   themeColor: "#E85D3B",
 };
 

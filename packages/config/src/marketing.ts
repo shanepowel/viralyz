@@ -195,6 +195,51 @@ export const MARKETING_PLANS: MarketingPlan[] = [
   },
 ];
 
+export const MARKETING_COMPARISON = [
+  {
+    feature: "Pre-publish viral score",
+    viralyz: true,
+    opus: true,
+    vidiq: false,
+    tubebuddy: false,
+  },
+  {
+    feature: "Hook + caption optimization",
+    viralyz: true,
+    opus: true,
+    vidiq: true,
+    tubebuddy: false,
+  },
+  {
+    feature: "Competitor intelligence",
+    viralyz: true,
+    opus: false,
+    vidiq: true,
+    tubebuddy: true,
+  },
+  {
+    feature: "Best time to post heatmap",
+    viralyz: true,
+    opus: false,
+    vidiq: true,
+    tubebuddy: false,
+  },
+  {
+    feature: "Multi-platform repurpose",
+    viralyz: true,
+    opus: true,
+    vidiq: false,
+    tubebuddy: false,
+  },
+  {
+    feature: "Prediction vs actual tracking",
+    viralyz: true,
+    opus: false,
+    vidiq: false,
+    tubebuddy: false,
+  },
+] as const;
+
 export const MARKETING_FAQ = [
   {
     question: "How accurate is the Viral Score?",

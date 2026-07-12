@@ -46,7 +46,11 @@ export default function Onboarding() {
     onSuccess: () => {
       qc.invalidateQueries({ queryKey: ["/api/auth/user"] });
       qc.invalidateQueries({ queryKey: ["/api/notifications"] });
-      setLocation("/");
+      const params = new URLSearchParams();
+      if (platform) params.set("platform", platform);
+      if (niche.trim()) params.set("niche", niche.trim().toLowerCase());
+      const query = params.toString();
+      setLocation(query ? `/analyze?${query}` : "/analyze");
     },
   });
 

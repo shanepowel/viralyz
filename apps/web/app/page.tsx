@@ -1,3 +1,4 @@
+import { CompareSection } from "@/components/marketing/compare-section";
 import { CtaSection } from "@/components/marketing/cta-section";
 import { FaqSection } from "@/components/marketing/faq-section";
 import { FeaturesSection } from "@/components/marketing/features-section";
@@ -23,6 +24,7 @@ export default function HomePage() {
         <StatsSection />
         <HowItWorksSection />
         <FeaturesSection />
+        <CompareSection />
         <ResultsSection />
         <TestimonialsSection />
         <PricingSection />

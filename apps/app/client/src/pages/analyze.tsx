@@ -2,7 +2,7 @@ import { useState, useCallback, useEffect, useRef } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import {
   Upload, Link as LinkIcon, Sparkles, Clock, ArrowRight, Check, Loader2,
-  RefreshCw, Zap, ChevronDown, Copy, Share2, Target, Repeat,
+  RefreshCw, Zap, ChevronDown, Copy, Share2, Target, Repeat, Wand2,
 } from "lucide-react";
 import { Link as WouterLink } from "wouter";
 import { Button } from "@/components/ui/button";
@@ -10,11 +10,13 @@ import { DashboardLayout } from "@/components/layout/DashboardLayout";
 import { PageHeader } from "@/components/ui/page-header";
 import { ScoreRing, scoreTone } from "@/components/ui/score-ring";
 import { useToast } from "@/hooks/use-toast";
-import { useMutation, useQuery } from "@tanstack/react-query";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { ShareDialog } from "@/components/ShareDialog";
 import { ScheduleAndActuals } from "@/components/ScheduleAndActuals";
 import { useParams } from "wouter";
 import { cn } from "@/lib/utils";
+import { useUpload } from "@/hooks/use-upload";
+import { useAuth } from "@/hooks/use-auth";
 
 type Platform = 'youtube' | 'tiktok' | 'instagram' | 'twitter' | 'linkedin';
 type Step = 'upload' | 'analyzing' | 'results' | 'loading';
@@ -81,12 +83,15 @@ const ANALYSIS_STEP_NAMES = [
 export default function Analyze() {
   const params = useParams<{ id?: string }>();
   const analysisId = params?.id;
+  const { user } = useAuth();
+  const queryClient = useQueryClient();
   const [step, setStep] = useState<Step>(analysisId ? 'loading' : 'upload');
   const [selectedPlatform, setSelectedPlatform] = useState<Platform>('youtube');
   const [title, setTitle] = useState('');
   const [description, setDescription] = useState('');
   const [url, setUrl] = useState('');
   const [file, setFile] = useState<File | null>(null);
+  const [uploadedObjectPath, setUploadedObjectPath] = useState<string | null>(null);
   const [isDragging, setIsDragging] = useState(false);
   const [analysisProgress, setAnalysisProgress] = useState(0);
   const [analysisSteps, setAnalysisSteps] = useState<string[]>([]);
@@ -95,6 +100,27 @@ export default function Analyze() {
   const dropRef = useRef<HTMLDivElement>(null);
 
   const { toast } = useToast();
+  const { uploadFile, isUploading } = useUpload({
+    onSuccess: (response) => setUploadedObjectPath(response.objectPath),
+  });
+
+  useEffect(() => {
+    const search = new URLSearchParams(window.location.search);
+    const platformParam = search.get("platform");
+    const nicheParam = search.get("niche");
+
+    if (platformParam && platforms.some((p) => p.id === platformParam)) {
+      setSelectedPlatform(platformParam as Platform);
+    } else if (user?.primaryPlatform && platforms.some((p) => p.id === user.primaryPlatform)) {
+      setSelectedPlatform(user.primaryPlatform as Platform);
+    }
+
+    if (nicheParam) {
+      setDescription((prev) => prev || `Niche: ${nicheParam}`);
+    } else if (user?.primaryNiche) {
+      setDescription((prev) => prev || `Niche: ${user.primaryNiche}`);
+    }
+  }, [user?.primaryPlatform, user?.primaryNiche]);
 
   const { data: loadedAnalysis, isLoading: isLoadingAnalysis } = useQuery<LoadedAnalysis | null>({
     queryKey: ["/api/analyses", analysisId],
@@ -140,6 +166,7 @@ export default function Analyze() {
     const droppedFile = e.dataTransfer.files[0];
     if (droppedFile && (droppedFile.type.startsWith('video/') || droppedFile.type.startsWith('image/'))) {
       setFile(droppedFile);
+      setUploadedObjectPath(null);
       if (!title) setTitle(droppedFile.name.replace(/\.[^/.]+$/, ''));
       toast({ title: "File added", description: droppedFile.name });
     } else if (droppedFile) {
@@ -149,6 +176,16 @@ export default function Analyze() {
 
   const analyzeMutation = useMutation({
     mutationFn: async () => {
+      let fileUrl = uploadedObjectPath;
+      if (file && !fileUrl) {
+        const uploadResult = await uploadFile(file);
+        if (!uploadResult?.objectPath) {
+          throw new Error("File upload failed");
+        }
+        fileUrl = uploadResult.objectPath;
+        setUploadedObjectPath(fileUrl);
+      }
+
       const animateSteps = async () => {
         for (let i = 0; i < ANALYSIS_STEP_NAMES.length; i++) {
           setAnalysisSteps(ANALYSIS_STEP_NAMES.slice(0, i + 1));
@@ -165,7 +202,9 @@ export default function Analyze() {
             title: title || 'Untitled Content',
             description: description || '',
             platform: selectedPlatform,
-            contentType: file ? (file.type.startsWith('video/') ? 'video' : 'image') : 'video'
+            contentType: file ? (file.type.startsWith('video/') ? 'video' : 'image') : 'video',
+            url: url.trim() || undefined,
+            fileUrl: fileUrl || undefined,
           })
         }).then(async (res) => {
           if (!res.ok) {
@@ -182,9 +221,18 @@ export default function Analyze() {
       setResult(data);
       setStep('results');
       setExpandedSection('Hook Strength');
+      queryClient.invalidateQueries({ queryKey: ["/api/auth/user"] });
+      queryClient.invalidateQueries({ queryKey: ["/api/analytics"] });
     },
-    onError: () => {
-      toast({ title: "Analysis failed", description: "Please try again", variant: "destructive" });
+    onError: (error: Error) => {
+      const isCredits = error.message.toLowerCase().includes("credits");
+      toast({
+        title: isCredits ? "Out of credits" : "Analysis failed",
+        description: isCredits
+          ? "Upgrade your plan to continue analyzing content."
+          : error.message || "Please try again",
+        variant: "destructive",
+      });
       setStep('upload');
     }
   });
@@ -193,6 +241,7 @@ export default function Analyze() {
     const selectedFile = e.target.files?.[0];
     if (selectedFile) {
       setFile(selectedFile);
+      setUploadedObjectPath(null);
       if (!title) setTitle(selectedFile.name.replace(/\.[^/.]+$/, ''));
     }
   }, [title]);
@@ -435,12 +484,16 @@ export default function Analyze() {
 
                 <Button
                   onClick={handleAnalyze}
-                  disabled={!file && !url && !title && !description}
+                  disabled={(!file && !url && !title && !description) || isUploading || analyzeMutation.isPending}
                   className="w-full mt-6 bg-indigo-600 hover:bg-indigo-500 py-6 text-base"
                   data-testid="button-analyze-now"
                 >
-                  <Sparkles className="h-5 w-5 mr-2" />
-                  Analyze Now
+                  {isUploading || analyzeMutation.isPending ? (
+                    <Loader2 className="h-5 w-5 mr-2 animate-spin" />
+                  ) : (
+                    <Sparkles className="h-5 w-5 mr-2" />
+                  )}
+                  {isUploading ? "Uploading…" : "Analyze Now"}
                   <ArrowRight className="h-5 w-5 ml-2" />
                 </Button>
               </div>
@@ -634,6 +687,34 @@ export default function Analyze() {
                   shares: loadedAnalysis?.actualShares ?? null,
                 }}
               />
+
+              <div className="card-base p-6">
+                <h3 className="text-h3 text-white mb-4">Improve your score next</h3>
+                <div className="grid md:grid-cols-2 gap-3">
+                  <WouterLink
+                    href={`/hook-lab?topic=${encodeURIComponent(title || description || "my content")}&platform=${selectedPlatform}`}
+                  >
+                    <Button variant="outline" className="w-full border-white/[0.10] bg-white/[0.025] py-5 justify-start">
+                      <Zap className="h-5 w-5 mr-3 text-amber-300" />
+                      <span className="text-left">
+                        <span className="block font-medium">Hook Lab</span>
+                        <span className="block text-xs text-slate-400">Generate 10 stronger opening hooks</span>
+                      </span>
+                    </Button>
+                  </WouterLink>
+                  <WouterLink
+                    href={`/caption-studio?text=${encodeURIComponent(description || title || "")}&platform=${selectedPlatform}`}
+                  >
+                    <Button variant="outline" className="w-full border-white/[0.10] bg-white/[0.025] py-5 justify-start">
+                      <Wand2 className="h-5 w-5 mr-3 text-indigo-300" />
+                      <span className="text-left">
+                        <span className="block font-medium">Caption Studio</span>
+                        <span className="block text-xs text-slate-400">Rewrite metadata for higher CTR</span>
+                      </span>
+                    </Button>
+                  </WouterLink>
+                </div>
+              </div>
 
               <div className="flex gap-4 flex-wrap">
                 <Button
