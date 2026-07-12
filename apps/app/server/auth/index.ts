@@ -10,7 +10,7 @@ import {
   isAuthenticated as replitIsAuthenticated,
   getSession as replitGetSession,
 } from "../replit_integrations/auth/replitAuth";
-import { registerAuthRoutes } from "../replit_integrations/auth/routes";
+import { registerAuthRoutes } from "./routes";
 
 export { authStorage, type IAuthStorage } from "../replit_integrations/auth/storage";
 

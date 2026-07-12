@@ -83,9 +83,9 @@ const sidebarSections: NavSection[] = [
 const mobileNavItems = [
   { icon: Home, label: "Home", href: "/" },
   { icon: Sparkles, label: "Analyze", href: "/analyze" },
-  { icon: Lightbulb, label: "Ideas", href: "/ideas" },
-  { icon: Calendar, label: "Plan", href: "/calendar" },
-  { icon: Radar, label: "Trends", href: "/trends" },
+  { icon: Bot, label: "Autopilot", href: "/autopilot" },
+  { icon: Activity, label: "Pulse", href: "/intelligence" },
+  { icon: BarChart3, label: "Stats", href: "/analytics" },
 ];
 
 interface DashboardLayoutProps {

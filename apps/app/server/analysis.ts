@@ -1,12 +1,27 @@
-import OpenAI from "openai";
+import { openai, OPENAI_CHAT_MODEL } from "./lib/openai";
 import { db } from "./db";
 import { contentAnalyses, analysisHistory, users } from "@shared/schema";
 import { eq, desc } from "drizzle-orm";
 
-const openai = new OpenAI({
-  apiKey: process.env.AI_INTEGRATIONS_OPENAI_API_KEY,
-  baseURL: process.env.AI_INTEGRATIONS_OPENAI_BASE_URL,
-});
+export interface AnalysisContext {
+  sourceUrl?: string;
+  fileUrl?: string;
+  niche?: string;
+  thumbnailUrl?: string;
+}
+
+const PLATFORM_TIPS: Record<string, string> = {
+  youtube:
+    "YouTube: prioritize CTR (title + thumbnail), first 30s retention, SEO keywords in title/description, chapters for long-form.",
+  tiktok:
+    "TikTok: hook in first 1-2 seconds, vertical 9:16, trending sounds, loop-friendly endings, 3-5 niche hashtags.",
+  instagram:
+    "Instagram Reels: visual hook in frame 1, captions for silent viewers, 15-45s sweet spot, CTA in caption.",
+  twitter:
+    "X/Twitter: punchy first line, thread potential, quote-tweet bait, post during news cycles in niche.",
+  linkedin:
+    "LinkedIn: professional hook, value-first framing, document/carousel potential, weekday mornings perform best.",
+};
 
 export interface AnalysisResult {
   viralScore: number;
@@ -71,17 +86,37 @@ export async function analyzeContent(
   title: string,
   description: string,
   platform: string,
-  contentType: string
+  contentType: string,
+  context: AnalysisContext = {},
 ): Promise<AnalysisResult> {
-  const prompt = ANALYSIS_PROMPT
-    .replace("{title}", title || "Untitled")
-    .replace("{description}", description || "No description provided")
-    .replace("{platform}", platform || "general")
-    .replace("{contentType}", contentType || "video");
+  const platformKey = (platform || "general").toLowerCase();
+  const platformTips =
+    PLATFORM_TIPS[platformKey] ??
+    "General: strong hook, clear value prop, platform-native format, optimized metadata.";
+
+  const contextLines: string[] = [];
+  if (context.sourceUrl) contextLines.push(`- Source URL: ${context.sourceUrl}`);
+  if (context.fileUrl) contextLines.push(`- Uploaded media: ${context.fileUrl}`);
+  if (context.niche) contextLines.push(`- Creator niche: ${context.niche}`);
+  if (context.thumbnailUrl)
+    contextLines.push(`- Thumbnail/preview available: ${context.thumbnailUrl}`);
+
+  const extraContext =
+    contextLines.length > 0
+      ? `\nAdditional context:\n${contextLines.join("\n")}\n`
+      : "";
+
+  const prompt =
+    ANALYSIS_PROMPT.replace("{title}", title || "Untitled")
+      .replace("{description}", description || "No description provided")
+      .replace("{platform}", platform || "general")
+      .replace("{contentType}", contentType || "video") +
+    `\nPlatform-specific guidance: ${platformTips}` +
+    extraContext;
 
   try {
     const response = await openai.chat.completions.create({
-      model: "gpt-4o",
+      model: OPENAI_CHAT_MODEL,
       messages: [
         {
           role: "system",
@@ -121,12 +156,15 @@ export async function saveAnalysis(
   description: string,
   platform: string,
   contentType: string,
-  result: AnalysisResult
+  result: AnalysisResult,
+  extras: { fileUrl?: string; sourceUrl?: string; thumbnailUrl?: string } = {},
 ) {
   const [analysis] = await db.insert(contentAnalyses).values({
     userId,
     title,
     description,
+    fileUrl: extras.fileUrl ?? extras.sourceUrl ?? null,
+    thumbnailUrl: extras.thumbnailUrl ?? null,
     targetPlatform: platform,
     contentType,
     viralScore: result.viralScore,

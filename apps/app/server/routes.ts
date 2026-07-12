@@ -4,11 +4,13 @@ import { storage } from "./storage";
 import { insertContentSchema, insertCommentSchema, insertTribePostSchema, type InsertSwipePost } from "@shared/schema";
 import { z } from "zod";
 import { fromError } from "zod-validation-error";
-import { setupAuth, registerAuthRoutes, isAuthenticated } from "./replit_integrations/auth";
+import { setupAuth, registerAuthRoutes, isAuthenticated } from "./auth";
 import { registerObjectStorageRoutes } from "./replit_integrations/object_storage";
 import { registerAutopilotRoutes } from "./autopilot-routes";
 import { registerIntelligenceRoutes } from "./intelligence-routes";
 import { analyzeContent, saveAnalysis, getRecentAnalyses, getAllAnalyses, getAnalysis, getUserStats, decrementUserCredits } from "./analysis";
+import { fetchUrlMetadata } from "./url-metadata";
+import { getAnalyticsDashboard } from "./analytics";
 import { generateHooks, rewriteCaption, generateTrends, generateIdeas, repurposeForPlatforms } from "./ai-tools";
 import { lintCaption } from "./lint";
 import { extractBrandVoice, generateThumbnailIdeas, renderThumbnail } from "./ai-vision";
@@ -310,25 +312,107 @@ export async function registerRoutes(
   app.post("/api/analyze", isAuthenticated, async (req, res) => {
     try {
       const userId = (req.user as any).claims?.sub || (req.user as any).id;
-      const { title, description, platform, contentType } = req.body;
 
-      if (!title && !description) {
-        return res.status(400).json({ error: "Please provide a title or description to analyze" });
+      const creditsOk = await decrementUserCredits(userId);
+      if (!creditsOk) {
+        return res
+          .status(402)
+          .json({ error: "Out of credits. Upgrade your plan to continue." });
       }
 
-      // Analyze content using OpenAI
-      const result = await analyzeContent(title, description, platform, contentType);
-      
-      // Save to database
-      const analysis = await saveAnalysis(userId, title, description, platform, contentType, result);
+      const {
+        title,
+        description,
+        platform,
+        contentType,
+        url,
+        fileUrl,
+        niche,
+      } = req.body as {
+        title?: string;
+        description?: string;
+        platform?: string;
+        contentType?: string;
+        url?: string;
+        fileUrl?: string;
+        niche?: string;
+      };
 
-      res.json({ 
+      let finalTitle = title?.trim() || "";
+      let finalDescription = description?.trim() || "";
+      let finalPlatform = platform?.trim() || "";
+      let thumbnailUrl: string | undefined;
+
+      if (url?.trim()) {
+        const meta = await fetchUrlMetadata(url.trim());
+        finalTitle = finalTitle || meta.title;
+        finalDescription = finalDescription || meta.description;
+        finalPlatform = finalPlatform || meta.platform;
+        thumbnailUrl = meta.thumbnailUrl;
+      }
+
+      const user = await storage.getUser(userId);
+      const userNiche = niche?.trim() || user?.primaryNiche || undefined;
+      finalPlatform =
+        finalPlatform || user?.primaryPlatform || "youtube";
+
+      if (!finalTitle && !finalDescription && !fileUrl && !url?.trim()) {
+        return res.status(400).json({
+          error:
+            "Please upload a file, paste a URL, or enter a title/description to analyze",
+        });
+      }
+
+      const resolvedContentType =
+        contentType ||
+        (fileUrl?.match(/\.(jpg|jpeg|png|webp|gif)(\?|$)/i) ? "image" : "video");
+
+      const result = await analyzeContent(
+        finalTitle || "Untitled Content",
+        finalDescription || "",
+        finalPlatform,
+        resolvedContentType,
+        {
+          sourceUrl: url?.trim(),
+          fileUrl,
+          niche: userNiche,
+          thumbnailUrl,
+        },
+      );
+
+      const analysis = await saveAnalysis(
+        userId,
+        finalTitle || "Untitled Content",
+        finalDescription || "",
+        finalPlatform,
+        resolvedContentType,
+        result,
+        { fileUrl, sourceUrl: url?.trim(), thumbnailUrl },
+      );
+
+      res.json({
         id: analysis.id,
-        ...result 
+        ...result,
       });
     } catch (error) {
       console.error("Analysis error:", error);
       res.status(500).json({ error: "Failed to analyze content" });
+    }
+  });
+
+  app.get("/api/analytics", isAuthenticated, async (req, res) => {
+    try {
+      const userId = (req.user as any).claims?.sub || (req.user as any).id;
+      const user = await storage.getUser(userId);
+      const platform =
+        (req.query.platform as string | undefined) ||
+        user?.primaryPlatform ||
+        "tiktok";
+      const dashboard = await getAnalyticsDashboard(userId, platform);
+      res.json(dashboard);
+    } catch (error) {
+      console.error("Analytics error:", error);
+      res.status(500).json({ error: "Failed to fetch analytics" });
     }
   });
 

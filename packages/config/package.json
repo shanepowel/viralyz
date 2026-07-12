@@ -4,7 +4,9 @@
   "private": true,
   "type": "module",
   "exports": {
-    ".": "./src/index.ts"
+    ".": "./src/index.ts",
+    "./app-routes": "./src/app-routes.ts",
+    "./marketing": "./src/marketing.ts"
   },
   "devDependencies": {
     "@repo/typescript-config": "workspace:*",

@@ -3,12 +3,7 @@
  * one optional OpenAI batch for ambiguous titles. Cached on engager name in
  * a process-local Map to avoid re-classification across digest cycles.
  */
-import OpenAI from "openai";
-
-const openai = new OpenAI({
-  apiKey: process.env.AI_INTEGRATIONS_OPENAI_API_KEY,
-  baseURL: process.env.AI_INTEGRATIONS_OPENAI_BASE_URL,
-});
+import { openai, isOpenAIConfigured } from "../lib/openai";
 
 export type Engager = { name: string; title?: string; company?: string };
 export type QualifiedEngager = Engager & { qualified: boolean };
@@ -44,7 +39,7 @@ export async function qualifyEngagers(engagers: Engager[]): Promise<QualifiedEng
       ambiguous.push(e);
     }
   }
-  if (ambiguous.length === 0 || !process.env.AI_INTEGRATIONS_OPENAI_API_KEY) {
+  if (ambiguous.length === 0 || !isOpenAIConfigured()) {
     for (const e of ambiguous) {
       cache.set(`${e.name}::${e.title || ""}`, false);
       out.push({ ...e, qualified: false });

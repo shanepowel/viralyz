@@ -1,0 +1,29 @@
+# Deploy the Viralyz product app (Express API + React UI).
+# Connect this repo in Render → New Web Service → apply this blueprint.
+# Point viralyz.com DNS here, then set APP_URL=https://viralyz.com
+
+services:
+  - type: web
+    name: viralyz-app
+    runtime: node
+    region: oregon
+    plan: starter
+    rootDir: .
+    buildCommand: corepack enable && pnpm install && pnpm turbo run build --filter=app
+    startCommand: node apps/app/dist/index.cjs
+    healthCheckPath: /
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: AUTH_MODE
+        value: dev
+      - key: USE_LOCAL_STORAGE
+        value: "true"
+      - key: DATABASE_URL
+        sync: false
+      - key: SESSION_SECRET
+        generateValue: true
+      - key: OPENAI_API_KEY
+        sync: false
+      - key: APP_URL
+        value: https://viralyz.com

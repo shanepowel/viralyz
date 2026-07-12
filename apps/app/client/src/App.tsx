@@ -40,6 +40,7 @@ import InsightsPage from "@/pages/insights";
 import AutopilotPage from "@/pages/autopilot";
 import IntelligencePage from "@/pages/intelligence";
 import IntelligenceCompetitorPage from "@/pages/intelligence-competitor";
+import Contact from "@/pages/contact";
 import { useTimezoneSync } from "@/hooks/use-timezone-sync";
 
 function AuthenticatedRoutes() {
@@ -104,6 +105,7 @@ function AuthenticatedRoutes() {
           <Route path="/modern-slavery" component={ModernSlavery} />
           <Route path="/terms" component={Terms} />
           <Route path="/press" component={Press} />
+          <Route path="/contact" component={Contact} />
           <Route path="/share/:code" component={SharePage} />
           <Route component={NotFound} />
         </Switch>
@@ -121,6 +123,7 @@ function PublicRoutes() {
       <Route path="/modern-slavery" component={ModernSlavery} />
       <Route path="/terms" component={Terms} />
       <Route path="/press" component={Press} />
+      <Route path="/contact" component={Contact} />
       <Route path="/share/:code" component={SharePage} />
       <Route component={Landing} />
     </Switch>

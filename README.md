@@ -125,21 +125,24 @@ The Next.js marketing site (`apps/web`) deploys to Vercel.
 
 | Variable | Scope | Notes |
 |----------|-------|-------|
-| `NEXT_PUBLIC_APP_URL` | Production, Preview | URL of the main Viralyz app (see below) |
-
-Until the Express app is hosted, set `NEXT_PUBLIC_APP_URL` to your local tunnel or future API host.
+| `NEXT_PUBLIC_APP_URL` | Production, Preview | URL of the main app (default: `https://viralyz.com`) |
 
 ### Main app (Express + React)
 
-Deploy `apps/app` to Railway, Render, or Fly.io (Node server + Postgres). Required env vars:
+Deploy `apps/app` to [Render](https://render.com) using the included `render.yaml` blueprint, or Railway/Fly.io.
 
-- `DATABASE_URL` — Neon pooled connection string
-- `SESSION_SECRET` — long random string
-- `AUTH_MODE=dev` (or your OIDC provider)
-- `OPENAI_API_KEY`
-- `APP_URL` — public URL of the deployed app
+| Variable | Required | Notes |
+|----------|----------|-------|
+| `DATABASE_URL` | Yes | Neon pooled connection string |
+| `SESSION_SECRET` | Yes | Long random string |
+| `AUTH_MODE` | Yes | Set `dev` until Clerk/OIDC is wired |
+| `OPENAI_API_KEY` | Yes | For AI tools |
+| `APP_URL` | Yes | Public URL, e.g. `https://viralyz.com` |
+| `USE_LOCAL_STORAGE` | Recommended | `true` for filesystem uploads |
 
-After the app is live, set `NEXT_PUBLIC_APP_URL` on Vercel to that URL so marketing CTAs link correctly.
+After deploy, set `NEXT_PUBLIC_APP_URL` on Vercel to the app URL so marketing CTAs redirect correctly.
+
+**Important:** The live site at viralyz.com still runs the old Replit deployment. Redeploy from this repo with `AUTH_MODE=dev` (or your OIDC provider) to replace it.
 
 ## License
 
