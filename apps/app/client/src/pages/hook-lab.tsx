@@ -83,7 +83,7 @@ export default function HookLab() {
           description="Generate 10 scroll-stopping hook variants in seconds. Pick the winner."
         />
         {prefillNote && (
-          <div className="card-base p-4 mb-6 text-meta text-amber-200 border-amber-500/20" data-testid="banner-prefill">
+          <div className="card-base p-4 mb-6 text-meta text-[var(--score-50)] border-amber-500/20" data-testid="banner-prefill">
             {prefillNote}
           </div>
         )}
@@ -95,7 +95,7 @@ export default function HookLab() {
               value={topic}
               onChange={(e) => setTopic(e.target.value)}
               placeholder="e.g. How I built a $10K/month side hustle while working full-time"
-              className="bg-white/[0.04] border-white/[0.08] text-white"
+              className="bg-secondary border-border text-foreground"
               rows={3}
               data-testid="input-topic"
             />
@@ -112,8 +112,8 @@ export default function HookLab() {
                     className={cn(
                       "px-3.5 py-2 rounded-lg text-sm font-medium capitalize transition-colors border",
                       platform === p
-                        ? "bg-indigo-500/20 text-indigo-200 border-indigo-500/40"
-                        : "bg-white/[0.025] text-slate-400 border-white/[0.06] hover:text-white hover:border-white/[0.12]"
+                        ? "bg-indigo-500/20 text-primary border-indigo-500/40"
+                        : "bg-card text-muted-foreground border-border hover:text-foreground hover:border-[var(--border-strong)]"
                     )}
                   >
                     {p}
@@ -127,7 +127,7 @@ export default function HookLab() {
                 value={audience}
                 onChange={(e) => setAudience(e.target.value)}
                 placeholder="e.g. early-career devs, busy moms"
-                className="bg-white/[0.04] border-white/[0.08] text-white"
+                className="bg-secondary border-border text-foreground"
                 data-testid="input-audience"
               />
             </div>
@@ -168,11 +168,11 @@ export default function HookLab() {
                   <Trophy className="h-5 w-5" />
                 </div>
                 <div className="min-w-0 flex-1">
-                  <div className="text-eyebrow mb-1.5 text-emerald-300">Top pick</div>
-                  <p className="text-white text-lg font-medium mb-2" data-testid="text-best-hook">
+                  <div className="text-eyebrow mb-1.5 text-[var(--score-90)]">Top pick</div>
+                  <p className="text-foreground text-lg font-medium mb-2" data-testid="text-best-hook">
                     "{result.hooks[result.bestHookIndex]?.text}"
                   </p>
-                  <p className="text-sm text-slate-400">{result.bestHookExplanation}</p>
+                  <p className="text-sm text-muted-foreground">{result.bestHookExplanation}</p>
                 </div>
               </div>
             </div>
@@ -194,7 +194,7 @@ export default function HookLab() {
                   >
                     <div className="flex items-start justify-between gap-4 mb-3">
                       <div className="flex items-center gap-2">
-                        <span className="px-2 py-1 rounded-md text-xs font-medium bg-white/[0.04] border border-white/[0.06] text-slate-300 capitalize">
+                        <span className="px-2 py-1 rounded-md text-xs font-medium bg-secondary border border-border text-muted-foreground capitalize">
                           {hook.style}
                         </span>
                         <span className={`px-2.5 py-1 rounded-md text-sm font-bold tabular-nums score-bg-${tone}`} data-testid={`text-score-${idx}`}>
@@ -205,14 +205,14 @@ export default function HookLab() {
                         variant="ghost"
                         size="sm"
                         onClick={() => copyHook(hook.text, idx)}
-                        className="text-slate-400 hover:text-white"
+                        className="text-muted-foreground hover:text-foreground"
                         data-testid={`button-copy-${idx}`}
                       >
                         {copiedIdx === idx ? <Check className="h-4 w-4" /> : <Copy className="h-4 w-4" />}
                       </Button>
                     </div>
-                    <p className="text-white text-base mb-2 leading-relaxed">"{hook.text}"</p>
-                    <p className="text-sm text-slate-500">{hook.reasoning}</p>
+                    <p className="text-foreground text-base mb-2 leading-relaxed">"{hook.text}"</p>
+                    <p className="text-sm text-muted-foreground">{hook.reasoning}</p>
                   </motion.div>
                 );
               })}

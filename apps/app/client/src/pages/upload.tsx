@@ -78,7 +78,7 @@ const platforms = [
     name: 'TikTok',
     icon: '🎵',
     color: 'bg-black',
-    hoverBorder: 'hover:border-white/50',
+    hoverBorder: 'hover:border-border0',
     activeBorder: 'border-white',
     activeBg: 'bg-white/20',
     formats: ['clip', 'flash'],
@@ -278,13 +278,13 @@ export default function Upload() {
             </div>
             
             <div>
-              <h1 className="text-3xl font-bold text-white mb-2">Published to Viralyz!</h1>
+              <h1 className="text-3xl font-bold text-foreground mb-2">Published to Viralyz!</h1>
               <p className="text-muted-foreground">"{title}" is now live on your profile</p>
             </div>
 
             {selectedPlatforms.filter(p => p !== 'viralyz').length > 0 && (
-              <div className="bg-card border border-white/10 rounded-2xl p-6 text-left">
-                <h3 className="font-bold text-white mb-4 flex items-center gap-2">
+              <div className="bg-card border border-border rounded-2xl p-6 text-left">
+                <h3 className="font-bold text-foreground mb-4 flex items-center gap-2">
                   <Share2 className="h-5 w-5" />
                   Cross-post to selected platforms
                 </h3>
@@ -299,12 +299,12 @@ export default function Upload() {
                       <button
                         key={platform.id}
                         onClick={() => openPlatformUpload(platform.uploadUrl)}
-                        className="flex items-center gap-3 p-4 rounded-xl bg-white/5 border border-white/10 hover:bg-white/10 hover:border-white/20 transition-all group"
+                        className="flex items-center gap-3 p-4 rounded-xl bg-secondary border border-border hover:bg-secondary hover:border-border transition-all group"
                         data-testid={`open-${platform.id}`}
                       >
                         <span className="text-2xl">{platform.icon}</span>
                         <div className="text-left">
-                          <div className="font-medium text-white">{platform.name}</div>
+                          <div className="font-medium text-foreground">{platform.name}</div>
                           <div className="text-xs text-muted-foreground flex items-center gap-1">
                             Open upload <ExternalLink className="h-3 w-3" />
                           </div>
@@ -338,7 +338,7 @@ export default function Upload() {
     <Shell>
       <div className="mx-auto max-w-3xl py-8">
         <div className="mb-8 text-center">
-          <h1 className="text-4xl font-bold font-display text-white mb-2">Create Content</h1>
+          <h1 className="text-4xl font-bold font-display text-foreground mb-2">Create Content</h1>
           <p className="text-muted-foreground">Share your story with the world. One platform, all formats.</p>
         </div>
 
@@ -358,15 +358,15 @@ export default function Upload() {
                     whileHover={{ scale: 1.02 }}
                     whileTap={{ scale: 0.98 }}
                     onClick={() => setSelectedType(item.type)}
-                    className={`p-6 rounded-2xl bg-card border border-white/10 ${item.borderHover} transition-all cursor-pointer group`}
+                    className={`p-6 rounded-2xl bg-card border border-border ${item.borderHover} transition-all cursor-pointer group`}
                     data-testid={`select-${item.type}`}
                   >
-                    <div className={`h-12 w-12 rounded-xl ${item.iconBg} flex items-center justify-center ${item.iconColor} mb-4 ${item.iconHoverBg} group-hover:text-white transition-colors`}>
+                    <div className={`h-12 w-12 rounded-xl ${item.iconBg} flex items-center justify-center ${item.iconColor} mb-4 ${item.iconHoverBg} group-hover:text-foreground transition-colors`}>
                       <item.icon size={24} />
                     </div>
-                    <h4 className="font-bold text-white text-lg mb-1">{item.title}</h4>
+                    <h4 className="font-bold text-foreground text-lg mb-1">{item.title}</h4>
                     <p className="text-sm text-muted-foreground mb-3">{item.desc}</p>
-                    <p className="text-xs text-white/40">{item.specs}</p>
+                    <p className="text-xs text-muted-foreground">{item.specs}</p>
                   </motion.div>
                 ))}
               </div>
@@ -381,7 +381,7 @@ export default function Upload() {
             >
               <button 
                 onClick={() => { setSelectedType(null); setUploadedFile(null); setUploadedObjectPath(null); }}
-                className="flex items-center gap-2 text-sm text-muted-foreground hover:text-white transition-colors"
+                className="flex items-center gap-2 text-sm text-muted-foreground hover:text-foreground transition-colors"
               >
                 <X size={16} /> Back to content types
               </button>
@@ -391,7 +391,7 @@ export default function Upload() {
                   {selectedTypeInfo && <selectedTypeInfo.icon className="h-5 w-5 text-primary" />}
                 </div>
                 <div>
-                  <h3 className="font-bold text-white">
+                  <h3 className="font-bold text-foreground">
                     {selectedTypeInfo?.title}
                   </h3>
                   <p className="text-xs text-muted-foreground">
@@ -412,7 +412,7 @@ export default function Upload() {
                       ? 'border-green-500/50 bg-green-500/5' 
                       : uploadedFile && isFileUploading
                         ? 'border-blue-500/50 bg-blue-500/5'
-                        : 'border-white/10 bg-white/5 hover:bg-white/10 hover:border-primary/50'
+                        : 'border-border bg-secondary hover:bg-secondary hover:border-primary/50'
                 }`}
               >
                 <input
@@ -431,7 +431,7 @@ export default function Upload() {
                         <Loader2 className="h-8 w-8 text-blue-500 animate-spin" />
                       </div>
                       <div>
-                        <h3 className="text-lg font-bold text-white">Uploading...</h3>
+                        <h3 className="text-lg font-bold text-foreground">Uploading...</h3>
                         <p className="text-sm text-muted-foreground">
                           {uploadedFile?.name}
                         </p>
@@ -443,7 +443,7 @@ export default function Upload() {
                         <Check className="h-8 w-8 text-green-500" />
                       </div>
                       <div>
-                        <h3 className="text-lg font-bold text-white">{uploadedFile?.name}</h3>
+                        <h3 className="text-lg font-bold text-foreground">{uploadedFile?.name}</h3>
                         <p className="text-sm text-muted-foreground">
                           {uploadedFile ? (uploadedFile.size / 1024 / 1024).toFixed(2) : 0} MB • Uploaded successfully
                         </p>
@@ -452,10 +452,10 @@ export default function Upload() {
                   ) : (
                     <>
                       <div className="h-16 w-16 rounded-full bg-gradient-to-tr from-primary to-accent flex items-center justify-center shadow-lg shadow-primary/25">
-                        <UploadCloud className="h-8 w-8 text-white" />
+                        <UploadCloud className="h-8 w-8 text-foreground" />
                       </div>
                       <div>
-                        <h3 className="text-lg font-bold text-white">Drag & Drop or Click to Upload</h3>
+                        <h3 className="text-lg font-bold text-foreground">Drag & Drop or Click to Upload</h3>
                         <p className="text-sm text-muted-foreground">
                           Select a file from your device
                         </p>
@@ -473,7 +473,7 @@ export default function Upload() {
                     value={title}
                     onChange={(e) => setTitle(e.target.value)}
                     placeholder="Give your content a catchy title..."
-                    className="w-full px-4 py-3 rounded-xl bg-white/5 border border-white/10 focus:border-primary/50 focus:outline-none focus:ring-2 focus:ring-primary/20 transition-all"
+                    className="w-full px-4 py-3 rounded-xl bg-secondary border border-border focus:border-primary/50 focus:outline-none focus:ring-2 focus:ring-primary/20 transition-all"
                     data-testid="input-title"
                   />
                 </div>
@@ -485,7 +485,7 @@ export default function Upload() {
                     onChange={(e) => setDescription(e.target.value)}
                     rows={3}
                     placeholder="Tell viewers what this is about..."
-                    className="w-full px-4 py-3 rounded-xl bg-white/5 border border-white/10 focus:border-primary/50 focus:outline-none focus:ring-2 focus:ring-primary/20 transition-all resize-none"
+                    className="w-full px-4 py-3 rounded-xl bg-secondary border border-border focus:border-primary/50 focus:outline-none focus:ring-2 focus:ring-primary/20 transition-all resize-none"
                     data-testid="input-description"
                   />
                 </div>
@@ -495,8 +495,8 @@ export default function Upload() {
                 <ViralyzScoreCard score={viralyzScore} compact />
               )}
 
-              <div className="bg-card border border-white/10 rounded-2xl p-6">
-                <h3 className="font-bold text-white mb-2 flex items-center gap-2">
+              <div className="bg-card border border-border rounded-2xl p-6">
+                <h3 className="font-bold text-foreground mb-2 flex items-center gap-2">
                   <Share2 className="h-5 w-5" />
                   Publish to Platforms
                 </h3>
@@ -522,8 +522,8 @@ export default function Upload() {
                         onClick={() => togglePlatform(platform.id)}
                         className={`flex items-center gap-2 px-4 py-2 rounded-xl border-2 transition-all ${
                           isSelected 
-                            ? `${platform.activeBg} ${platform.activeBorder} text-white` 
-                            : `bg-white/5 border-white/10 text-white/70 ${platform.hoverBorder}`
+                            ? `${platform.activeBg} ${platform.activeBorder} text-foreground` 
+                            : `bg-secondary border-border text-foreground/70 ${platform.hoverBorder}`
                         }`}
                         data-testid={`platform-${platform.id}`}
                       >
@@ -535,7 +535,7 @@ export default function Upload() {
                   })}
                 </div>
                 
-                <p className="text-xs text-white/40 mt-4">
+                <p className="text-xs text-muted-foreground mt-4">
                   External platforms will open in new tabs for you to complete the upload.
                 </p>
               </div>

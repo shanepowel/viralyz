@@ -81,7 +81,7 @@ export default function Onboarding() {
                 key={i}
                 className={cn(
                   "h-1.5 rounded-full transition-all duration-300",
-                  i <= step ? "w-8 bg-indigo-400" : "w-4 bg-white/10"
+                  i <= step ? "w-8 bg-indigo-400" : "w-4 bg-secondary"
                 )}
               />
             ))}
@@ -100,7 +100,7 @@ export default function Onboarding() {
             >
               <div className="text-eyebrow mb-3">Step 1 of 4</div>
               <h1 className="text-h1 mb-2">Where do you create?</h1>
-              <p className="text-slate-400 mb-6">We tune analyses, hooks, and timing to your main platform.</p>
+              <p className="text-muted-foreground mb-6">We tune analyses, hooks, and timing to your main platform.</p>
               <div className="grid grid-cols-2 gap-3">
                 {PLATFORMS.map((p) => (
                   <button
@@ -110,7 +110,7 @@ export default function Onboarding() {
                       "p-4 rounded-xl border text-left transition-all",
                       platform === p.value
                         ? "border-indigo-400 bg-indigo-500/10"
-                        : "border-white/[0.06] hover:border-white/[0.12]"
+                        : "border-border hover:border-[var(--border-strong)]"
                     )}
                     data-testid={`button-platform-${p.value}`}
                   >
@@ -133,12 +133,12 @@ export default function Onboarding() {
             >
               <div className="text-eyebrow mb-3">Step 2 of 4</div>
               <h1 className="text-h1 mb-2">What's your niche?</h1>
-              <p className="text-slate-400 mb-6">Be specific — "personal finance for Gen Z" beats "money".</p>
+              <p className="text-muted-foreground mb-6">Be specific — "personal finance for Gen Z" beats "money".</p>
               <Input
                 value={niche}
                 onChange={(e) => setNiche(e.target.value)}
                 placeholder="e.g. fitness, fintech, food vlogs..."
-                className="bg-white/[0.04] border-white/[0.08] text-base h-12"
+                className="bg-secondary border-border text-base h-12"
                 data-testid="input-niche"
                 autoFocus
               />
@@ -147,7 +147,7 @@ export default function Onboarding() {
                   <button
                     key={n}
                     onClick={() => setNiche(n)}
-                    className="text-xs px-3 py-1.5 rounded-full border border-white/[0.08] hover:border-white/[0.16] text-slate-300"
+                    className="text-xs px-3 py-1.5 rounded-full border border-border hover:border-border text-muted-foreground"
                   >
                     {n}
                   </button>
@@ -167,7 +167,7 @@ export default function Onboarding() {
             >
               <div className="text-eyebrow mb-3">Step 3 of 4</div>
               <h1 className="text-h1 mb-2">What's your main goal?</h1>
-              <p className="text-slate-400 mb-6">We'll prioritize the right tools and notifications.</p>
+              <p className="text-muted-foreground mb-6">We'll prioritize the right tools and notifications.</p>
               <div className="space-y-2">
                 {GOALS.map((g) => (
                   <button
@@ -177,15 +177,15 @@ export default function Onboarding() {
                       "w-full p-4 rounded-xl border text-left transition-all flex items-center gap-3",
                       goal === g.value
                         ? "border-indigo-400 bg-indigo-500/10"
-                        : "border-white/[0.06] hover:border-white/[0.12]"
+                        : "border-border hover:border-[var(--border-strong)]"
                     )}
                     data-testid={`button-goal-${g.value}`}
                   >
                     <div className="h-9 w-9 rounded-lg bg-white/[0.05] flex items-center justify-center">
-                      <g.icon className="h-4 w-4 text-indigo-300" />
+                      <g.icon className="h-4 w-4 text-primary" />
                     </div>
                     <span className="font-medium flex-1">{g.label}</span>
-                    {goal === g.value && <Check className="h-4 w-4 text-indigo-300" />}
+                    {goal === g.value && <Check className="h-4 w-4 text-primary" />}
                   </button>
                 ))}
               </div>
@@ -203,12 +203,12 @@ export default function Onboarding() {
             >
               <div className="text-eyebrow mb-3">Step 4 of 4 · Optional</div>
               <h1 className="text-h1 mb-2">Connect LinkedIn</h1>
-              <p className="text-slate-400 mb-6">
+              <p className="text-muted-foreground mb-6">
                 Hook up LinkedIn now and the agent can post for you the moment
                 you approve a draft. You can always do this later from Settings.
               </p>
               {!linkedin.data?.configured ? (
-                <div className="rounded-xl border border-amber-500/20 bg-amber-500/5 p-4 text-sm text-amber-200/90" data-testid="text-linkedin-not-configured">
+                <div className="rounded-xl border border-amber-500/20 bg-amber-500/5 p-4 text-sm text-[var(--score-50)]/90" data-testid="text-linkedin-not-configured">
                   LinkedIn isn't configured on this server yet. Skip this step
                   for now — you can connect anytime from Settings once it's set
                   up.
@@ -216,11 +216,11 @@ export default function Onboarding() {
               ) : linkedin.data?.connected ? (
                 <div className="rounded-xl border border-emerald-500/30 bg-emerald-500/10 p-4 flex items-center gap-3" data-testid="status-linkedin-connected">
                   <div className="h-10 w-10 rounded-full bg-emerald-500/20 flex items-center justify-center">
-                    <ShieldCheck className="h-5 w-5 text-emerald-300" />
+                    <ShieldCheck className="h-5 w-5 text-[var(--score-90)]" />
                   </div>
                   <div>
-                    <div className="font-semibold text-emerald-100">Connected</div>
-                    <div className="text-xs text-emerald-200/70">
+                    <div className="font-semibold text-emerald-800">Connected</div>
+                    <div className="text-xs text-[var(--score-90)]/70">
                       {linkedin.data.profileName ? `Posting as ${linkedin.data.profileName}.` : "The agent can now publish on your behalf."}
                     </div>
                   </div>
@@ -233,17 +233,17 @@ export default function Onboarding() {
                 >
                   <div className="rounded-xl border border-sky-500/30 bg-gradient-to-r from-sky-500/10 to-blue-500/10 hover:from-sky-500/20 hover:to-blue-500/20 p-4 flex items-center gap-3 transition-all">
                     <div className="h-10 w-10 rounded-full bg-sky-500/20 flex items-center justify-center">
-                      <Linkedin className="h-5 w-5 text-sky-300" />
+                      <Linkedin className="h-5 w-5 text-sky-700" />
                     </div>
                     <div className="flex-1">
                       <div className="font-semibold">Connect LinkedIn</div>
-                      <div className="text-xs text-slate-400">OAuth — we only request post + profile scopes.</div>
+                      <div className="text-xs text-muted-foreground">OAuth — we only request post + profile scopes.</div>
                     </div>
-                    <ArrowRight className="h-4 w-4 text-slate-400" />
+                    <ArrowRight className="h-4 w-4 text-muted-foreground" />
                   </div>
                 </a>
               )}
-              <p className="text-xs text-slate-500 mt-4">
+              <p className="text-xs text-muted-foreground mt-4">
                 v0 always pauses for your approval before publishing. Nothing posts silently.
               </p>
             </motion.div>
@@ -262,7 +262,7 @@ export default function Onboarding() {
                 qc.invalidateQueries({ queryKey: ["/api/auth/user"] });
                 setLocation("/");
               }}
-              className="text-sm text-slate-400 hover:text-white"
+              className="text-sm text-muted-foreground hover:text-foreground"
               data-testid="button-skip"
             >
               Skip for now

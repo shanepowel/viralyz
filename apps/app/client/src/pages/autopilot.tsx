@@ -80,7 +80,7 @@ function AccuracySection() {
   });
   if (isLoading) {
     return (
-      <div className="card-base p-5 text-sm text-slate-400" data-testid="card-accuracy-loading">
+      <div className="card-base p-5 text-sm text-muted-foreground" data-testid="card-accuracy-loading">
         Crunching the agent's prediction accuracy…
       </div>
     );
@@ -89,7 +89,7 @@ function AccuracySection() {
     return (
       <div className="card-base p-5" data-testid="card-accuracy-empty">
         <h2 className="text-h2 mb-1">Prediction accuracy</h2>
-        <p className="text-sm text-slate-400">
+        <p className="text-sm text-muted-foreground">
           The agent will start showing how accurate its viral-score predictions
           are once a few posts have been measured.
         </p>
@@ -101,43 +101,43 @@ function AccuracySection() {
       <div className="flex items-baseline justify-between gap-3">
         <div>
           <h2 className="text-h2">Prediction accuracy</h2>
-          <p className="text-meta text-slate-500">
+          <p className="text-meta text-muted-foreground">
             Last 7 days · {data.sampleSize} measured post{data.sampleSize === 1 ? "" : "s"}
           </p>
         </div>
-        <span className="text-eyebrow text-slate-500">
+        <span className="text-eyebrow text-muted-foreground">
           Updated {new Date(data.generatedAt).toLocaleDateString()}
         </span>
       </div>
       <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
         {data.perPlatform.length === 0 && (
-          <div className="text-sm text-slate-400 sm:col-span-3">
+          <div className="text-sm text-muted-foreground sm:col-span-3">
             No measured runs yet — give the agent a few cycles.
           </div>
         )}
         {data.perPlatform.map((p) => (
           <div
             key={p.platform}
-            className="rounded-lg border border-white/10 bg-white/[0.03] p-3"
+            className="rounded-lg border border-border bg-secondary/80 p-3"
             data-testid={`stat-mae-${p.platform}`}
           >
-            <div className="text-eyebrow text-slate-500 capitalize">{p.platform}</div>
-            <div className="text-2xl font-semibold text-white">±{p.mae}</div>
-            <div className="text-meta text-slate-500">MAE · {p.samples} sample{p.samples === 1 ? "" : "s"}</div>
+            <div className="text-eyebrow text-muted-foreground capitalize">{p.platform}</div>
+            <div className="text-2xl font-semibold text-foreground">±{p.mae}</div>
+            <div className="text-meta text-muted-foreground">MAE · {p.samples} sample{p.samples === 1 ? "" : "s"}</div>
           </div>
         ))}
       </div>
       {data.topLearnings.length > 0 && (
         <div>
-          <div className="text-eyebrow text-slate-500 mb-2">What the agent learned</div>
+          <div className="text-eyebrow text-muted-foreground mb-2">What the agent learned</div>
           <ol className="space-y-2">
             {data.topLearnings.map((s, i) => (
               <li
                 key={i}
-                className="text-sm text-slate-200 rounded-md border border-indigo-500/20 bg-indigo-500/5 p-3"
+                className="text-sm text-foreground rounded-md border border-indigo-500/20 bg-indigo-500/5 p-3"
                 data-testid={`text-learning-${i}`}
               >
-                <span className="text-indigo-300 font-medium mr-2">#{i + 1}</span>
+                <span className="text-primary font-medium mr-2">#{i + 1}</span>
                 {s}
               </li>
             ))}
@@ -186,21 +186,21 @@ const PLATFORM_CHAR_LIMIT: Record<PlatformId, number> = {
 };
 
 const STATUS_LABEL: Record<string, { label: string; tone: string }> = {
-  pending: { label: "Queued", tone: "bg-slate-500/15 text-slate-300 border-slate-500/30" },
-  running: { label: "Drafting", tone: "bg-indigo-500/15 text-indigo-300 border-indigo-500/30" },
-  awaiting_idea: { label: "Pick angle", tone: "bg-fuchsia-500/15 text-fuchsia-300 border-fuchsia-500/30" },
-  awaiting_approval: { label: "Needs you", tone: "bg-amber-500/15 text-amber-300 border-amber-500/30" },
-  approved: { label: "Approved", tone: "bg-emerald-500/15 text-emerald-300 border-emerald-500/30" },
-  rejected: { label: "Rejected", tone: "bg-rose-500/15 text-rose-300 border-rose-500/30" },
-  posting: { label: "Posting", tone: "bg-indigo-500/15 text-indigo-300 border-indigo-500/30" },
-  posted: { label: "Posted", tone: "bg-cyan-500/15 text-cyan-300 border-cyan-500/30" },
-  measuring: { label: "Measuring", tone: "bg-cyan-500/15 text-cyan-300 border-cyan-500/30" },
-  complete: { label: "Complete", tone: "bg-emerald-500/15 text-emerald-300 border-emerald-500/30" },
-  failed: { label: "Failed", tone: "bg-rose-500/15 text-rose-300 border-rose-500/30" },
+  pending: { label: "Queued", tone: "bg-slate-500/15 text-muted-foreground border-slate-500/30" },
+  running: { label: "Drafting", tone: "bg-indigo-500/15 text-primary border-indigo-500/30" },
+  awaiting_idea: { label: "Pick angle", tone: "bg-fuchsia-500/15 text-primary border-fuchsia-500/30" },
+  awaiting_approval: { label: "Needs you", tone: "bg-amber-500/15 text-[var(--score-50)] border-amber-500/30" },
+  approved: { label: "Approved", tone: "bg-emerald-500/15 text-[var(--score-90)] border-emerald-500/30" },
+  rejected: { label: "Rejected", tone: "bg-rose-500/15 text-destructive border-rose-500/30" },
+  posting: { label: "Posting", tone: "bg-indigo-500/15 text-primary border-indigo-500/30" },
+  posted: { label: "Posted", tone: "bg-cyan-500/15 text-[var(--score-90)] border-cyan-500/30" },
+  measuring: { label: "Measuring", tone: "bg-cyan-500/15 text-[var(--score-90)] border-cyan-500/30" },
+  complete: { label: "Complete", tone: "bg-emerald-500/15 text-[var(--score-90)] border-emerald-500/30" },
+  failed: { label: "Failed", tone: "bg-rose-500/15 text-destructive border-rose-500/30" },
 };
 
 function StatusPill({ status }: { status: string }) {
-  const s = STATUS_LABEL[status] || { label: status, tone: "bg-slate-500/15 text-slate-300 border-slate-500/30" };
+  const s = STATUS_LABEL[status] || { label: status, tone: "bg-slate-500/15 text-muted-foreground border-slate-500/30" };
   return (
     <span className={cn("inline-flex items-center px-2 py-0.5 rounded-full text-[10px] font-medium border", s.tone)} data-testid={`status-${status}`}>
       {s.label}
@@ -279,7 +279,7 @@ function NewMissionDialog({ onCreated }: { onCreated: (missionId?: string) => vo
           <Plus className="h-4 w-4" /> New mission
         </Button>
       </DialogTrigger>
-      <DialogContent className="border-white/10 bg-slate-950 max-w-lg">
+      <DialogContent className="border-border bg-card max-w-lg">
         <DialogHeader>
           <DialogTitle>Launch a new mission</DialogTitle>
           <DialogDescription>Tell the agent what to post about. It handles the rest.</DialogDescription>
@@ -288,45 +288,45 @@ function NewMissionDialog({ onCreated }: { onCreated: (missionId?: string) => vo
           <div>
             <Label>Platform</Label>
             <Select value={form.platform} onValueChange={(v) => setForm({ ...form, platform: v as PlatformId })}>
-              <SelectTrigger data-testid="select-mission-platform" className="bg-white/5 border-white/10"><SelectValue /></SelectTrigger>
+              <SelectTrigger data-testid="select-mission-platform" className="bg-secondary border-border"><SelectValue /></SelectTrigger>
               <SelectContent>
                 {(Object.keys(PLATFORM_LABEL) as PlatformId[]).map((p) => (
                   <SelectItem key={p} value={p} data-testid={`option-platform-${p}`}>
-                    {PLATFORM_LABEL[p]} <span className="text-slate-500 text-xs">· {PLATFORM_CHAR_LIMIT[p]} char cap{p === "instagram" ? " · auto image" : ""}</span>
+                    {PLATFORM_LABEL[p]} <span className="text-muted-foreground text-xs">· {PLATFORM_CHAR_LIMIT[p]} char cap{p === "instagram" ? " · auto image" : ""}</span>
                   </SelectItem>
                 ))}
               </SelectContent>
             </Select>
-            <p className="text-[11px] text-slate-500 mt-1">The agent tailors hooks, length, and hashtags to this platform.</p>
+            <p className="text-[11px] text-muted-foreground mt-1">The agent tailors hooks, length, and hashtags to this platform.</p>
           </div>
           <div>
             <Label htmlFor="m-name">Mission name</Label>
             <Input id="m-name" data-testid="input-mission-name" placeholder="Engineering thought leadership"
               value={form.name} onChange={(e) => setForm({ ...form, name: e.target.value })}
-              className="bg-white/5 border-white/10" />
+              className="bg-secondary border-border" />
           </div>
           <div>
             <Label htmlFor="m-brief">Brief</Label>
             <Textarea id="m-brief" data-testid="input-mission-brief"
               placeholder="Build an audience of senior engineers and EMs around scaling distributed systems and team leadership."
               value={form.brief} onChange={(e) => setForm({ ...form, brief: e.target.value })}
-              className="bg-white/5 border-white/10 min-h-[100px]" />
+              className="bg-secondary border-border min-h-[100px]" />
           </div>
           <div>
             <Label htmlFor="m-goal">Goal (one sentence)</Label>
             <Input id="m-goal" data-testid="input-mission-goal"
               placeholder="Reach 5,000 senior-engineer followers in 90 days."
               value={form.goal} onChange={(e) => setForm({ ...form, goal: e.target.value })}
-              className="bg-white/5 border-white/10" />
-            <p className="text-[11px] text-slate-500 mt-1">The agent uses this as the north star in every prompt and critique.</p>
+              className="bg-secondary border-border" />
+            <p className="text-[11px] text-muted-foreground mt-1">The agent uses this as the north star in every prompt and critique.</p>
           </div>
           <div>
             <Label htmlFor="m-inspo">Inspiration links (optional)</Label>
             <Textarea id="m-inspo" data-testid="input-mission-inspiration"
               placeholder="https://linkedin.com/in/...&#10;@some-handle&#10;https://example.com/great-post"
               value={form.inspirationLinksRaw} onChange={(e) => setForm({ ...form, inspirationLinksRaw: e.target.value })}
-              className="bg-white/5 border-white/10 min-h-[60px]" />
-            <p className="text-[11px] text-slate-500 mt-1">One per line. The agent studies tone and structure (not copy).</p>
+              className="bg-secondary border-border min-h-[60px]" />
+            <p className="text-[11px] text-muted-foreground mt-1">One per line. The agent studies tone and structure (not copy).</p>
           </div>
           <div>
             <Label>Tone preset</Label>
@@ -334,7 +334,7 @@ function NewMissionDialog({ onCreated }: { onCreated: (missionId?: string) => vo
               const isProfile = (voices.data || []).some((p: any) => p.id === v);
               setForm({ ...form, brandVoiceProfileId: isProfile ? v : "", tonePreset: isProfile ? "" : v });
             }}>
-              <SelectTrigger data-testid="select-tone-preset" className="bg-white/5 border-white/10"><SelectValue /></SelectTrigger>
+              <SelectTrigger data-testid="select-tone-preset" className="bg-secondary border-border"><SelectValue /></SelectTrigger>
               <SelectContent>
                 {(voices.data && voices.data.length > 0) && (
                   <>
@@ -353,7 +353,7 @@ function NewMissionDialog({ onCreated }: { onCreated: (missionId?: string) => vo
             <div>
               <Label>Viralyz</Label>
               <Select value={form.cadence} onValueChange={(v) => setForm({ ...form, cadence: v })}>
-                <SelectTrigger data-testid="select-cadence" className="bg-white/5 border-white/10"><SelectValue /></SelectTrigger>
+                <SelectTrigger data-testid="select-cadence" className="bg-secondary border-border"><SelectValue /></SelectTrigger>
                 <SelectContent>
                   <SelectItem value="weekdays">Weekdays</SelectItem>
                   <SelectItem value="daily">Daily</SelectItem>
@@ -366,42 +366,42 @@ function NewMissionDialog({ onCreated }: { onCreated: (missionId?: string) => vo
               <Input type="number" min={1} max={7} value={form.postsPerWeek}
                 data-testid="input-posts-per-week"
                 onChange={(e) => setForm({ ...form, postsPerWeek: parseInt(e.target.value) || 3 })}
-                className="bg-white/5 border-white/10" />
+                className="bg-secondary border-border" />
             </div>
           </div>
           <div>
             <Label>Approval mode</Label>
             <Select value={form.approvalMode} onValueChange={(v) => setForm({ ...form, approvalMode: v })}>
-              <SelectTrigger data-testid="select-approval-mode" className="bg-white/5 border-white/10"><SelectValue /></SelectTrigger>
+              <SelectTrigger data-testid="select-approval-mode" className="bg-secondary border-border"><SelectValue /></SelectTrigger>
               <SelectContent>
                 <SelectItem value="review">Review every post (recommended)</SelectItem>
                 <SelectItem value="auto">Auto-approve after delay</SelectItem>
               </SelectContent>
             </Select>
-            <p className="text-[11px] text-slate-500 mt-1">
+            <p className="text-[11px] text-muted-foreground mt-1">
               {form.approvalMode === "auto"
                 ? "v0 always pauses here. Nothing is posted until you click Approve."
                 : "Every draft waits for your explicit click before it posts."}
             </p>
           </div>
-          <div className="flex items-center justify-between rounded-lg border border-white/10 bg-white/[0.03] p-3">
+          <div className="flex items-center justify-between rounded-lg border border-border bg-secondary/80 p-3">
             <div>
               <div className="text-sm font-medium">Use my brand voice</div>
-              <div className="text-xs text-slate-400">Weave in your tone and signature moves.</div>
+              <div className="text-xs text-muted-foreground">Weave in your tone and signature moves.</div>
             </div>
             <Switch checked={form.useBrandVoice} onCheckedChange={(v) => setForm({ ...form, useBrandVoice: v })} data-testid="switch-brand-voice" />
           </div>
-          <div className="rounded-lg border border-white/10 bg-white/[0.03] p-3 text-xs text-slate-300 flex items-center gap-2" data-testid={`text-${form.platform}-account`}>
+          <div className="rounded-lg border border-border bg-secondary/80 p-3 text-xs text-muted-foreground flex items-center gap-2" data-testid={`text-${form.platform}-account`}>
             <span className="h-2 w-2 rounded-full" style={{ background: connStatus.data?.connected ? "#34d399" : "#f87171" }} />
             {connStatus.data?.connected ? (
-              <span>Posting as <span className="font-medium text-white">{connStatus.data?.profileName || connStatus.data?.account?.displayName || `your ${PLATFORM_LABEL[form.platform]} account`}</span></span>
+              <span>Posting as <span className="font-medium text-foreground">{connStatus.data?.profileName || connStatus.data?.account?.displayName || `your ${PLATFORM_LABEL[form.platform]} account`}</span></span>
             ) : connStatus.data?.configured ? (
               <span>{PLATFORM_LABEL[form.platform]} isn't connected yet — the agent will draft, but you'll need to connect before approving.</span>
             ) : (
               <span>{PLATFORM_LABEL[form.platform]} isn't configured on the server. Drafts will still generate; publishing is disabled.</span>
             )}
           </div>
-          <div className="rounded-lg border border-amber-500/20 bg-amber-500/5 p-3 text-xs text-amber-200/90 flex gap-2">
+          <div className="rounded-lg border border-amber-500/20 bg-amber-500/5 p-3 text-xs text-[var(--score-50)]/90 flex gap-2">
             <ShieldAlert className="h-4 w-4 mt-0.5 shrink-0" />
             <span>v0 always pauses for your approval before posting. The agent never publishes silently.</span>
           </div>
@@ -450,16 +450,16 @@ function IdeaSelectionCard({ run, mission, onChange }: { run: MissionRun; missio
     >
       <div className="flex items-start gap-3">
         <div className="h-10 w-10 rounded-lg bg-gradient-to-br from-indigo-500/30 to-fuchsia-500/30 flex items-center justify-center shrink-0">
-          <Sparkles className="h-5 w-5 text-fuchsia-300" />
+          <Sparkles className="h-5 w-5 text-primary" />
         </div>
         <div>
-          <div className="text-eyebrow text-fuchsia-300 mb-1">Pick the angle · Gate 1 of 2</div>
+          <div className="text-eyebrow text-primary mb-1">Pick the angle · Gate 1 of 2</div>
           <div className="text-h3">Which idea should I draft?</div>
-          <p className="text-sm text-slate-400">Mission: {mission?.name || "LinkedIn"}. Pick one and I'll write it up for your approval.</p>
+          <p className="text-sm text-muted-foreground">Mission: {mission?.name || "LinkedIn"}. Pick one and I'll write it up for your approval.</p>
         </div>
       </div>
       {ideas.length === 0 ? (
-        <div className="rounded-lg bg-white/[0.03] border border-white/[0.06] p-4 text-sm text-slate-400">
+        <div className="rounded-lg bg-secondary/80 border border-border p-4 text-sm text-muted-foreground">
           <Loader2 className="h-4 w-4 animate-spin inline mr-2" /> Generating ideas…
         </div>
       ) : (
@@ -470,26 +470,26 @@ function IdeaSelectionCard({ run, mission, onChange }: { run: MissionRun; missio
               onClick={() => { setPicking(i); select.mutate(i); }}
               disabled={select.isPending}
               data-testid={`button-pick-idea-${run.id}-${i}`}
-              className="text-left rounded-lg border border-white/10 hover:border-indigo-500/40 hover:bg-indigo-500/[0.04] p-3 transition-all disabled:opacity-50"
+              className="text-left rounded-lg border border-border hover:border-indigo-500/40 hover:bg-indigo-500/[0.04] p-3 transition-all disabled:opacity-50"
             >
               <div className="flex items-start gap-3">
-                <div className="text-[10px] uppercase tracking-wider text-slate-500 pt-1 w-8">#{i + 1}</div>
+                <div className="text-[10px] uppercase tracking-wider text-muted-foreground pt-1 w-8">#{i + 1}</div>
                 <div className="flex-1 min-w-0">
-                  <div className="text-sm font-medium text-slate-100 mb-1">{idea.title}</div>
-                  {idea.hook && <div className="text-xs text-slate-400 line-clamp-2">"{idea.hook}"</div>}
+                  <div className="text-sm font-medium text-foreground mb-1">{idea.title}</div>
+                  {idea.hook && <div className="text-xs text-muted-foreground line-clamp-2">"{idea.hook}"</div>}
                 </div>
                 {picking === i && select.isPending ? (
-                  <Loader2 className="h-4 w-4 animate-spin text-indigo-300" />
+                  <Loader2 className="h-4 w-4 animate-spin text-primary" />
                 ) : (
-                  <ChevronRight className="h-4 w-4 text-slate-500" />
+                  <ChevronRight className="h-4 w-4 text-muted-foreground" />
                 )}
               </div>
             </button>
           ))}
         </div>
       )}
-      <div className="flex items-center gap-2 pt-2 border-t border-white/[0.06]">
-        <Button variant="ghost" size="sm" className="text-slate-300 hover:bg-white/[0.05]"
+      <div className="flex items-center gap-2 pt-2 border-t border-border">
+        <Button variant="ghost" size="sm" className="text-muted-foreground hover:bg-white/[0.05]"
           onClick={() => regen.mutate()} disabled={regen.isPending} data-testid={`button-regen-ideas-${run.id}`}>
           {regen.isPending ? <Loader2 className="h-4 w-4 animate-spin mr-1.5" /> : <Sparkles className="h-4 w-4 mr-1.5" />}
           Show me different ideas
@@ -551,24 +551,24 @@ function WhyThisDraft({ runId }: { runId: string }) {
     <div className="rounded-lg border border-indigo-500/20 bg-indigo-500/[0.03]" data-testid={`why-this-draft-${runId}`}>
       <button
         onClick={() => setOpen(!open)}
-        className="w-full flex items-center gap-2 px-3 py-2 text-left text-xs font-medium text-indigo-200 hover:bg-indigo-500/[0.06] rounded-lg transition-colors"
+        className="w-full flex items-center gap-2 px-3 py-2 text-left text-xs font-medium text-primary hover:bg-indigo-500/[0.06] rounded-lg transition-colors"
         data-testid={`button-why-${runId}`}
       >
         <Sparkles className="h-3.5 w-3.5" />
         <span>Why this draft?</span>
-        <span className="text-[10px] text-slate-500 font-normal">— see the angles, hooks &amp; score the agent considered</span>
+        <span className="text-[10px] text-muted-foreground font-normal">— see the angles, hooks &amp; score the agent considered</span>
         <ChevronDown className={cn("h-3.5 w-3.5 ml-auto transition-transform", open && "rotate-180")} />
       </button>
       {open && (
         <div className="px-3 pb-3 pt-1 space-y-3 text-xs">
           {isLoading && (
-            <div className="text-slate-400 inline-flex items-center gap-2">
+            <div className="text-muted-foreground inline-flex items-center gap-2">
               <Loader2 className="h-3.5 w-3.5 animate-spin" /> Loading the agent's thinking…
             </div>
           )}
           {!isLoading && ideas.length > 0 && (
             <div data-testid={`why-ideas-${runId}`}>
-              <div className="text-eyebrow text-slate-500 mb-1.5 inline-flex items-center gap-1.5">
+              <div className="text-eyebrow text-muted-foreground mb-1.5 inline-flex items-center gap-1.5">
                 <Lightbulb className="h-3 w-3" /> Trending angles considered ({ideas.length})
               </div>
               <ul className="space-y-1">
@@ -580,18 +580,18 @@ function WhyThisDraft({ runId }: { runId: string }) {
                       className={cn(
                         "rounded border px-2 py-1.5",
                         picked
-                          ? "border-emerald-500/30 bg-emerald-500/[0.05] text-emerald-100"
-                          : "border-white/[0.06] bg-white/[0.02] text-slate-300"
+                          ? "border-emerald-500/30 bg-emerald-500/[0.05] text-emerald-800"
+                          : "border-border bg-card text-muted-foreground"
                       )}
                       data-testid={`why-idea-${runId}-${i}`}
                     >
                       <div className="flex items-start gap-2">
-                        <span className="text-[10px] text-slate-500 pt-0.5">#{i + 1}</span>
+                        <span className="text-[10px] text-muted-foreground pt-0.5">#{i + 1}</span>
                         <div className="flex-1 min-w-0">
                           <div className="font-medium">{idea.title}</div>
-                          {idea.hook && <div className="text-[11px] text-slate-400 mt-0.5">"{idea.hook}"</div>}
+                          {idea.hook && <div className="text-[11px] text-muted-foreground mt-0.5">"{idea.hook}"</div>}
                         </div>
-                        {picked && <span className="text-[9px] uppercase tracking-wider text-emerald-300">Picked</span>}
+                        {picked && <span className="text-[9px] uppercase tracking-wider text-[var(--score-90)]">Picked</span>}
                       </div>
                     </li>
                   );
@@ -601,7 +601,7 @@ function WhyThisDraft({ runId }: { runId: string }) {
           )}
           {!isLoading && candidates.length > 0 && (
             <div data-testid={`why-hooks-${runId}`}>
-              <div className="text-eyebrow text-slate-500 mb-1.5 inline-flex items-center gap-1.5">
+              <div className="text-eyebrow text-muted-foreground mb-1.5 inline-flex items-center gap-1.5">
                 <Target className="h-3 w-3" /> Candidate hooks ({candidates.length})
               </div>
               <ul className="space-y-1">
@@ -614,30 +614,30 @@ function WhyThisDraft({ runId }: { runId: string }) {
                         "rounded border px-2 py-1.5",
                         picked
                           ? "border-emerald-500/30 bg-emerald-500/[0.05]"
-                          : "border-white/[0.06] bg-white/[0.02]"
+                          : "border-border bg-card"
                       )}
                       data-testid={`why-hook-${runId}-${i}`}
                     >
                       <div className="flex items-start gap-2">
                         <span className={cn(
                           "text-[10px] font-semibold w-7 text-right pt-0.5",
-                          (h.score ?? 0) >= 80 ? "text-emerald-300" : (h.score ?? 0) >= 60 ? "text-indigo-300" : "text-slate-400"
+                          (h.score ?? 0) >= 80 ? "text-[var(--score-90)]" : (h.score ?? 0) >= 60 ? "text-primary" : "text-muted-foreground"
                         )}>{h.score ?? "—"}</span>
                         <div className="flex-1 min-w-0">
-                          <div className="text-slate-100">"{h.text}"</div>
-                          <div className="text-[10px] text-slate-500 mt-0.5">
+                          <div className="text-foreground">"{h.text}"</div>
+                          <div className="text-[10px] text-muted-foreground mt-0.5">
                             {h.style && <span className="capitalize">{h.style}</span>}
                             {h.reasoning && <span> · {h.reasoning}</span>}
                           </div>
                         </div>
-                        {picked && <span className="text-[9px] uppercase tracking-wider text-emerald-300 pt-0.5">Picked</span>}
+                        {picked && <span className="text-[9px] uppercase tracking-wider text-[var(--score-90)] pt-0.5">Picked</span>}
                       </div>
                     </li>
                   );
                 })}
               </ul>
               {bestHookExplanation && (
-                <p className="mt-1.5 text-[11px] text-emerald-200/80 italic" data-testid={`why-hook-explanation-${runId}`}>
+                <p className="mt-1.5 text-[11px] text-[var(--score-90)]/80 italic" data-testid={`why-hook-explanation-${runId}`}>
                   Why this hook beat the others: {bestHookExplanation}
                 </p>
               )}
@@ -645,22 +645,22 @@ function WhyThisDraft({ runId }: { runId: string }) {
           )}
           {!isLoading && breakdown && (
             <div data-testid={`why-score-${runId}`}>
-              <div className="text-eyebrow text-slate-500 mb-1.5 inline-flex items-center gap-1.5">
+              <div className="text-eyebrow text-muted-foreground mb-1.5 inline-flex items-center gap-1.5">
                 <Sparkles className="h-3 w-3" /> Analysis breakdown
-                {viralScore != null && <span className="text-indigo-300">· predicted {viralScore}</span>}
+                {viralScore != null && <span className="text-primary">· predicted {viralScore}</span>}
               </div>
               <div className="grid grid-cols-2 sm:grid-cols-5 gap-1.5">
                 {Object.entries(breakdown).map(([k, v]) => (
                   <div
                     key={k}
-                    className="rounded border border-white/[0.06] bg-white/[0.02] px-2 py-1.5 text-center"
+                    className="rounded border border-border bg-card px-2 py-1.5 text-center"
                     data-testid={`why-score-${runId}-${k}`}
                   >
                     <div className={cn(
                       "text-sm font-semibold",
-                      (v ?? 0) >= 80 ? "text-emerald-300" : (v ?? 0) >= 60 ? "text-indigo-300" : "text-slate-300"
+                      (v ?? 0) >= 80 ? "text-[var(--score-90)]" : (v ?? 0) >= 60 ? "text-primary" : "text-muted-foreground"
                     )}>{v}</div>
-                    <div className="text-[10px] text-slate-500 capitalize">{k}</div>
+                    <div className="text-[10px] text-muted-foreground capitalize">{k}</div>
                   </div>
                 ))}
               </div>
@@ -668,12 +668,12 @@ function WhyThisDraft({ runId }: { runId: string }) {
           )}
           {!isLoading && critiqueText && (
             <div data-testid={`why-critique-${runId}`}>
-              <div className="text-eyebrow text-slate-500 mb-1.5">Self-critique</div>
-              <p className="rounded border border-white/[0.06] bg-white/[0.02] px-2 py-1.5 text-slate-300 italic">{critiqueText}</p>
+              <div className="text-eyebrow text-muted-foreground mb-1.5">Self-critique</div>
+              <p className="rounded border border-border bg-card px-2 py-1.5 text-muted-foreground italic">{critiqueText}</p>
             </div>
           )}
           {!isLoading && ideas.length === 0 && candidates.length === 0 && !breakdown && (
-            <div className="text-slate-500 italic">The agent didn't record reasoning for this draft.</div>
+            <div className="text-muted-foreground italic">The agent didn't record reasoning for this draft.</div>
           )}
         </div>
       )}
@@ -729,27 +729,27 @@ function ApprovalCard({ run, mission, onChange }: { run: MissionRun; mission?: M
       <div className="flex items-start gap-4">
         <ScoreRing score={run.predictedScore || 0} size={56} />
         <div className="flex-1 min-w-0">
-          <div className="flex items-center gap-2 text-xs text-slate-400 mb-1">
+          <div className="flex items-center gap-2 text-xs text-muted-foreground mb-1">
             <Linkedin className="h-3.5 w-3.5" />
             <span className="truncate">{mission?.name || "LinkedIn mission"}</span>
           </div>
           <div className="text-h3 mb-2">Sign off · Gate 2 of 2</div>
           {editing ? (
-            <Textarea value={text} onChange={(e) => setText(e.target.value)} className="bg-white/5 border-white/10 min-h-[180px] text-sm" data-testid={`textarea-edit-${run.id}`} />
+            <Textarea value={text} onChange={(e) => setText(e.target.value)} className="bg-secondary border-border min-h-[180px] text-sm" data-testid={`textarea-edit-${run.id}`} />
           ) : (
-            <div className="rounded-lg bg-white/[0.03] border border-white/[0.06] p-3 text-sm whitespace-pre-wrap text-slate-200" data-testid={`text-draft-${run.id}`}>
+            <div className="rounded-lg bg-secondary/80 border border-border p-3 text-sm whitespace-pre-wrap text-foreground" data-testid={`text-draft-${run.id}`}>
               {run.finalText}
             </div>
           )}
           {run.finalHashtags && run.finalHashtags.length > 0 && (
             <div className="flex flex-wrap gap-1.5 mt-2">
               {run.finalHashtags.map((t, i) => (
-                <span key={i} className="text-[11px] px-1.5 py-0.5 rounded bg-indigo-500/10 text-indigo-300">{t.startsWith("#") ? t : `#${t}`}</span>
+                <span key={i} className="text-[11px] px-1.5 py-0.5 rounded bg-indigo-500/10 text-primary">{t.startsWith("#") ? t : `#${t}`}</span>
               ))}
             </div>
           )}
           <div className="mt-3 grid sm:grid-cols-[auto_1fr] items-center gap-2 text-xs">
-            <label className="text-slate-400 inline-flex items-center gap-1.5">
+            <label className="text-muted-foreground inline-flex items-center gap-1.5">
               <Clock className="h-3.5 w-3.5" /> Post at
             </label>
             <input
@@ -757,7 +757,7 @@ function ApprovalCard({ run, mission, onChange }: { run: MissionRun; mission?: M
               value={scheduledFor}
               onChange={(e) => setScheduledFor(e.target.value)}
               data-testid={`input-schedule-${run.id}`}
-              className="bg-white/5 border border-white/10 rounded px-2 py-1 text-sm text-slate-100"
+              className="bg-secondary border border-border rounded px-2 py-1 text-sm text-foreground"
             />
           </div>
         </div>
@@ -767,13 +767,13 @@ function ApprovalCard({ run, mission, onChange }: { run: MissionRun; mission?: M
 
       {showRegen && (
         <div className="rounded-lg border border-fuchsia-500/20 bg-fuchsia-500/[0.04] p-3 space-y-2" data-testid={`regen-panel-${run.id}`}>
-          <div className="text-xs text-fuchsia-200">Tell the agent what to do differently:</div>
+          <div className="text-xs text-fuchsia-700">Tell the agent what to do differently:</div>
           <Textarea value={feedback} onChange={(e) => setFeedback(e.target.value)} placeholder="e.g. punchier hook, less salesy, focus on the data point"
-            className="bg-white/5 border-white/10 min-h-[80px] text-sm" data-testid={`textarea-feedback-${run.id}`} />
+            className="bg-secondary border-border min-h-[80px] text-sm" data-testid={`textarea-feedback-${run.id}`} />
           <div className="flex items-center gap-2">
             <Button size="sm" variant="ghost" onClick={() => setShowRegen(false)}>Cancel</Button>
             <div className="flex-1" />
-            <Button size="sm" variant="ghost" className="text-rose-300" onClick={() => reject.mutate()} disabled={reject.isPending} data-testid={`button-reject-only-${run.id}`}>
+            <Button size="sm" variant="ghost" className="text-destructive" onClick={() => reject.mutate()} disabled={reject.isPending} data-testid={`button-reject-only-${run.id}`}>
               Reject only
             </Button>
             <Button size="sm" className="bg-gradient-to-r from-indigo-500 to-fuchsia-500 text-white border-0"
@@ -785,12 +785,12 @@ function ApprovalCard({ run, mission, onChange }: { run: MissionRun; mission?: M
         </div>
       )}
 
-      <div className="flex flex-wrap items-center gap-2 pt-2 border-t border-white/[0.06]">
-        <Button variant="outline" size="sm" className="border-white/10 hover:bg-white/[0.05]"
+      <div className="flex flex-wrap items-center gap-2 pt-2 border-t border-border">
+        <Button variant="outline" size="sm" className="border-border hover:bg-white/[0.05]"
           data-testid={`button-edit-${run.id}`} onClick={() => setEditing(!editing)}>
           {editing ? "Cancel edit" : "Edit text"}
         </Button>
-        <Button variant="ghost" size="sm" className="text-rose-300 hover:text-rose-200 hover:bg-rose-500/10"
+        <Button variant="ghost" size="sm" className="text-destructive hover:text-destructive hover:bg-rose-500/10"
           data-testid={`button-reject-${run.id}`} onClick={() => setShowRegen(true)}>
           <XCircle className="h-4 w-4 mr-1.5" /> Reject / regenerate
         </Button>
@@ -811,16 +811,16 @@ function RunRow({ run }: { run: MissionRun }) {
     <button
       type="button"
       onClick={() => navigate(`/autopilot/${run.missionId}`)}
-      className="w-full flex items-center gap-3 px-3 py-2 rounded-lg hover:bg-white/[0.04] transition-colors text-sm text-left"
+      className="w-full flex items-center gap-3 px-3 py-2 rounded-lg hover:bg-secondary transition-colors text-sm text-left"
       data-testid={`run-row-${run.id}`}
       title="Open the full step trail for this run"
     >
       <StatusPill status={run.status} />
-      <div className="flex-1 truncate text-slate-300">{run.finalText?.slice(0, 80) || <span className="text-slate-500 italic">(drafting…)</span>}</div>
-      {run.predictedScore != null && <span className="text-xs text-slate-400">{run.predictedScore}</span>}
-      {run.actualImpressions != null && <span className="text-xs text-cyan-300">{run.actualImpressions.toLocaleString()} views</span>}
-      <span className="text-[10px] text-slate-500 w-20 text-right">{new Date(run.createdAt).toLocaleDateString()}</span>
-      <ChevronRight className="h-3.5 w-3.5 text-slate-500" />
+      <div className="flex-1 truncate text-muted-foreground">{run.finalText?.slice(0, 80) || <span className="text-muted-foreground italic">(drafting…)</span>}</div>
+      {run.predictedScore != null && <span className="text-xs text-muted-foreground">{run.predictedScore}</span>}
+      {run.actualImpressions != null && <span className="text-xs text-[var(--score-90)]">{run.actualImpressions.toLocaleString()} views</span>}
+      <span className="text-[10px] text-muted-foreground w-20 text-right">{new Date(run.createdAt).toLocaleDateString()}</span>
+      <ChevronRight className="h-3.5 w-3.5 text-muted-foreground" />
     </button>
   );
 }
@@ -843,12 +843,12 @@ function MissionCard({ mission, onChange }: { mission: Mission; onChange: () => 
       <div className="flex items-start justify-between gap-3">
         <div className="flex-1 min-w-0">
           <div className="flex items-center gap-2 mb-1">
-            <Linkedin className="h-3.5 w-3.5 text-indigo-300" />
-            <span className="text-eyebrow text-slate-500">{mission.cadence} · {mission.postsPerWeek}/week</span>
-            {mission.status === "paused" && <Badge className="bg-slate-700 text-slate-200 text-[9px]">Paused</Badge>}
+            <Linkedin className="h-3.5 w-3.5 text-primary" />
+            <span className="text-eyebrow text-muted-foreground">{mission.cadence} · {mission.postsPerWeek}/week</span>
+            {mission.status === "paused" && <Badge className="bg-muted text-foreground text-[9px]">Paused</Badge>}
           </div>
           <div className="text-h3 truncate">{mission.name}</div>
-          <p className="text-sm text-slate-400 line-clamp-2 mt-1">{mission.brief}</p>
+          <p className="text-sm text-muted-foreground line-clamp-2 mt-1">{mission.brief}</p>
         </div>
         <div className="flex flex-col items-end gap-2">
           <Button size="icon" variant="ghost" className="h-8 w-8" onClick={(e) => { e.stopPropagation(); toggle.mutate(); }} data-testid={`button-toggle-${mission.id}`}>
@@ -856,10 +856,10 @@ function MissionCard({ mission, onChange }: { mission: Mission; onChange: () => 
           </Button>
         </div>
       </div>
-      <div className="flex items-center gap-3 text-xs text-slate-500 mt-3 pt-3 border-t border-white/[0.04]">
+      <div className="flex items-center gap-3 text-xs text-muted-foreground mt-3 pt-3 border-t border-border">
         {mission.useBrandVoice && <span className="inline-flex items-center gap-1"><Sparkles className="h-3 w-3" /> Brand voice</span>}
         {mission.nextRunAt && <span>Next: {new Date(mission.nextRunAt).toLocaleDateString()}</span>}
-        <span className="ml-auto inline-flex items-center text-indigo-300">Open <ChevronRight className="h-3 w-3" /></span>
+        <span className="ml-auto inline-flex items-center text-primary">Open <ChevronRight className="h-3 w-3" /></span>
       </div>
     </div>
   );
@@ -877,10 +877,10 @@ function PlatformStatusCard({ platform, status }: { platform: PlatformId; status
     return (
       <div className="card-base p-4 border-amber-500/20" data-testid={`${platform}-not-configured`}>
         <div className="flex items-start gap-3">
-          <AlertCircle className="h-5 w-5 text-amber-400 mt-0.5" />
+          <AlertCircle className="h-5 w-5 text-[var(--score-50)] mt-0.5" />
           <div className="flex-1">
             <div className="font-medium">{label} not configured</div>
-            <p className="text-sm text-slate-400 mt-1">Server keys are missing. Until then, missions can still draft for {label} and you can copy posts manually.</p>
+            <p className="text-sm text-muted-foreground mt-1">Server keys are missing. Until then, missions can still draft for {label} and you can copy posts manually.</p>
           </div>
         </div>
       </div>
@@ -890,12 +890,12 @@ function PlatformStatusCard({ platform, status }: { platform: PlatformId; status
     return (
       <div className="card-base p-4 border-indigo-500/20" data-testid={`${platform}-connect`}>
         <div className="flex items-center gap-3">
-          <Linkedin className="h-5 w-5 text-indigo-300" />
+          <Linkedin className="h-5 w-5 text-primary" />
           <div className="flex-1">
             <div className="font-medium">Connect your {label}</div>
-            <p className="text-sm text-slate-400">Authorize Viralyz to publish on your behalf.</p>
+            <p className="text-sm text-muted-foreground">Authorize Viralyz to publish on your behalf.</p>
           </div>
-          <Button data-testid={`button-connect-${platform}`} asChild className="bg-indigo-600 hover:bg-indigo-500 text-white border-0">
+          <Button data-testid={`button-connect-${platform}`} asChild className="bg-indigo-600 hover:bg-indigo-500 text-foreground border-0">
             <a href={`/api/${platform}/connect`}>Connect</a>
           </Button>
         </div>
@@ -908,9 +908,9 @@ function PlatformStatusCard({ platform, status }: { platform: PlatformId; status
         <CheckCircle2 className="h-5 w-5 text-emerald-400" />
         <div className="flex-1">
           <div className="font-medium">{label} connected</div>
-          <p className="text-sm text-slate-400">Posting as <span className="text-slate-200">{status.profileName || status.account?.displayName || "your account"}</span></p>
+          <p className="text-sm text-muted-foreground">Posting as <span className="text-foreground">{status.profileName || status.account?.displayName || "your account"}</span></p>
         </div>
-        <Button size="sm" variant="ghost" className="text-slate-400 hover:text-rose-300" onClick={() => disconnect.mutate()} data-testid={`button-disconnect-${platform}`}>
+        <Button size="sm" variant="ghost" className="text-muted-foreground hover:text-destructive" onClick={() => disconnect.mutate()} data-testid={`button-disconnect-${platform}`}>
           Disconnect
         </Button>
       </div>
@@ -931,39 +931,39 @@ function StepCard({ step }: { step: StepRow }) {
     ? "border-rose-500/30 bg-rose-500/[0.04]"
     : step.kind.startsWith("await")
       ? "border-amber-500/30 bg-amber-500/[0.04]"
-      : "border-white/10 bg-white/[0.02]";
+      : "border-border bg-card";
   const dur = step.startedAt && step.finishedAt
     ? Math.max(0, new Date(step.finishedAt).getTime() - new Date(step.startedAt).getTime())
     : null;
   return (
     <div className={`rounded-lg border ${tone} p-3`} data-testid={`step-${step.id}`}>
       <button onClick={() => setOpen(!open)} className="w-full text-left flex items-center gap-3">
-        <div className="text-[10px] uppercase tracking-wider text-slate-500 w-10">#{step.ord}</div>
+        <div className="text-[10px] uppercase tracking-wider text-muted-foreground w-10">#{step.ord}</div>
         <div className="flex-1 min-w-0">
-          <div className="text-sm font-medium text-slate-100">{step.kind}{step.toolCall ? <span className="text-slate-500"> · {step.toolCall}</span> : null}</div>
-          <div className="text-[11px] text-slate-500 flex items-center gap-2 flex-wrap">
+          <div className="text-sm font-medium text-foreground">{step.kind}{step.toolCall ? <span className="text-muted-foreground"> · {step.toolCall}</span> : null}</div>
+          <div className="text-[11px] text-muted-foreground flex items-center gap-2 flex-wrap">
             <span>{step.status}</span>
             {dur !== null && <span>· {dur}ms</span>}
-            {!!step.tokenCost && <span className="text-indigo-300">· ~{step.tokenCost} tok</span>}
-            {!!step.creditCost && <span className="text-fuchsia-300">· {step.creditCost} cr</span>}
-            {step.error && <span className="text-rose-300">· {step.error.slice(0, 60)}</span>}
+            {!!step.tokenCost && <span className="text-primary">· ~{step.tokenCost} tok</span>}
+            {!!step.creditCost && <span className="text-primary">· {step.creditCost} cr</span>}
+            {step.error && <span className="text-destructive">· {step.error.slice(0, 60)}</span>}
           </div>
         </div>
-        <ChevronRight className={`h-4 w-4 text-slate-500 transition-transform ${open ? "rotate-90" : ""}`} />
+        <ChevronRight className={`h-4 w-4 text-muted-foreground transition-transform ${open ? "rotate-90" : ""}`} />
       </button>
       {open && (
         <div className="mt-2 space-y-2 text-[11px]">
           {step.reasoning && (
-            <div className="rounded bg-indigo-500/[0.06] border border-indigo-500/20 p-2 text-slate-200" data-testid={`step-reasoning-${step.id}`}>
-              <span className="text-indigo-300">reasoning:</span> {step.reasoning}
+            <div className="rounded bg-indigo-500/[0.06] border border-indigo-500/20 p-2 text-foreground" data-testid={`step-reasoning-${step.id}`}>
+              <span className="text-primary">reasoning:</span> {step.reasoning}
             </div>
           )}
           <div className="grid sm:grid-cols-2 gap-2">
-            <pre className="rounded bg-black/40 border border-white/[0.06] p-2 overflow-auto max-h-48 text-slate-300" data-testid={`step-input-${step.id}`}>
-              <span className="text-slate-500">input:</span>{"\n"}{step.input ? JSON.stringify(step.input, null, 2) : "—"}
+            <pre className="rounded bg-black/40 border border-border p-2 overflow-auto max-h-48 text-muted-foreground" data-testid={`step-input-${step.id}`}>
+              <span className="text-muted-foreground">input:</span>{"\n"}{step.input ? JSON.stringify(step.input, null, 2) : "—"}
             </pre>
-            <pre className="rounded bg-black/40 border border-white/[0.06] p-2 overflow-auto max-h-48 text-slate-300" data-testid={`step-output-${step.id}`}>
-              <span className="text-slate-500">output:</span>{"\n"}{step.output ? JSON.stringify(step.output, null, 2) : "—"}
+            <pre className="rounded bg-black/40 border border-border p-2 overflow-auto max-h-48 text-muted-foreground" data-testid={`step-output-${step.id}`}>
+              <span className="text-muted-foreground">output:</span>{"\n"}{step.output ? JSON.stringify(step.output, null, 2) : "—"}
             </pre>
           </div>
         </div>
@@ -991,7 +991,7 @@ function RunInspector({ runId, mission, onChange }: { runId: string; mission?: M
     onSuccess: (action) => { toast({ title: `Run ${action}d` }); refetch(); onChange(); },
     onError: (e: any) => toast({ title: "Couldn't update run", description: String(e?.message || e), variant: "destructive" }),
   });
-  if (!data) return <div className="card-base p-4 text-sm text-slate-400"><Loader2 className="h-4 w-4 animate-spin inline mr-2" />Loading run…</div>;
+  if (!data) return <div className="card-base p-4 text-sm text-muted-foreground"><Loader2 className="h-4 w-4 animate-spin inline mr-2" />Loading run…</div>;
   const { run, steps } = data;
   const refresh = () => { refetch(); onChange(); };
   const tokens = steps.reduce((a, s) => a + (s.tokenCost || 0), 0);
@@ -1001,24 +1001,24 @@ function RunInspector({ runId, mission, onChange }: { runId: string; mission?: M
     <div className="card-base p-4 space-y-3" data-testid={`run-inspector-${runId}`}>
       <div className="flex items-center gap-2 flex-wrap">
         <StatusPill status={run.status} />
-        <div className="text-xs text-slate-400">Run · {new Date(run.createdAt).toLocaleString()}</div>
-        {run.predictedScore != null && <div className="text-xs text-indigo-300">predicted {run.predictedScore}</div>}
-        {run.actualImpressions != null && <div className="text-xs text-cyan-300">{run.actualImpressions.toLocaleString()} views</div>}
-        {tokens > 0 && <div className="text-xs text-indigo-300" data-testid={`run-tokens-${runId}`}>~{tokens.toLocaleString()} tok</div>}
-        {credits > 0 && <div className="text-xs text-fuchsia-300" data-testid={`run-credits-${runId}`}>{credits} cr</div>}
+        <div className="text-xs text-muted-foreground">Run · {new Date(run.createdAt).toLocaleString()}</div>
+        {run.predictedScore != null && <div className="text-xs text-primary">predicted {run.predictedScore}</div>}
+        {run.actualImpressions != null && <div className="text-xs text-[var(--score-90)]">{run.actualImpressions.toLocaleString()} views</div>}
+        {tokens > 0 && <div className="text-xs text-primary" data-testid={`run-tokens-${runId}`}>~{tokens.toLocaleString()} tok</div>}
+        {credits > 0 && <div className="text-xs text-primary" data-testid={`run-credits-${runId}`}>{credits} cr</div>}
         <div className="flex-1" />
         {!terminal && run.status !== "paused" && (
-          <Button size="sm" variant="ghost" className="h-7 px-2 text-slate-300" onClick={() => ctl.mutate("pause")} disabled={ctl.isPending} data-testid={`button-pause-run-${runId}`}>
+          <Button size="sm" variant="ghost" className="h-7 px-2 text-muted-foreground" onClick={() => ctl.mutate("pause")} disabled={ctl.isPending} data-testid={`button-pause-run-${runId}`}>
             <Pause className="h-3.5 w-3.5 mr-1" /> Pause
           </Button>
         )}
         {run.status === "paused" && (
-          <Button size="sm" variant="ghost" className="h-7 px-2 text-emerald-300" onClick={() => ctl.mutate("resume")} disabled={ctl.isPending} data-testid={`button-resume-run-${runId}`}>
+          <Button size="sm" variant="ghost" className="h-7 px-2 text-[var(--score-90)]" onClick={() => ctl.mutate("resume")} disabled={ctl.isPending} data-testid={`button-resume-run-${runId}`}>
             <Play className="h-3.5 w-3.5 mr-1" /> Resume
           </Button>
         )}
         {!terminal && (
-          <Button size="sm" variant="ghost" className="h-7 px-2 text-rose-300" onClick={() => ctl.mutate("cancel")} disabled={ctl.isPending} data-testid={`button-cancel-run-${runId}`}>
+          <Button size="sm" variant="ghost" className="h-7 px-2 text-destructive" onClick={() => ctl.mutate("cancel")} disabled={ctl.isPending} data-testid={`button-cancel-run-${runId}`}>
             <XCircle className="h-3.5 w-3.5 mr-1" /> Cancel
           </Button>
         )}
@@ -1030,9 +1030,9 @@ function RunInspector({ runId, mission, onChange }: { runId: string; mission?: M
         <ApprovalCard run={run} mission={mission} onChange={refresh} />
       )}
       <div className="space-y-1.5" data-testid={`run-timeline-${runId}`}>
-        <div className="text-eyebrow text-slate-500">Agent timeline · {steps.length} step{steps.length === 1 ? "" : "s"}</div>
+        <div className="text-eyebrow text-muted-foreground">Agent timeline · {steps.length} step{steps.length === 1 ? "" : "s"}</div>
         {steps.length === 0 ? (
-          <div className="text-xs text-slate-500 italic">No steps yet — the agent is warming up.</div>
+          <div className="text-xs text-muted-foreground italic">No steps yet — the agent is warming up.</div>
         ) : (
           steps.map((s) => <StepCard key={s.id} step={s} />)
         )}
@@ -1059,24 +1059,24 @@ function MissionInspectorPage({ missionId, onBack }: { missionId: string; onBack
   return (
     <DashboardLayout>
       <div className="max-w-5xl mx-auto p-6 space-y-5">
-        <button onClick={onBack} data-testid="button-back-missions" className="text-sm text-slate-400 hover:text-slate-200 inline-flex items-center gap-1.5">
+        <button onClick={onBack} data-testid="button-back-missions" className="text-sm text-muted-foreground hover:text-foreground inline-flex items-center gap-1.5">
           <ChevronRight className="h-4 w-4 rotate-180" /> Back to mission control
         </button>
         <PageHeader
           eyebrow="Mission"
           title={
             <span className="inline-flex items-center gap-2">
-              <Bot className="h-6 w-6 text-indigo-300" /> {mission?.name || "Mission"}
+              <Bot className="h-6 w-6 text-primary" /> {mission?.name || "Mission"}
             </span>
           }
           description={mission?.brief}
         />
         {cost && (cost.runs > 0) && (
           <div className="grid grid-cols-4 gap-3 text-center" data-testid="mission-cost-summary">
-            <div className="card-base p-3"><div className="text-h3 text-slate-100">{cost.runs}</div><div className="text-meta">Runs</div></div>
-            <div className="card-base p-3"><div className="text-h3 text-slate-100">{cost.steps}</div><div className="text-meta">Steps</div></div>
-            <div className="card-base p-3"><div className="text-h3 text-indigo-300">~{cost.tokens.toLocaleString()}</div><div className="text-meta">Tokens</div></div>
-            <div className="card-base p-3"><div className="text-h3 text-fuchsia-300">{cost.credits}</div><div className="text-meta">Credits</div></div>
+            <div className="card-base p-3"><div className="text-h3 text-foreground">{cost.runs}</div><div className="text-meta">Runs</div></div>
+            <div className="card-base p-3"><div className="text-h3 text-foreground">{cost.steps}</div><div className="text-meta">Steps</div></div>
+            <div className="card-base p-3"><div className="text-h3 text-primary">~{cost.tokens.toLocaleString()}</div><div className="text-meta">Tokens</div></div>
+            <div className="card-base p-3"><div className="text-h3 text-primary">{cost.credits}</div><div className="text-meta">Credits</div></div>
           </div>
         )}
         <div className="space-y-3">
@@ -1145,7 +1145,7 @@ function AutopilotHomePage() {
           eyebrow="Autopilot · v0"
           title={
             <span className="inline-flex items-center gap-3">
-              <Bot className="h-7 w-7 text-indigo-300" />
+              <Bot className="h-7 w-7 text-primary" />
               Your autonomous growth agent
             </span>
           }
@@ -1156,8 +1156,8 @@ function AutopilotHomePage() {
                 variant="outline"
                 size="sm"
                 className={cn(
-                  "gap-2 border-white/10",
-                  state?.paused && "border-rose-500/30 text-rose-300"
+                  "gap-2 border-border",
+                  state?.paused && "border-rose-500/30 text-destructive"
                 )}
                 onClick={() => togglePause.mutate()}
                 data-testid="button-killswitch"
@@ -1170,7 +1170,7 @@ function AutopilotHomePage() {
         />
 
         {state?.paused && (
-          <div className="rounded-lg border border-rose-500/30 bg-rose-500/5 p-3 text-sm text-rose-200 flex items-center gap-2" data-testid="banner-paused">
+          <div className="rounded-lg border border-rose-500/30 bg-rose-500/5 p-3 text-sm text-destructive flex items-center gap-2" data-testid="banner-paused">
             <ShieldAlert className="h-4 w-4" /> Autopilot is paused. No drafting, no posting, no measuring until you resume.
           </div>
         )}
@@ -1187,7 +1187,7 @@ function AutopilotHomePage() {
           <section className="space-y-3" data-testid="section-awaiting-idea">
             <div className="flex items-center justify-between">
               <h2 className="text-h2">Pick the angle</h2>
-              <span className="text-meta text-fuchsia-300">{awaitingIdea.length} ready to choose</span>
+              <span className="text-meta text-primary">{awaitingIdea.length} ready to choose</span>
             </div>
             <div className="grid lg:grid-cols-2 gap-4">
               {awaitingIdea.map((r) => (
@@ -1201,7 +1201,7 @@ function AutopilotHomePage() {
           <div className="space-y-3">
             <div className="flex items-baseline justify-between">
               <h2 className="text-h2">Approval queue</h2>
-              <span className="text-meta text-amber-300">{awaitingApproval.length} waiting</span>
+              <span className="text-meta text-[var(--score-50)]">{awaitingApproval.length} waiting</span>
             </div>
             <AnimatePresence>
               {awaitingApproval.map((r) => (
@@ -1215,7 +1215,7 @@ function AutopilotHomePage() {
         <div className="space-y-3">
           <div className="flex items-baseline justify-between">
             <h2 className="text-h2">Missions</h2>
-            <span className="text-meta text-slate-500">{state?.activeMissions || 0} active</span>
+            <span className="text-meta text-muted-foreground">{state?.activeMissions || 0} active</span>
           </div>
           {missionsList.length === 0 ? (
             <EmptyState

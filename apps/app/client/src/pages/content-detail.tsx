@@ -136,7 +136,7 @@ export default function ContentDetail() {
     return (
       <Shell>
         <div className="max-w-4xl mx-auto py-20 text-center">
-          <h1 className="text-2xl font-bold text-white mb-4">Content not found</h1>
+          <h1 className="text-2xl font-bold text-foreground mb-4">Content not found</h1>
           <Link href="/discover">
             <Button variant="outline">Go to Discover</Button>
           </Link>
@@ -172,7 +172,7 @@ export default function ContentDetail() {
                   )}
                   <div className="absolute inset-0 flex items-center justify-center bg-black/40">
                     <div className="h-16 w-16 rounded-full bg-white/20 backdrop-blur-sm flex items-center justify-center cursor-pointer hover:bg-white/30 transition-colors">
-                      <Play className="h-8 w-8 text-white ml-1" fill="white" />
+                      <Play className="h-8 w-8 text-foreground ml-1" fill="white" />
                     </div>
                   </div>
                   {content.duration && (
@@ -193,27 +193,27 @@ export default function ContentDetail() {
 
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-4">
-                <Button variant="ghost" size="sm" className="gap-2 text-white/70 hover:text-pink-400">
+                <Button variant="ghost" size="sm" className="gap-2 text-foreground/70 hover:text-pink-400">
                   <Heart className="h-5 w-5" />
                   <span>{content.likes.toLocaleString()}</span>
                 </Button>
-                <Button variant="ghost" size="sm" className="gap-2 text-white/70 hover:text-primary">
+                <Button variant="ghost" size="sm" className="gap-2 text-foreground/70 hover:text-primary">
                   <MessageCircle className="h-5 w-5" />
                   <span>{comments.length}</span>
                 </Button>
-                <Button variant="ghost" size="sm" className="gap-2 text-white/70 hover:text-cyan-400">
+                <Button variant="ghost" size="sm" className="gap-2 text-foreground/70 hover:text-cyan-400">
                   <Share2 className="h-5 w-5" />
                   <span>Share</span>
                 </Button>
               </div>
-              <div className="flex items-center gap-2 text-white/50 text-sm">
+              <div className="flex items-center gap-2 text-foreground/50 text-sm">
                 <Eye className="h-4 w-4" />
                 <span>{content.views.toLocaleString()} views</span>
               </div>
             </div>
 
             {content.description && (
-              <p className="text-white/70 leading-relaxed">{content.description}</p>
+              <p className="text-foreground/70 leading-relaxed">{content.description}</p>
             )}
           </div>
 
@@ -222,21 +222,21 @@ export default function ContentDetail() {
               <ViralyzScoreCard score={viralyzScore} />
             )}
 
-            <div className="rounded-2xl border border-white/10 bg-white/5 backdrop-blur-sm overflow-hidden">
-              <div className="p-4 border-b border-white/10">
-                <h2 className="font-bold text-white flex items-center gap-2">
+            <div className="rounded-2xl border border-border bg-secondary backdrop-blur-sm overflow-hidden">
+              <div className="p-4 border-b border-border">
+                <h2 className="font-bold text-foreground flex items-center gap-2">
                   <MessageCircle className="h-5 w-5 text-primary" />
                   Comments ({comments.length})
                 </h2>
               </div>
 
               {user ? (
-                <form onSubmit={handleSubmitComment} className="p-4 border-b border-white/10">
+                <form onSubmit={handleSubmitComment} className="p-4 border-b border-border">
                   <Textarea
                     placeholder="Add a comment..."
                     value={commentText}
                     onChange={(e) => setCommentText(e.target.value)}
-                    className="min-h-[80px] bg-white/5 border-white/10 resize-none mb-2"
+                    className="min-h-[80px] bg-secondary border-border resize-none mb-2"
                     data-testid="comment-input"
                   />
                   <Button 
@@ -251,8 +251,8 @@ export default function ContentDetail() {
                   </Button>
                 </form>
               ) : (
-                <div className="p-4 border-b border-white/10 text-center">
-                  <p className="text-white/50 text-sm mb-2">Sign in to comment</p>
+                <div className="p-4 border-b border-border text-center">
+                  <p className="text-foreground/50 text-sm mb-2">Sign in to comment</p>
                   <a href="/api/login">
                     <Button size="sm" variant="outline">Log In</Button>
                   </a>
@@ -274,9 +274,9 @@ export default function ContentDetail() {
                   </div>
                 ) : comments.length === 0 ? (
                   <div className="p-8 text-center">
-                    <MessageCircle className="h-10 w-10 text-white/20 mx-auto mb-3" />
-                    <p className="text-white/50 text-sm">No comments yet</p>
-                    <p className="text-white/30 text-xs mt-1">Be the first to share your thoughts!</p>
+                    <MessageCircle className="h-10 w-10 text-muted-foreground mx-auto mb-3" />
+                    <p className="text-foreground/50 text-sm">No comments yet</p>
+                    <p className="text-muted-foreground text-xs mt-1">Be the first to share your thoughts!</p>
                   </div>
                 ) : (
                   <AnimatePresence>
@@ -291,7 +291,7 @@ export default function ContentDetail() {
                           animate={{ opacity: 1, y: 0 }}
                           exit={{ opacity: 0, x: -20 }}
                           transition={{ delay: idx * 0.05 }}
-                          className="p-4 border-b border-white/5 last:border-b-0 group"
+                          className="p-4 border-b border-border last:border-b-0 group"
                           data-testid={`comment-${comment.id}`}
                         >
                           <div className="flex gap-3">
@@ -303,26 +303,26 @@ export default function ContentDetail() {
                                   className="h-8 w-8 rounded-full object-cover"
                                 />
                               ) : (
-                                <User className="h-4 w-4 text-white/60" />
+                                <User className="h-4 w-4 text-foreground/60" />
                               )}
                             </div>
                             <div className="flex-1 min-w-0">
                               <div className="flex items-center justify-between gap-2">
-                                <span className="font-medium text-white text-sm truncate">
+                                <span className="font-medium text-foreground text-sm truncate">
                                   {commentUser?.firstName || "User"}
                                 </span>
-                                <span className="text-xs text-white/40 flex-shrink-0">
+                                <span className="text-xs text-muted-foreground flex-shrink-0">
                                   {formatTimeAgo(new Date(comment.createdAt))}
                                 </span>
                               </div>
-                              <p className="text-white/70 text-sm mt-1 break-words">
+                              <p className="text-foreground/70 text-sm mt-1 break-words">
                                 {comment.text}
                               </p>
                               {isOwner && (
                                 <Button
                                   variant="ghost"
                                   size="sm"
-                                  className="h-6 px-2 mt-1 text-xs text-white/40 hover:text-red-400 opacity-0 group-hover:opacity-100 transition-opacity"
+                                  className="h-6 px-2 mt-1 text-xs text-muted-foreground hover:text-red-400 opacity-0 group-hover:opacity-100 transition-opacity"
                                   onClick={() => deleteCommentMutation.mutate(comment.id)}
                                   data-testid={`delete-comment-${comment.id}`}
                                 >

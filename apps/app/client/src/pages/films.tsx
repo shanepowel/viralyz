@@ -20,12 +20,12 @@ const Countdown = () => {
     }, []);
 
     return (
-        <div className="flex gap-4 font-mono text-2xl md:text-4xl font-bold text-white tracking-widest">
-            <div className="bg-black/40 backdrop-blur-md rounded-lg px-3 py-2 border border-white/10">0{timeLeft.h}</div>
+        <div className="flex gap-4 font-mono text-2xl md:text-4xl font-bold text-foreground tracking-widest">
+            <div className="bg-black/40 backdrop-blur-md rounded-lg px-3 py-2 border border-border">0{timeLeft.h}</div>
             <span className="self-center animate-pulse">:</span>
-            <div className="bg-black/40 backdrop-blur-md rounded-lg px-3 py-2 border border-white/10">{timeLeft.m < 10 ? '0'+timeLeft.m : timeLeft.m}</div>
+            <div className="bg-black/40 backdrop-blur-md rounded-lg px-3 py-2 border border-border">{timeLeft.m < 10 ? '0'+timeLeft.m : timeLeft.m}</div>
             <span className="self-center animate-pulse">:</span>
-            <div className="bg-black/40 backdrop-blur-md rounded-lg px-3 py-2 border border-white/10 text-primary">{timeLeft.s < 10 ? '0'+timeLeft.s : timeLeft.s}</div>
+            <div className="bg-black/40 backdrop-blur-md rounded-lg px-3 py-2 border border-border text-primary">{timeLeft.s < 10 ? '0'+timeLeft.s : timeLeft.s}</div>
         </div>
     );
 };
@@ -77,7 +77,7 @@ export default function Films() {
   return (
     <Shell>
       {/* Featured Hero with Countdown */}
-      <div className="relative mb-12 overflow-hidden rounded-3xl border border-white/10 bg-black/40 aspect-video md:aspect-[21/9] group">
+      <div className="relative mb-12 overflow-hidden rounded-3xl border border-border bg-black/40 aspect-video md:aspect-[21/9] group">
         <div className="absolute inset-0 bg-gradient-to-br from-purple-900 via-blue-900 to-cyan-900 opacity-60 transition-transform duration-1000 group-hover:scale-105">
           <div className="absolute inset-0 bg-[radial-gradient(circle_at_30%_50%,rgba(168,85,247,0.3),transparent_50%)]" />
           <div className="absolute inset-0 bg-[radial-gradient(circle_at_70%_70%,rgba(34,211,238,0.2),transparent_50%)]" />
@@ -89,12 +89,12 @@ export default function Films() {
                 <Calendar size={14} /> Global Premiere Event
             </span>
             
-            <h1 className="mb-6 text-4xl md:text-7xl font-black font-display text-white tracking-tight drop-shadow-[0_0_30px_rgba(255,255,255,0.3)]">
+            <h1 className="mb-6 text-4xl md:text-7xl font-black font-display text-foreground tracking-tight drop-shadow-[0_0_30px_rgba(255,255,255,0.3)]">
                 ECHOES OF TOMORROW
             </h1>
 
             <div className="mb-8">
-                <p className="text-white/60 text-sm font-bold uppercase tracking-widest mb-4">Starts In</p>
+                <p className="text-foreground/60 text-sm font-bold uppercase tracking-widest mb-4">Starts In</p>
                 <Countdown />
             </div>
 
@@ -102,7 +102,7 @@ export default function Films() {
                 <Button size="lg" className="rounded-full bg-white text-black hover:bg-white/90 gap-2 font-bold text-md px-8 h-12 shadow-[0_0_20px_rgba(255,255,255,0.4)]">
                     <Bell className="fill-black" size={20} /> Remind Me
                 </Button>
-                <Button size="lg" variant="outline" className="rounded-full border-white/20 bg-white/10 text-white hover:bg-white/20 gap-2 h-12 backdrop-blur-md">
+                <Button size="lg" variant="outline" className="rounded-full border-border bg-secondary text-foreground hover:bg-white/20 gap-2 h-12 backdrop-blur-md">
                     <Info size={20} /> Trailer
                 </Button>
             </div>
@@ -113,7 +113,7 @@ export default function Films() {
       <div className="space-y-10">
         <section>
             <div className="flex items-center justify-between mb-6">
-                <h2 className="text-2xl font-bold font-display text-white">Recommended Films</h2>
+                <h2 className="text-2xl font-bold font-display text-foreground">Recommended Films</h2>
                 <Button variant="link" className="text-primary">View All</Button>
             </div>
             
@@ -134,7 +134,7 @@ export default function Films() {
                   
                   return (
                     <div key={film.id} className="group cursor-pointer" data-testid={`film-${film.id}`}>
-                      <div className="relative aspect-video mb-3 overflow-hidden rounded-xl border border-white/10 bg-card">
+                      <div className="relative aspect-video mb-3 overflow-hidden rounded-xl border border-border bg-card">
                         <img 
                           src={film.thumbnail || film.src} 
                           alt={film.title || 'Film'} 
@@ -153,9 +153,9 @@ export default function Films() {
                         </div>
                       </div>
                       <div className="flex gap-3">
-                        <div className="h-10 w-10 shrink-0 rounded-full bg-white/10" />
+                        <div className="h-10 w-10 shrink-0 rounded-full bg-secondary" />
                         <div>
-                          <h3 className="font-bold text-white leading-tight mb-1 group-hover:text-primary transition-colors">
+                          <h3 className="font-bold text-foreground leading-tight mb-1 group-hover:text-primary transition-colors">
                             {film.title || 'Untitled Film'}
                           </h3>
                           <p className="text-sm text-muted-foreground">{film.views} views</p>
@@ -169,8 +169,8 @@ export default function Films() {
         </section>
 
         <section>
-            <h2 className="text-2xl font-bold font-display text-white mb-6">Continue Watching</h2>
-            <div className="relative overflow-hidden rounded-2xl border border-white/10 bg-white/5 p-6 flex flex-col md:flex-row items-center gap-6">
+            <h2 className="text-2xl font-bold font-display text-foreground mb-6">Continue Watching</h2>
+            <div className="relative overflow-hidden rounded-2xl border border-border bg-secondary p-6 flex flex-col md:flex-row items-center gap-6">
                 <div className="relative aspect-video w-full md:w-64 shrink-0 overflow-hidden rounded-lg bg-gradient-to-br from-purple-600 via-blue-600 to-cyan-600">
                      <div className="absolute inset-0 bg-black/20" />
                      <div className="absolute bottom-0 left-0 h-1 w-[65%] bg-primary" />
@@ -179,7 +179,7 @@ export default function Films() {
                      </div>
                 </div>
                 <div className="flex-1 text-center md:text-left">
-                    <h3 className="text-xl font-bold text-white mb-2">The Architecture of light</h3>
+                    <h3 className="text-xl font-bold text-foreground mb-2">The Architecture of light</h3>
                     <p className="text-muted-foreground mb-4">You have 15 minutes left.</p>
                     <Button variant="secondary" className="rounded-full">Resume</Button>
                 </div>

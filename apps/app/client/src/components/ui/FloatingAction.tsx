@@ -41,9 +41,9 @@ export function FloatingAction() {
                 transition={{ delay: i * 0.05 }}
               >
                 <Link href={action.href} onClick={() => setIsOpen(false)}>
-                  <div className="flex items-center gap-2 px-4 py-2 rounded-full bg-card border border-white/10 shadow-xl backdrop-blur-xl">
+                  <div className="flex items-center gap-2 px-4 py-2 rounded-full bg-card border border-border shadow-xl backdrop-blur-xl">
                     <span className="text-lg">{action.icon}</span>
-                    <span className="text-sm font-medium text-white">{action.label}</span>
+                    <span className="text-sm font-medium text-foreground">{action.label}</span>
                   </div>
                 </Link>
               </motion.div>
@@ -57,13 +57,13 @@ export function FloatingAction() {
         className={cn(
           "h-14 w-14 rounded-full flex items-center justify-center shadow-2xl transition-all",
           isOpen 
-            ? "bg-card border border-white/10 rotate-45" 
+            ? "bg-card border border-border rotate-45" 
             : "bg-gradient-to-r from-primary to-accent shadow-primary/30"
         )}
         whileTap={{ scale: 0.95 }}
         data-testid="fab-create"
       >
-        <Plus className={cn("h-6 w-6 text-white transition-transform", isOpen && "rotate-0")} />
+        <Plus className={cn("h-6 w-6 transition-transform", isOpen ? "text-foreground" : "text-primary-foreground", isOpen && "rotate-0")} />
       </motion.button>
     </div>
   );

@@ -156,31 +156,31 @@ export default function Messages() {
       <div className="max-w-6xl mx-auto" data-testid="page-messages">
         <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="mb-6">
           <div className="flex items-center gap-3 mb-2">
-            <MessageSquare className="h-8 w-8 text-indigo-400" />
+            <MessageSquare className="h-8 w-8 text-primary" />
             <h1 className="text-3xl font-bold" data-testid="text-messages-title">Messages</h1>
           </div>
-          <p className="text-slate-400">Chat with other creators in the community</p>
+          <p className="text-muted-foreground">Chat with other creators in the community</p>
         </motion.div>
 
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.1 }}
-          className="bg-slate-900/50 border border-slate-800/50 rounded-2xl overflow-hidden"
+          className="bg-secondary border border-border rounded-2xl overflow-hidden"
           style={{ height: "calc(100vh - 260px)", minHeight: "500px" }}
         >
           <div className="flex h-full">
             {/* Conversation List */}
-            <div className={`w-full md:w-80 border-r border-slate-800/50 flex flex-col ${selectedConversation ? "hidden md:flex" : "flex"}`}>
-              <div className="p-3 border-b border-slate-800/50">
+            <div className={`w-full md:w-80 border-r border-border flex flex-col ${selectedConversation ? "hidden md:flex" : "flex"}`}>
+              <div className="p-3 border-b border-border">
                 <div className="relative">
-                  <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-slate-500" />
+                  <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
                   <input
                     type="text"
                     placeholder="Search conversations..."
                     value={search}
                     onChange={(e) => setSearch(e.target.value)}
-                    className="w-full pl-9 pr-3 py-2 bg-slate-800/50 border border-slate-700/50 rounded-lg text-sm text-white placeholder-slate-500 focus:outline-none focus:border-indigo-500/50"
+                    className="w-full pl-9 pr-3 py-2 bg-secondary border border-border/50 rounded-lg text-sm text-foreground placeholder-slate-500 focus:outline-none focus:border-indigo-500/50"
                     data-testid="input-search-conversations"
                   />
                 </div>
@@ -190,18 +190,18 @@ export default function Messages() {
                   <div className="p-4 space-y-3">
                     {[1, 2, 3].map((i) => (
                       <div key={i} className="flex items-center gap-3 animate-pulse">
-                        <div className="h-10 w-10 rounded-full bg-slate-800" />
+                        <div className="h-10 w-10 rounded-full bg-secondary" />
                         <div className="flex-1 space-y-2">
-                          <div className="h-3 w-24 bg-slate-800 rounded" />
-                          <div className="h-2 w-32 bg-slate-800/50 rounded" />
+                          <div className="h-3 w-24 bg-secondary rounded" />
+                          <div className="h-2 w-32 bg-secondary rounded" />
                         </div>
                       </div>
                     ))}
                   </div>
                 ) : filteredConversations.length === 0 ? (
                   <div className="p-8 text-center">
-                    <MessageSquare className="h-10 w-10 text-slate-700 mx-auto mb-3" />
-                    <p className="text-sm text-slate-500">
+                    <MessageSquare className="h-10 w-10 text-muted-foreground mx-auto mb-3" />
+                    <p className="text-sm text-muted-foreground">
                       {search ? "No conversations found" : "No messages yet. Visit the Community page to start a conversation!"}
                     </p>
                   </div>
@@ -210,8 +210,8 @@ export default function Messages() {
                     <button
                       key={conv.id}
                       onClick={() => setSelectedConversation(conv.id)}
-                      className={`w-full px-4 py-3 flex items-center gap-3 hover:bg-slate-800/40 transition-colors text-left ${
-                        selectedConversation === conv.id ? "bg-slate-800/60 border-l-2 border-indigo-500" : ""
+                      className={`w-full px-4 py-3 flex items-center gap-3 hover:bg-secondary/40 transition-colors text-left ${
+                        selectedConversation === conv.id ? "bg-secondary/60 border-l-2 border-indigo-500" : ""
                       }`}
                       data-testid={`conversation-${conv.id}`}
                     >
@@ -228,17 +228,17 @@ export default function Messages() {
                       )}
                       <div className="flex-1 min-w-0">
                         <div className="flex items-center justify-between">
-                          <span className="font-medium text-white text-sm truncate">
+                          <span className="font-medium text-foreground text-sm truncate">
                             {conv.otherUser?.firstName || "User"} {conv.otherUser?.lastName?.[0] ? `${conv.otherUser.lastName[0]}.` : ""}
                           </span>
                           {conv.lastMessage && (
-                            <span className="text-xs text-slate-500 flex-shrink-0 ml-2">
+                            <span className="text-xs text-muted-foreground flex-shrink-0 ml-2">
                               {formatTime(conv.lastMessage.createdAt)}
                             </span>
                           )}
                         </div>
                         <div className="flex items-center justify-between">
-                          <p className="text-xs text-slate-400 truncate">
+                          <p className="text-xs text-muted-foreground truncate">
                             {conv.lastMessage
                               ? conv.lastMessage.senderId === currentUserId
                                 ? `You: ${conv.lastMessage.text}`
@@ -246,7 +246,7 @@ export default function Messages() {
                               : "No messages yet"}
                           </p>
                           {conv.unreadCount > 0 && (
-                            <span className="ml-2 flex-shrink-0 h-5 min-w-[20px] px-1.5 rounded-full bg-indigo-500 text-white text-xs flex items-center justify-center font-medium">
+                            <span className="ml-2 flex-shrink-0 h-5 min-w-[20px] px-1.5 rounded-full bg-indigo-500 text-foreground text-xs flex items-center justify-center font-medium">
                               {conv.unreadCount}
                             </span>
                           )}
@@ -263,10 +263,10 @@ export default function Messages() {
               {selectedConversation ? (
                 <>
                   {/* Chat Header */}
-                  <div className="px-4 py-3 border-b border-slate-800/50 flex items-center gap-3">
+                  <div className="px-4 py-3 border-b border-border flex items-center gap-3">
                     <button
                       onClick={() => setSelectedConversation(null)}
-                      className="md:hidden text-slate-400 hover:text-white"
+                      className="md:hidden text-muted-foreground hover:text-foreground"
                       data-testid="button-back-to-conversations"
                     >
                       <ArrowLeft className="h-5 w-5" />
@@ -278,7 +278,7 @@ export default function Messages() {
                         {selectedUser?.firstName?.[0] || "?"}
                       </div>
                     )}
-                    <span className="font-medium text-white">
+                    <span className="font-medium text-foreground">
                       {selectedUser?.firstName || "User"} {selectedUser?.lastName?.[0] ? `${selectedUser.lastName[0]}.` : ""}
                     </span>
                   </div>
@@ -287,8 +287,8 @@ export default function Messages() {
                   <div className="flex-1 overflow-y-auto p-4 space-y-3">
                     {messages && messages.length === 0 && (
                       <div className="text-center py-12">
-                        <MessageSquare className="h-12 w-12 text-slate-700 mx-auto mb-3" />
-                        <p className="text-slate-500 text-sm">Send a message to start the conversation</p>
+                        <MessageSquare className="h-12 w-12 text-muted-foreground mx-auto mb-3" />
+                        <p className="text-muted-foreground text-sm">Send a message to start the conversation</p>
                       </div>
                     )}
                     {messages?.map((msg) => {
@@ -308,12 +308,12 @@ export default function Messages() {
                             <div
                               className={`px-3 py-2 rounded-2xl text-sm ${
                                 isOwn
-                                  ? "bg-indigo-600 text-white rounded-br-md"
-                                  : "bg-slate-800 text-slate-200 rounded-bl-md"
+                                  ? "bg-indigo-600 text-foreground rounded-br-md"
+                                  : "bg-secondary text-foreground rounded-bl-md"
                               }`}
                             >
                               <p className="whitespace-pre-wrap break-words">{msg.text}</p>
-                              <p className={`text-[10px] mt-1 ${isOwn ? "text-indigo-200" : "text-slate-500"}`}>
+                              <p className={`text-[10px] mt-1 ${isOwn ? "text-primary" : "text-muted-foreground"}`}>
                                 {formatTime(msg.createdAt)}
                               </p>
                             </div>
@@ -325,7 +325,7 @@ export default function Messages() {
                   </div>
 
                   {/* Input */}
-                  <div className="p-3 border-t border-slate-800/50">
+                  <div className="p-3 border-t border-border">
                     <div className="flex items-end gap-2">
                       <textarea
                         value={messageText}
@@ -333,7 +333,7 @@ export default function Messages() {
                         onKeyDown={handleKeyDown}
                         placeholder="Type a message..."
                         rows={1}
-                        className="flex-1 px-4 py-2.5 bg-slate-800/50 border border-slate-700/50 rounded-xl text-white placeholder-slate-500 focus:outline-none focus:border-indigo-500/50 resize-none text-sm"
+                        className="flex-1 px-4 py-2.5 bg-secondary border border-border/50 rounded-xl text-foreground placeholder-slate-500 focus:outline-none focus:border-indigo-500/50 resize-none text-sm"
                         style={{ maxHeight: "120px" }}
                         data-testid="input-message"
                       />
@@ -352,9 +352,9 @@ export default function Messages() {
               ) : (
                 <div className="flex-1 flex items-center justify-center">
                   <div className="text-center">
-                    <MessageSquare className="h-16 w-16 text-slate-700 mx-auto mb-4" />
-                    <h3 className="text-lg font-medium text-slate-300 mb-2">Select a conversation</h3>
-                    <p className="text-sm text-slate-500">Choose a conversation from the list or message someone from the Community page</p>
+                    <MessageSquare className="h-16 w-16 text-muted-foreground mx-auto mb-4" />
+                    <h3 className="text-lg font-medium text-muted-foreground mb-2">Select a conversation</h3>
+                    <p className="text-sm text-muted-foreground">Choose a conversation from the list or message someone from the Community page</p>
                   </div>
                 </div>
               )}

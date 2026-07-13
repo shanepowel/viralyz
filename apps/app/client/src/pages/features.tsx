@@ -5,25 +5,25 @@ import { Link } from "wouter";
 
 export default function Features() {
   return (
-    <div className="min-h-screen bg-background text-white">
-      <nav className="fixed top-0 left-0 right-0 z-50 flex items-center justify-between px-6 py-4 backdrop-blur-xl bg-background/80 border-b border-white/5">
+    <div className="min-h-screen bg-background text-foreground">
+      <nav className="fixed top-0 left-0 right-0 z-50 flex items-center justify-between px-6 py-4 backdrop-blur-xl bg-background/80 border-b border-border">
         <Link href="/">
           <div className="flex items-center gap-2 cursor-pointer">
             <div className="h-8 w-8 rounded-lg bg-gradient-to-br from-primary to-accent flex items-center justify-center">
-              <TrendingUp className="h-4 w-4 text-white" />
+              <TrendingUp className="h-4 w-4 text-foreground" />
             </div>
             <span className="text-xl font-bold font-display tracking-tight">Viralyz</span>
           </div>
         </Link>
         <div className="hidden md:flex items-center gap-8">
-          <Link href="/features" className="text-white font-medium">Features</Link>
-          <Link href="/pricing" className="text-white/60 hover:text-white transition-colors">Pricing</Link>
-          <Link href="/about" className="text-white/60 hover:text-white transition-colors">About</Link>
-          <Link href="/contact" className="text-white/60 hover:text-white transition-colors">Contact</Link>
+          <Link href="/features" className="text-foreground font-medium">Features</Link>
+          <Link href="/pricing" className="text-foreground/60 hover:text-foreground transition-colors">Pricing</Link>
+          <Link href="/about" className="text-foreground/60 hover:text-foreground transition-colors">About</Link>
+          <Link href="/contact" className="text-foreground/60 hover:text-foreground transition-colors">Contact</Link>
         </div>
         <div className="flex items-center gap-4">
           <a href="/api/login">
-            <Button variant="ghost" className="text-white/80 hover:text-white">Log In</Button>
+            <Button variant="ghost" className="text-foreground/80 hover:text-foreground">Log In</Button>
           </a>
           <a href="/api/login">
             <Button className="bg-primary hover:bg-primary/90 rounded-full px-6">Get Started Free</Button>
@@ -41,7 +41,7 @@ export default function Features() {
             <h1 className="text-4xl md:text-6xl font-black font-display tracking-tight mb-6">
               Everything you need to <span className="bg-gradient-to-r from-primary to-accent bg-clip-text text-transparent">succeed</span>
             </h1>
-            <p className="text-xl text-white/60 max-w-2xl mx-auto">
+            <p className="text-xl text-foreground/60 max-w-2xl mx-auto">
               From content creation to community building to monetization, Viralyz has all the tools you need in one platform.
             </p>
           </motion.div>
@@ -56,13 +56,13 @@ export default function Features() {
                 <Film className="h-7 w-7 text-primary" />
               </div>
               <h2 className="text-3xl md:text-4xl font-bold font-display">Multi-Format Content Hub</h2>
-              <p className="text-white/60 text-lg leading-relaxed">
+              <p className="text-foreground/60 text-lg leading-relaxed">
                 Upload and share any type of content - short clips, long-form films, ephemeral stories, or stunning photography. 
                 Our adaptive player handles everything seamlessly.
               </p>
               <ul className="space-y-3">
                 {["Vertical & horizontal video support", "Auto-transcoding for all devices", "Scheduled publishing", "Draft saving & collaboration"].map((item, i) => (
-                  <li key={i} className="flex items-center gap-3 text-white/80">
+                  <li key={i} className="flex items-center gap-3 text-foreground/80">
                     <div className="h-5 w-5 rounded-full bg-primary/20 flex items-center justify-center">
                       <Zap className="h-3 w-3 text-primary" />
                     </div>
@@ -72,9 +72,9 @@ export default function Features() {
               </ul>
             </div>
             <div className="relative">
-              <div className="aspect-video rounded-2xl overflow-hidden border border-white/10 bg-gradient-to-br from-primary/30 via-card to-accent/20 flex items-center justify-center">
+              <div className="aspect-video rounded-2xl overflow-hidden border border-border bg-gradient-to-br from-primary/30 via-card to-accent/20 flex items-center justify-center">
                 <div className="relative">
-                  <div className="h-20 w-20 rounded-2xl bg-white/10 backdrop-blur flex items-center justify-center">
+                  <div className="h-20 w-20 rounded-2xl bg-secondary backdrop-blur flex items-center justify-center">
                     <Film className="h-10 w-10 text-primary" />
                   </div>
                   <div className="absolute -top-2 -right-2 h-6 w-6 rounded-full bg-accent flex items-center justify-center">
@@ -88,10 +88,10 @@ export default function Features() {
 
           <motion.div initial={{ opacity: 0, y: 40 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} className="grid lg:grid-cols-2 gap-12 items-center">
             <div className="relative order-2 lg:order-1">
-              <div className="aspect-video rounded-2xl overflow-hidden border border-white/10 bg-gradient-to-br from-accent/30 via-card to-primary/20 flex items-center justify-center">
+              <div className="aspect-video rounded-2xl overflow-hidden border border-border bg-gradient-to-br from-accent/30 via-card to-primary/20 flex items-center justify-center">
                 <div className="flex -space-x-3">
                   {[1,2,3,4].map(i => (
-                    <div key={i} className="h-12 w-12 rounded-full bg-white/10 backdrop-blur border-2 border-card flex items-center justify-center">
+                    <div key={i} className="h-12 w-12 rounded-full bg-secondary backdrop-blur border-2 border-card flex items-center justify-center">
                       <img src={`https://api.dicebear.com/7.x/avataaars/svg?seed=user${i}`} className="h-10 w-10 rounded-full" />
                     </div>
                   ))}
@@ -105,13 +105,13 @@ export default function Features() {
                 <Users className="h-7 w-7 text-accent" />
               </div>
               <h2 className="text-3xl md:text-4xl font-bold font-display">Community Tribes</h2>
-              <p className="text-white/60 text-lg leading-relaxed">
+              <p className="text-foreground/60 text-lg leading-relaxed">
                 Build engaged communities around your content. Tribes let your fans connect, share, and support each other - 
                 creating a loyal audience that grows organically.
               </p>
               <ul className="space-y-3">
                 {["Topic-based discussion threads", "Real-time chat channels", "Member roles & moderation", "Exclusive member content"].map((item, i) => (
-                  <li key={i} className="flex items-center gap-3 text-white/80">
+                  <li key={i} className="flex items-center gap-3 text-foreground/80">
                     <div className="h-5 w-5 rounded-full bg-accent/20 flex items-center justify-center">
                       <Zap className="h-3 w-3 text-accent" />
                     </div>
@@ -128,13 +128,13 @@ export default function Features() {
                 <BookOpen className="h-7 w-7 text-purple-400" />
               </div>
               <h2 className="text-3xl md:text-4xl font-bold font-display">Creator Courses</h2>
-              <p className="text-white/60 text-lg leading-relaxed">
+              <p className="text-foreground/60 text-lg leading-relaxed">
                 Monetize your expertise with structured courses. Create modules, track student progress, 
                 and build a sustainable income stream from your knowledge.
               </p>
               <ul className="space-y-3">
                 {["Drag-and-drop course builder", "Progress tracking for students", "Certificates & achievements", "Multiple pricing tiers"].map((item, i) => (
-                  <li key={i} className="flex items-center gap-3 text-white/80">
+                  <li key={i} className="flex items-center gap-3 text-foreground/80">
                     <div className="h-5 w-5 rounded-full bg-purple-500/20 flex items-center justify-center">
                       <Zap className="h-3 w-3 text-purple-400" />
                     </div>
@@ -144,7 +144,7 @@ export default function Features() {
               </ul>
             </div>
             <div className="relative">
-              <div className="aspect-video rounded-2xl overflow-hidden border border-white/10 bg-gradient-to-br from-purple-500/30 via-card to-pink-500/20 flex items-center justify-center">
+              <div className="aspect-video rounded-2xl overflow-hidden border border-border bg-gradient-to-br from-purple-500/30 via-card to-pink-500/20 flex items-center justify-center">
                 <div className="text-center">
                   <div className="h-16 w-16 mx-auto rounded-2xl bg-purple-500/20 backdrop-blur flex items-center justify-center mb-3">
                     <BookOpen className="h-8 w-8 text-purple-400" />
@@ -162,11 +162,11 @@ export default function Features() {
         </div>
       </section>
 
-      <section className="py-20 px-6 bg-white/[0.02] border-y border-white/5">
+      <section className="py-20 px-6 bg-card border-y border-border">
         <div className="max-w-6xl mx-auto">
           <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} className="text-center mb-16">
             <h2 className="text-3xl md:text-4xl font-bold font-display mb-4">More powerful features</h2>
-            <p className="text-white/60">Everything else you need to grow your audience</p>
+            <p className="text-foreground/60">Everything else you need to grow your audience</p>
           </motion.div>
           
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
@@ -184,11 +184,11 @@ export default function Features() {
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
                 transition={{ delay: i * 0.1 }}
-                className="p-6 rounded-2xl bg-white/5 border border-white/10 hover:border-white/20 transition-all"
+                className="p-6 rounded-2xl bg-secondary border border-border hover:border-border transition-all"
               >
                 <feature.icon className={`h-8 w-8 text-${feature.color}-400 mb-4`} />
                 <h3 className="text-lg font-bold mb-2">{feature.title}</h3>
-                <p className="text-white/60 text-sm">{feature.desc}</p>
+                <p className="text-foreground/60 text-sm">{feature.desc}</p>
               </motion.div>
             ))}
           </div>
@@ -197,9 +197,9 @@ export default function Features() {
 
       <section className="py-24 px-6">
         <div className="max-w-4xl mx-auto text-center">
-          <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} className="p-12 rounded-3xl bg-gradient-to-br from-primary/20 via-accent/10 to-purple-500/10 border border-white/10">
+          <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} className="p-12 rounded-3xl bg-gradient-to-br from-primary/20 via-accent/10 to-purple-500/10 border border-border">
             <h2 className="text-3xl md:text-4xl font-bold font-display mb-4">Ready to get started?</h2>
-            <p className="text-white/60 mb-8">Join thousands of creators already using Viralyz</p>
+            <p className="text-foreground/60 mb-8">Join thousands of creators already using Viralyz</p>
             <a href="/api/login">
               <Button size="lg" className="rounded-full bg-white text-black hover:bg-white/90 gap-2 font-bold px-10 h-14 text-lg">
                 Start Free Trial <ArrowRight size={20} />
@@ -209,17 +209,17 @@ export default function Features() {
         </div>
       </section>
 
-      <footer className="py-12 px-6 border-t border-white/5">
+      <footer className="py-12 px-6 border-t border-border">
         <div className="max-w-6xl mx-auto flex flex-col md:flex-row items-center justify-between gap-4">
           <Link href="/">
             <div className="flex items-center gap-2 cursor-pointer">
               <div className="h-6 w-6 rounded bg-gradient-to-br from-primary to-accent flex items-center justify-center">
-                <TrendingUp className="h-3 w-3 text-white" />
+                <TrendingUp className="h-3 w-3 text-foreground" />
               </div>
               <span className="font-bold font-display">Viralyz</span>
             </div>
           </Link>
-          <p className="text-sm text-white/40">&copy; 2026 Viralyz. All rights reserved.</p>
+          <p className="text-sm text-muted-foreground">&copy; 2026 Viralyz. All rights reserved.</p>
         </div>
       </footer>
     </div>

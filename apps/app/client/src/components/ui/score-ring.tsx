@@ -10,10 +10,11 @@ interface ScoreRingProps {
   animate?: boolean;
 }
 
-export function scoreTone(score: number | null | undefined): "emerald" | "indigo" | "amber" | "rose" | "slate" {
+/** Signal score bands: emerald / lime / amber / red */
+export function scoreTone(score: number | null | undefined): "emerald" | "lime" | "amber" | "rose" | "slate" {
   if (score == null) return "slate";
   if (score >= 80) return "emerald";
-  if (score >= 60) return "indigo";
+  if (score >= 60) return "lime";
   if (score >= 40) return "amber";
   return "rose";
 }
@@ -54,11 +55,11 @@ export function ScoreRing({
   const offset = circumference - (displayScore / 100) * circumference;
 
   const stops: Record<string, [string, string]> = {
-    emerald: ["#34d399", "#22d3ee"],
-    indigo: ["#a78bfa", "#22d3ee"],
-    amber: ["#fbbf24", "#f472b6"],
-    rose: ["#fb7185", "#f97316"],
-    slate: ["#64748b", "#475569"],
+    emerald: ["#0FA968", "#0FA968"],
+    lime: ["#7CA426", "#7CA426"],
+    amber: ["#D9950B", "#D9950B"],
+    rose: ["#DE4E4E", "#DE4E4E"],
+    slate: ["#928FA0", "#D6D2C8"],
   };
   const [c1, c2] = stops[tone];
   const gradId = `ringGradient-${tone}`;
@@ -98,7 +99,7 @@ export function ScoreRing({
         />
       </svg>
       <div className="absolute inset-0 flex flex-col items-center justify-center">
-        <span className="text-display text-4xl text-white tabular-nums">
+        <span className="text-display text-4xl text-foreground tabular-nums font-mono">
           {score == null ? "—" : displayScore}
         </span>
         {label && <span className="text-eyebrow mt-1">{label}</span>}

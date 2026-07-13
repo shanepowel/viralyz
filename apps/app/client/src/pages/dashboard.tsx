@@ -1,17 +1,15 @@
 import { Link } from "wouter";
-import { motion } from "framer-motion";
 import { useQuery } from "@tanstack/react-query";
 import {
   Bot, ArrowRight, Sparkles, Zap, Wand2, Lightbulb, Radar, Calendar,
-  Image as ImageIcon, Mic2, Bookmark, Repeat, CheckCircle2, Clock,
-  Linkedin, Plus, Pause, Play, ShieldAlert, ChevronRight, Activity,
+  Image as ImageIcon, Mic2, Bookmark, Repeat, Clock,
+  Linkedin, Plus, ShieldAlert, ChevronRight, Activity, Upload,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { DashboardLayout } from "@/components/layout/DashboardLayout";
 import { useAuth } from "@/hooks/use-auth";
 import { PageHeader } from "@/components/ui/page-header";
 import { ScoreRing } from "@/components/ui/score-ring";
-import { EmptyState } from "@/components/ui/empty-state";
 import { cn } from "@/lib/utils";
 
 type Mission = {
@@ -50,26 +48,26 @@ type LinkedInStatus = {
   account: { displayName: string | null } | null;
 };
 
-const manualTools = [
-  { icon: Zap, title: "Hook Lab", href: "/hook-lab" },
-  { icon: Wand2, title: "Caption Studio", href: "/caption-studio" },
-  { icon: Lightbulb, title: "Ideas", href: "/ideas" },
-  { icon: ImageIcon, title: "Thumbnails", href: "/thumbnails" },
-  { icon: Radar, title: "Trends", href: "/trends" },
-  { icon: Bookmark, title: "Swipe File", href: "/swipe-file" },
-  { icon: Repeat, title: "Repurpose", href: "/repurpose" },
-  { icon: Mic2, title: "Brand Voice", href: "/brand-voice" },
+const createTools = [
+  { icon: Zap, title: "Hook Lab", href: "/hook-lab", blurb: "Ten openings, each scored" },
+  { icon: Wand2, title: "Captions", href: "/caption-studio", blurb: "Platform-ready copy" },
+  { icon: Lightbulb, title: "Ideas", href: "/ideas", blurb: "When you're stuck" },
+  { icon: ImageIcon, title: "Thumbnails", href: "/thumbnails", blurb: "Readable at feed size" },
+  { icon: Radar, title: "Trends", href: "/trends", blurb: "Rising vs fading" },
+  { icon: Calendar, title: "Calendar", href: "/calendar", blurb: "Best posting slots" },
+  { icon: Bookmark, title: "Swipe file", href: "/swipe-file", blurb: "Save what works" },
+  { icon: Mic2, title: "Brand voice", href: "/brand-voice", blurb: "Stay consistent" },
 ];
 
 const STATUS_LABEL: Record<string, { label: string; tone: string }> = {
-  awaiting_approval: { label: "Needs you", tone: "bg-amber-500/15 text-amber-300 border-amber-500/30" },
-  approved: { label: "Approved", tone: "bg-emerald-500/15 text-emerald-300 border-emerald-500/30" },
-  posting: { label: "Posting", tone: "bg-indigo-500/15 text-indigo-300 border-indigo-500/30" },
-  posted: { label: "Posted", tone: "bg-cyan-500/15 text-cyan-300 border-cyan-500/30" },
-  complete: { label: "Complete", tone: "bg-emerald-500/15 text-emerald-300 border-emerald-500/30" },
-  running: { label: "Drafting", tone: "bg-indigo-500/15 text-indigo-300 border-indigo-500/30" },
-  pending: { label: "Queued", tone: "bg-slate-500/15 text-slate-300 border-slate-500/30" },
-  failed: { label: "Failed", tone: "bg-rose-500/15 text-rose-300 border-rose-500/30" },
+  awaiting_approval: { label: "Needs you", tone: "bg-[rgba(217,149,11,0.12)] text-[#a87208] border-[rgba(217,149,11,0.3)]" },
+  approved: { label: "Approved", tone: "bg-[rgba(15,169,104,0.12)] text-[#0b8a55] border-[rgba(15,169,104,0.3)]" },
+  posting: { label: "Posting", tone: "bg-[rgba(108,76,241,0.1)] text-[var(--accent-hover)] border-[rgba(108,76,241,0.25)]" },
+  posted: { label: "Posted", tone: "bg-[rgba(15,169,104,0.12)] text-[#0b8a55] border-[rgba(15,169,104,0.3)]" },
+  complete: { label: "Complete", tone: "bg-[rgba(15,169,104,0.12)] text-[#0b8a55] border-[rgba(15,169,104,0.3)]" },
+  running: { label: "Drafting", tone: "bg-[rgba(108,76,241,0.1)] text-[var(--accent-hover)] border-[rgba(108,76,241,0.25)]" },
+  pending: { label: "Queued", tone: "bg-secondary text-muted-foreground border-border" },
+  failed: { label: "Failed", tone: "bg-[rgba(222,78,78,0.12)] text-[#c43d3d] border-[rgba(222,78,78,0.3)]" },
 };
 
 export default function Dashboard() {
@@ -97,123 +95,88 @@ export default function Dashboard() {
   })();
   const name = user?.firstName || (user?.email?.split("@")[0]) || "creator";
   const awaiting = autopilot?.recentRuns?.filter((r) => r.status === "awaiting_approval") || [];
-  const activeMissions = missions.filter((m) => m.status === "active");
+  const credits = user?.creditsRemaining ?? 0;
 
   return (
     <DashboardLayout>
-      <div className="max-w-6xl mx-auto p-6 space-y-6">
+      <div className="max-w-5xl mx-auto space-y-8">
         <PageHeader
           eyebrow={`${greeting}, ${name}`}
-          title={
-            <span className="inline-flex items-center gap-3">
-              <Bot className="h-7 w-7 text-indigo-300" />
-              Mission Control
-            </span>
-          }
-          description="Here's what your agent is working on right now."
+          title="What are you posting next?"
+          description="Score a draft before it goes live. Every fix shows how many points it is worth."
           actions={
-            <Button asChild className="gap-2 bg-gradient-to-r from-indigo-500 to-fuchsia-500 hover:from-indigo-400 hover:to-fuchsia-400 text-white border-0 shadow-[0_0_24px_-8px_rgba(168,85,247,0.6)]" data-testid="button-new-mission-dash">
-              <Link href="/autopilot"><Plus className="h-4 w-4" /> New mission</Link>
+            <Button asChild className="gap-2 rounded-full" data-testid="button-score-home">
+              <Link href="/analyze">
+                <Upload className="h-4 w-4" /> Score content
+              </Link>
             </Button>
           }
         />
 
+        {/* Primary job card */}
+        <Link href="/analyze" className="block group" data-testid="card-score-primary">
+          <div className="relative overflow-hidden rounded-[22px] border border-border bg-card p-6 sm:p-8 shadow-[var(--shadow-soft)] transition-all group-hover:shadow-[var(--shadow-pop)] group-hover:border-[var(--border-strong)]">
+            <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_at_top_right,rgba(108,76,241,0.1),transparent_55%)]" />
+            <div className="relative flex flex-col sm:flex-row sm:items-center gap-6">
+              <div className="flex h-16 w-16 items-center justify-center rounded-full bg-[rgba(108,76,241,0.12)] text-primary shrink-0">
+                <Sparkles className="h-7 w-7" />
+              </div>
+              <div className="flex-1 min-w-0">
+                <div className="text-eyebrow text-primary mb-2">Primary</div>
+                <h2 className="text-h2 mb-1">Score your content free</h2>
+                <p className="text-muted-foreground text-sm max-w-lg">
+                  Drop in a video or paste a caption. In under 30 seconds you get a score out of 100 and exactly what to fix.
+                </p>
+              </div>
+              <div className="flex items-center gap-3 shrink-0">
+                <span className="font-mono text-xs text-muted-foreground">{credits} left</span>
+                <span className="inline-flex h-10 w-10 items-center justify-center rounded-full bg-primary text-primary-foreground group-hover:bg-[var(--accent-hover)] transition-colors">
+                  <ArrowRight className="h-5 w-5" />
+                </span>
+              </div>
+            </div>
+          </div>
+        </Link>
+
         {autopilot?.paused && (
-          <div className="rounded-lg border border-rose-500/30 bg-rose-500/5 p-3 text-sm text-rose-200 flex items-center gap-2" data-testid="banner-paused">
+          <div className="rounded-[16px] border border-[rgba(222,78,78,0.3)] bg-[rgba(222,78,78,0.08)] p-3 text-sm text-[#c43d3d] flex items-center gap-2" data-testid="banner-paused">
             <ShieldAlert className="h-4 w-4" /> Autopilot is paused.
-            <Link href="/autopilot" className="ml-auto underline hover:text-rose-100">Resume</Link>
+            <Link href="/autopilot" className="ml-auto underline hover:opacity-80">Resume</Link>
           </div>
         )}
 
-        {/* Top row: agent status + LinkedIn */}
-        <div className="grid md:grid-cols-3 gap-4">
-          <Link href="/autopilot" className="card-pop p-5 block hover:border-indigo-500/40 transition-all md:col-span-2" data-testid="card-agent-status">
-              <div className="flex items-center justify-between">
-                <div className="flex items-center gap-3">
-                  <div className={cn(
-                    "h-12 w-12 rounded-xl flex items-center justify-center shrink-0 shadow-[0_0_24px_-4px_rgba(168,85,247,0.5)]",
-                    autopilot?.paused
-                      ? "bg-slate-700"
-                      : "bg-gradient-to-br from-indigo-500 to-fuchsia-500",
-                  )}>
-                    <Bot className="h-6 w-6 text-white" />
-                  </div>
-                  <div>
-                    <div className="text-eyebrow text-slate-500">Your agent</div>
-                    <div className="text-h2 leading-tight">
-                      {autopilot?.paused
-                        ? "Paused"
-                        : (activeMissions.length > 0 ? `Running ${activeMissions.length} mission${activeMissions.length === 1 ? "" : "s"}` : "Standing by")}
-                    </div>
-                  </div>
-                </div>
-                <ChevronRight className="h-5 w-5 text-slate-500" />
-              </div>
-              <div className="mt-5 grid grid-cols-3 gap-3">
-                <div className="rounded-lg bg-white/[0.03] border border-white/[0.06] p-3 text-center">
-                  <div className="text-2xl font-bold text-amber-300">{autopilot?.awaitingApproval || 0}</div>
-                  <div className="text-[10px] uppercase tracking-wider text-slate-500 mt-1">Awaiting you</div>
-                </div>
-                <div className="rounded-lg bg-white/[0.03] border border-white/[0.06] p-3 text-center">
-                  <div className="text-2xl font-bold text-indigo-300">{autopilot?.activeMissions || 0}</div>
-                  <div className="text-[10px] uppercase tracking-wider text-slate-500 mt-1">Active missions</div>
-                </div>
-                <div className="rounded-lg bg-white/[0.03] border border-white/[0.06] p-3 text-center">
-                  <div className="text-2xl font-bold text-cyan-300">{autopilot?.recentRuns?.filter((r) => r.status === "posted" || r.status === "complete").length || 0}</div>
-                  <div className="text-[10px] uppercase tracking-wider text-slate-500 mt-1">Recently posted</div>
-                </div>
-              </div>
-          </Link>
-
-          <div className="card-base p-5" data-testid="card-linkedin">
-            <div className="flex items-center gap-3 mb-3">
-              <div className="h-10 w-10 rounded-lg bg-[#0077B5]/15 flex items-center justify-center">
-                <Linkedin className="h-5 w-5 text-[#0A85C7]" />
-              </div>
-              <div className="flex-1">
-                <div className="text-eyebrow text-slate-500">LinkedIn</div>
-                <div className="text-sm font-semibold">
-                  {linkedin?.connected ? "Connected" : linkedin?.configured ? "Not connected" : "Not configured"}
-                </div>
-              </div>
-            </div>
-            {linkedin?.connected ? (
-              <div className="text-xs text-slate-400 truncate">{linkedin.account?.displayName}</div>
-            ) : linkedin?.configured ? (
-              <Button asChild size="sm" className="w-full bg-[#0077B5] hover:bg-[#006399] text-white border-0">
-                <a href="/api/linkedin/connect">Connect</a>
-              </Button>
-            ) : (
-              <p className="text-xs text-slate-500">Ask the admin to set LinkedIn keys.</p>
-            )}
-          </div>
-        </div>
-
-        {/* Approval queue spotlight */}
+        {/* Waiting on you — only when relevant */}
         {awaiting.length > 0 && (
           <div className="space-y-3">
             <div className="flex items-baseline justify-between">
               <h2 className="text-h2 inline-flex items-center gap-2">
-                <Clock className="h-5 w-5 text-amber-400 animate-pulse" /> Waiting on you
+                <Clock className="h-5 w-5 text-[var(--score-50)]" /> Waiting on you
               </h2>
-              <Link href="/autopilot" className="text-sm text-indigo-300 hover:text-indigo-200">Open queue <ArrowRight className="inline h-3.5 w-3.5" /></Link>
+              <Link href="/autopilot" className="text-sm text-primary hover:text-[var(--accent-hover)]">
+                Open queue <ArrowRight className="inline h-3.5 w-3.5" />
+              </Link>
             </div>
             <div className="space-y-2">
               {awaiting.slice(0, 3).map((r) => {
                 const m = missions.find((mm) => mm.id === r.missionId);
                 return (
-                  <Link key={r.id} href="/autopilot" className="card-base p-4 hover:border-amber-500/30 transition-all flex items-start gap-4 cursor-pointer" data-testid={`approval-quick-${r.id}`}>
+                  <Link
+                    key={r.id}
+                    href="/autopilot"
+                    className="card-base p-4 hover:border-[rgba(217,149,11,0.35)] transition-all flex items-start gap-4 cursor-pointer"
+                    data-testid={`approval-quick-${r.id}`}
+                  >
                     <ScoreRing score={r.predictedScore || 0} size={48} />
                     <div className="flex-1 min-w-0">
-                      <div className="flex items-center gap-2 text-xs text-slate-500 mb-1">
+                      <div className="flex items-center gap-2 text-xs text-muted-foreground mb-1">
                         <Linkedin className="h-3 w-3" />
                         <span className="truncate">{m?.name || "Mission"}</span>
                         <span>·</span>
                         <span>{r.scheduledFor ? new Date(r.scheduledFor).toLocaleString() : "TBD"}</span>
                       </div>
-                      <div className="text-sm text-slate-200 line-clamp-2">{r.finalText}</div>
+                      <div className="text-sm text-foreground line-clamp-2">{r.finalText}</div>
                     </div>
-                    <ArrowRight className="h-4 w-4 text-slate-500 mt-1.5 shrink-0" />
+                    <ArrowRight className="h-4 w-4 text-muted-foreground mt-1.5 shrink-0" />
                   </Link>
                 );
               })}
@@ -221,58 +184,97 @@ export default function Dashboard() {
           </div>
         )}
 
-        {/* Competitive Pulse mini-card */}
-        {intelCompetitors.length > 0 && (
-          <Link href="/intelligence" className="block">
-            <div className="card-base p-4 hover:border-[#E85D3B]/40 transition-all flex items-center gap-4 cursor-pointer" data-testid="card-intel-pulse">
-              <div className="h-10 w-10 rounded-lg bg-[#E85D3B]/15 flex items-center justify-center shrink-0">
-                <Activity className="h-5 w-5 text-[#E85D3B]" />
-              </div>
-              <div className="flex-1 min-w-0">
-                <div className="text-eyebrow text-slate-500">Competitive Pulse</div>
-                <div className="text-sm text-slate-200">
-                  <span className="font-semibold text-white">{intelSignalCount}</span> competitor posts in the latest digest across {intelCompetitors.length} tracked
+        {/* Secondary row: autopilot + linkedin + competitors */}
+        <div className="grid md:grid-cols-3 gap-4">
+          <Link href="/autopilot" className="card-base card-hover p-5 block md:col-span-2" data-testid="card-agent-status">
+            <div className="flex items-center justify-between">
+              <div className="flex items-center gap-3">
+                <div className={cn(
+                  "h-11 w-11 rounded-[12px] flex items-center justify-center shrink-0",
+                  autopilot?.paused ? "bg-secondary" : "bg-[rgba(108,76,241,0.12)] text-primary",
+                )}>
+                  <Bot className="h-5 w-5" />
+                </div>
+                <div>
+                  <div className="text-eyebrow">Autopilot</div>
+                  <div className="text-h3 leading-tight">
+                    {autopilot?.paused
+                      ? "Paused"
+                      : (autopilot?.activeMissions ? `Running ${autopilot.activeMissions} mission${autopilot.activeMissions === 1 ? "" : "s"}` : "Standing by")}
+                  </div>
                 </div>
               </div>
-              <ArrowRight className="h-4 w-4 text-slate-500" />
+              <ChevronRight className="h-5 w-5 text-muted-foreground" />
+            </div>
+            <div className="mt-4 grid grid-cols-3 gap-2">
+              <div className="rounded-[12px] bg-secondary/80 border border-border p-3 text-center">
+                <div className="text-xl font-bold font-mono text-[var(--score-50)]">{autopilot?.awaitingApproval || 0}</div>
+                <div className="text-[10px] uppercase tracking-wider text-muted-foreground mt-1 font-mono">Awaiting</div>
+              </div>
+              <div className="rounded-[12px] bg-secondary/80 border border-border p-3 text-center">
+                <div className="text-xl font-bold font-mono text-primary">{autopilot?.activeMissions || 0}</div>
+                <div className="text-[10px] uppercase tracking-wider text-muted-foreground mt-1 font-mono">Active</div>
+              </div>
+              <div className="rounded-[12px] bg-secondary/80 border border-border p-3 text-center">
+                <div className="text-xl font-bold font-mono text-[var(--score-90)]">
+                  {autopilot?.recentRuns?.filter((r) => r.status === "posted" || r.status === "complete").length || 0}
+                </div>
+                <div className="text-[10px] uppercase tracking-wider text-muted-foreground mt-1 font-mono">Posted</div>
+              </div>
             </div>
           </Link>
-        )}
 
-        {/* Empty state if no missions yet */}
-        {missions.length === 0 && (
-          <div className="card-pop p-8" data-testid="empty-state-no-missions">
-            <div className="grid md:grid-cols-[1fr_auto] gap-6 items-center">
-              <div>
-                <div className="text-eyebrow text-fuchsia-300 mb-2">Get started in 60 seconds</div>
-                <h3 className="text-h2 mb-2">Launch your first mission</h3>
-                <p className="text-slate-400 mb-4">Tell the agent your audience, niche, and goal. It'll draft the first post within minutes — you just approve.</p>
-                <Button asChild className="gap-2 bg-gradient-to-r from-indigo-500 to-fuchsia-500 text-white border-0">
-                  <Link href="/autopilot"><Bot className="h-4 w-4" /> Launch a mission</Link>
-                </Button>
+          <div className="card-base p-5 space-y-4" data-testid="card-linkedin">
+            <div className="flex items-center gap-3">
+              <div className="h-10 w-10 rounded-[12px] bg-[#0077B5]/12 flex items-center justify-center">
+                <Linkedin className="h-5 w-5 text-[#0A85C7]" />
               </div>
-              <div className="hidden md:flex items-center justify-center">
-                <div className="h-32 w-32 rounded-2xl bg-gradient-to-br from-indigo-500/20 to-fuchsia-500/20 border border-white/10 flex items-center justify-center shadow-[0_0_60px_-12px_rgba(168,85,247,0.4)]">
-                  <Bot className="h-16 w-16 text-indigo-300" />
+              <div className="flex-1 min-w-0">
+                <div className="text-eyebrow">LinkedIn</div>
+                <div className="text-sm font-semibold truncate">
+                  {linkedin?.connected ? (linkedin.account?.displayName || "Connected") : linkedin?.configured ? "Not connected" : "Not configured"}
                 </div>
               </div>
             </div>
+            {!linkedin?.connected && linkedin?.configured && (
+              <Button asChild size="sm" className="w-full rounded-full bg-[#0077B5] hover:bg-[#006399] text-white border-0">
+                <a href="/api/linkedin/connect">Connect</a>
+              </Button>
+            )}
+            {intelCompetitors.length > 0 && (
+              <Link href="/intelligence" className="flex items-center gap-2 text-sm text-muted-foreground hover:text-foreground pt-1 border-t border-border">
+                <Activity className="h-4 w-4 text-primary" />
+                <span className="flex-1">{intelSignalCount} competitor posts tracked</span>
+                <ArrowRight className="h-3.5 w-3.5" />
+              </Link>
+            )}
+          </div>
+        </div>
+
+        {missions.length === 0 && (
+          <div className="card-base p-6 sm:p-8" data-testid="empty-state-no-missions">
+            <div className="text-eyebrow text-primary mb-2">Optional</div>
+            <h3 className="text-h2 mb-2">Or let Autopilot draft for you</h3>
+            <p className="text-muted-foreground mb-4 max-w-lg text-sm">
+              Set a mission once. The agent drafts, you approve, it posts. Scoring still runs on every draft.
+            </p>
+            <Button asChild variant="outline" className="gap-2 rounded-full">
+              <Link href="/autopilot"><Bot className="h-4 w-4" /> Set up Autopilot</Link>
+            </Button>
           </div>
         )}
 
-        {/* Recent runs */}
         {autopilot && autopilot.recentRuns.length > 0 && (
-          <div className="space-y-2">
+          <div className="space-y-3">
             <h2 className="text-h2">Recent activity</h2>
             <div className="card-base p-2">
               {autopilot.recentRuns.slice(0, 6).map((r) => {
-                const s = STATUS_LABEL[r.status] || { label: r.status, tone: "bg-slate-500/15 text-slate-300 border-slate-500/30" };
+                const s = STATUS_LABEL[r.status] || { label: r.status, tone: "bg-secondary text-muted-foreground border-border" };
                 return (
-                  <div key={r.id} className="flex items-center gap-3 px-3 py-2 rounded-lg hover:bg-white/[0.03] text-sm">
+                  <div key={r.id} className="flex items-center gap-3 px-3 py-2.5 rounded-[10px] hover:bg-secondary/80 text-sm">
                     <span className={cn("inline-flex items-center px-2 py-0.5 rounded-full text-[10px] font-medium border w-24 justify-center", s.tone)}>{s.label}</span>
-                    <span className="flex-1 truncate text-slate-300">{r.finalText?.slice(0, 80) || <span className="text-slate-500 italic">(drafting…)</span>}</span>
-                    {r.predictedScore != null && <span className="text-xs text-slate-400">{r.predictedScore}</span>}
-                    {r.actualImpressions != null && <span className="text-xs text-cyan-300">{r.actualImpressions.toLocaleString()} views</span>}
+                    <span className="flex-1 truncate text-foreground/80">{r.finalText?.slice(0, 80) || <span className="text-muted-foreground italic">(drafting…)</span>}</span>
+                    {r.predictedScore != null && <span className="text-xs font-mono text-muted-foreground">{r.predictedScore}</span>}
                   </div>
                 );
               })}
@@ -280,19 +282,22 @@ export default function Dashboard() {
           </div>
         )}
 
-        {/* Manual mode */}
         <div className="space-y-3">
-          <div className="flex items-baseline justify-between">
-            <div>
-              <h2 className="text-h2">Manual mode</h2>
-              <p className="text-sm text-slate-500">When you want to drive yourself.</p>
-            </div>
+          <div>
+            <h2 className="text-h2">Create tools</h2>
+            <p className="text-sm text-muted-foreground">Every tool feeds your Viral Score.</p>
           </div>
           <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
-            {manualTools.map((t) => (
-              <Link key={t.href} href={t.href} className="card-base p-4 hover:border-indigo-500/30 transition-all flex flex-col items-start gap-2 cursor-pointer" data-testid={`tool-${t.title.toLowerCase().replace(/\s+/g, '-')}`}>
-                <t.icon className="h-5 w-5 text-indigo-300" />
-                <div className="text-sm font-medium">{t.title}</div>
+            {createTools.map((t) => (
+              <Link
+                key={t.href}
+                href={t.href}
+                className="card-base card-hover p-4 flex flex-col items-start gap-2 cursor-pointer"
+                data-testid={`tool-${t.title.toLowerCase().replace(/\s+/g, '-')}`}
+              >
+                <t.icon className="h-5 w-5 text-primary" />
+                <div className="text-sm font-semibold">{t.title}</div>
+                <div className="text-xs text-muted-foreground">{t.blurb}</div>
               </Link>
             ))}
           </div>

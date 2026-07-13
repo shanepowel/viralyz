@@ -258,11 +258,11 @@ export default function ContentLibrary() {
           description="From spark to scheduled to shipped — drag cards to move stages and log how they performed."
           actions={
             <div className="flex items-center gap-2">
-              <div className="bg-white/[0.04] border border-white/[0.08] rounded-lg p-0.5 flex" data-testid="view-toggle">
+              <div className="bg-secondary border border-border rounded-lg p-0.5 flex" data-testid="view-toggle">
                 <button
                   onClick={() => switchView("board")}
                   className={cn("px-3 py-1.5 rounded-md text-sm flex items-center gap-1.5 transition-colors",
-                    view === "board" ? "bg-white/[0.08] text-white" : "text-slate-400 hover:text-white")}
+                    view === "board" ? "bg-white/[0.08] text-foreground" : "text-muted-foreground hover:text-foreground")}
                   data-testid="button-view-board"
                 >
                   <LayoutGrid className="h-3.5 w-3.5" /> Board
@@ -270,7 +270,7 @@ export default function ContentLibrary() {
                 <button
                   onClick={() => switchView("list")}
                   className={cn("px-3 py-1.5 rounded-md text-sm flex items-center gap-1.5 transition-colors",
-                    view === "list" ? "bg-white/[0.08] text-white" : "text-slate-400 hover:text-white")}
+                    view === "list" ? "bg-white/[0.08] text-foreground" : "text-muted-foreground hover:text-foreground")}
                   data-testid="button-view-list"
                 >
                   <ListIcon className="h-3.5 w-3.5" /> List
@@ -292,12 +292,12 @@ export default function ContentLibrary() {
           className="card-base p-3 mb-4 flex flex-col md:flex-row gap-3"
         >
           <div className="relative flex-1">
-            <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-slate-500" />
+            <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
             <Input
               value={search}
               onChange={(e) => setSearch(e.target.value)}
               placeholder="Search title or description..."
-              className="pl-9 bg-white/[0.03] border-white/[0.06]"
+              className="pl-9 bg-secondary/80 border-border"
               data-testid="input-search"
             />
           </div>
@@ -311,8 +311,8 @@ export default function ContentLibrary() {
                   className={cn(
                     "px-3 py-1.5 rounded-lg text-xs font-medium border transition-colors capitalize",
                     platformFilter === p
-                      ? "bg-indigo-500/20 border-indigo-400/40 text-indigo-200"
-                      : "bg-white/[0.02] border-white/[0.06] text-slate-300 hover:bg-white/[0.05]"
+                      ? "bg-indigo-500/20 border-indigo-400/40 text-primary"
+                      : "bg-card border-border text-muted-foreground hover:bg-white/[0.05]"
                   )}
                   data-testid={`filter-platform-${p}`}
                 >
@@ -329,8 +329,8 @@ export default function ContentLibrary() {
                   className={cn(
                     "px-3 py-1.5 rounded-lg text-xs font-medium border transition-colors capitalize",
                     nicheFilter === n
-                      ? "bg-purple-500/20 border-purple-400/40 text-purple-200"
-                      : "bg-white/[0.02] border-white/[0.06] text-slate-300 hover:bg-white/[0.05]"
+                      ? "bg-purple-500/20 border-purple-400/40 text-purple-700"
+                      : "bg-card border-border text-muted-foreground hover:bg-white/[0.05]"
                   )}
                   data-testid={`filter-niche-${n}`}
                 >
@@ -383,21 +383,21 @@ export default function ContentLibrary() {
 
       {/* Delete dialog */}
       <AlertDialog open={!!deleteTarget} onOpenChange={(open) => !open && setDeleteTarget(null)}>
-        <AlertDialogContent className="bg-slate-900 border-slate-700">
+        <AlertDialogContent className="bg-card border-border">
           <AlertDialogHeader>
-            <AlertDialogTitle className="flex items-center gap-2 text-white">
+            <AlertDialogTitle className="flex items-center gap-2 text-foreground">
               <AlertTriangle className="h-5 w-5 text-red-400" />
               Delete this card?
             </AlertDialogTitle>
-            <AlertDialogDescription className="text-slate-400">
+            <AlertDialogDescription className="text-muted-foreground">
               "{deleteTarget?.title || "Untitled"}" will be permanently removed.
             </AlertDialogDescription>
           </AlertDialogHeader>
           <AlertDialogFooter>
-            <AlertDialogCancel className="bg-slate-800 border-slate-700 text-slate-300 hover:bg-slate-700">Cancel</AlertDialogCancel>
+            <AlertDialogCancel className="bg-secondary border-border text-muted-foreground hover:bg-muted">Cancel</AlertDialogCancel>
             <AlertDialogAction
               onClick={() => deleteTarget && deleteMutation.mutate(deleteTarget.id)}
-              className="bg-red-600 hover:bg-red-700 text-white"
+              className="bg-red-600 hover:bg-red-700 text-foreground"
               data-testid="button-confirm-delete"
             >
               {deleteMutation.isPending ? <Loader2 className="h-4 w-4 animate-spin mr-2" /> : <Trash2 className="h-4 w-4 mr-2" />}
@@ -409,10 +409,10 @@ export default function ContentLibrary() {
 
       {/* Schedule dialog */}
       <Dialog open={!!scheduleTarget} onOpenChange={(open) => !open && setScheduleTarget(null)}>
-        <DialogContent className="bg-slate-900 border-slate-700">
+        <DialogContent className="bg-card border-border">
           <DialogHeader>
-            <DialogTitle className="flex items-center gap-2"><CalendarClock className="h-5 w-5 text-cyan-300" /> Schedule post</DialogTitle>
-            <DialogDescription className="text-slate-400">Pick when "{scheduleTarget?.title || "Untitled"}" should go live.</DialogDescription>
+            <DialogTitle className="flex items-center gap-2"><CalendarClock className="h-5 w-5 text-[var(--score-90)]" /> Schedule post</DialogTitle>
+            <DialogDescription className="text-muted-foreground">Pick when "{scheduleTarget?.title || "Untitled"}" should go live.</DialogDescription>
           </DialogHeader>
           <div className="space-y-3 py-2">
             {scheduleTarget && (
@@ -428,7 +428,7 @@ export default function ContentLibrary() {
                 type="datetime-local"
                 value={scheduleAt}
                 onChange={(e) => setScheduleAt(e.target.value)}
-                className="bg-white/[0.03] border-white/[0.08]"
+                className="bg-secondary/80 border-border"
                 data-testid="input-schedule-at"
               />
             </div>
@@ -454,10 +454,10 @@ export default function ContentLibrary() {
 
       {/* Actuals dialog */}
       <Dialog open={!!actualsTarget} onOpenChange={(open) => !open && setActualsTarget(null)}>
-        <DialogContent className="bg-slate-900 border-slate-700">
+        <DialogContent className="bg-card border-border">
           <DialogHeader>
-            <DialogTitle className="flex items-center gap-2"><BarChart3 className="h-5 w-5 text-emerald-300" /> Log post performance</DialogTitle>
-            <DialogDescription className="text-slate-400">
+            <DialogTitle className="flex items-center gap-2"><BarChart3 className="h-5 w-5 text-[var(--score-90)]" /> Log post performance</DialogTitle>
+            <DialogDescription className="text-muted-foreground">
               How did "{actualsTarget?.title || "Untitled"}" actually do?
             </DialogDescription>
           </DialogHeader>
@@ -470,7 +470,7 @@ export default function ContentLibrary() {
                   min={0}
                   value={actuals[k]}
                   onChange={(e) => setActuals((a) => ({ ...a, [k]: e.target.value }))}
-                  className="bg-white/[0.03] border-white/[0.08]"
+                  className="bg-secondary/80 border-border"
                   data-testid={`input-actuals-${k}`}
                 />
               </div>
@@ -527,14 +527,14 @@ function Column({ col, count, items, loading, onDelete, onSchedule, onActuals }:
     >
       <div className="flex items-center justify-between px-2 pt-1.5 pb-2">
         <div className="flex items-center gap-2">
-          <Icon className="h-3.5 w-3.5 text-slate-300" />
-          <span className="text-sm font-semibold text-white">{col.label}</span>
-          <span className="text-[10px] tabular-nums px-1.5 py-0.5 rounded bg-white/[0.08] text-slate-300" data-testid={`count-${col.id}`}>
+          <Icon className="h-3.5 w-3.5 text-muted-foreground" />
+          <span className="text-sm font-semibold text-foreground">{col.label}</span>
+          <span className="text-[10px] tabular-nums px-1.5 py-0.5 rounded bg-white/[0.08] text-muted-foreground" data-testid={`count-${col.id}`}>
             {count}
           </span>
         </div>
       </div>
-      <div className="text-[10px] text-slate-400 px-2 mb-2">{col.hint}</div>
+      <div className="text-[10px] text-muted-foreground px-2 mb-2">{col.hint}</div>
       <div className="space-y-2 flex-1">
         {loading ? (
           <>
@@ -542,7 +542,7 @@ function Column({ col, count, items, loading, onDelete, onSchedule, onActuals }:
             <div className="skeleton h-20 rounded-lg" />
           </>
         ) : items.length === 0 ? (
-          <div className="text-center py-8 text-xs text-slate-500 border border-dashed border-white/[0.06] rounded-lg">
+          <div className="text-center py-8 text-xs text-muted-foreground border border-dashed border-border rounded-lg">
             Drop here
           </div>
         ) : (
@@ -590,7 +590,7 @@ function Card({ item, dragging, listeners, attributes, onDelete, onSchedule, onA
   return (
     <div
       className={cn(
-        "card-base p-3 group hover:border-white/15 transition-colors",
+        "card-base p-3 group hover:border-border transition-colors",
         dragging && "shadow-2xl ring-1 ring-indigo-400/50"
       )}
       data-testid={`card-${item.id}`}
@@ -599,7 +599,7 @@ function Card({ item, dragging, listeners, attributes, onDelete, onSchedule, onA
         <button
           {...listeners}
           {...attributes}
-          className="cursor-grab active:cursor-grabbing text-slate-500 hover:text-slate-300 mt-0.5"
+          className="cursor-grab active:cursor-grabbing text-muted-foreground hover:text-muted-foreground mt-0.5"
           aria-label="Drag"
           data-testid={`drag-${item.id}`}
         >
@@ -607,11 +607,11 @@ function Card({ item, dragging, listeners, attributes, onDelete, onSchedule, onA
         </button>
         <div className="flex-1 min-w-0">
           <Link href={`/analyze/${item.id}`}>
-            <div className="text-sm font-medium text-white truncate hover:text-indigo-300 cursor-pointer" data-testid={`title-${item.id}`}>
+            <div className="text-sm font-medium text-foreground truncate hover:text-primary cursor-pointer" data-testid={`title-${item.id}`}>
               {item.title || "Untitled"}
             </div>
           </Link>
-          <div className="flex items-center gap-1.5 mt-1 text-[10px] text-slate-400 capitalize">
+          <div className="flex items-center gap-1.5 mt-1 text-[10px] text-muted-foreground capitalize">
             <span>{item.targetPlatform || "—"}</span>
             <span>·</span>
             <span>{new Date(item.updatedAt).toLocaleDateString()}</span>
@@ -625,7 +625,7 @@ function Card({ item, dragging, listeners, attributes, onDelete, onSchedule, onA
       </div>
 
       {item.boardStatus === "scheduled" && item.scheduledFor && (
-        <div className="mt-2 flex items-center gap-1 text-[10px] text-cyan-300">
+        <div className="mt-2 flex items-center gap-1 text-[10px] text-[var(--score-90)]">
           <CalendarClock className="h-3 w-3" />
           {new Date(item.scheduledFor).toLocaleString(undefined, { month: "short", day: "numeric", hour: "numeric", minute: "2-digit" })}
         </div>
@@ -633,13 +633,13 @@ function Card({ item, dragging, listeners, attributes, onDelete, onSchedule, onA
 
       {item.boardStatus === "posted" && (
         <div className="mt-2 grid grid-cols-2 gap-1.5 text-[10px]">
-          <div className="rounded bg-white/[0.04] px-1.5 py-1">
-            <div className="text-slate-400">Predicted</div>
-            <div className="font-bold text-slate-200 tabular-nums">{predicted != null ? fmtCount(predicted) : "—"}</div>
+          <div className="rounded bg-secondary px-1.5 py-1">
+            <div className="text-muted-foreground">Predicted</div>
+            <div className="font-bold text-foreground tabular-nums">{predicted != null ? fmtCount(predicted) : "—"}</div>
           </div>
           <div className="rounded bg-emerald-500/10 px-1.5 py-1 border border-emerald-400/20">
-            <div className="text-emerald-300/80">Actual</div>
-            <div className="font-bold text-emerald-200 tabular-nums flex items-center gap-1">
+            <div className="text-[var(--score-90)]/80">Actual</div>
+            <div className="font-bold text-[var(--score-90)] tabular-nums flex items-center gap-1">
               {item.actualViews != null ? fmtCount(item.actualViews) : "—"}
               {item.actualViews != null && predicted != null && item.actualViews >= predicted && (
                 <TrendingUp className="h-2.5 w-2.5" />
@@ -653,28 +653,28 @@ function Card({ item, dragging, listeners, attributes, onDelete, onSchedule, onA
         <div className="mt-2 flex items-center justify-end opacity-0 group-hover:opacity-100 transition-opacity">
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
-              <button className="p-1 rounded hover:bg-white/[0.08] text-slate-400" data-testid={`menu-${item.id}`}>
+              <button className="p-1 rounded hover:bg-white/[0.08] text-muted-foreground" data-testid={`menu-${item.id}`}>
                 <MoreVertical className="h-3.5 w-3.5" />
               </button>
             </DropdownMenuTrigger>
-            <DropdownMenuContent align="end" className="bg-slate-900 border-slate-700">
+            <DropdownMenuContent align="end" className="bg-card border-border">
               <Link href={`/analyze/${item.id}`}>
-                <DropdownMenuItem className="text-slate-300 focus:bg-slate-800">
+                <DropdownMenuItem className="text-muted-foreground focus:bg-secondary">
                   <ExternalLink className="h-3.5 w-3.5 mr-2" /> Open
                 </DropdownMenuItem>
               </Link>
               {onSchedule && (
-                <DropdownMenuItem onClick={onSchedule} className="text-slate-300 focus:bg-slate-800">
+                <DropdownMenuItem onClick={onSchedule} className="text-muted-foreground focus:bg-secondary">
                   <CalendarClock className="h-3.5 w-3.5 mr-2" /> Schedule
                 </DropdownMenuItem>
               )}
               {onActuals && (
-                <DropdownMenuItem onClick={onActuals} className="text-slate-300 focus:bg-slate-800">
+                <DropdownMenuItem onClick={onActuals} className="text-muted-foreground focus:bg-secondary">
                   <BarChart3 className="h-3.5 w-3.5 mr-2" /> Log results
                 </DropdownMenuItem>
               )}
               {onDelete && (
-                <DropdownMenuItem onClick={onDelete} className="text-red-400 focus:text-red-400 focus:bg-slate-800">
+                <DropdownMenuItem onClick={onDelete} className="text-red-400 focus:text-red-400 focus:bg-secondary">
                   <Trash2 className="h-3.5 w-3.5 mr-2" /> Delete
                 </DropdownMenuItem>
               )}
@@ -706,7 +706,7 @@ function ListView({ items, isLoading, onDelete }: { items: BoardItem[]; isLoadin
   }
   return (
     <div className="card-base overflow-hidden" data-testid="list-view">
-      <div className="grid grid-cols-12 gap-3 px-4 py-2 text-eyebrow border-b border-white/[0.06]">
+      <div className="grid grid-cols-12 gap-3 px-4 py-2 text-eyebrow border-b border-border">
         <div className="col-span-5">Content</div>
         <div className="col-span-2 text-center">Stage</div>
         <div className="col-span-1 text-center">Score</div>
@@ -718,38 +718,38 @@ function ListView({ items, isLoading, onDelete }: { items: BoardItem[]; isLoadin
           const tone = scoreTone(it.viralScore);
           const predicted = typeof it.viralScore === "number" ? Math.round(it.viralScore * 1000) : null;
           return (
-            <div key={it.id} className="grid grid-cols-12 gap-3 px-4 py-3 items-center hover:bg-white/[0.02]" data-testid={`row-${it.id}`}>
+            <div key={it.id} className="grid grid-cols-12 gap-3 px-4 py-3 items-center hover:bg-card" data-testid={`row-${it.id}`}>
               <div className="col-span-5 flex items-center gap-3 min-w-0">
-                <div className="h-9 w-12 rounded bg-white/[0.04] flex items-center justify-center overflow-hidden shrink-0">
-                  {it.thumbnailUrl ? <img src={it.thumbnailUrl} alt="" className="w-full h-full object-cover" /> : <Eye className="h-4 w-4 text-slate-500" />}
+                <div className="h-9 w-12 rounded bg-secondary flex items-center justify-center overflow-hidden shrink-0">
+                  {it.thumbnailUrl ? <img src={it.thumbnailUrl} alt="" className="w-full h-full object-cover" /> : <Eye className="h-4 w-4 text-muted-foreground" />}
                 </div>
                 <div className="min-w-0 flex-1">
                   <Link href={`/analyze/${it.id}`}>
-                    <div className="text-sm font-medium truncate hover:text-indigo-300 cursor-pointer">{it.title || "Untitled"}</div>
+                    <div className="text-sm font-medium truncate hover:text-primary cursor-pointer">{it.title || "Untitled"}</div>
                   </Link>
-                  <div className="text-[11px] text-slate-400 capitalize">{it.targetPlatform || "—"} · {new Date(it.updatedAt).toLocaleDateString()}</div>
+                  <div className="text-[11px] text-muted-foreground capitalize">{it.targetPlatform || "—"} · {new Date(it.updatedAt).toLocaleDateString()}</div>
                 </div>
               </div>
               <div className="col-span-2 text-center">
-                <span className="text-[11px] uppercase tracking-wide text-slate-300 px-2 py-0.5 rounded bg-white/[0.06]">{statusLabel(it.boardStatus)}</span>
+                <span className="text-[11px] uppercase tracking-wide text-muted-foreground px-2 py-0.5 rounded bg-muted">{statusLabel(it.boardStatus)}</span>
               </div>
               <div className="col-span-1 text-center">
                 {typeof it.viralScore === "number"
                   ? <span className={cn("rounded px-2 py-0.5 text-xs font-bold tabular-nums", `score-bg-${tone}`)}>{it.viralScore}</span>
-                  : <span className="text-slate-500 text-xs">—</span>}
+                  : <span className="text-muted-foreground text-xs">—</span>}
               </div>
-              <div className="col-span-2 text-center text-sm text-slate-300 tabular-nums">{predicted != null ? fmtCount(predicted) : "—"}</div>
+              <div className="col-span-2 text-center text-sm text-muted-foreground tabular-nums">{predicted != null ? fmtCount(predicted) : "—"}</div>
               <div className="col-span-2 text-center text-sm tabular-nums flex items-center justify-center gap-2">
-                {it.actualViews != null ? <span className="text-emerald-300 font-medium">{fmtCount(it.actualViews)}</span> : <span className="text-slate-500">—</span>}
+                {it.actualViews != null ? <span className="text-[var(--score-90)] font-medium">{fmtCount(it.actualViews)}</span> : <span className="text-muted-foreground">—</span>}
                 <DropdownMenu>
                   <DropdownMenuTrigger asChild>
-                    <button className="p-1 rounded hover:bg-white/[0.08] text-slate-400"><MoreVertical className="h-3.5 w-3.5" /></button>
+                    <button className="p-1 rounded hover:bg-white/[0.08] text-muted-foreground"><MoreVertical className="h-3.5 w-3.5" /></button>
                   </DropdownMenuTrigger>
-                  <DropdownMenuContent align="end" className="bg-slate-900 border-slate-700">
+                  <DropdownMenuContent align="end" className="bg-card border-border">
                     <Link href={`/analyze/${it.id}`}>
-                      <DropdownMenuItem className="text-slate-300 focus:bg-slate-800"><ExternalLink className="h-3.5 w-3.5 mr-2" /> Open</DropdownMenuItem>
+                      <DropdownMenuItem className="text-muted-foreground focus:bg-secondary"><ExternalLink className="h-3.5 w-3.5 mr-2" /> Open</DropdownMenuItem>
                     </Link>
-                    <DropdownMenuItem onClick={() => onDelete(it)} className="text-red-400 focus:text-red-400 focus:bg-slate-800">
+                    <DropdownMenuItem onClick={() => onDelete(it)} className="text-red-400 focus:text-red-400 focus:bg-secondary">
                       <Trash2 className="h-3.5 w-3.5 mr-2" /> Delete
                     </DropdownMenuItem>
                   </DropdownMenuContent>

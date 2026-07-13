@@ -27,7 +27,7 @@ export function Navigation() {
   return (
     <>
       {/* Mobile Bottom Nav */}
-      <nav className="fixed bottom-0 left-0 right-0 z-50 border-t border-white/10 bg-background/95 backdrop-blur-xl md:hidden safe-area-pb">
+      <nav className="fixed bottom-0 left-0 right-0 z-50 border-t border-border bg-background/95 backdrop-blur-xl md:hidden safe-area-pb">
         <div className="flex items-center justify-around px-1 py-2">
           {navItems.map((item) => (
             <Link key={item.label} href={item.href}>
@@ -66,7 +66,7 @@ export function Navigation() {
       </nav>
 
       {/* Desktop Sidebar */}
-      <aside className="hidden w-64 flex-col border-r border-white/10 bg-sidebar px-6 py-8 md:flex fixed h-full">
+      <aside className="hidden w-64 flex-col border-r border-border bg-sidebar px-6 py-8 md:flex fixed h-full">
         <Link href="/">
           <div className="mb-10 flex items-center gap-2 px-2 cursor-pointer hover:opacity-90 transition-opacity">
             <ViralyzWordmark size={28} variant="light" />
@@ -81,7 +81,7 @@ export function Navigation() {
                   <Link href={item.href}>
                     <div
                       className={cn(
-                        "relative flex items-center gap-4 rounded-xl px-4 py-3 text-sm font-medium transition-all hover:bg-white/5 group cursor-pointer",
+                        "relative flex items-center gap-4 rounded-xl px-4 py-3 text-sm font-medium transition-all hover:bg-secondary group cursor-pointer",
                         location === item.href
                           ? "bg-primary/10 text-primary hover:bg-primary/20"
                           : "text-muted-foreground hover:text-foreground",
@@ -104,7 +104,7 @@ export function Navigation() {
                   </Link>
                 </div>
               </TooltipTrigger>
-              <TooltipContent side="right" className="bg-card border-white/10">
+              <TooltipContent side="right" className="bg-card border-border">
                 <p className="text-sm">{item.description}</p>
               </TooltipContent>
             </Tooltip>
@@ -112,7 +112,7 @@ export function Navigation() {
         </div>
 
         <div className="mt-auto space-y-3">
-          <div className="rounded-xl border border-white/5 bg-white/5 p-4">
+          <div className="rounded-xl border border-border bg-secondary p-4">
             <div className="flex items-center gap-3">
               {user?.profileImageUrl ? (
                 <img src={user.profileImageUrl} alt={user.firstName || 'User'} className="h-10 w-10 rounded-full" />
@@ -122,12 +122,12 @@ export function Navigation() {
                 </div>
               )}
               <div className="flex flex-col">
-                <span className="text-sm font-medium text-white">{user?.firstName || 'User'}</span>
+                <span className="text-sm font-medium text-foreground">{user?.firstName || 'User'}</span>
                 <span className="text-xs text-muted-foreground">{user?.email || '@user'}</span>
               </div>
             </div>
           </div>
-          <a href="/api/logout" className="flex items-center gap-2 px-4 py-2 text-sm text-muted-foreground hover:text-white transition-colors">
+          <a href="/api/logout" className="flex items-center gap-2 px-4 py-2 text-sm text-muted-foreground hover:text-foreground transition-colors">
             <LogOut className="h-4 w-4" />
             Sign Out
           </a>

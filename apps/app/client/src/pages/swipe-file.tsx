@@ -40,11 +40,11 @@ interface Facets {
 }
 
 const PLATFORM_TONES: Record<string, string> = {
-  tiktok: "bg-pink-500/15 text-pink-300 border-pink-400/30",
-  instagram: "bg-purple-500/15 text-purple-300 border-purple-400/30",
-  youtube: "bg-red-500/15 text-red-300 border-red-400/30",
-  twitter: "bg-sky-500/15 text-sky-300 border-sky-400/30",
-  linkedin: "bg-blue-500/15 text-blue-300 border-blue-400/30",
+  tiktok: "bg-pink-500/15 text-pink-700 border-pink-400/30",
+  instagram: "bg-purple-500/15 text-purple-700 border-purple-400/30",
+  youtube: "bg-red-500/15 text-red-700 border-red-400/30",
+  twitter: "bg-sky-500/15 text-sky-700 border-sky-400/30",
+  linkedin: "bg-blue-500/15 text-blue-700 border-blue-400/30",
 };
 
 export default function SwipeFile() {
@@ -151,8 +151,8 @@ export default function SwipeFile() {
         {!userNiche && (
           <div className="card-base p-4 mb-4 bg-gradient-to-br from-amber-500/10 to-transparent border-amber-500/20 flex items-center justify-between gap-3" data-testid="banner-set-niche">
             <div>
-              <div className="text-sm font-semibold text-amber-200">Tell us your niche to personalize this swipe file</div>
-              <div className="text-xs text-slate-400">We'll surface the most relevant viral posts for your audience.</div>
+              <div className="text-sm font-semibold text-[var(--score-50)]">Tell us your niche to personalize this swipe file</div>
+              <div className="text-xs text-muted-foreground">We'll surface the most relevant viral posts for your audience.</div>
             </div>
             <Link href="/onboarding">
               <Button size="sm" className="bg-amber-500 hover:bg-amber-400 text-slate-900" data-testid="button-set-niche">
@@ -172,7 +172,7 @@ export default function SwipeFile() {
               className={cn(
                 savedOnly
                   ? "bg-indigo-600 hover:bg-indigo-500"
-                  : "border-white/10 hover:bg-white/[0.04]"
+                  : "border-border hover:bg-secondary"
               )}
               data-testid="button-saved-toggle"
             >
@@ -186,19 +186,19 @@ export default function SwipeFile() {
         <div className="card-base p-4 mb-6 space-y-3">
           <div className="flex items-center gap-3">
             <div className="relative flex-1">
-              <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-slate-500" />
+              <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
               <Input
                 value={q}
                 onChange={(e) => setQ(e.target.value)}
                 placeholder="Search hooks, topics, or why-it-works…"
-                className="pl-9 bg-white/[0.03] border-white/10"
+                className="pl-9 bg-secondary/80 border-border"
                 data-testid="input-swipe-search"
               />
             </div>
             <select
               value={sort}
               onChange={(e) => setSort(e.target.value as "score" | "newest" | "trending")}
-              className="h-9 rounded-md bg-white/[0.03] border border-white/10 px-2 text-sm text-slate-200"
+              className="h-9 rounded-md bg-secondary/80 border border-border px-2 text-sm text-foreground"
               data-testid="select-sort"
             >
               <option value="score">Highest score</option>
@@ -208,7 +208,7 @@ export default function SwipeFile() {
           </div>
 
           <div className="flex flex-wrap items-center gap-2 text-xs">
-            <Filter className="h-3 w-3 text-slate-500 mr-1" />
+            <Filter className="h-3 w-3 text-muted-foreground mr-1" />
             <FilterChips
               label="Platform"
               value={platform}
@@ -270,12 +270,12 @@ export default function SwipeFile() {
                       <span
                         className={cn(
                           "px-2 py-0.5 rounded-md border text-[10px] font-semibold uppercase tracking-wide",
-                          PLATFORM_TONES[s.platform] || "bg-slate-500/15 text-slate-300 border-slate-400/20"
+                          PLATFORM_TONES[s.platform] || "bg-slate-500/15 text-muted-foreground border-slate-400/20"
                         )}
                       >
                         {s.platform}
                       </span>
-                      <span className="px-2 py-0.5 rounded-md bg-white/[0.05] border border-white/[0.08] text-[10px] capitalize text-slate-300">
+                      <span className="px-2 py-0.5 rounded-md bg-white/[0.05] border border-border text-[10px] capitalize text-muted-foreground">
                         {s.niche}
                       </span>
                     </div>
@@ -284,28 +284,28 @@ export default function SwipeFile() {
                         e.stopPropagation();
                         saveMutation.mutate({ id: s.id, saved: !!s.saved });
                       }}
-                      className="text-slate-400 hover:text-indigo-300 transition-colors p-1 -m-1"
+                      className="text-muted-foreground hover:text-primary transition-colors p-1 -m-1"
                       data-testid={`button-save-${s.id}`}
                       aria-label={s.saved ? "Unsave" : "Save"}
                     >
                       {s.saved ? (
-                        <BookmarkCheck className="h-4 w-4 text-indigo-300 fill-indigo-300/30" />
+                        <BookmarkCheck className="h-4 w-4 text-primary fill-indigo-300/30" />
                       ) : (
                         <Bookmark className="h-4 w-4" />
                       )}
                     </button>
                   </div>
 
-                  <p className="text-white text-[15px] font-medium leading-snug mb-3 line-clamp-4">
+                  <p className="text-foreground text-[15px] font-medium leading-snug mb-3 line-clamp-4">
                     "{s.text}"
                   </p>
 
-                  <div className="text-[11px] text-slate-400 leading-relaxed line-clamp-2 mb-3 italic" data-testid={`text-why-${s.id}`}>
-                    <span className="text-indigo-300 not-italic font-semibold">Why it works · </span>
+                  <div className="text-[11px] text-muted-foreground leading-relaxed line-clamp-2 mb-3 italic" data-testid={`text-why-${s.id}`}>
+                    <span className="text-primary not-italic font-semibold">Why it works · </span>
                     {s.whyItWorks}
                   </div>
 
-                  <div className="mt-auto flex items-center justify-between gap-3 pt-3 border-t border-white/[0.06]">
+                  <div className="mt-auto flex items-center justify-between gap-3 pt-3 border-t border-border">
                     <div className="flex items-center gap-2 min-w-0">
                       <span
                         className={cn(
@@ -317,7 +317,7 @@ export default function SwipeFile() {
                         {s.viralScore}
                       </span>
                       {s.hookType && (
-                        <span className="text-[11px] text-slate-400 capitalize truncate">
+                        <span className="text-[11px] text-muted-foreground capitalize truncate">
                           {s.hookType.replace(/_/g, " ")}
                         </span>
                       )}
@@ -326,7 +326,7 @@ export default function SwipeFile() {
                       <Button
                         size="sm"
                         variant="ghost"
-                        className="h-7 px-2 text-slate-400 hover:text-white"
+                        className="h-7 px-2 text-muted-foreground hover:text-foreground"
                         onClick={(e) => {
                           e.stopPropagation();
                           copy(s.text, s.id);
@@ -367,23 +367,23 @@ export default function SwipeFile() {
                     <span
                       className={cn(
                         "px-2 py-1 rounded-md border text-[10px] font-semibold uppercase tracking-wide",
-                        PLATFORM_TONES[activeSwipe.platform] || "bg-slate-500/15 text-slate-300 border-slate-400/20"
+                        PLATFORM_TONES[activeSwipe.platform] || "bg-slate-500/15 text-muted-foreground border-slate-400/20"
                       )}
                     >
                       {activeSwipe.platform}
                     </span>
-                    <span className="px-2 py-1 rounded-md bg-white/[0.05] border border-white/[0.08] text-[10px] capitalize text-slate-300">
+                    <span className="px-2 py-1 rounded-md bg-white/[0.05] border border-border text-[10px] capitalize text-muted-foreground">
                       {activeSwipe.niche}
                     </span>
                     {activeSwipe.hookType && (
-                      <span className="px-2 py-1 rounded-md bg-white/[0.05] border border-white/[0.08] text-[10px] capitalize text-slate-300">
+                      <span className="px-2 py-1 rounded-md bg-white/[0.05] border border-border text-[10px] capitalize text-muted-foreground">
                         {activeSwipe.hookType.replace(/_/g, " ")} hook
                       </span>
                     )}
                   </div>
                   <button
                     onClick={() => setActiveSwipe(null)}
-                    className="text-slate-400 hover:text-white text-2xl leading-none"
+                    className="text-muted-foreground hover:text-foreground text-2xl leading-none"
                     data-testid="button-close-detail"
                   >
                     ×
@@ -393,7 +393,7 @@ export default function SwipeFile() {
                 <div className="flex items-start gap-5 mb-5">
                   <ScoreRing score={activeSwipe.viralScore} size={108} />
                   <div className="flex-1 min-w-0">
-                    <p className="text-white text-lg font-medium leading-snug mb-2">
+                    <p className="text-foreground text-lg font-medium leading-snug mb-2">
                       "{activeSwipe.text}"
                     </p>
                     {activeSwipe.creatorHandle && (
@@ -407,8 +407,8 @@ export default function SwipeFile() {
                     {(["hook", "structure", "emotion", "clarity", "cta"] as const).map((k) => (
                       <div key={k} className="text-center card-base p-2">
                         <div className="text-meta capitalize">{k}</div>
-                        <div className="text-base font-bold tabular-nums text-white">
-                          {activeSwipe.scoreBreakdown![k]}<span className="text-xs text-slate-500">/20</span>
+                        <div className="text-base font-bold tabular-nums text-foreground">
+                          {activeSwipe.scoreBreakdown![k]}<span className="text-xs text-muted-foreground">/20</span>
                         </div>
                       </div>
                     ))}
@@ -418,19 +418,19 @@ export default function SwipeFile() {
                 <div className="grid grid-cols-3 gap-2 mb-5 text-xs">
                   <div className="card-base p-2">
                     <div className="text-meta">Hook length</div>
-                    <div className="text-sm font-semibold text-white">
+                    <div className="text-sm font-semibold text-foreground">
                       {activeSwipe.text.split(/\s+/).filter(Boolean).length} words
                     </div>
                   </div>
                   <div className="card-base p-2">
                     <div className="text-meta">Retention move</div>
-                    <div className="text-sm font-semibold text-white capitalize truncate">
+                    <div className="text-sm font-semibold text-foreground capitalize truncate">
                       {activeSwipe.format ? activeSwipe.format.replace(/_/g, " ") : "—"}
                     </div>
                   </div>
                   <div className="card-base p-2">
                     <div className="text-meta">Hook style</div>
-                    <div className="text-sm font-semibold text-white capitalize truncate">
+                    <div className="text-sm font-semibold text-foreground capitalize truncate">
                       {activeSwipe.hookType ? activeSwipe.hookType.replace(/_/g, " ") : "—"}
                     </div>
                   </div>
@@ -440,25 +440,25 @@ export default function SwipeFile() {
                   <div className="text-eyebrow mb-1 flex items-center gap-1.5">
                     <TrendingUp className="h-3 w-3" /> Why it works
                   </div>
-                  <p className="text-sm text-slate-200 leading-relaxed">{activeSwipe.whyItWorks}</p>
+                  <p className="text-sm text-foreground leading-relaxed">{activeSwipe.whyItWorks}</p>
                 </div>
 
                 <div className="flex flex-wrap gap-2 mb-5">
                   <Button
                     onClick={() => saveMutation.mutate({ id: activeSwipe.id, saved: !!activeSwipe.saved })}
                     variant="outline"
-                    className="border-white/10 hover:bg-white/[0.04]"
+                    className="border-border hover:bg-secondary"
                     data-testid="button-save-detail"
                   >
                     {activeSwipe.saved ? (
-                      <><BookmarkCheck className="h-4 w-4 mr-1.5 text-indigo-300" /> Saved</>
+                      <><BookmarkCheck className="h-4 w-4 mr-1.5 text-primary" /> Saved</>
                     ) : (
                       <><Bookmark className="h-4 w-4 mr-1.5" /> Save</>
                     )}
                   </Button>
                   <Button
                     variant="outline"
-                    className="border-white/10 hover:bg-white/[0.04]"
+                    className="border-border hover:bg-secondary"
                     onClick={() => copy(activeSwipe.text, activeSwipe.id + "-detail")}
                   >
                     {copiedId === activeSwipe.id + "-detail" ? <Check className="h-4 w-4 mr-1.5" /> : <Copy className="h-4 w-4 mr-1.5" />}
@@ -466,7 +466,7 @@ export default function SwipeFile() {
                   </Button>
                   {activeSwipe.sourceUrl && (
                     <a href={activeSwipe.sourceUrl} target="_blank" rel="noopener noreferrer">
-                      <Button variant="outline" className="border-white/10 hover:bg-white/[0.04]">
+                      <Button variant="outline" className="border-border hover:bg-secondary">
                         <ExternalLink className="h-4 w-4 mr-1.5" /> Source
                       </Button>
                     </a>
@@ -509,14 +509,14 @@ function FilterChips({
 }) {
   return (
     <div className="inline-flex items-center gap-1 mr-2">
-      <span className="text-slate-500 mr-1">{label}:</span>
+      <span className="text-muted-foreground mr-1">{label}:</span>
       <button
         onClick={() => onChange("all")}
         className={cn(
           "px-2 py-1 rounded-md border transition-colors",
           value === "all"
-            ? "bg-indigo-500/15 text-indigo-200 border-indigo-400/30"
-            : "bg-white/[0.03] text-slate-400 border-white/[0.06] hover:text-white"
+            ? "bg-indigo-500/15 text-primary border-indigo-400/30"
+            : "bg-secondary/80 text-muted-foreground border-border hover:text-foreground"
         )}
         data-testid={`${testId}-all`}
       >
@@ -529,8 +529,8 @@ function FilterChips({
           className={cn(
             "px-2 py-1 rounded-md border capitalize transition-colors",
             value === o
-              ? "bg-indigo-500/15 text-indigo-200 border-indigo-400/30"
-              : "bg-white/[0.03] text-slate-400 border-white/[0.06] hover:text-white"
+              ? "bg-indigo-500/15 text-primary border-indigo-400/30"
+              : "bg-secondary/80 text-muted-foreground border-border hover:text-foreground"
           )}
           data-testid={`${testId}-${o}`}
         >

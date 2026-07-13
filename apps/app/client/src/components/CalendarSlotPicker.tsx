@@ -137,10 +137,10 @@ export function CalendarSlotPicker({ platform, value, onChange }: Props) {
 
   const multiplierBadge = (mult?: number) => {
     if (mult === undefined) return "";
-    if (mult >= 1.4) return "bg-emerald-500/20 text-emerald-200 border-emerald-400/40";
-    if (mult >= 1.1) return "bg-indigo-500/15 text-indigo-200 border-indigo-400/30";
-    if (mult >= 0.9) return "bg-slate-500/10 text-slate-300 border-slate-400/20";
-    return "bg-slate-700/30 text-slate-400 border-slate-600/40";
+    if (mult >= 1.4) return "bg-emerald-500/20 text-[var(--score-90)] border-emerald-400/40";
+    if (mult >= 1.1) return "bg-indigo-500/15 text-primary border-indigo-400/30";
+    if (mult >= 0.9) return "bg-slate-500/10 text-muted-foreground border-slate-400/20";
+    return "bg-muted/30 text-muted-foreground border-slate-600/40";
   };
 
   return (
@@ -191,13 +191,13 @@ export function CalendarSlotPicker({ platform, value, onChange }: Props) {
               key={key}
               className={cn(
                 "rounded-lg border p-1.5 min-h-[120px]",
-                isToday ? "border-indigo-400/40 bg-indigo-500/[0.04]" : "border-white/[0.06] bg-white/[0.02]"
+                isToday ? "border-indigo-400/40 bg-indigo-500/[0.04]" : "border-border bg-card"
               )}
             >
-              <div className="text-[10px] uppercase tracking-wide text-slate-400 text-center">
+              <div className="text-[10px] uppercase tracking-wide text-muted-foreground text-center">
                 {d.toLocaleString(undefined, { weekday: "short" })}
               </div>
-              <div className="text-[11px] font-semibold text-slate-200 text-center mb-1">{d.getDate()}</div>
+              <div className="text-[11px] font-semibold text-foreground text-center mb-1">{d.getDate()}</div>
               <div className="space-y-1">
                 {peakHours.map((h) => {
                   const slot = new Date(d);
@@ -223,16 +223,16 @@ export function CalendarSlotPicker({ platform, value, onChange }: Props) {
                       className={cn(
                         "w-full text-[10px] rounded px-1 py-1 border transition-colors flex items-center justify-center gap-1",
                         past
-                          ? "opacity-40 cursor-not-allowed border-white/5 text-slate-500"
+                          ? "opacity-40 cursor-not-allowed border-border text-muted-foreground"
                           : active
-                          ? "bg-indigo-500/30 border-indigo-400 text-white"
+                          ? "bg-indigo-500/30 border-indigo-400 text-foreground"
                           : taken
-                          ? "border-amber-400/30 bg-amber-500/10 text-amber-200 hover:bg-amber-500/20"
+                          ? "border-amber-400/30 bg-amber-500/10 text-[var(--score-50)] hover:bg-amber-500/20"
                           : multiplierBadge(mult) + " hover:brightness-125"
                       )}
                       data-testid={`slot-${key}-${h}`}
                     >
-                      {top && !past && <Star className="h-2.5 w-2.5 text-emerald-300 fill-emerald-300" />}
+                      {top && !past && <Star className="h-2.5 w-2.5 text-[var(--score-90)] fill-emerald-300" />}
                       {h % 12 || 12}{h >= 12 ? "p" : "a"}{taken ? "•" : ""}
                     </button>
                   );
@@ -244,8 +244,8 @@ export function CalendarSlotPicker({ platform, value, onChange }: Props) {
       </div>
       {heatmap && (
         <div className="text-meta flex items-center gap-2 pt-1">
-          <Star className="h-3 w-3 text-emerald-300 fill-emerald-300" />
-          Starred = top 3 slots from your <a href="/insights" className="text-indigo-300 hover:underline">best-time heatmap</a>
+          <Star className="h-3 w-3 text-[var(--score-90)] fill-emerald-300" />
+          Starred = top 3 slots from your <a href="/insights" className="text-primary hover:underline">best-time heatmap</a>
         </div>
       )}
     </div>

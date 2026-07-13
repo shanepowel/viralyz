@@ -26,22 +26,22 @@ const PROVIDER_META: Record<ProviderId, { label: string; envHint: string; iconBg
   x: {
     label: "X (Twitter)",
     envHint: "X_CLIENT_ID / X_CLIENT_SECRET",
-    iconBg: "bg-black/30",
-    iconClass: "text-slate-100",
-    buttonClass: "bg-slate-900 hover:bg-black text-white border border-white/10",
+    iconBg: "bg-card",
+    iconClass: "text-foreground",
+    buttonClass: "bg-foreground hover:bg-foreground/90 text-background border-0",
   },
   threads: {
     label: "Threads",
     envHint: "THREADS_CLIENT_ID / THREADS_CLIENT_SECRET",
-    iconBg: "bg-white/10",
-    iconClass: "text-slate-100",
-    buttonClass: "bg-slate-900 hover:bg-black text-white border border-white/10",
+    iconBg: "bg-secondary",
+    iconClass: "text-foreground",
+    buttonClass: "bg-foreground hover:bg-foreground/90 text-background border-0",
   },
   instagram: {
     label: "Instagram",
     envHint: "INSTAGRAM_CLIENT_ID / INSTAGRAM_CLIENT_SECRET",
-    iconBg: "bg-gradient-to-br from-fuchsia-500/30 to-amber-500/30",
-    iconClass: "text-fuchsia-200",
+    iconBg: "bg-gradient-to-br from-fuchsia-500/20 to-amber-500/20",
+    iconClass: "text-fuchsia-700",
     buttonClass: "bg-gradient-to-r from-fuchsia-500 to-amber-500 hover:opacity-90 text-white border-0",
   },
 };
@@ -58,22 +58,22 @@ function ConnectionSettingsRow({ provider }: { provider: ProviderId }) {
   const meta = PROVIDER_META[provider];
   if (!status) return null;
   return (
-    <div className="rounded-xl border border-white/10 bg-white/[0.02] p-4 flex items-center gap-3" data-testid={`${provider}-settings-row`}>
+    <div className="rounded-xl border border-border bg-card p-4 flex items-center gap-3" data-testid={`${provider}-settings-row`}>
       <div className={`h-10 w-10 rounded-lg ${meta.iconBg} flex items-center justify-center`}>
         <Linkedin className={`h-5 w-5 ${meta.iconClass}`} />
       </div>
       <div className="flex-1 min-w-0">
         <div className="font-medium">{meta.label}</div>
         {!status.configured ? (
-          <div className="text-xs text-amber-300 inline-flex items-center gap-1"><AlertCircle className="h-3 w-3" /> Not configured ({meta.envHint})</div>
+          <div className="text-xs text-[var(--score-50)] inline-flex items-center gap-1"><AlertCircle className="h-3 w-3" /> Not configured ({meta.envHint})</div>
         ) : status.connected ? (
-          <div className="text-xs text-emerald-300 inline-flex items-center gap-1"><CheckCircle2 className="h-3 w-3" /> Connected as {status.profileName || status.account?.displayName || "you"}</div>
+          <div className="text-xs text-[var(--score-90)] inline-flex items-center gap-1"><CheckCircle2 className="h-3 w-3" /> Connected as {status.profileName || status.account?.displayName || "you"}</div>
         ) : (
-          <div className="text-xs text-slate-400">Not connected</div>
+          <div className="text-xs text-muted-foreground">Not connected</div>
         )}
       </div>
       {status.connected ? (
-        <Button size="sm" variant="ghost" className="text-rose-300 hover:text-rose-200" onClick={() => disconnect.mutate()} data-testid={`button-disconnect-${provider}-settings`}>
+        <Button size="sm" variant="ghost" className="text-destructive hover:text-destructive" onClick={() => disconnect.mutate()} data-testid={`button-disconnect-${provider}-settings`}>
           Disconnect
         </Button>
       ) : status.configured ? (
@@ -220,17 +220,17 @@ export default function SettingsPage() {
           animate={{ opacity: 1, y: 0 }}
         >
           <h1 className="text-3xl font-bold mb-2">Settings</h1>
-          <p className="text-slate-400">Manage your account and preferences</p>
+          <p className="text-muted-foreground">Manage your account and preferences</p>
         </motion.div>
 
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.1 }}
-          className="bg-slate-900/50 border border-slate-800/50 rounded-2xl p-6"
+          className="bg-secondary border border-border rounded-2xl p-6"
         >
           <div className="flex items-center gap-2 mb-6">
-            <User className="h-5 w-5 text-indigo-400" />
+            <User className="h-5 w-5 text-primary" />
             <h2 className="font-semibold">Profile</h2>
           </div>
           <div className="flex items-center gap-6">
@@ -241,20 +241,20 @@ export default function SettingsPage() {
                 className="h-20 w-20 rounded-full"
               />
             ) : (
-              <div className="h-20 w-20 rounded-full bg-indigo-500/20 flex items-center justify-center text-indigo-400 text-2xl font-semibold">
+              <div className="h-20 w-20 rounded-full bg-indigo-500/20 flex items-center justify-center text-primary text-2xl font-semibold">
                 {user?.firstName?.[0] || 'U'}
               </div>
             )}
             <div className="flex-1">
               <div className="text-xl font-medium">{user?.firstName} {user?.lastName}</div>
-              <div className="text-slate-400">{user?.email}</div>
+              <div className="text-muted-foreground">{user?.email}</div>
               <div className="mt-2">
-                <span className="px-3 py-1 rounded-full bg-indigo-500/20 text-indigo-400 text-sm">
+                <span className="px-3 py-1 rounded-full bg-indigo-500/20 text-primary text-sm">
                   {(user as any)?.plan === 'pro' ? 'Pro Plan' : 'Free Plan'}
                 </span>
               </div>
             </div>
-            <Button variant="outline" className="border-slate-700" data-testid="button-edit-profile">
+            <Button variant="outline" className="border-border" data-testid="button-edit-profile">
               Edit Profile
             </Button>
           </div>
@@ -264,25 +264,25 @@ export default function SettingsPage() {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.2 }}
-          className="bg-slate-900/50 border border-slate-800/50 rounded-2xl p-6"
+          className="bg-secondary border border-border rounded-2xl p-6"
         >
           <div className="flex items-center gap-2 mb-6">
             <CreditCard className="h-5 w-5 text-emerald-400" />
             <h2 className="font-semibold">Subscription & Credits</h2>
           </div>
           
-          <div className="bg-slate-800/30 rounded-xl p-4 mb-6">
+          <div className="bg-secondary/30 rounded-xl p-4 mb-6">
             <div className="flex items-center justify-between mb-3">
-              <span className="text-slate-400">Credits Remaining</span>
-              <span className="text-2xl font-bold text-indigo-400">{(user as any)?.creditsRemaining ?? 10}</span>
+              <span className="text-muted-foreground">Credits Remaining</span>
+              <span className="text-2xl font-bold text-primary">{(user as any)?.creditsRemaining ?? 10}</span>
             </div>
-            <div className="w-full h-2 bg-slate-700 rounded-full overflow-hidden">
+            <div className="w-full h-2 bg-muted rounded-full overflow-hidden">
               <div 
                 className="h-full bg-gradient-to-r from-indigo-500 to-purple-500"
                 style={{ width: `${Math.min(100, ((user as any)?.creditsRemaining ?? 10) * 10)}%` }}
               />
             </div>
-            <p className="text-sm text-slate-500 mt-2">Credits reset monthly on your billing date</p>
+            <p className="text-sm text-muted-foreground mt-2">Credits reset monthly on your billing date</p>
           </div>
 
           <div className="grid md:grid-cols-3 gap-4">
@@ -293,16 +293,16 @@ export default function SettingsPage() {
                   plan.current 
                     ? 'border-indigo-500 bg-indigo-500/10' 
                     : plan.popular 
-                    ? 'border-emerald-500/50 bg-slate-800/30' 
-                    : 'border-slate-700 bg-slate-800/30'
+                    ? 'border-emerald-500/50 bg-secondary/30' 
+                    : 'border-border bg-secondary/30'
                 }`}
               >
                 {plan.popular && (
                   <span className="text-xs text-emerald-400 font-medium">Most Popular</span>
                 )}
                 <div className="text-lg font-semibold mt-1">{plan.name}</div>
-                <div className="text-2xl font-bold mb-3">{plan.price}<span className="text-sm text-slate-400">/mo</span></div>
-                <ul className="space-y-2 text-sm text-slate-400 mb-4">
+                <div className="text-2xl font-bold mb-3">{plan.price}<span className="text-sm text-muted-foreground">/mo</span></div>
+                <ul className="space-y-2 text-sm text-muted-foreground mb-4">
                   {plan.features.map((f) => (
                     <li key={f} className="flex items-center gap-2">
                       <Check className="h-4 w-4 text-emerald-400" />
@@ -312,7 +312,7 @@ export default function SettingsPage() {
                 </ul>
                 {plan.current ? (
                   <Button 
-                    className="w-full bg-slate-700"
+                    className="w-full bg-muted"
                     disabled
                     data-testid={`button-plan-${plan.name.toLowerCase()}`}
                   >
@@ -320,7 +320,7 @@ export default function SettingsPage() {
                   </Button>
                 ) : plan.name === 'Free' ? (
                   <Button 
-                    className="w-full bg-slate-700"
+                    className="w-full bg-muted"
                     disabled
                     data-testid={`button-plan-${plan.name.toLowerCase()}`}
                   >
@@ -336,7 +336,7 @@ export default function SettingsPage() {
                     <Button 
                       variant="ghost" 
                       size="sm" 
-                      className="w-full text-slate-400"
+                      className="w-full text-muted-foreground"
                       onClick={() => setShowPayPal(null)}
                     >
                       Cancel
@@ -366,7 +366,7 @@ export default function SettingsPage() {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.3 }}
-          className="bg-slate-900/50 border border-slate-800/50 rounded-2xl p-6"
+          className="bg-secondary border border-border rounded-2xl p-6"
         >
           <div className="flex items-center gap-2 mb-4">
             <Link className="h-5 w-5 text-purple-400" />
@@ -375,12 +375,12 @@ export default function SettingsPage() {
 
           <div className="bg-indigo-500/10 border border-indigo-500/30 rounded-xl p-4 mb-6">
             <div className="flex items-start gap-3">
-              <Info className="h-5 w-5 text-indigo-400 mt-0.5 flex-shrink-0" />
+              <Info className="h-5 w-5 text-primary mt-0.5 flex-shrink-0" />
               <div>
-                <p className="text-sm text-slate-300 mb-1">
+                <p className="text-sm text-muted-foreground mb-1">
                   <strong>Autopilot needs publishing access.</strong> Connect LinkedIn so the agent can post on your behalf — only after you approve each draft.
                 </p>
-                <p className="text-sm text-slate-400">
+                <p className="text-sm text-muted-foreground">
                   We never publish silently. Disconnect any time.
                 </p>
               </div>
@@ -392,8 +392,8 @@ export default function SettingsPage() {
           <ConnectionSettingsRow provider="threads" />
           <ConnectionSettingsRow provider="instagram" />
 
-          <div className="mt-6 pt-6 border-t border-slate-800/50 space-y-3">
-            <p className="text-xs uppercase tracking-wider text-slate-500">Quick publish (manual mode)</p>
+          <div className="mt-6 pt-6 border-t border-border space-y-3">
+            <p className="text-xs uppercase tracking-wider text-muted-foreground">Quick publish (manual mode)</p>
             {connectedPlatforms.filter((p) => p.name !== "LinkedIn").map((platform) => (
               <div key={platform.name} className="flex items-center justify-between py-2">
                 <div className="flex items-center gap-3">
@@ -417,20 +417,20 @@ export default function SettingsPage() {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.35 }}
-          className="bg-slate-900/50 border border-slate-800/50 rounded-2xl p-6"
+          className="bg-secondary border border-border rounded-2xl p-6"
         >
           <div className="flex items-center gap-2 mb-4">
-            <Clock className="h-5 w-5 text-indigo-400" />
+            <Clock className="h-5 w-5 text-primary" />
             <h2 className="font-semibold">Timezone</h2>
           </div>
-          <p className="text-sm text-slate-400 mb-3">
+          <p className="text-sm text-muted-foreground mb-3">
             Used to align your best-time-to-post heatmap, calendar slots, and scheduled posts.
           </p>
           <div className="flex items-center gap-3">
             <select
               value={currentTz}
               onChange={(e) => updateTz(e.target.value)}
-              className="bg-slate-800/50 border border-slate-700 rounded-xl px-4 py-2 text-white"
+              className="bg-secondary border border-border rounded-xl px-4 py-2 text-foreground"
               data-testid="select-timezone"
             >
               {tzOptions.map((tz) => (
@@ -449,19 +449,19 @@ export default function SettingsPage() {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.4 }}
-          className="bg-slate-900/50 border border-slate-800/50 rounded-2xl p-6"
+          className="bg-secondary border border-border rounded-2xl p-6"
         >
           <div className="flex items-center gap-2 mb-6">
-            <Bell className="h-5 w-5 text-amber-400" />
+            <Bell className="h-5 w-5 text-[var(--score-50)]" />
             <h2 className="font-semibold">Notifications</h2>
           </div>
           <div className="space-y-4">
             <div className="flex items-center justify-between py-2" data-testid="row-pref-email-digests">
               <div className="flex items-start gap-3">
-                <Mail className="h-5 w-5 text-indigo-400 mt-0.5" />
+                <Mail className="h-5 w-5 text-primary mt-0.5" />
                 <div>
                   <div className="font-medium">Weekly email digest</div>
-                  <div className="text-sm text-slate-400">A Monday recap with your top scores, scheduled posts, and prediction accuracy.</div>
+                  <div className="text-sm text-muted-foreground">A Monday recap with your top scores, scheduled posts, and prediction accuracy.</div>
                 </div>
               </div>
               <label className="relative inline-flex items-center cursor-pointer">
@@ -473,14 +473,14 @@ export default function SettingsPage() {
                   onChange={(e) => updatePrefs.mutate(e.target.checked)}
                   data-testid="toggle-email-digests"
                 />
-                <div className="w-11 h-6 bg-slate-700 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-indigo-600"></div>
+                <div className="w-11 h-6 bg-muted peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-indigo-600"></div>
               </label>
             </div>
             <div className="pt-2">
               <Button
                 variant="outline"
                 size="sm"
-                className="border-slate-700"
+                className="border-border"
                 onClick={() => sendTestDigest.mutate()}
                 disabled={sendTestDigest.isPending || !user?.email}
                 data-testid="button-send-test-digest"
@@ -496,11 +496,11 @@ export default function SettingsPage() {
               <div key={item.label} className="flex items-center justify-between py-2">
                 <div>
                   <div className="font-medium">{item.label}</div>
-                  <div className="text-sm text-slate-400">{item.desc}</div>
+                  <div className="text-sm text-muted-foreground">{item.desc}</div>
                 </div>
                 <label className="relative inline-flex items-center cursor-pointer">
                   <input type="checkbox" defaultChecked className="sr-only peer" />
-                  <div className="w-11 h-6 bg-slate-700 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-indigo-600"></div>
+                  <div className="w-11 h-6 bg-muted peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-indigo-600"></div>
                 </label>
               </div>
             ))}
@@ -519,7 +519,7 @@ export default function SettingsPage() {
               Log Out
             </Button>
           </a>
-          <Button variant="ghost" className="text-slate-400 hover:text-white">
+          <Button variant="ghost" className="text-muted-foreground hover:text-foreground">
             <Shield className="h-4 w-4 mr-2" />
             Privacy & Security
             <ChevronRight className="h-4 w-4 ml-2" />

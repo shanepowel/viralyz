@@ -97,11 +97,11 @@ export default function Thumbnails() {
               value={topic}
               onChange={(e) => setTopic(e.target.value)}
               placeholder="What's the video about? e.g. 'I tried the viral 5 AM routine for 30 days'"
-              className="bg-white/[0.04] border-white/[0.08] h-11"
+              className="bg-secondary border-border h-11"
               data-testid="input-thumbnail-topic"
             />
             <Select value={platform} onValueChange={setPlatform}>
-              <SelectTrigger className="bg-white/[0.04] border-white/[0.08] h-11" data-testid="select-platform">
+              <SelectTrigger className="bg-secondary border-border h-11" data-testid="select-platform">
                 <SelectValue />
               </SelectTrigger>
               <SelectContent>
@@ -143,8 +143,8 @@ export default function Thumbnails() {
                       CTR {idea.ctrScore}
                     </div>
                   </div>
-                  <p className="text-sm text-slate-300 line-clamp-4 mb-3">{idea.prompt}</p>
-                  {idea.notes && <p className="text-xs text-slate-500 mb-4 italic">{idea.notes}</p>}
+                  <p className="text-sm text-muted-foreground line-clamp-4 mb-3">{idea.prompt}</p>
+                  {idea.notes && <p className="text-xs text-muted-foreground mb-4 italic">{idea.notes}</p>}
                   <Button
                     onClick={() => renderOne.mutate({ ...idea, idx })}
                     disabled={renderingIdx === idx}
@@ -183,7 +183,7 @@ export default function Thumbnails() {
                     <a
                       href={t.imageUrl}
                       download={`thumbnail-${t.id}.png`}
-                      className="bg-white/10 hover:bg-white/20 backdrop-blur px-3 py-1.5 rounded-lg text-xs font-medium inline-flex items-center"
+                      className="bg-secondary hover:bg-white/20 backdrop-blur px-3 py-1.5 rounded-lg text-xs font-medium inline-flex items-center"
                     >
                       <Download className="h-3.5 w-3.5 mr-1" /> Download
                     </a>

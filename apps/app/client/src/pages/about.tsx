@@ -18,25 +18,25 @@ const values = [
 
 export default function About() {
   return (
-    <div className="min-h-screen bg-background text-white">
-      <nav className="fixed top-0 left-0 right-0 z-50 flex items-center justify-between px-6 py-4 backdrop-blur-xl bg-background/80 border-b border-white/5">
+    <div className="min-h-screen bg-background text-foreground">
+      <nav className="fixed top-0 left-0 right-0 z-50 flex items-center justify-between px-6 py-4 backdrop-blur-xl bg-background/80 border-b border-border">
         <Link href="/">
           <div className="flex items-center gap-2 cursor-pointer">
             <div className="h-8 w-8 rounded-lg bg-gradient-to-br from-primary to-accent flex items-center justify-center">
-              <TrendingUp className="h-4 w-4 text-white" />
+              <TrendingUp className="h-4 w-4 text-foreground" />
             </div>
             <span className="text-xl font-bold font-display tracking-tight">Viralyz</span>
           </div>
         </Link>
         <div className="hidden md:flex items-center gap-8">
-          <Link href="/features" className="text-white/60 hover:text-white transition-colors">Features</Link>
-          <Link href="/pricing" className="text-white/60 hover:text-white transition-colors">Pricing</Link>
-          <Link href="/about" className="text-white font-medium">About</Link>
-          <Link href="/contact" className="text-white/60 hover:text-white transition-colors">Contact</Link>
+          <Link href="/features" className="text-foreground/60 hover:text-foreground transition-colors">Features</Link>
+          <Link href="/pricing" className="text-foreground/60 hover:text-foreground transition-colors">Pricing</Link>
+          <Link href="/about" className="text-foreground font-medium">About</Link>
+          <Link href="/contact" className="text-foreground/60 hover:text-foreground transition-colors">Contact</Link>
         </div>
         <div className="flex items-center gap-4">
           <a href="/api/login">
-            <Button variant="ghost" className="text-white/80 hover:text-white">Log In</Button>
+            <Button variant="ghost" className="text-foreground/80 hover:text-foreground">Log In</Button>
           </a>
           <a href="/api/login">
             <Button className="bg-primary hover:bg-primary/90 rounded-full px-6">Get Started Free</Button>
@@ -55,7 +55,7 @@ export default function About() {
               Built by <span className="bg-gradient-to-r from-primary to-accent bg-clip-text text-transparent">creators</span>,
               <br />for creators
             </h1>
-            <p className="text-xl text-white/60 max-w-2xl mx-auto">
+            <p className="text-xl text-foreground/60 max-w-2xl mx-auto">
               We started Viralyz because we experienced firsthand the challenges of building an audience across fragmented platforms.
             </p>
           </motion.div>
@@ -66,28 +66,28 @@ export default function About() {
         <div className="max-w-6xl mx-auto">
           <div className="grid lg:grid-cols-2 gap-12 items-center">
             <motion.div initial={{ opacity: 0, x: -20 }} whileInView={{ opacity: 1, x: 0 }} viewport={{ once: true }}>
-              <div className="aspect-video rounded-2xl overflow-hidden border border-white/10 bg-gradient-to-br from-primary/30 via-card to-accent/20 flex items-center justify-center">
+              <div className="aspect-video rounded-2xl overflow-hidden border border-border bg-gradient-to-br from-primary/30 via-card to-accent/20 flex items-center justify-center">
                 <div className="text-center">
                   <div className="flex justify-center -space-x-4 mb-4">
                     {team.map((member, i) => (
                       <img 
                         key={i}
                         src={`https://api.dicebear.com/7.x/avataaars/svg?seed=${member.avatar}`}
-                        className="h-16 w-16 rounded-full border-4 border-card bg-white/10"
+                        className="h-16 w-16 rounded-full border-4 border-card bg-secondary"
                       />
                     ))}
                   </div>
-                  <p className="text-white/60 text-sm">Building the future of creator tools</p>
+                  <p className="text-foreground/60 text-sm">Building the future of creator tools</p>
                 </div>
               </div>
             </motion.div>
             <motion.div initial={{ opacity: 0, x: 20 }} whileInView={{ opacity: 1, x: 0 }} viewport={{ once: true }} className="space-y-6">
               <h2 className="text-3xl font-bold font-display">Our Mission</h2>
-              <p className="text-white/60 text-lg leading-relaxed">
+              <p className="text-foreground/60 text-lg leading-relaxed">
                 We believe every creator deserves a platform that helps them thrive. Too many talented people give up 
                 because the tools are too complex, too expensive, or too fragmented.
               </p>
-              <p className="text-white/60 text-lg leading-relaxed">
+              <p className="text-foreground/60 text-lg leading-relaxed">
                 Viralyz brings together everything you need - content hosting, community building, monetization, and 
                 analytics - in one beautiful, intuitive platform. We handle the technology so you can focus on what 
                 you do best: creating.
@@ -95,15 +95,15 @@ export default function About() {
               <div className="grid grid-cols-3 gap-6 pt-6">
                 <div>
                   <div className="text-3xl font-black text-primary">50K+</div>
-                  <div className="text-white/60 text-sm">Active creators</div>
+                  <div className="text-foreground/60 text-sm">Active creators</div>
                 </div>
                 <div>
                   <div className="text-3xl font-black text-accent">10M+</div>
-                  <div className="text-white/60 text-sm">Monthly views</div>
+                  <div className="text-foreground/60 text-sm">Monthly views</div>
                 </div>
                 <div>
                   <div className="text-3xl font-black text-purple-400">$2M+</div>
-                  <div className="text-white/60 text-sm">Paid to creators</div>
+                  <div className="text-foreground/60 text-sm">Paid to creators</div>
                 </div>
               </div>
             </motion.div>
@@ -111,11 +111,11 @@ export default function About() {
         </div>
       </section>
 
-      <section className="py-20 px-6 bg-white/[0.02] border-y border-white/5">
+      <section className="py-20 px-6 bg-card border-y border-border">
         <div className="max-w-6xl mx-auto">
           <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} className="text-center mb-16">
             <h2 className="text-3xl font-bold font-display mb-4">Our Values</h2>
-            <p className="text-white/60">The principles that guide everything we do</p>
+            <p className="text-foreground/60">The principles that guide everything we do</p>
           </motion.div>
           
           <div className="grid md:grid-cols-3 gap-8">
@@ -132,7 +132,7 @@ export default function About() {
                   <value.icon className="h-8 w-8 text-primary" />
                 </div>
                 <h3 className="text-xl font-bold mb-3">{value.title}</h3>
-                <p className="text-white/60">{value.description}</p>
+                <p className="text-foreground/60">{value.description}</p>
               </motion.div>
             ))}
           </div>
@@ -143,7 +143,7 @@ export default function About() {
         <div className="max-w-6xl mx-auto">
           <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} className="text-center mb-16">
             <h2 className="text-3xl font-bold font-display mb-4">Meet the Team</h2>
-            <p className="text-white/60">The people making Viralyz possible</p>
+            <p className="text-foreground/60">The people making Viralyz possible</p>
           </motion.div>
           
           <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
@@ -156,7 +156,7 @@ export default function About() {
                 transition={{ delay: i * 0.1 }}
                 className="text-center"
               >
-                <div className="h-32 w-32 rounded-full bg-gradient-to-br from-primary/20 to-accent/20 mx-auto mb-4 overflow-hidden border-2 border-white/10">
+                <div className="h-32 w-32 rounded-full bg-gradient-to-br from-primary/20 to-accent/20 mx-auto mb-4 overflow-hidden border-2 border-border">
                   <img 
                     src={`https://api.dicebear.com/7.x/avataaars/svg?seed=${member.avatar}`} 
                     alt={member.name}
@@ -165,7 +165,7 @@ export default function About() {
                 </div>
                 <h3 className="font-bold text-lg">{member.name}</h3>
                 <p className="text-primary text-sm mb-2">{member.role}</p>
-                <p className="text-white/60 text-sm">{member.bio}</p>
+                <p className="text-foreground/60 text-sm">{member.bio}</p>
               </motion.div>
             ))}
           </div>
@@ -174,9 +174,9 @@ export default function About() {
 
       <section className="py-24 px-6">
         <div className="max-w-4xl mx-auto text-center">
-          <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} className="p-12 rounded-3xl bg-gradient-to-br from-primary/20 via-accent/10 to-purple-500/10 border border-white/10">
+          <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} className="p-12 rounded-3xl bg-gradient-to-br from-primary/20 via-accent/10 to-purple-500/10 border border-border">
             <h2 className="text-3xl md:text-4xl font-bold font-display mb-4">Join our journey</h2>
-            <p className="text-white/60 mb-8">Be part of the creator revolution</p>
+            <p className="text-foreground/60 mb-8">Be part of the creator revolution</p>
             <a href="/api/login">
               <Button size="lg" className="rounded-full bg-white text-black hover:bg-white/90 gap-2 font-bold px-10 h-14 text-lg">
                 Get Started Free <ArrowRight size={20} />
@@ -186,17 +186,17 @@ export default function About() {
         </div>
       </section>
 
-      <footer className="py-12 px-6 border-t border-white/5">
+      <footer className="py-12 px-6 border-t border-border">
         <div className="max-w-6xl mx-auto flex flex-col md:flex-row items-center justify-between gap-4">
           <Link href="/">
             <div className="flex items-center gap-2 cursor-pointer">
               <div className="h-6 w-6 rounded bg-gradient-to-br from-primary to-accent flex items-center justify-center">
-                <TrendingUp className="h-3 w-3 text-white" />
+                <TrendingUp className="h-3 w-3 text-foreground" />
               </div>
               <span className="font-bold font-display">Viralyz</span>
             </div>
           </Link>
-          <p className="text-sm text-white/40">&copy; 2026 Viralyz. All rights reserved.</p>
+          <p className="text-sm text-muted-foreground">&copy; 2026 Viralyz. All rights reserved.</p>
         </div>
       </footer>
     </div>

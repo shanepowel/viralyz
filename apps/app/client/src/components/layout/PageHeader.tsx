@@ -34,7 +34,7 @@ export function PageHeader({
             <Button 
               variant="ghost" 
               size="sm" 
-              className="gap-1 text-muted-foreground hover:text-white -ml-2"
+              className="gap-1 text-muted-foreground hover:text-foreground -ml-2"
               onClick={() => navigate(backHref)}
             >
               <ArrowLeft className="h-4 w-4" />
@@ -44,16 +44,16 @@ export function PageHeader({
           
           {breadcrumbs && breadcrumbs.length > 0 && (
             <nav className="flex items-center gap-1 text-muted-foreground">
-              <Link href="/" className="hover:text-white transition-colors">Home</Link>
+              <Link href="/" className="hover:text-foreground transition-colors">Home</Link>
               {breadcrumbs.map((crumb, i) => (
                 <span key={i} className="flex items-center gap-1">
                   <ChevronRight className="h-3 w-3" />
                   {crumb.href ? (
-                    <Link href={crumb.href} className="hover:text-white transition-colors">
+                    <Link href={crumb.href} className="hover:text-foreground transition-colors">
                       {crumb.label}
                     </Link>
                   ) : (
-                    <span className="text-white font-medium">{crumb.label}</span>
+                    <span className="text-foreground font-medium">{crumb.label}</span>
                   )}
                 </span>
               ))}
@@ -64,7 +64,7 @@ export function PageHeader({
       
       <div className="flex flex-col md:flex-row md:items-end justify-between gap-4">
         <div>
-          <h1 className="text-2xl md:text-3xl font-bold font-display text-white mb-1">{title}</h1>
+          <h1 className="text-2xl md:text-3xl font-bold font-display text-foreground mb-1">{title}</h1>
           {description && (
             <p className="text-muted-foreground">{description}</p>
           )}

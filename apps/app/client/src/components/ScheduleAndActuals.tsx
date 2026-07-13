@@ -156,18 +156,18 @@ export function ScheduleAndActuals({
   const accuracy = Math.max(0, 100 - Math.abs(delta));
 
   const inputCls =
-    "w-full bg-slate-800/50 border border-slate-700 rounded-lg py-2 px-3 text-white text-sm placeholder:text-slate-500 focus:outline-none focus:ring-2 focus:ring-indigo-500/50";
+    "w-full bg-secondary border border-border rounded-lg py-2 px-3 text-foreground text-sm placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-indigo-500/50";
 
   return (
-    <div className="bg-slate-900/50 border border-slate-800/50 rounded-2xl p-6 space-y-6" data-testid="schedule-and-actuals">
+    <div className="bg-secondary border border-border rounded-2xl p-6 space-y-6" data-testid="schedule-and-actuals">
       <div>
         <div className="flex items-center justify-between mb-4">
           <div className="flex items-center gap-2">
-            <CalendarIcon className="h-5 w-5 text-indigo-400" />
+            <CalendarIcon className="h-5 w-5 text-primary" />
             <h3 className="font-semibold">Schedule this post</h3>
           </div>
           {savedScheduledFor && (
-            <span className="text-xs px-2 py-1 rounded-full bg-indigo-500/20 text-indigo-300" data-testid="badge-status">
+            <span className="text-xs px-2 py-1 rounded-full bg-indigo-500/20 text-primary" data-testid="badge-status">
               {status === "posted" ? "Posted" : "Scheduled"}
             </span>
           )}
@@ -199,7 +199,7 @@ export function ScheduleAndActuals({
               variant="outline"
               onClick={handleClearSchedule}
               disabled={scheduleMutation.isPending}
-              className="border-slate-700"
+              className="border-border"
               data-testid="button-clear-schedule"
             >
               Clear
@@ -208,7 +208,7 @@ export function ScheduleAndActuals({
         </div>
 
         {savedScheduledFor && (
-          <p className="text-xs text-slate-400 mt-2" data-testid="text-scheduled-summary">
+          <p className="text-xs text-muted-foreground mt-2" data-testid="text-scheduled-summary">
             Posting on {new Date(savedScheduledFor).toLocaleString(undefined, {
               dateStyle: "medium",
               timeStyle: "short",
@@ -218,7 +218,7 @@ export function ScheduleAndActuals({
       </div>
 
       {savedScheduledFor && (
-        <div className="border-t border-slate-800/60 pt-6">
+        <div className="border-t border-border/60 pt-6">
           <div className="flex items-center gap-2 mb-4">
             <CheckCircle2 className="h-5 w-5 text-emerald-400" />
             <h3 className="font-semibold">Mark as posted & log results</h3>
@@ -226,7 +226,7 @@ export function ScheduleAndActuals({
 
           <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 mb-4">
             <div>
-              <label className="block text-xs text-slate-400 mb-1">Views</label>
+              <label className="block text-xs text-muted-foreground mb-1">Views</label>
               <input
                 type="number"
                 min="0"
@@ -238,7 +238,7 @@ export function ScheduleAndActuals({
               />
             </div>
             <div>
-              <label className="block text-xs text-slate-400 mb-1">Likes</label>
+              <label className="block text-xs text-muted-foreground mb-1">Likes</label>
               <input
                 type="number"
                 min="0"
@@ -250,7 +250,7 @@ export function ScheduleAndActuals({
               />
             </div>
             <div>
-              <label className="block text-xs text-slate-400 mb-1">Comments</label>
+              <label className="block text-xs text-muted-foreground mb-1">Comments</label>
               <input
                 type="number"
                 min="0"
@@ -262,7 +262,7 @@ export function ScheduleAndActuals({
               />
             </div>
             <div>
-              <label className="block text-xs text-slate-400 mb-1">Shares</label>
+              <label className="block text-xs text-muted-foreground mb-1">Shares</label>
               <input
                 type="number"
                 min="0"
@@ -290,29 +290,29 @@ export function ScheduleAndActuals({
           </Button>
 
           {showVsReality && (
-            <div className="mt-5 bg-slate-800/40 border border-slate-700/50 rounded-xl p-4" data-testid="card-prediction-vs-reality">
+            <div className="mt-5 bg-secondary/40 border border-border/50 rounded-xl p-4" data-testid="card-prediction-vs-reality">
               <div className="flex items-center gap-2 mb-3">
-                <BarChart3 className="h-4 w-4 text-indigo-400" />
+                <BarChart3 className="h-4 w-4 text-primary" />
                 <h4 className="text-sm font-semibold">Prediction vs. Reality</h4>
               </div>
               <div className="grid grid-cols-3 gap-3 text-center">
                 <div>
-                  <div className="text-xs text-slate-400 mb-1">Predicted</div>
-                  <div className="text-2xl font-bold text-indigo-400" data-testid="text-predicted-score">
+                  <div className="text-xs text-muted-foreground mb-1">Predicted</div>
+                  <div className="text-2xl font-bold text-primary" data-testid="text-predicted-score">
                     {predictedScore}
                   </div>
                 </div>
                 <div>
-                  <div className="text-xs text-slate-400 mb-1">Actual</div>
+                  <div className="text-xs text-muted-foreground mb-1">Actual</div>
                   <div className="text-2xl font-bold text-emerald-400" data-testid="text-actual-score">
                     {actualScore}
                   </div>
                 </div>
                 <div>
-                  <div className="text-xs text-slate-400 mb-1">Accuracy</div>
+                  <div className="text-xs text-muted-foreground mb-1">Accuracy</div>
                   <div
                     className={`text-2xl font-bold ${
-                      accuracy >= 80 ? "text-emerald-400" : accuracy >= 60 ? "text-amber-400" : "text-red-400"
+                      accuracy >= 80 ? "text-emerald-400" : accuracy >= 60 ? "text-[var(--score-50)]" : "text-red-400"
                     }`}
                     data-testid="text-accuracy"
                   >
@@ -320,7 +320,7 @@ export function ScheduleAndActuals({
                   </div>
                 </div>
               </div>
-              <p className="text-xs text-slate-400 text-center mt-3">
+              <p className="text-xs text-muted-foreground text-center mt-3">
                 {delta > 0
                   ? `Outperformed prediction by ${delta} points 🎉`
                   : delta < 0

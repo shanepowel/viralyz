@@ -53,7 +53,7 @@ export function Hint({ id, title, description, className, position = "bottom", s
             <Lightbulb className="h-4 w-4 shrink-0 mt-0.5" />
             <div className="flex-1 min-w-0">
               <p className="font-medium text-sm">{title}</p>
-              <p className="text-xs text-white/80 mt-0.5">{description}</p>
+              <p className="text-xs text-foreground/80 mt-0.5">{description}</p>
             </div>
             <button 
               onClick={dismiss}

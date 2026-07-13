@@ -29,6 +29,17 @@ export async function createLocalUploadTarget(filename: string) {
   return { objectPath, diskPath, uploadURL };
 }
 
+/** Map /objects/uploads/<file> → absolute disk path */
+export function resolveLocalDiskPath(objectPath: string): string {
+  const relative = objectPath.replace(/^\/objects\//, "");
+  const filename = relative.replace(/^uploads\//, "");
+  return path.join(UPLOAD_ROOT, filename);
+}
+
+export function getUploadRoot() {
+  return UPLOAD_ROOT;
+}
+
 export async function saveLocalUpload(
   diskPath: string,
   data: Buffer,
@@ -41,8 +52,7 @@ export async function serveLocalObject(
   objectPath: string,
   res: Response,
 ): Promise<boolean> {
-  const relative = objectPath.replace(/^\/objects\//, "");
-  const diskPath = path.join(UPLOAD_ROOT, relative.replace(/^uploads\//, ""));
+  const diskPath = resolveLocalDiskPath(objectPath);
 
   try {
     const file = await fs.readFile(diskPath);
@@ -56,7 +66,9 @@ export async function serveLocalObject(
             ? "video/mp4"
             : ext === ".webm"
               ? "video/webm"
-              : "application/octet-stream";
+              : ext === ".mov"
+                ? "video/quicktime"
+                : "application/octet-stream";
 
     res.setHeader("Content-Type", contentType);
     res.setHeader("Cache-Control", "public, max-age=3600");

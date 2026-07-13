@@ -62,24 +62,24 @@ export default function Community() {
 
   const getScoreColor = (score: number) => {
     if (score >= 80) return "text-emerald-400";
-    if (score >= 60) return "text-indigo-400";
-    if (score >= 40) return "text-amber-400";
-    return "text-slate-400";
+    if (score >= 60) return "text-primary";
+    if (score >= 40) return "text-[var(--score-50)]";
+    return "text-muted-foreground";
   };
 
   const SkeletonCard = () => (
-    <div className="bg-slate-900/50 border border-slate-800/50 rounded-2xl p-6 animate-pulse">
+    <div className="bg-secondary border border-border rounded-2xl p-6 animate-pulse">
       <div className="flex items-center gap-4 mb-4">
-        <div className="h-14 w-14 rounded-full bg-slate-800" />
+        <div className="h-14 w-14 rounded-full bg-secondary" />
         <div className="space-y-2 flex-1">
-          <div className="h-4 w-32 bg-slate-800 rounded" />
-          <div className="h-3 w-20 bg-slate-800/50 rounded" />
+          <div className="h-4 w-32 bg-secondary rounded" />
+          <div className="h-3 w-20 bg-secondary rounded" />
         </div>
       </div>
       <div className="grid grid-cols-3 gap-3">
-        <div className="h-12 bg-slate-800/50 rounded-lg" />
-        <div className="h-12 bg-slate-800/50 rounded-lg" />
-        <div className="h-12 bg-slate-800/50 rounded-lg" />
+        <div className="h-12 bg-secondary rounded-lg" />
+        <div className="h-12 bg-secondary rounded-lg" />
+        <div className="h-12 bg-secondary rounded-lg" />
       </div>
     </div>
   );
@@ -92,10 +92,10 @@ export default function Community() {
           animate={{ opacity: 1, y: 0 }}
         >
           <div className="flex items-center gap-3 mb-2">
-            <Users className="h-8 w-8 text-indigo-400" />
+            <Users className="h-8 w-8 text-primary" />
             <h1 className="text-3xl font-bold" data-testid="text-community-title">Community</h1>
           </div>
-          <p className="text-slate-400">Discover creators, follow their journey, and learn from the best</p>
+          <p className="text-muted-foreground">Discover creators, follow their journey, and learn from the best</p>
         </motion.div>
 
         <motion.div
@@ -104,13 +104,13 @@ export default function Community() {
           transition={{ delay: 0.1 }}
         >
           <div className="relative">
-            <Search className="absolute left-4 top-1/2 -translate-y-1/2 h-5 w-5 text-slate-500" />
+            <Search className="absolute left-4 top-1/2 -translate-y-1/2 h-5 w-5 text-muted-foreground" />
             <input
               type="text"
               placeholder="Search creators..."
               value={search}
               onChange={(e) => setSearch(e.target.value)}
-              className="w-full pl-12 pr-4 py-3 bg-slate-900/50 border border-slate-800/50 rounded-xl text-white placeholder-slate-500 focus:outline-none focus:border-indigo-500/50 focus:ring-1 focus:ring-indigo-500/30 transition-colors"
+              className="w-full pl-12 pr-4 py-3 bg-secondary border border-border rounded-xl text-foreground placeholder-slate-500 focus:outline-none focus:border-indigo-500/50 focus:ring-1 focus:ring-indigo-500/30 transition-colors"
               data-testid="input-search-creators"
             />
           </div>
@@ -127,11 +127,11 @@ export default function Community() {
           </div>
         ) : filteredCreators.length === 0 ? (
           <div className="text-center py-16">
-            <Users className="h-16 w-16 text-slate-700 mx-auto mb-4" />
-            <h3 className="text-lg font-medium text-slate-300 mb-2">
+            <Users className="h-16 w-16 text-muted-foreground mx-auto mb-4" />
+            <h3 className="text-lg font-medium text-muted-foreground mb-2">
               {search ? "No creators found" : "No creators yet"}
             </h3>
-            <p className="text-slate-500">
+            <p className="text-muted-foreground">
               {search ? "Try a different search term" : "Be the first to analyze content and appear here!"}
             </p>
           </div>
@@ -145,7 +145,7 @@ export default function Community() {
                   initial={{ opacity: 0, y: 20 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ delay: Math.min(0.05 * i, 0.3) }}
-                  className="bg-slate-900/50 border border-slate-800/50 rounded-2xl p-6 hover:border-slate-700/50 transition-colors group"
+                  className="bg-secondary border border-border rounded-2xl p-6 hover:border-border/50 transition-colors group"
                   data-testid={`card-creator-${creator.id}`}
                 >
                   <div className="flex items-start justify-between mb-4">
@@ -164,14 +164,14 @@ export default function Community() {
                         )}
                         <div>
                           <div className="flex items-center gap-2">
-                            <span className="font-semibold text-white group-hover:text-indigo-300 transition-colors">
+                            <span className="font-semibold text-foreground group-hover:text-primary transition-colors">
                               {creator.firstName || "Anonymous"} {creator.lastName?.[0] ? `${creator.lastName[0]}.` : ""}
                             </span>
                             {creator.plan === "pro" && (
-                              <Crown className="h-4 w-4 text-amber-400" />
+                              <Crown className="h-4 w-4 text-[var(--score-50)]" />
                             )}
                           </div>
-                          <span className="text-sm text-slate-500">
+                          <span className="text-sm text-muted-foreground">
                             {Number(creator.followerCount)} follower{Number(creator.followerCount) !== 1 ? "s" : ""}
                           </span>
                         </div>
@@ -180,21 +180,21 @@ export default function Community() {
                   </div>
 
                   <div className="grid grid-cols-3 gap-3 mb-4">
-                    <div className="bg-slate-800/40 rounded-lg p-3 text-center">
-                      <div className="text-lg font-bold text-white">{Number(creator.totalAnalyses)}</div>
-                      <div className="text-xs text-slate-500">Analyses</div>
+                    <div className="bg-secondary/40 rounded-lg p-3 text-center">
+                      <div className="text-lg font-bold text-foreground">{Number(creator.totalAnalyses)}</div>
+                      <div className="text-xs text-muted-foreground">Analyses</div>
                     </div>
-                    <div className="bg-slate-800/40 rounded-lg p-3 text-center">
+                    <div className="bg-secondary/40 rounded-lg p-3 text-center">
                       <div className={`text-lg font-bold ${getScoreColor(Number(creator.avgScore))}`}>
                         {Number(creator.avgScore) || "--"}
                       </div>
-                      <div className="text-xs text-slate-500">Avg Score</div>
+                      <div className="text-xs text-muted-foreground">Avg Score</div>
                     </div>
-                    <div className="bg-slate-800/40 rounded-lg p-3 text-center">
-                      <div className="text-lg font-bold text-indigo-400">
+                    <div className="bg-secondary/40 rounded-lg p-3 text-center">
+                      <div className="text-lg font-bold text-primary">
                         {Number(creator.followerCount)}
                       </div>
-                      <div className="text-xs text-slate-500">Followers</div>
+                      <div className="text-xs text-muted-foreground">Followers</div>
                     </div>
                   </div>
 
@@ -202,7 +202,7 @@ export default function Community() {
                     <Link href={`/profile/${creator.id}`} className="flex-1">
                       <Button
                         variant="outline"
-                        className="w-full border-slate-700 text-slate-300 hover:text-white hover:bg-slate-800"
+                        className="w-full border-border text-muted-foreground hover:text-foreground hover:bg-secondary"
                         data-testid={`button-view-profile-${creator.id}`}
                       >
                         View Profile
@@ -213,7 +213,7 @@ export default function Community() {
                         <Button
                           size="icon"
                           variant="outline"
-                          className="border-slate-700 text-slate-400 hover:text-white hover:bg-slate-800"
+                          className="border-border text-muted-foreground hover:text-foreground hover:bg-secondary"
                           data-testid={`button-message-${creator.id}`}
                           onClick={() => navigate(`/messages?to=${creator.id}`)}
                         >

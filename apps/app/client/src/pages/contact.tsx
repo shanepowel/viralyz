@@ -14,25 +14,25 @@ export default function Contact() {
   };
 
   return (
-    <div className="min-h-screen bg-background text-white">
-      <nav className="fixed top-0 left-0 right-0 z-50 flex items-center justify-between px-6 py-4 backdrop-blur-xl bg-background/80 border-b border-white/5">
+    <div className="min-h-screen bg-background text-foreground">
+      <nav className="fixed top-0 left-0 right-0 z-50 flex items-center justify-between px-6 py-4 backdrop-blur-xl bg-background/80 border-b border-border">
         <Link href="/">
           <div className="flex items-center gap-2 cursor-pointer">
             <div className="h-8 w-8 rounded-lg bg-gradient-to-br from-primary to-accent flex items-center justify-center">
-              <TrendingUp className="h-4 w-4 text-white" />
+              <TrendingUp className="h-4 w-4 text-foreground" />
             </div>
             <span className="text-xl font-bold font-display tracking-tight">Viralyz</span>
           </div>
         </Link>
         <div className="hidden md:flex items-center gap-8">
-          <Link href="/features" className="text-white/60 hover:text-white transition-colors">Features</Link>
-          <Link href="/pricing" className="text-white/60 hover:text-white transition-colors">Pricing</Link>
-          <Link href="/about" className="text-white/60 hover:text-white transition-colors">About</Link>
-          <Link href="/contact" className="text-white font-medium">Contact</Link>
+          <Link href="/features" className="text-foreground/60 hover:text-foreground transition-colors">Features</Link>
+          <Link href="/pricing" className="text-foreground/60 hover:text-foreground transition-colors">Pricing</Link>
+          <Link href="/about" className="text-foreground/60 hover:text-foreground transition-colors">About</Link>
+          <Link href="/contact" className="text-foreground font-medium">Contact</Link>
         </div>
         <div className="flex items-center gap-4">
           <a href="/api/login">
-            <Button variant="ghost" className="text-white/80 hover:text-white">Log In</Button>
+            <Button variant="ghost" className="text-foreground/80 hover:text-foreground">Log In</Button>
           </a>
           <a href="/api/login">
             <Button className="bg-primary hover:bg-primary/90 rounded-full px-6">Get Started Free</Button>
@@ -50,7 +50,7 @@ export default function Contact() {
             <h1 className="text-4xl md:text-6xl font-black font-display tracking-tight mb-6">
               We'd love to <span className="bg-gradient-to-r from-primary to-accent bg-clip-text text-transparent">hear from you</span>
             </h1>
-            <p className="text-xl text-white/60 max-w-2xl mx-auto">
+            <p className="text-xl text-foreground/60 max-w-2xl mx-auto">
               Have a question, feedback, or just want to say hi? We're here to help.
             </p>
           </motion.div>
@@ -71,8 +71,8 @@ export default function Contact() {
                     </div>
                     <div>
                       <h3 className="font-bold mb-1">Email</h3>
-                      <p className="text-white/60">hello@viralyz.app</p>
-                      <p className="text-white/60">support@viralyz.app</p>
+                      <p className="text-foreground/60">hello@viralyz.app</p>
+                      <p className="text-foreground/60">support@viralyz.app</p>
                     </div>
                   </div>
                   
@@ -82,8 +82,8 @@ export default function Contact() {
                     </div>
                     <div>
                       <h3 className="font-bold mb-1">Live Chat</h3>
-                      <p className="text-white/60">Available 9am - 6pm EST</p>
-                      <p className="text-white/60">Monday to Friday</p>
+                      <p className="text-foreground/60">Available 9am - 6pm EST</p>
+                      <p className="text-foreground/60">Monday to Friday</p>
                     </div>
                   </div>
                   
@@ -93,8 +93,8 @@ export default function Contact() {
                     </div>
                     <div>
                       <h3 className="font-bold mb-1">Office</h3>
-                      <p className="text-white/60">123 Creator Way</p>
-                      <p className="text-white/60">San Francisco, CA 94107</p>
+                      <p className="text-foreground/60">123 Creator Way</p>
+                      <p className="text-foreground/60">San Francisco, CA 94107</p>
                     </div>
                   </div>
                 </div>
@@ -107,14 +107,14 @@ export default function Contact() {
               viewport={{ once: true }}
               className="lg:col-span-2"
             >
-              <div className="p-8 rounded-3xl bg-white/5 border border-white/10">
+              <div className="p-8 rounded-3xl bg-secondary border border-border">
                 {submitted ? (
                   <div className="text-center py-12">
                     <div className="h-16 w-16 rounded-full bg-green-500/20 flex items-center justify-center mx-auto mb-6">
                       <Send className="h-8 w-8 text-green-500" />
                     </div>
                     <h3 className="text-2xl font-bold mb-2">Message sent!</h3>
-                    <p className="text-white/60">We'll get back to you as soon as possible.</p>
+                    <p className="text-foreground/60">We'll get back to you as soon as possible.</p>
                   </div>
                 ) : (
                   <form onSubmit={handleSubmit} className="space-y-6">
@@ -126,7 +126,7 @@ export default function Contact() {
                           required
                           value={formData.name}
                           onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-                          className="w-full px-4 py-3 rounded-xl bg-white/5 border border-white/10 focus:border-primary/50 focus:outline-none focus:ring-2 focus:ring-primary/20 transition-all"
+                          className="w-full px-4 py-3 rounded-xl bg-secondary border border-border focus:border-primary/50 focus:outline-none focus:ring-2 focus:ring-primary/20 transition-all"
                           placeholder="Your name"
                           data-testid="input-name"
                         />
@@ -138,7 +138,7 @@ export default function Contact() {
                           required
                           value={formData.email}
                           onChange={(e) => setFormData({ ...formData, email: e.target.value })}
-                          className="w-full px-4 py-3 rounded-xl bg-white/5 border border-white/10 focus:border-primary/50 focus:outline-none focus:ring-2 focus:ring-primary/20 transition-all"
+                          className="w-full px-4 py-3 rounded-xl bg-secondary border border-border focus:border-primary/50 focus:outline-none focus:ring-2 focus:ring-primary/20 transition-all"
                           placeholder="you@example.com"
                           data-testid="input-email"
                         />
@@ -150,7 +150,7 @@ export default function Contact() {
                       <select
                         value={formData.subject}
                         onChange={(e) => setFormData({ ...formData, subject: e.target.value })}
-                        className="w-full px-4 py-3 rounded-xl bg-white/5 border border-white/10 focus:border-primary/50 focus:outline-none focus:ring-2 focus:ring-primary/20 transition-all"
+                        className="w-full px-4 py-3 rounded-xl bg-secondary border border-border focus:border-primary/50 focus:outline-none focus:ring-2 focus:ring-primary/20 transition-all"
                         data-testid="select-subject"
                       >
                         <option value="">Select a topic</option>
@@ -169,7 +169,7 @@ export default function Contact() {
                         rows={5}
                         value={formData.message}
                         onChange={(e) => setFormData({ ...formData, message: e.target.value })}
-                        className="w-full px-4 py-3 rounded-xl bg-white/5 border border-white/10 focus:border-primary/50 focus:outline-none focus:ring-2 focus:ring-primary/20 transition-all resize-none"
+                        className="w-full px-4 py-3 rounded-xl bg-secondary border border-border focus:border-primary/50 focus:outline-none focus:ring-2 focus:ring-primary/20 transition-all resize-none"
                         placeholder="How can we help you?"
                         data-testid="textarea-message"
                       />
@@ -186,17 +186,17 @@ export default function Contact() {
         </div>
       </section>
 
-      <footer className="py-12 px-6 border-t border-white/5">
+      <footer className="py-12 px-6 border-t border-border">
         <div className="max-w-6xl mx-auto flex flex-col md:flex-row items-center justify-between gap-4">
           <Link href="/">
             <div className="flex items-center gap-2 cursor-pointer">
               <div className="h-6 w-6 rounded bg-gradient-to-br from-primary to-accent flex items-center justify-center">
-                <TrendingUp className="h-3 w-3 text-white" />
+                <TrendingUp className="h-3 w-3 text-foreground" />
               </div>
               <span className="font-bold font-display">Viralyz</span>
             </div>
           </Link>
-          <p className="text-sm text-white/40">&copy; 2026 Viralyz. All rights reserved.</p>
+          <p className="text-sm text-muted-foreground">&copy; 2026 Viralyz. All rights reserved.</p>
         </div>
       </footer>
     </div>
