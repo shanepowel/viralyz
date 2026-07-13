@@ -49,12 +49,12 @@ export default function SearchPage() {
         <PageHeader eyebrow="Library" title="Search" description="Find any analysis, hook, caption, or idea you've created." />
 
         <div className="relative mb-6">
-          <SearchIcon className="absolute left-4 top-1/2 -translate-y-1/2 h-4 w-4 text-slate-500" />
+          <SearchIcon className="absolute left-4 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
           <Input
             value={q}
             onChange={(e) => setQ(e.target.value)}
             placeholder="Search your content..."
-            className="bg-white/[0.04] border-white/[0.08] h-12 pl-11 text-base"
+            className="bg-secondary border-border h-12 pl-11 text-base"
             autoFocus
             data-testid="input-search"
           />
@@ -117,7 +117,7 @@ function Section({ title, icon: Icon, children }: { title: string; icon: any; ch
   return (
     <div>
       <div className="flex items-center gap-2 mb-3">
-        <Icon className="h-4 w-4 text-indigo-300" />
+        <Icon className="h-4 w-4 text-primary" />
         <h2 className="text-h3">{title}</h2>
       </div>
       <div className="space-y-2">{children}</div>

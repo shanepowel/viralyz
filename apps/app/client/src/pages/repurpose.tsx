@@ -221,13 +221,13 @@ export default function RepurposePage() {
                 onChange={(e) => { setSourceText(e.target.value); setSourceAnalysisId(null); }}
                 rows={6}
                 placeholder="Paste your draft caption, script, or post here…"
-                className="w-full bg-white/[0.03] border border-white/10 rounded-xl p-3 text-sm text-white placeholder:text-slate-500 focus:outline-none focus:ring-2 focus:ring-indigo-500/50 resize-none"
+                className="w-full bg-secondary/80 border border-border rounded-xl p-3 text-sm text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-indigo-500/50 resize-none"
                 data-testid="input-source-text"
               />
               <div className="text-meta mt-1 flex items-center justify-between">
                 <span>{sourceText.length} chars (min 20)</span>
                 {sourceAnalysisId && (
-                  <span className="inline-flex items-center gap-1 text-indigo-300">
+                  <span className="inline-flex items-center gap-1 text-primary">
                     <Sparkles className="h-3 w-3" /> From analysis · prefilled
                   </span>
                 )}
@@ -247,8 +247,8 @@ export default function RepurposePage() {
                       className={cn(
                         "px-3 py-1.5 rounded-full border text-sm transition-colors",
                         on
-                          ? "bg-indigo-500/20 border-indigo-400/50 text-indigo-200"
-                          : "bg-white/[0.03] border-white/10 text-slate-300 hover:border-white/20"
+                          ? "bg-indigo-500/20 border-indigo-400/50 text-primary"
+                          : "bg-secondary/80 border-border text-muted-foreground hover:border-border"
                       )}
                       data-testid={`chip-platform-${p.id}`}
                     >
@@ -263,7 +263,7 @@ export default function RepurposePage() {
               <label
                 className={cn(
                   "inline-flex items-center gap-2 text-sm",
-                  hasDefaultBV ? "text-slate-200 cursor-pointer" : "text-slate-500 cursor-not-allowed"
+                  hasDefaultBV ? "text-foreground cursor-pointer" : "text-muted-foreground cursor-not-allowed"
                 )}
                 title={hasDefaultBV ? "" : "Set a default Brand Voice profile to enable"}
               >
@@ -272,14 +272,14 @@ export default function RepurposePage() {
                   checked={useBrandVoice && hasDefaultBV}
                   onChange={(e) => setUseBrandVoice(e.target.checked)}
                   disabled={!hasDefaultBV}
-                  className="h-4 w-4 rounded border-white/10 bg-white/[0.04]"
+                  className="h-4 w-4 rounded border-border bg-secondary"
                   data-testid="checkbox-use-brand-voice"
                 />
                 <Mic2 className="h-4 w-4" />
                 Use my Brand Voice
                 {!hasDefaultBV && (
                   <Link href="/brand-voice">
-                    <span className="text-indigo-300 underline ml-1">Set up</span>
+                    <span className="text-primary underline ml-1">Set up</span>
                   </Link>
                 )}
               </label>
@@ -334,9 +334,9 @@ export default function RepurposePage() {
           >
             <div className="card-base p-5">
               <h3 className="text-h3 mb-3 flex items-center gap-2">
-                <Sparkles className="h-4 w-4 text-indigo-300" /> Why use this
+                <Sparkles className="h-4 w-4 text-primary" /> Why use this
               </h3>
-              <ul className="space-y-2 text-sm text-slate-300">
+              <ul className="space-y-2 text-sm text-muted-foreground">
                 <li className="flex items-start gap-2"><CheckCircle2 className="h-4 w-4 text-emerald-400 mt-0.5 shrink-0" />Each variant is independently scored, not blindly rewritten.</li>
                 <li className="flex items-start gap-2"><CheckCircle2 className="h-4 w-4 text-emerald-400 mt-0.5 shrink-0" />Pre-publish lint catches risky words, length, and AI tells.</li>
                 <li className="flex items-start gap-2"><CheckCircle2 className="h-4 w-4 text-emerald-400 mt-0.5 shrink-0" />Schedule directly to your calendar in one click.</li>
@@ -348,7 +348,7 @@ export default function RepurposePage() {
               {loadingRuns ? (
                 <div className="space-y-2">{[0, 1].map((i) => <div key={i} className="skeleton h-14 rounded-lg" />)}</div>
               ) : !runs || runs.length === 0 ? (
-                <p className="text-sm text-slate-400">No runs yet.</p>
+                <p className="text-sm text-muted-foreground">No runs yet.</p>
               ) : (
                 <div className="space-y-2">
                   {runs.slice(0, 6).map((r) => (
@@ -373,12 +373,12 @@ export default function RepurposePage() {
       </div>
 
       <Dialog open={!!scheduling} onOpenChange={(o) => !o && setScheduling(null)}>
-        <DialogContent className="border-white/10 bg-slate-950">
+        <DialogContent className="border-border bg-card">
           <DialogHeader>
             <DialogTitle>Schedule {scheduling?.platform} variant</DialogTitle>
           </DialogHeader>
           <div className="space-y-3">
-            <p className="text-sm text-slate-300 line-clamp-3">{scheduling?.text}</p>
+            <p className="text-sm text-muted-foreground line-clamp-3">{scheduling?.text}</p>
             {scheduling && (
               <CalendarSlotPicker
                 platform={scheduling.platform}
@@ -392,13 +392,13 @@ export default function RepurposePage() {
                 type="datetime-local"
                 value={scheduleDate}
                 onChange={(e) => setScheduleDate(e.target.value)}
-                className="w-full bg-white/[0.03] border border-white/10 rounded-lg p-2 text-sm text-white"
+                className="w-full bg-secondary/80 border border-border rounded-lg p-2 text-sm text-foreground"
                 data-testid="input-schedule-date"
               />
             </div>
           </div>
           <DialogFooter>
-            <Button variant="outline" className="border-white/10" onClick={() => setScheduling(null)}>
+            <Button variant="outline" className="border-border" onClick={() => setScheduling(null)}>
               <X className="h-4 w-4 mr-1.5" />Cancel
             </Button>
             <Button
@@ -430,14 +430,14 @@ function VariantCard({
     <div className="card-base p-4 flex flex-col gap-3" data-testid={`variant-${variant.platform}`}>
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-2">
-          <span className="text-xs uppercase tracking-wide text-slate-300 font-semibold">{variant.platform}</span>
+          <span className="text-xs uppercase tracking-wide text-muted-foreground font-semibold">{variant.platform}</span>
           {scheduled && (
-            <span className="text-[10px] uppercase tracking-wide bg-emerald-500/15 text-emerald-300 border border-emerald-500/30 rounded-full px-2 py-0.5">
+            <span className="text-[10px] uppercase tracking-wide bg-emerald-500/15 text-[var(--score-90)] border border-emerald-500/30 rounded-full px-2 py-0.5">
               scheduled
             </span>
           )}
           {draftSaved && (
-            <span className="text-[10px] uppercase tracking-wide bg-indigo-500/15 text-indigo-300 border border-indigo-500/30 rounded-full px-2 py-0.5">
+            <span className="text-[10px] uppercase tracking-wide bg-indigo-500/15 text-primary border border-indigo-500/30 rounded-full px-2 py-0.5">
               draft
             </span>
           )}
@@ -447,12 +447,12 @@ function VariantCard({
         </span>
       </div>
 
-      <p className="text-sm whitespace-pre-wrap text-slate-100 leading-relaxed line-clamp-[10]">{variant.text}</p>
+      <p className="text-sm whitespace-pre-wrap text-foreground leading-relaxed line-clamp-[10]">{variant.text}</p>
 
       {variant.hashtags && variant.hashtags.length > 0 && (
         <div className="flex flex-wrap gap-1">
           {variant.hashtags.map((h, i) => (
-            <span key={i} className="text-[11px] text-indigo-300 bg-indigo-500/10 border border-indigo-500/20 rounded px-1.5 py-0.5">
+            <span key={i} className="text-[11px] text-primary bg-indigo-500/10 border border-indigo-500/20 rounded px-1.5 py-0.5">
               {h}
             </span>
           ))}
@@ -460,7 +460,7 @@ function VariantCard({
       )}
 
       {variant.platformNote && (
-        <div className="text-xs text-slate-400 italic border-l-2 border-indigo-500/40 pl-2">
+        <div className="text-xs text-muted-foreground italic border-l-2 border-indigo-500/40 pl-2">
           Platform-tuned because: {variant.platformNote}
         </div>
       )}
@@ -468,17 +468,17 @@ function VariantCard({
       {(errorFlags.length + warnFlags.length + infoFlags.length) > 0 && (
         <div className="space-y-1">
           {errorFlags.map((f, i) => (
-            <div key={`e${i}`} className="flex items-start gap-1.5 text-xs text-rose-300">
+            <div key={`e${i}`} className="flex items-start gap-1.5 text-xs text-destructive">
               <AlertTriangle className="h-3.5 w-3.5 mt-0.5 shrink-0" />{f.message}
             </div>
           ))}
           {warnFlags.map((f, i) => (
-            <div key={`w${i}`} className="flex items-start gap-1.5 text-xs text-amber-300">
+            <div key={`w${i}`} className="flex items-start gap-1.5 text-xs text-[var(--score-50)]">
               <AlertTriangle className="h-3.5 w-3.5 mt-0.5 shrink-0" />{f.message}
             </div>
           ))}
           {infoFlags.map((f, i) => (
-            <div key={`i${i}`} className="flex items-start gap-1.5 text-xs text-slate-400">
+            <div key={`i${i}`} className="flex items-start gap-1.5 text-xs text-muted-foreground">
               <Info className="h-3.5 w-3.5 mt-0.5 shrink-0" />{f.message}
             </div>
           ))}
@@ -486,13 +486,13 @@ function VariantCard({
       )}
 
       <div className="flex items-center gap-2 pt-1 mt-auto flex-wrap">
-        <Button size="sm" variant="outline" className="border-white/10" onClick={onCopy} data-testid={`button-copy-${variant.platform}`}>
+        <Button size="sm" variant="outline" className="border-border" onClick={onCopy} data-testid={`button-copy-${variant.platform}`}>
           <Copy className="h-3.5 w-3.5 mr-1.5" />Copy
         </Button>
         <Button
           size="sm"
           variant="outline"
-          className="border-white/10"
+          className="border-border"
           onClick={onSaveDraft}
           disabled={scheduled || draftSaved || savingDraft}
           data-testid={`button-save-draft-${variant.platform}`}
@@ -513,7 +513,7 @@ function VariantCard({
         </Button>
         {variant.scheduledAnalysisId && (
           <Link href={`/analyze/${variant.scheduledAnalysisId}`}>
-            <Button size="sm" variant="ghost" className="text-indigo-300">
+            <Button size="sm" variant="ghost" className="text-primary">
               Open <ArrowRight className="h-3 w-3 ml-1" />
             </Button>
           </Link>

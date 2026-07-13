@@ -77,7 +77,7 @@ export default function CaptionStudio() {
         />
 
         {prefillNote && (
-          <div className="card-base p-4 mb-6 text-meta text-amber-200 border-amber-500/20" data-testid="banner-prefill">
+          <div className="card-base p-4 mb-6 text-meta text-[var(--score-50)] border-amber-500/20" data-testid="banner-prefill">
             {prefillNote}
           </div>
         )}
@@ -89,7 +89,7 @@ export default function CaptionStudio() {
               value={caption}
               onChange={(e) => setCaption(e.target.value)}
               placeholder="Paste your caption here…"
-              className="bg-white/[0.04] border-white/[0.08] text-white"
+              className="bg-secondary border-border text-foreground"
               rows={5}
               data-testid="input-caption"
             />
@@ -106,8 +106,8 @@ export default function CaptionStudio() {
                   className={cn(
                     "px-3.5 py-2 rounded-lg text-sm font-medium capitalize transition-colors border",
                     platform === p
-                      ? "bg-rose-500/20 text-rose-200 border-rose-500/40"
-                      : "bg-white/[0.025] text-slate-400 border-white/[0.06] hover:text-white hover:border-white/[0.12]"
+                      ? "bg-rose-500/20 text-destructive border-rose-500/40"
+                      : "bg-card text-muted-foreground border-border hover:text-foreground hover:border-[var(--border-strong)]"
                   )}
                 >
                   {p}
@@ -149,7 +149,7 @@ export default function CaptionStudio() {
               <div className="flex items-start justify-between gap-4 mb-5">
                 <div>
                   <div className="text-eyebrow mb-1">Rewritten caption</div>
-                  <h3 className="text-h3 text-white">Optimised for {platform}</h3>
+                  <h3 className="text-h3 text-foreground">Optimised for {platform}</h3>
                 </div>
                 <div className="flex items-center gap-3 shrink-0">
                   <ScoreRing score={result.viralScore} size={88} strokeWidth={8} label="Viral" />
@@ -157,32 +157,32 @@ export default function CaptionStudio() {
                     size="sm"
                     variant="ghost"
                     onClick={() => doCopy(result.rewrittenCaption, "main")}
-                    className="text-slate-300 hover:text-white"
+                    className="text-muted-foreground hover:text-foreground"
                     data-testid="button-copy-main"
                   >
                     {copied === "main" ? <Check className="h-4 w-4" /> : <Copy className="h-4 w-4" />}
                   </Button>
                 </div>
               </div>
-              <div className="rounded-xl bg-white/[0.04] border border-white/[0.06] p-4 mb-4 whitespace-pre-wrap text-white leading-relaxed" data-testid="text-rewritten-caption">
+              <div className="rounded-xl bg-secondary border border-border p-4 mb-4 whitespace-pre-wrap text-foreground leading-relaxed" data-testid="text-rewritten-caption">
                 {result.rewrittenCaption}
               </div>
 
               <div className="flex items-center gap-2 mb-2">
-                <Hash className="h-4 w-4 text-slate-400" />
+                <Hash className="h-4 w-4 text-muted-foreground" />
                 <span className="text-eyebrow">Hashtags</span>
                 <Button
                   size="sm"
                   variant="ghost"
                   onClick={() => doCopy(result.hashtags.join(" "), "hashtags")}
-                  className="text-slate-400 hover:text-white ml-auto h-7"
+                  className="text-muted-foreground hover:text-foreground ml-auto h-7"
                 >
                   {copied === "hashtags" ? <Check className="h-3 w-3" /> : <Copy className="h-3 w-3" />}
                 </Button>
               </div>
               <div className="flex flex-wrap gap-2">
                 {result.hashtags.map((tag, i) => (
-                  <span key={i} className="px-2 py-1 bg-white/[0.04] border border-white/[0.06] text-slate-300 rounded-md text-sm" data-testid={`tag-${i}`}>
+                  <span key={i} className="px-2 py-1 bg-secondary border border-border text-muted-foreground rounded-md text-sm" data-testid={`tag-${i}`}>
                     {tag}
                   </span>
                 ))}
@@ -190,10 +190,10 @@ export default function CaptionStudio() {
             </div>
 
             <div className="card-base p-6">
-              <h3 className="text-h3 text-white mb-4">What changed</h3>
+              <h3 className="text-h3 text-foreground mb-4">What changed</h3>
               <ul className="space-y-2">
                 {result.improvements.map((imp, i) => (
-                  <li key={i} className="flex items-start gap-2 text-slate-300">
+                  <li key={i} className="flex items-start gap-2 text-muted-foreground">
                     <span className="text-emerald-400 mt-1">→</span>
                     <span>{imp}</span>
                   </li>
@@ -202,22 +202,22 @@ export default function CaptionStudio() {
             </div>
 
             <div>
-              <h3 className="text-h3 text-white mb-3">Tone variants</h3>
+              <h3 className="text-h3 text-foreground mb-3">Tone variants</h3>
               <div className="space-y-3">
                 {result.variants.map((v, i) => (
                   <div key={i} className="card-base card-hover p-5" data-testid={`variant-${i}`}>
                     <div className="flex items-center justify-between mb-2">
-                      <span className="capitalize text-eyebrow text-indigo-300">{v.tone}</span>
+                      <span className="capitalize text-eyebrow text-primary">{v.tone}</span>
                       <Button
                         size="sm"
                         variant="ghost"
                         onClick={() => doCopy(v.caption, `variant-${i}`)}
-                        className="text-slate-400 hover:text-white"
+                        className="text-muted-foreground hover:text-foreground"
                       >
                         {copied === `variant-${i}` ? <Check className="h-4 w-4" /> : <Copy className="h-4 w-4" />}
                       </Button>
                     </div>
-                    <p className="text-slate-200 whitespace-pre-wrap leading-relaxed">{v.caption}</p>
+                    <p className="text-foreground whitespace-pre-wrap leading-relaxed">{v.caption}</p>
                   </div>
                 ))}
               </div>

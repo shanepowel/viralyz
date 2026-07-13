@@ -38,10 +38,10 @@ const platformIcons = [
 ];
 
 const quickActions = [
-  { type: 'clip', icon: Sparkles, label: 'Clip', color: 'bg-pink-500/20 text-pink-400 hover:bg-pink-500 hover:text-white' },
-  { type: 'film', icon: Film, label: 'Film', color: 'bg-blue-500/20 text-blue-400 hover:bg-blue-500 hover:text-white' },
-  { type: 'still', icon: Image, label: 'Still', color: 'bg-green-500/20 text-green-400 hover:bg-green-500 hover:text-white' },
-  { type: 'flash', icon: Zap, label: 'Flash', color: 'bg-yellow-500/20 text-yellow-400 hover:bg-yellow-500 hover:text-white' },
+  { type: 'clip', icon: Sparkles, label: 'Clip', color: 'bg-pink-500/20 text-pink-400 hover:bg-pink-500 hover:text-foreground' },
+  { type: 'film', icon: Film, label: 'Film', color: 'bg-blue-500/20 text-blue-400 hover:bg-blue-500 hover:text-foreground' },
+  { type: 'still', icon: Image, label: 'Still', color: 'bg-green-500/20 text-green-400 hover:bg-green-500 hover:text-foreground' },
+  { type: 'flash', icon: Zap, label: 'Flash', color: 'bg-yellow-500/20 text-yellow-400 hover:bg-yellow-500 hover:text-foreground' },
 ];
 
 export default function Home() {
@@ -65,7 +65,7 @@ export default function Home() {
             <div>
               <div className="flex items-center gap-2 mb-1">
                 <TrendingUp className="h-6 w-6 text-primary" />
-                <h1 className="text-3xl font-bold font-display tracking-tight text-white">For You</h1>
+                <h1 className="text-3xl font-bold font-display tracking-tight text-foreground">For You</h1>
               </div>
               <p className="text-muted-foreground">Content curated for your taste</p>
             </div>
@@ -80,7 +80,7 @@ export default function Home() {
           <motion.div 
             initial={{ opacity: 0, scale: 0.98 }}
             animate={{ opacity: 1, scale: 1 }}
-            className="relative overflow-hidden rounded-2xl border border-white/10 mb-6"
+            className="relative overflow-hidden rounded-2xl border border-border mb-6"
           >
             {/* Animated gradient background */}
             <div className="absolute inset-0 bg-gradient-to-r from-primary/20 via-accent/10 to-primary/20 animate-gradient-x" />
@@ -90,7 +90,7 @@ export default function Home() {
               <div>
                 <div className="flex items-center gap-2 mb-1">
                   <div className="h-2 w-2 rounded-full bg-green-500 animate-pulse" />
-                  <p className="text-sm font-semibold text-white">Cross-Platform Publishing</p>
+                  <p className="text-sm font-semibold text-foreground">Cross-Platform Publishing</p>
                 </div>
                 <p className="text-xs text-muted-foreground">Create once, share everywhere</p>
               </div>
@@ -134,7 +134,7 @@ export default function Home() {
         <FlashesBar />
 
         <Tabs defaultValue="all" value={activeTab} onValueChange={setActiveTab} className="w-full mb-8">
-          <TabsList className="bg-white/5 border border-white/10 p-1 w-full justify-start overflow-x-auto hide-scrollbar">
+          <TabsList className="bg-secondary border border-border p-1 w-full justify-start overflow-x-auto hide-scrollbar">
             <TabsTrigger 
               value="all" 
               data-testid="tab-all"
@@ -175,14 +175,14 @@ export default function Home() {
             className="py-12" 
             data-testid="empty-state"
           >
-            <div className="rounded-3xl border border-white/10 bg-gradient-to-b from-white/5 to-transparent p-8 text-center">
+            <div className="rounded-3xl border border-border bg-gradient-to-b from-white/5 to-transparent p-8 text-center">
               <div className="relative mx-auto mb-6 h-24 w-24">
                 <div className="absolute inset-0 rounded-full bg-gradient-to-r from-primary/20 to-accent/20 animate-pulse" />
                 <div className="relative h-full w-full rounded-full bg-gradient-to-br from-primary to-accent flex items-center justify-center">
-                  <Rocket className="h-10 w-10 text-white" />
+                  <Rocket className="h-10 w-10 text-foreground" />
                 </div>
               </div>
-              <h3 className="text-2xl font-bold text-white mb-2">Your feed is empty</h3>
+              <h3 className="text-2xl font-bold text-foreground mb-2">Your feed is empty</h3>
               <p className="text-muted-foreground mb-6 max-w-sm mx-auto">
                 Be the first to create content! Share clips, films, stills, or quick flashes with the world.
               </p>
@@ -200,7 +200,7 @@ export default function Home() {
                   </Button>
                 </Link>
               </div>
-              <p className="text-xs text-white/40 mt-6">
+              <p className="text-xs text-muted-foreground mt-6">
                 Content you create will appear in your feed and can be shared to YouTube, TikTok, Instagram, and more.
               </p>
             </div>

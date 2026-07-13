@@ -30,10 +30,10 @@ interface HeatmapResponse { platform: string; grid: SlotCell[][] }
 const HEATMAP_PLATFORMS = ["tiktok", "instagram", "youtube", "twitter", "linkedin", "threads"];
 
 function multiplierTone(m: number): string {
-  if (m >= 1.4) return "bg-emerald-500/20 text-emerald-200 border-emerald-400/30";
-  if (m >= 1.1) return "bg-indigo-500/15 text-indigo-200 border-indigo-400/30";
-  if (m >= 0.9) return "bg-slate-500/10 text-slate-300 border-slate-400/20";
-  return "bg-rose-500/10 text-rose-200 border-rose-400/20";
+  if (m >= 1.4) return "bg-emerald-500/20 text-[var(--score-90)] border-emerald-400/30";
+  if (m >= 1.1) return "bg-indigo-500/15 text-primary border-indigo-400/30";
+  if (m >= 0.9) return "bg-slate-500/10 text-muted-foreground border-slate-400/20";
+  return "bg-rose-500/10 text-destructive border-rose-400/20";
 }
 
 function startOfMonth(d: Date) { return new Date(d.getFullYear(), d.getMonth(), 1); }
@@ -207,13 +207,13 @@ export default function CalendarPage() {
                     className={cn(
                       "min-h-[88px] rounded-lg border p-1.5 transition-colors",
                       inMonth(d)
-                        ? "border-white/[0.06] bg-white/[0.02]"
-                        : "border-white/[0.03] bg-white/[0.01] opacity-40",
+                        ? "border-border bg-card"
+                        : "border-border bg-muted/30 opacity-40",
                       isToday(d) && "ring-1 ring-indigo-400/60"
                     )}
                     data-testid={`cell-${key}`}
                   >
-                    <div className="text-[11px] font-semibold text-slate-300 mb-1 px-1">{d.getDate()}</div>
+                    <div className="text-[11px] font-semibold text-muted-foreground mb-1 px-1">{d.getDate()}</div>
                     <div className="space-y-1">
                       {dayItems.slice(0, 2).map((it) => {
                         const tone = scoreTone(it.viralScore);
@@ -245,7 +245,7 @@ export default function CalendarPage() {
                         );
                       })}
                       {dayItems.length > 2 && (
-                        <div className="text-[10px] text-slate-400 px-1.5">+{dayItems.length - 2} more</div>
+                        <div className="text-[10px] text-muted-foreground px-1.5">+{dayItems.length - 2} more</div>
                       )}
                     </div>
                   </div>
@@ -317,11 +317,11 @@ export default function CalendarPage() {
 
             <div className="card-base p-5">
               <h3 className="text-h3 mb-2">Pro tip</h3>
-              <p className="text-sm text-slate-400">
+              <p className="text-sm text-muted-foreground">
                 Score your draft, fix the top 3 issues, then schedule it for your platform's peak hour.
               </p>
               <Link href="/analyze">
-                <Button variant="outline" size="sm" className="mt-3 border-white/10 hover:bg-white/[0.04]">
+                <Button variant="outline" size="sm" className="mt-3 border-border hover:bg-secondary">
                   <Sparkles className="h-4 w-4 mr-1.5" /> Score a new draft
                 </Button>
               </Link>

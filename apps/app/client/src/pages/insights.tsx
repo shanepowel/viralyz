@@ -39,8 +39,8 @@ function heatColor(mult: number): string {
   if (mult >= 1.3) return "bg-emerald-500/60";
   if (mult >= 1.1) return "bg-indigo-500/60";
   if (mult >= 0.9) return "bg-indigo-500/25";
-  if (mult >= 0.7) return "bg-slate-700/60";
-  return "bg-slate-800/60";
+  if (mult >= 0.7) return "bg-muted/60";
+  return "bg-secondary/60";
 }
 
 function fmtHour(h: number): string {
@@ -90,8 +90,8 @@ export default function InsightsPage() {
               className={cn(
                 "px-3 py-1.5 rounded-full text-sm font-medium border transition-colors",
                 platform === p
-                  ? "bg-indigo-500/20 border-indigo-400/40 text-indigo-100"
-                  : "border-white/10 text-slate-400 hover:text-white hover:border-white/20"
+                  ? "bg-indigo-500/20 border-indigo-400/40 text-indigo-800"
+                  : "border-border text-muted-foreground hover:text-foreground hover:border-border"
               )}
               data-testid={`tab-platform-${p}`}
             >
@@ -109,7 +109,7 @@ export default function InsightsPage() {
           >
             <div className="flex items-center justify-between mb-4">
               <h3 className="text-h3 flex items-center gap-2">
-                <Clock className="h-4 w-4 text-indigo-300" /> Heatmap · {PLATFORM_LABEL[platform]}
+                <Clock className="h-4 w-4 text-primary" /> Heatmap · {PLATFORM_LABEL[platform]}
               </h3>
               <span className="text-meta">Times shown in {tz}</span>
             </div>
@@ -122,13 +122,13 @@ export default function InsightsPage() {
                   <div className="grid" style={{ gridTemplateColumns: "32px repeat(24, minmax(0, 1fr))" }}>
                     <div />
                     {Array.from({ length: 24 }).map((_, h) => (
-                      <div key={h} className="text-[10px] text-slate-500 text-center pb-1">
+                      <div key={h} className="text-[10px] text-muted-foreground text-center pb-1">
                         {h % 3 === 0 ? fmtHour(h) : ""}
                       </div>
                     ))}
                     {DAYS.map((dayLabel, dow) => (
                       <Fragment key={`row-${dow}`}>
-                        <div key={`l-${dow}`} className="text-[11px] text-slate-400 pr-1 flex items-center">{dayLabel}</div>
+                        <div key={`l-${dow}`} className="text-[11px] text-muted-foreground pr-1 flex items-center">{dayLabel}</div>
                         {data.grid[dow].map((cell, hour) => {
                           const isTop = data.top.some((t) => t.dow === dow && t.hour === hour);
                           return (
@@ -136,7 +136,7 @@ export default function InsightsPage() {
                               key={`c-${dow}-${hour}`}
                               title={`${dayLabel} ${fmtHour(hour)} · ${cell.multiplier.toFixed(2)}× avg${cell.personal ? " · personalized" : ""}`}
                               className={cn(
-                                "h-7 m-[1px] rounded-sm relative flex items-center justify-center text-[9px] font-semibold tabular-nums text-white/90",
+                                "h-7 m-[1px] rounded-sm relative flex items-center justify-center text-[9px] font-semibold tabular-nums text-foreground/90",
                                 heatColor(cell.multiplier),
                                 cell.personal && "ring-1 ring-amber-300/60",
                                 isTop && "ring-2 ring-emerald-300"
@@ -176,7 +176,7 @@ export default function InsightsPage() {
           >
             <div className="card-base p-5">
               <h3 className="text-h3 mb-3 flex items-center gap-2">
-                <TrendingUp className="h-4 w-4 text-emerald-300" /> Top 3 slots this week
+                <TrendingUp className="h-4 w-4 text-[var(--score-90)]" /> Top 3 slots this week
               </h3>
               {isLoading || !data ? (
                 <div className="space-y-2">
@@ -189,10 +189,10 @@ export default function InsightsPage() {
                     return (
                       <div
                         key={`${t.dow}-${t.hour}`}
-                        className="flex items-center gap-3 p-3 rounded-lg border border-white/[0.06] bg-white/[0.02]"
+                        className="flex items-center gap-3 p-3 rounded-lg border border-border bg-card"
                         data-testid={`top-slot-${i}`}
                       >
-                        <div className="h-10 w-10 rounded-lg bg-emerald-500/15 text-emerald-300 flex items-center justify-center text-sm font-bold">
+                        <div className="h-10 w-10 rounded-lg bg-emerald-500/15 text-[var(--score-90)] flex items-center justify-center text-sm font-bold">
                           #{i + 1}
                         </div>
                         <div className="flex-1 min-w-0">
@@ -212,9 +212,9 @@ export default function InsightsPage() {
 
             <div className="card-base p-5">
               <h3 className="text-h3 mb-2 flex items-center gap-2">
-                <Sparkles className="h-4 w-4 text-indigo-300" /> How this works
+                <Sparkles className="h-4 w-4 text-primary" /> How this works
               </h3>
-              <p className="text-sm text-slate-400 leading-relaxed">
+              <p className="text-sm text-muted-foreground leading-relaxed">
                 We start from a curated baseline by platform & niche, then blend in your own posted actuals (views &amp; likes per dow/hour) as you log them. The more posts you publish &amp; track, the more personal the heatmap becomes.
               </p>
               {data && (

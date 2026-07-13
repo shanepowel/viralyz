@@ -547,7 +547,7 @@ export default function Analyze() {
             />
           </div>
         </div>
-        <div className="h-1.5 w-full overflow-hidden rounded-full bg-white/[0.06]">
+        <div className="h-1.5 w-full overflow-hidden rounded-full bg-muted">
           <motion.div
             className={`h-full ${fillColor[tone]}`}
             initial={{ width: 0 }}
@@ -590,7 +590,7 @@ export default function Analyze() {
           key: "Timing",
           analysis: result.timingAnalysis,
           extra: (
-            <p className="text-sm text-emerald-300">
+            <p className="text-sm text-[var(--score-90)]">
               <Clock className="mr-1 inline h-4 w-4" />
               Optimal time: {result.optimalPostingTime}
             </p>
@@ -700,7 +700,7 @@ export default function Analyze() {
                       <div className="score-bg-emerald mx-auto mb-3 flex h-14 w-14 items-center justify-center rounded-2xl">
                         <Check className="h-7 w-7" />
                       </div>
-                      <h3 className="text-h3 mb-1 text-emerald-300">{file.name}</h3>
+                      <h3 className="text-h3 mb-1 text-[var(--score-90)]">{file.name}</h3>
                       <p className="text-sm text-muted-foreground">
                         {(file.size / (1024 * 1024)).toFixed(1)} MB · Click or drop to change
                       </p>
@@ -822,7 +822,7 @@ export default function Analyze() {
                   <ScoreRing score={analysisProgress} size={160} label="Progress" />
                 </div>
 
-                <div className="mb-8 h-2 w-full overflow-hidden rounded-full bg-white/[0.06]">
+                <div className="mb-8 h-2 w-full overflow-hidden rounded-full bg-muted">
                   <motion.div
                     className="h-full bg-gradient-to-r from-[var(--accent)] to-[var(--score-90)]"
                     initial={{ width: 0 }}
@@ -936,7 +936,7 @@ export default function Analyze() {
                     )}
                     <div className="divider-soft mt-6 w-full pt-5">
                       <p className="text-meta">If you fix the issues below, predicted score</p>
-                      <p className="text-display mt-1.5 text-3xl tabular-nums text-emerald-300">
+                      <p className="text-display mt-1.5 text-3xl tabular-nums text-[var(--score-90)]">
                         {result.predictedScoreAfterFixes}
                       </p>
                     </div>
@@ -966,7 +966,7 @@ export default function Analyze() {
                                         key={i}
                                         className="flex items-start gap-2 text-sm text-muted-foreground"
                                       >
-                                        <Zap className="mt-0.5 h-4 w-4 flex-shrink-0 text-amber-300" />
+                                        <Zap className="mt-0.5 h-4 w-4 flex-shrink-0 text-[var(--score-50)]" />
                                         {sg}
                                       </li>
                                     ))}

@@ -110,7 +110,7 @@ export function AnalysisReveal({
                         {value}/20
                       </span>
                     </div>
-                    <div className="h-1.5 overflow-hidden rounded-full bg-white/[0.06]">
+                    <div className="h-1.5 overflow-hidden rounded-full bg-muted">
                       <motion.div
                         className="h-full rounded-full bg-[var(--accent,#7C5CFF)]"
                         initial={{ width: 0 }}

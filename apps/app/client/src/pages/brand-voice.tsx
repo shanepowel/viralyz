@@ -124,7 +124,7 @@ export default function BrandVoice() {
                     <div className="flex items-center gap-2">
                       <h3 className="text-h3">{p.name}</h3>
                       {p.isDefault && (
-                        <span className="text-[10px] px-2 py-0.5 rounded-full bg-indigo-500/15 text-indigo-300 inline-flex items-center gap-1">
+                        <span className="text-[10px] px-2 py-0.5 rounded-full bg-indigo-500/15 text-primary inline-flex items-center gap-1">
                           <Star className="h-3 w-3 fill-current" /> Default
                         </span>
                       )}
@@ -148,20 +148,20 @@ export default function BrandVoice() {
                       onClick={() => del.mutate(p.id)}
                       data-testid={`button-delete-${p.id}`}
                     >
-                      <Trash2 className="h-4 w-4 text-slate-400" />
+                      <Trash2 className="h-4 w-4 text-muted-foreground" />
                     </Button>
                   </div>
                 </div>
 
-                {p.toneSummary && <p className="text-sm text-slate-300 mb-4">{p.toneSummary}</p>}
+                {p.toneSummary && <p className="text-sm text-muted-foreground mb-4">{p.toneSummary}</p>}
 
                 {p.signatureMoves && p.signatureMoves.length > 0 && (
                   <div className="mb-3">
                     <div className="text-eyebrow mb-1.5">Signature moves</div>
                     <ul className="space-y-1">
                       {p.signatureMoves.slice(0, 3).map((m, i) => (
-                        <li key={i} className="text-xs text-slate-300 flex gap-2">
-                          <Sparkles className="h-3 w-3 text-indigo-400 mt-0.5 shrink-0" /> {m}
+                        <li key={i} className="text-xs text-muted-foreground flex gap-2">
+                          <Sparkles className="h-3 w-3 text-primary mt-0.5 shrink-0" /> {m}
                         </li>
                       ))}
                     </ul>
@@ -174,7 +174,7 @@ export default function BrandVoice() {
                       <div className="text-eyebrow text-emerald-400 mb-1.5">Do</div>
                       <ul className="space-y-0.5">
                         {p.doRules.slice(0, 3).map((r, i) => (
-                          <li key={i} className="text-[11px] text-slate-300">• {r}</li>
+                          <li key={i} className="text-[11px] text-muted-foreground">• {r}</li>
                         ))}
                       </ul>
                     </div>
@@ -184,7 +184,7 @@ export default function BrandVoice() {
                       <div className="text-eyebrow text-rose-400 mb-1.5">Don't</div>
                       <ul className="space-y-0.5">
                         {p.dontRules.slice(0, 3).map((r, i) => (
-                          <li key={i} className="text-[11px] text-slate-300">• {r}</li>
+                          <li key={i} className="text-[11px] text-muted-foreground">• {r}</li>
                         ))}
                       </ul>
                     </div>
@@ -197,7 +197,7 @@ export default function BrandVoice() {
       </div>
 
       <Dialog open={open} onOpenChange={setOpen}>
-        <DialogContent className="max-w-2xl border-white/10 bg-slate-950">
+        <DialogContent className="max-w-2xl border-border bg-card">
           <DialogHeader>
             <DialogTitle>Train your brand voice</DialogTitle>
           </DialogHeader>
@@ -208,7 +208,7 @@ export default function BrandVoice() {
                 value={name}
                 onChange={(e) => setName(e.target.value)}
                 placeholder="e.g. My TikTok voice"
-                className="bg-white/[0.04] border-white/[0.08]"
+                className="bg-secondary border-border"
                 data-testid="input-voice-name"
               />
             </div>
@@ -216,7 +216,7 @@ export default function BrandVoice() {
               <div className="flex items-center justify-between mb-1.5">
                 <label className="text-eyebrow">Sample posts ({validSamples.length}/3–10 required)</label>
                 <button
-                  className="text-xs text-indigo-300 hover:text-indigo-200 disabled:opacity-40"
+                  className="text-xs text-primary hover:text-primary disabled:opacity-40"
                   onClick={() => setSamples([...samples, ""])}
                   disabled={samples.length >= 10}
                 >
@@ -230,13 +230,13 @@ export default function BrandVoice() {
                       value={s}
                       onChange={(e) => setSamples(samples.map((x, idx) => (idx === i ? e.target.value : x)))}
                       placeholder={i === 0 ? "Paste a recent post that sounds like you..." : "Another sample..."}
-                      className="bg-white/[0.04] border-white/[0.08] min-h-[100px] pr-10"
+                      className="bg-secondary border-border min-h-[100px] pr-10"
                       data-testid={`textarea-sample-${i}`}
                     />
                     {samples.length > 1 && (
                       <button
                         onClick={() => setSamples(samples.filter((_, idx) => idx !== i))}
-                        className="absolute top-2 right-2 h-6 w-6 rounded flex items-center justify-center text-slate-500 hover:text-white hover:bg-white/[0.06]"
+                        className="absolute top-2 right-2 h-6 w-6 rounded flex items-center justify-center text-muted-foreground hover:text-foreground hover:bg-muted"
                         aria-label="Remove sample"
                       >
                         <X className="h-3 w-3" />

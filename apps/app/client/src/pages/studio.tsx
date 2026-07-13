@@ -203,7 +203,7 @@ export default function Studio() {
               <CheckCircle2 className="h-12 w-12 text-green-500" />
             </div>
             <div>
-              <h1 className="text-3xl font-bold text-white mb-2">Published to Viralyz!</h1>
+              <h1 className="text-3xl font-bold text-foreground mb-2">Published to Viralyz!</h1>
               <p className="text-muted-foreground">"{title}" is now live</p>
               {viralyzScore && (
                 <p className="text-primary font-bold mt-2">Viralyz Score: {viralyzScore.overall}/100</p>
@@ -211,8 +211,8 @@ export default function Studio() {
             </div>
 
             {selectedPlatforms.length > 0 && (
-              <div className="bg-card border border-white/10 rounded-2xl p-6 text-left">
-                <h3 className="font-bold text-white mb-4 flex items-center gap-2">
+              <div className="bg-card border border-border rounded-2xl p-6 text-left">
+                <h3 className="font-bold text-foreground mb-4 flex items-center gap-2">
                   <Share2 className="h-5 w-5" /> Cross-post to platforms
                 </h3>
                 <div className="grid grid-cols-2 md:grid-cols-3 gap-3">
@@ -223,12 +223,12 @@ export default function Studio() {
                       <button
                         key={platform.id}
                         onClick={() => window.open(platform.url, '_blank')}
-                        className="flex items-center gap-3 p-4 rounded-xl bg-white/5 border border-white/10 hover:bg-white/10 transition-all"
+                        className="flex items-center gap-3 p-4 rounded-xl bg-secondary border border-border hover:bg-secondary transition-all"
                         data-testid={`crosspost-${platform.id}`}
                       >
                         <span className="text-2xl">{platform.icon}</span>
                         <div className="text-left">
-                          <div className="font-medium text-white">{platform.name}</div>
+                          <div className="font-medium text-foreground">{platform.name}</div>
                           <div className="text-xs text-muted-foreground flex items-center gap-1">
                             Open <ExternalLink className="h-3 w-3" />
                           </div>
@@ -254,13 +254,13 @@ export default function Studio() {
     <Shell>
       <div className="mx-auto max-w-4xl py-8">
         <div className="mb-8 text-center">
-          <h1 className="text-4xl font-bold font-display text-white mb-2">Content Studio</h1>
+          <h1 className="text-4xl font-bold font-display text-foreground mb-2">Content Studio</h1>
           <p className="text-muted-foreground">Create, analyze, optimize, and publish—all in one place</p>
         </div>
 
         <div className="mb-8">
           <div className="flex items-center justify-between relative">
-            <div className="absolute top-1/2 left-0 right-0 h-0.5 bg-white/10 -translate-y-1/2" />
+            <div className="absolute top-1/2 left-0 right-0 h-0.5 bg-secondary -translate-y-1/2" />
             <div 
               className="absolute top-1/2 left-0 h-0.5 bg-gradient-to-r from-primary to-accent -translate-y-1/2 transition-all duration-500"
               style={{ width: `${(currentStepIndex / (steps.length - 1)) * 100}%` }}
@@ -280,11 +280,11 @@ export default function Studio() {
                 >
                   <div className={`h-12 w-12 rounded-full flex items-center justify-center transition-all ${
                     isActive ? 'bg-gradient-to-br from-primary to-accent shadow-lg shadow-primary/30' :
-                    isComplete ? 'bg-green-500' : 'bg-white/10'
+                    isComplete ? 'bg-green-500' : 'bg-secondary'
                   }`}>
-                    {isComplete ? <Check className="h-5 w-5 text-white" /> : <Icon className="h-5 w-5 text-white" />}
+                    {isComplete ? <Check className="h-5 w-5 text-foreground" /> : <Icon className="h-5 w-5 text-foreground" />}
                   </div>
-                  <span className={`text-xs font-medium ${isActive ? 'text-white' : 'text-muted-foreground'}`}>
+                  <span className={`text-xs font-medium ${isActive ? 'text-foreground' : 'text-muted-foreground'}`}>
                     {s.label}
                   </span>
                 </button>
@@ -310,12 +310,12 @@ export default function Studio() {
                     className={`p-4 rounded-xl border-2 transition-all ${
                       contentType === ct.type 
                         ? 'border-primary bg-primary/10' 
-                        : 'border-white/10 bg-white/5 hover:border-white/30'
+                        : 'border-border bg-secondary hover:border-border'
                     }`}
                     data-testid={`type-${ct.type}`}
                   >
-                    <ct.icon className={`h-6 w-6 mx-auto mb-2 ${contentType === ct.type ? 'text-primary' : 'text-white/60'}`} />
-                    <div className="font-medium text-white text-sm">{ct.title}</div>
+                    <ct.icon className={`h-6 w-6 mx-auto mb-2 ${contentType === ct.type ? 'text-primary' : 'text-foreground/60'}`} />
+                    <div className="font-medium text-foreground text-sm">{ct.title}</div>
                     <div className="text-xs text-muted-foreground">{ct.desc}</div>
                   </button>
                 ))}
@@ -328,7 +328,7 @@ export default function Studio() {
                 className={`border-2 border-dashed rounded-2xl p-8 transition-all cursor-pointer ${
                   uploadedObjectPath ? 'border-green-500/50 bg-green-500/5' :
                   isUploading ? 'border-blue-500/50 bg-blue-500/5' :
-                  'border-white/10 bg-white/5 hover:border-primary/50'
+                  'border-border bg-secondary hover:border-primary/50'
                 }`}
               >
                 <input ref={fileInputRef} type="file" accept="video/*,image/*" onChange={handleFileSelect} className="hidden" data-testid="file-input" />
@@ -336,18 +336,18 @@ export default function Studio() {
                   {isUploading ? (
                     <>
                       <Loader2 className="h-10 w-10 text-blue-500 animate-spin" />
-                      <p className="text-white font-medium">Uploading...</p>
+                      <p className="text-foreground font-medium">Uploading...</p>
                     </>
                   ) : uploadedObjectPath ? (
                     <>
                       <Check className="h-10 w-10 text-green-500" />
-                      <p className="text-white font-medium">{uploadedFile?.name}</p>
+                      <p className="text-foreground font-medium">{uploadedFile?.name}</p>
                       <p className="text-xs text-muted-foreground">Click to change file</p>
                     </>
                   ) : (
                     <>
-                      <UploadCloud className="h-10 w-10 text-white/40" />
-                      <p className="text-white font-medium">Drop file or click to upload</p>
+                      <UploadCloud className="h-10 w-10 text-muted-foreground" />
+                      <p className="text-foreground font-medium">Drop file or click to upload</p>
                     </>
                   )}
                 </div>
@@ -360,7 +360,7 @@ export default function Studio() {
                   value={title}
                   onChange={e => setTitle(e.target.value)}
                   placeholder="Give your content a catchy title..."
-                  className="w-full px-4 py-3 rounded-xl bg-white/5 border border-white/10 focus:border-primary/50 focus:outline-none"
+                  className="w-full px-4 py-3 rounded-xl bg-secondary border border-border focus:border-primary/50 focus:outline-none"
                   data-testid="input-title"
                 />
               </div>
@@ -372,7 +372,7 @@ export default function Studio() {
                   onChange={e => setDescription(e.target.value)}
                   rows={3}
                   placeholder="Tell viewers what this is about..."
-                  className="w-full px-4 py-3 rounded-xl bg-white/5 border border-white/10 focus:border-primary/50 focus:outline-none resize-none"
+                  className="w-full px-4 py-3 rounded-xl bg-secondary border border-border focus:border-primary/50 focus:outline-none resize-none"
                   data-testid="input-description"
                 />
               </div>
@@ -389,8 +389,8 @@ export default function Studio() {
             >
               <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
                 <div className="space-y-4">
-                  <div className="rounded-2xl border border-white/10 bg-white/5 p-4">
-                    <h3 className="font-bold text-white mb-3">Content Preview</h3>
+                  <div className="rounded-2xl border border-border bg-secondary p-4">
+                    <h3 className="font-bold text-foreground mb-3">Content Preview</h3>
                     {uploadedFile && (
                       <div className="aspect-video rounded-xl bg-black/50 overflow-hidden">
                         {uploadedFile.type.startsWith('video/') ? (
@@ -401,7 +401,7 @@ export default function Studio() {
                       </div>
                     )}
                     <div className="mt-3">
-                      <h4 className="font-medium text-white">{title}</h4>
+                      <h4 className="font-medium text-foreground">{title}</h4>
                       <p className="text-sm text-muted-foreground mt-1 line-clamp-2">{description}</p>
                     </div>
                   </div>
@@ -411,9 +411,9 @@ export default function Studio() {
                   {viralyzScore ? (
                     <ViralyzScoreCard score={viralyzScore} />
                   ) : (
-                    <div className="rounded-2xl border border-white/10 bg-white/5 p-6 text-center">
+                    <div className="rounded-2xl border border-border bg-secondary p-6 text-center">
                       <AlertCircle className="h-10 w-10 text-yellow-500 mx-auto mb-3" />
-                      <p className="text-white font-medium">Add a title to see your score</p>
+                      <p className="text-foreground font-medium">Add a title to see your score</p>
                     </div>
                   )}
                 </div>
@@ -429,13 +429,13 @@ export default function Studio() {
               exit={{ opacity: 0, x: -20 }}
               className="space-y-6"
             >
-              <div className="rounded-2xl border border-white/10 bg-white/5 p-6">
+              <div className="rounded-2xl border border-border bg-secondary p-6">
                 <div className="flex items-center gap-3 mb-4">
                   <div className="h-10 w-10 rounded-xl bg-gradient-to-br from-primary to-accent flex items-center justify-center">
-                    <Lightbulb className="h-5 w-5 text-white" />
+                    <Lightbulb className="h-5 w-5 text-foreground" />
                   </div>
                   <div>
-                    <h3 className="font-bold text-white">Power Words</h3>
+                    <h3 className="font-bold text-foreground">Power Words</h3>
                     <p className="text-xs text-muted-foreground">Add attention-grabbing words to your title</p>
                   </div>
                 </div>
@@ -444,7 +444,7 @@ export default function Studio() {
                     <button
                       key={word}
                       onClick={() => applyOptimization('power_word', word)}
-                      className="px-3 py-1.5 rounded-lg bg-white/5 border border-white/10 text-sm text-white hover:bg-primary/20 hover:border-primary/50 transition-all"
+                      className="px-3 py-1.5 rounded-lg bg-secondary border border-border text-sm text-white hover:bg-primary/20 hover:border-primary/50 transition-all"
                       data-testid={`power-word-${word.toLowerCase()}`}
                     >
                       + {word}
@@ -453,13 +453,13 @@ export default function Studio() {
                 </div>
               </div>
 
-              <div className="rounded-2xl border border-white/10 bg-white/5 p-6">
+              <div className="rounded-2xl border border-border bg-secondary p-6">
                 <div className="flex items-center gap-3 mb-4">
                   <div className="h-10 w-10 rounded-xl bg-gradient-to-br from-cyan-500 to-blue-500 flex items-center justify-center">
-                    <TrendingUp className="h-5 w-5 text-white" />
+                    <TrendingUp className="h-5 w-5 text-foreground" />
                   </div>
                   <div>
-                    <h3 className="font-bold text-white">Hook Templates</h3>
+                    <h3 className="font-bold text-foreground">Hook Templates</h3>
                     <p className="text-xs text-muted-foreground">Use proven hooks that drive clicks</p>
                   </div>
                 </div>
@@ -468,7 +468,7 @@ export default function Studio() {
                     <button
                       key={hook}
                       onClick={() => applyOptimization('hook', hook)}
-                      className="p-3 rounded-lg bg-white/5 border border-white/10 text-sm text-white text-left hover:bg-cyan-500/20 hover:border-cyan-500/50 transition-all"
+                      className="p-3 rounded-lg bg-secondary border border-border text-sm text-foreground text-left hover:bg-cyan-500/20 hover:border-cyan-500/50 transition-all"
                       data-testid={`hook-${hook.substring(0, 10).toLowerCase().replace(/\s/g, '-')}`}
                     >
                       {hook}
@@ -477,13 +477,13 @@ export default function Studio() {
                 </div>
               </div>
 
-              <div className="rounded-2xl border border-white/10 bg-white/5 p-6">
+              <div className="rounded-2xl border border-border bg-secondary p-6">
                 <div className="flex items-center gap-3 mb-4">
                   <div className="h-10 w-10 rounded-xl bg-gradient-to-br from-purple-500 to-pink-500 flex items-center justify-center">
-                    <Hash className="h-5 w-5 text-white" />
+                    <Hash className="h-5 w-5 text-foreground" />
                   </div>
                   <div>
-                    <h3 className="font-bold text-white">Trending Hashtags</h3>
+                    <h3 className="font-bold text-foreground">Trending Hashtags</h3>
                     <p className="text-xs text-muted-foreground">Add to description for discoverability</p>
                   </div>
                 </div>
@@ -492,7 +492,7 @@ export default function Studio() {
                     <button
                       key={tag}
                       onClick={() => applyOptimization('hashtag', tag)}
-                      className="px-3 py-1.5 rounded-lg bg-white/5 border border-white/10 text-sm text-white hover:bg-purple-500/20 hover:border-purple-500/50 transition-all"
+                      className="px-3 py-1.5 rounded-lg bg-secondary border border-border text-sm text-foreground hover:bg-purple-500/20 hover:border-purple-500/50 transition-all"
                       data-testid={`hashtag-${tag.substring(1)}`}
                     >
                       {tag}
@@ -501,28 +501,28 @@ export default function Studio() {
                 </div>
               </div>
 
-              <div className="rounded-2xl border border-white/10 bg-white/5 p-4">
-                <h4 className="font-medium text-white mb-2">Current Title</h4>
+              <div className="rounded-2xl border border-border bg-secondary p-4">
+                <h4 className="font-medium text-foreground mb-2">Current Title</h4>
                 <input
                   type="text"
                   value={title}
                   onChange={e => setTitle(e.target.value)}
-                  className="w-full px-4 py-3 rounded-xl bg-white/5 border border-white/10 focus:border-primary/50 focus:outline-none"
+                  className="w-full px-4 py-3 rounded-xl bg-secondary border border-border focus:border-primary/50 focus:outline-none"
                 />
-                <h4 className="font-medium text-white mt-4 mb-2">Current Description</h4>
+                <h4 className="font-medium text-foreground mt-4 mb-2">Current Description</h4>
                 <textarea
                   value={description}
                   onChange={e => setDescription(e.target.value)}
                   rows={3}
-                  className="w-full px-4 py-3 rounded-xl bg-white/5 border border-white/10 focus:border-primary/50 focus:outline-none resize-none"
+                  className="w-full px-4 py-3 rounded-xl bg-secondary border border-border focus:border-primary/50 focus:outline-none resize-none"
                 />
               </div>
 
               {viralyzScore && (
                 <div className="p-4 rounded-xl bg-gradient-to-r from-primary/20 to-accent/20 border border-primary/30">
                   <div className="flex items-center justify-between">
-                    <span className="text-white font-medium">Updated Score</span>
-                    <span className="text-2xl font-bold text-white">{viralyzScore.overall}/100</span>
+                    <span className="text-foreground font-medium">Updated Score</span>
+                    <span className="text-2xl font-bold text-foreground">{viralyzScore.overall}/100</span>
                   </div>
                 </div>
               )}
@@ -537,8 +537,8 @@ export default function Studio() {
               exit={{ opacity: 0, x: -20 }}
               className="space-y-6"
             >
-              <div className="rounded-2xl border border-white/10 bg-white/5 p-6">
-                <h3 className="font-bold text-white mb-4 flex items-center gap-2">
+              <div className="rounded-2xl border border-border bg-secondary p-6">
+                <h3 className="font-bold text-foreground mb-4 flex items-center gap-2">
                   <Share2 className="h-5 w-5" /> Select Platforms
                 </h3>
                 <p className="text-sm text-muted-foreground mb-4">Choose where to publish your content</p>
@@ -546,7 +546,7 @@ export default function Studio() {
                 <div className="space-y-3">
                   <div className="p-4 rounded-xl bg-primary/20 border-2 border-primary flex items-center gap-3">
                     <span className="text-xl">✦</span>
-                    <span className="font-medium text-white flex-1">Viralyz</span>
+                    <span className="font-medium text-foreground flex-1">Viralyz</span>
                     <Check className="h-5 w-5 text-primary" />
                   </div>
 
@@ -559,12 +559,12 @@ export default function Studio() {
                           prev.includes(platform.id) ? prev.filter(p => p !== platform.id) : [...prev, platform.id]
                         )}
                         className={`w-full p-4 rounded-xl border-2 flex items-center gap-3 transition-all ${
-                          isSelected ? 'bg-white/10 border-white/30' : 'bg-white/5 border-white/10 hover:border-white/20'
+                          isSelected ? 'bg-secondary border-border' : 'bg-secondary border-border hover:border-border'
                         }`}
                         data-testid={`platform-${platform.id}`}
                       >
                         <span className="text-xl">{platform.icon}</span>
-                        <span className="font-medium text-white flex-1 text-left">{platform.name}</span>
+                        <span className="font-medium text-foreground flex-1 text-left">{platform.name}</span>
                         {isSelected && <Check className="h-5 w-5 text-green-500" />}
                       </button>
                     );
@@ -586,16 +586,16 @@ export default function Studio() {
                 </div>
               )}
 
-              <div className="rounded-2xl border border-white/10 bg-white/5 p-6">
-                <h3 className="font-bold text-white mb-4">Final Preview</h3>
+              <div className="rounded-2xl border border-border bg-secondary p-6">
+                <h3 className="font-bold text-foreground mb-4">Final Preview</h3>
                 <div className="space-y-3">
                   <div className="flex items-center gap-3 text-sm">
                     <span className="text-muted-foreground">Type:</span>
-                    <span className={contentType ? "text-white capitalize" : "text-red-400"}>{contentType || 'Not selected'}</span>
+                    <span className={contentType ? "text-foreground capitalize" : "text-red-400"}>{contentType || 'Not selected'}</span>
                   </div>
                   <div className="flex items-center gap-3 text-sm">
                     <span className="text-muted-foreground">Title:</span>
-                    <span className={title ? "text-white" : "text-red-400"}>{title || 'Not set'}</span>
+                    <span className={title ? "text-foreground" : "text-red-400"}>{title || 'Not set'}</span>
                   </div>
                   {viralyzScore && (
                     <div className="flex items-center gap-3 text-sm">
@@ -605,7 +605,7 @@ export default function Studio() {
                   )}
                   <div className="flex items-center gap-3 text-sm">
                     <span className="text-muted-foreground">Platforms:</span>
-                    <span className="text-white">Viralyz{selectedPlatforms.length > 0 ? ` + ${selectedPlatforms.length} more` : ''}</span>
+                    <span className="text-foreground">Viralyz{selectedPlatforms.length > 0 ? ` + ${selectedPlatforms.length} more` : ''}</span>
                   </div>
                 </div>
               </div>
@@ -613,7 +613,7 @@ export default function Studio() {
           )}
         </AnimatePresence>
 
-        <div className="flex justify-between mt-8 pt-6 border-t border-white/10">
+        <div className="flex justify-between mt-8 pt-6 border-t border-border">
           <Button
             variant="outline"
             onClick={goBack}

@@ -5,7 +5,7 @@ interface ViralyzWordmarkProps {
 }
 
 export function ViralyzWordmark({ size = 32, variant = "dark", className = "" }: ViralyzWordmarkProps) {
-  const textColor = variant === "light" ? "text-white" : "text-[#2A2522]";
+  const textColor = variant === "light" ? "text-foreground" : "text-[#2A2522]";
   return (
     <span className={`inline-flex items-center gap-2 ${className}`}>
       <span

@@ -70,8 +70,8 @@ export default function Competitors() {
 
   const getScoreColor = (score: number) => {
     if (score >= 80) return "text-emerald-400";
-    if (score >= 60) return "text-indigo-400";
-    if (score >= 40) return "text-amber-400";
+    if (score >= 60) return "text-primary";
+    if (score >= 40) return "text-[var(--score-50)]";
     return "text-red-400";
   };
 
@@ -85,7 +85,7 @@ export default function Competitors() {
         >
           <div>
             <h1 className="text-3xl font-bold mb-2">Competitor Intelligence</h1>
-            <p className="text-slate-400">Track what's working in your niche</p>
+            <p className="text-muted-foreground">Track what's working in your niche</p>
           </div>
           <Dialog open={showAddDialog} onOpenChange={setShowAddDialog}>
             <DialogTrigger asChild>
@@ -94,31 +94,31 @@ export default function Competitors() {
                 Add Competitor
               </Button>
             </DialogTrigger>
-            <DialogContent className="bg-slate-900 border-slate-700">
+            <DialogContent className="bg-card border-border">
               <DialogHeader>
                 <DialogTitle>Add Competitor</DialogTitle>
-                <DialogDescription className="text-slate-400">
+                <DialogDescription className="text-muted-foreground">
                   Track a competitor's content to see what's working in your niche.
                 </DialogDescription>
               </DialogHeader>
               <div className="space-y-4 mt-4">
                 <div>
-                  <label className="block text-sm text-slate-400 mb-2">Username or URL</label>
+                  <label className="block text-sm text-muted-foreground mb-2">Username or URL</label>
                   <input
                     type="text"
                     value={newCompetitor.username}
                     onChange={(e) => setNewCompetitor({ ...newCompetitor, username: e.target.value })}
                     placeholder="@username or channel URL"
-                    className="w-full bg-slate-800/50 border border-slate-700 rounded-xl py-3 px-4 text-white placeholder:text-slate-500"
+                    className="w-full bg-secondary border border-border rounded-xl py-3 px-4 text-foreground placeholder:text-muted-foreground"
                     data-testid="competitor-username-input"
                   />
                 </div>
                 <div>
-                  <label className="block text-sm text-slate-400 mb-2">Platform</label>
+                  <label className="block text-sm text-muted-foreground mb-2">Platform</label>
                   <select
                     value={newCompetitor.platform}
                     onChange={(e) => setNewCompetitor({ ...newCompetitor, platform: e.target.value })}
-                    className="w-full bg-slate-800/50 border border-slate-700 rounded-xl py-3 px-4 text-white"
+                    className="w-full bg-secondary border border-border rounded-xl py-3 px-4 text-foreground"
                     data-testid="competitor-platform-select"
                   >
                     <option value="youtube">YouTube</option>
@@ -143,43 +143,43 @@ export default function Competitors() {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.1 }}
-          className="bg-slate-900/50 border border-slate-800/50 rounded-2xl p-6"
+          className="bg-secondary border border-border rounded-2xl p-6"
         >
           <h3 className="font-semibold mb-4">Your Tracked Competitors</h3>
           <div className="grid md:grid-cols-3 gap-4">
             {mockCompetitors.map((competitor) => (
               <div 
                 key={competitor.id}
-                className="bg-slate-800/30 rounded-xl p-4 border border-slate-700/50 hover:border-indigo-500/30 transition-colors"
+                className="bg-secondary/30 rounded-xl p-4 border border-border/50 hover:border-indigo-500/30 transition-colors"
               >
                 <div className="flex items-center gap-3 mb-3">
-                  <div className="h-12 w-12 rounded-full bg-indigo-500/20 flex items-center justify-center text-indigo-400 font-bold text-lg">
+                  <div className="h-12 w-12 rounded-full bg-indigo-500/20 flex items-center justify-center text-primary font-bold text-lg">
                     {competitor.username[1].toUpperCase()}
                   </div>
                   <div>
                     <div className="font-medium">{competitor.username}</div>
-                    <div className="text-sm text-slate-400">{competitor.platform}</div>
+                    <div className="text-sm text-muted-foreground">{competitor.platform}</div>
                   </div>
                 </div>
                 <div className="flex items-center justify-between text-sm">
                   <div>
-                    <span className="text-slate-400">Followers: </span>
-                    <span className="text-white font-medium">{competitor.followers}</span>
+                    <span className="text-muted-foreground">Followers: </span>
+                    <span className="text-foreground font-medium">{competitor.followers}</span>
                   </div>
                   <div>
-                    <span className="text-slate-400">Avg Views: </span>
-                    <span className="text-white font-medium">{competitor.avgViews}</span>
+                    <span className="text-muted-foreground">Avg Views: </span>
+                    <span className="text-foreground font-medium">{competitor.avgViews}</span>
                   </div>
                 </div>
               </div>
             ))}
             <div 
-              className="bg-slate-800/20 rounded-xl p-4 border-2 border-dashed border-slate-700 flex items-center justify-center cursor-pointer hover:border-indigo-500/50 transition-colors"
+              className="bg-secondary/20 rounded-xl p-4 border-2 border-dashed border-border flex items-center justify-center cursor-pointer hover:border-indigo-500/50 transition-colors"
               onClick={() => setShowAddDialog(true)}
             >
               <div className="text-center">
-                <Plus className="h-8 w-8 text-slate-500 mx-auto mb-2" />
-                <span className="text-slate-400 text-sm">Add Competitor</span>
+                <Plus className="h-8 w-8 text-muted-foreground mx-auto mb-2" />
+                <span className="text-muted-foreground text-sm">Add Competitor</span>
               </div>
             </div>
           </div>
@@ -189,7 +189,7 @@ export default function Competitors() {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.2 }}
-          className="bg-slate-900/50 border border-slate-800/50 rounded-2xl p-6"
+          className="bg-secondary border border-border rounded-2xl p-6"
         >
           <div className="flex items-center gap-2 mb-6">
             <TrendingUp className="h-5 w-5 text-pink-400" />
@@ -206,21 +206,21 @@ export default function Competitors() {
                 initial={{ opacity: 0, y: 10 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.3 + i * 0.05 }}
-                className="bg-slate-800/30 rounded-xl p-4"
+                className="bg-secondary/30 rounded-xl p-4"
               >
                 <div className="flex items-start justify-between mb-3">
                   <div className="flex-1 min-w-0">
                     <h4 className="font-medium text-sm truncate">{content.title}</h4>
-                    <p className="text-xs text-slate-400">{content.competitor}</p>
+                    <p className="text-xs text-muted-foreground">{content.competitor}</p>
                   </div>
-                  <div className={`px-2 py-1 rounded text-xs font-bold ${getScoreColor(content.score)} bg-slate-700/50`}>
+                  <div className={`px-2 py-1 rounded text-xs font-bold ${getScoreColor(content.score)} bg-muted/50`}>
                     {content.score}
                   </div>
                 </div>
                 <div className="flex items-center justify-between text-sm">
-                  <span className="text-slate-400">{content.views} views</span>
+                  <span className="text-muted-foreground">{content.views} views</span>
                   <div className="flex gap-2">
-                    <Button size="sm" variant="ghost" className="h-7 text-xs text-slate-400 hover:text-white">
+                    <Button size="sm" variant="ghost" className="h-7 text-xs text-muted-foreground hover:text-foreground">
                       <Sparkles className="h-3 w-3 mr-1" />
                       Analyze
                     </Button>
@@ -236,16 +236,16 @@ export default function Competitors() {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.4 }}
-            className="bg-slate-900/50 border border-slate-800/50 rounded-2xl p-6"
+            className="bg-secondary border border-border rounded-2xl p-6"
           >
             <div className="flex items-center gap-2 mb-4">
-              <Zap className="h-5 w-5 text-amber-400" />
+              <Zap className="h-5 w-5 text-[var(--score-50)]" />
               <h3 className="font-semibold">Trending Hooks</h3>
             </div>
             <ul className="space-y-3">
               {trendingHooks.map((hook, i) => (
-                <li key={i} className="flex items-center justify-between py-2 border-b border-slate-800/50 last:border-0">
-                  <span className="text-slate-300">"{hook.text}"</span>
+                <li key={i} className="flex items-center justify-between py-2 border-b border-border last:border-0">
+                  <span className="text-muted-foreground">"{hook.text}"</span>
                   <span className="text-emerald-400 text-sm font-medium">{hook.change}</span>
                 </li>
               ))}
@@ -256,7 +256,7 @@ export default function Competitors() {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.5 }}
-            className="bg-slate-900/50 border border-slate-800/50 rounded-2xl p-6"
+            className="bg-secondary border border-border rounded-2xl p-6"
           >
             <div className="flex items-center gap-2 mb-4">
               <BarChart3 className="h-5 w-5 text-purple-400" />
@@ -264,13 +264,13 @@ export default function Competitors() {
             </div>
             <ul className="space-y-3">
               {trendingFormats.map((format, i) => (
-                <li key={i} className="flex items-center justify-between py-2 border-b border-slate-800/50 last:border-0">
-                  <span className="text-slate-300">{format.text}</span>
+                <li key={i} className="flex items-center justify-between py-2 border-b border-border last:border-0">
+                  <span className="text-muted-foreground">{format.text}</span>
                   <span className="text-emerald-400 text-sm font-medium">{format.change}</span>
                 </li>
               ))}
             </ul>
-            <Button variant="ghost" className="w-full mt-4 text-slate-400 hover:text-white">
+            <Button variant="ghost" className="w-full mt-4 text-muted-foreground hover:text-foreground">
               See Full Trends Report
               <ExternalLink className="h-4 w-4 ml-2" />
             </Button>

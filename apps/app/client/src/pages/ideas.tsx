@@ -27,9 +27,9 @@ interface Idea {
 const PLATFORMS = ["tiktok", "instagram", "youtube", "twitter", "linkedin"];
 
 const DIFFICULTY_TONE: Record<string, string> = {
-  easy: "bg-emerald-500/15 text-emerald-300 border-emerald-500/25",
-  medium: "bg-amber-500/15 text-amber-300 border-amber-500/25",
-  hard: "bg-rose-500/15 text-rose-300 border-rose-500/25",
+  easy: "bg-emerald-500/15 text-[var(--score-90)] border-emerald-500/25",
+  medium: "bg-amber-500/15 text-[var(--score-50)] border-amber-500/25",
+  hard: "bg-rose-500/15 text-destructive border-rose-500/25",
 };
 
 export default function Ideas() {
@@ -91,7 +91,7 @@ export default function Ideas() {
                 value={niche}
                 onChange={(e) => setNiche(e.target.value)}
                 placeholder="e.g. fitness, productivity, finance, beauty"
-                className="bg-white/[0.04] border-white/[0.08] text-white"
+                className="bg-secondary border-border text-foreground"
                 data-testid="input-niche"
               />
             </div>
@@ -100,11 +100,11 @@ export default function Ideas() {
               <select
                 value={platform}
                 onChange={(e) => setPlatform(e.target.value)}
-                className="w-full h-10 bg-white/[0.04] border border-white/[0.08] rounded-md text-white px-3 capitalize"
+                className="w-full h-10 bg-secondary border border-border rounded-md text-foreground px-3 capitalize"
                 data-testid="select-platform"
               >
                 {PLATFORMS.map((p) => (
-                  <option key={p} value={p} className="capitalize bg-slate-900">{p}</option>
+                  <option key={p} value={p} className="capitalize bg-card">{p}</option>
                 ))}
               </select>
             </div>
@@ -130,7 +130,7 @@ export default function Ideas() {
               onClick={() => setFilter("all")}
               className={cn(
                 "px-3 py-1.5 rounded-lg text-sm font-medium transition-colors",
-                filter === "all" ? "bg-white/[0.06] text-white" : "text-slate-400 hover:text-white"
+                filter === "all" ? "bg-muted text-foreground" : "text-muted-foreground hover:text-foreground"
               )}
               data-testid="filter-all"
             >
@@ -140,7 +140,7 @@ export default function Ideas() {
               onClick={() => setFilter("saved")}
               className={cn(
                 "px-3 py-1.5 rounded-lg text-sm font-medium transition-colors",
-                filter === "saved" ? "bg-white/[0.06] text-white" : "text-slate-400 hover:text-white"
+                filter === "saved" ? "bg-muted text-foreground" : "text-muted-foreground hover:text-foreground"
               )}
               data-testid="filter-saved"
             >
@@ -174,7 +174,7 @@ export default function Ideas() {
                         <span
                           className={cn(
                             "px-2 py-0.5 rounded text-xs font-medium border capitalize",
-                            DIFFICULTY_TONE[idea.difficulty] || "bg-white/[0.04] text-slate-300 border-white/[0.06]"
+                            DIFFICULTY_TONE[idea.difficulty] || "bg-secondary text-muted-foreground border-border"
                           )}
                         >
                           {idea.difficulty}
@@ -184,25 +184,25 @@ export default function Ideas() {
                     </div>
                     <button
                       onClick={() => saveMutation.mutate({ id: idea.id, saved: !idea.saved })}
-                      className="text-slate-400 hover:text-amber-300 transition-colors"
+                      className="text-muted-foreground hover:text-[var(--score-50)] transition-colors"
                       data-testid={`button-save-${idx}`}
                     >
                       {idea.saved ? (
-                        <BookmarkCheck className="h-5 w-5 text-amber-300" />
+                        <BookmarkCheck className="h-5 w-5 text-[var(--score-50)]" />
                       ) : (
                         <Bookmark className="h-5 w-5" />
                       )}
                     </button>
                   </div>
-                  <h3 className="text-h3 text-white mb-2 leading-tight">{idea.title}</h3>
+                  <h3 className="text-h3 text-foreground mb-2 leading-tight">{idea.title}</h3>
                   {idea.hook && (
-                    <p className="text-sm text-slate-400 italic mb-3 leading-relaxed">"{idea.hook}"</p>
+                    <p className="text-sm text-muted-foreground italic mb-3 leading-relaxed">"{idea.hook}"</p>
                   )}
                   {idea.outline && idea.outline.length > 0 && (
-                    <ul className="space-y-1 mb-4 text-sm text-slate-300 flex-1">
+                    <ul className="space-y-1 mb-4 text-sm text-muted-foreground flex-1">
                       {idea.outline.slice(0, 5).map((step, i) => (
                         <li key={i} className="flex items-start gap-2">
-                          <span className="text-amber-300 mt-0.5">•</span>
+                          <span className="text-[var(--score-50)] mt-0.5">•</span>
                           <span>{step}</span>
                         </li>
                       ))}
@@ -216,7 +216,7 @@ export default function Ideas() {
                       <span className="text-meta">Predicted</span>
                     </div>
                     <Link href={`/hook-lab?topic=${encodeURIComponent(idea.title)}`}>
-                      <Button size="sm" variant="ghost" className="text-amber-300 hover:text-amber-200" data-testid={`button-develop-${idx}`}>
+                      <Button size="sm" variant="ghost" className="text-[var(--score-50)] hover:text-[var(--score-50)]" data-testid={`button-develop-${idx}`}>
                         Develop <ArrowRight className="h-4 w-4 ml-1" />
                       </Button>
                     </Link>

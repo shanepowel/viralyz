@@ -142,7 +142,7 @@ export default function Admin() {
       <div className="max-w-7xl mx-auto py-8">
         <div className="flex items-center justify-between mb-8">
           <div>
-            <h1 className="text-3xl font-bold text-white flex items-center gap-3">
+            <h1 className="text-3xl font-bold text-foreground flex items-center gap-3">
               <Shield className="h-8 w-8 text-primary" />
               Admin Dashboard
             </h1>
@@ -154,7 +154,7 @@ export default function Admin() {
           </Button>
         </div>
 
-        <div className="flex gap-2 mb-6 border-b border-white/10 pb-4">
+        <div className="flex gap-2 mb-6 border-b border-border pb-4">
           {tabs.map(tab => (
             <button
               key={tab.id}
@@ -162,7 +162,7 @@ export default function Admin() {
               className={`flex items-center gap-2 px-4 py-2 rounded-lg transition-all ${
                 activeTab === tab.id 
                   ? 'bg-primary text-white' 
-                  : 'bg-white/5 text-muted-foreground hover:bg-white/10 hover:text-white'
+                  : 'bg-secondary text-muted-foreground hover:bg-secondary hover:text-foreground'
               }`}
               data-testid={`tab-${tab.id}`}
             >
@@ -212,8 +212,8 @@ export default function Admin() {
                 />
               </div>
 
-              <div className="rounded-2xl border border-white/10 bg-white/5 p-6">
-                <h2 className="text-lg font-bold text-white mb-4 flex items-center gap-2">
+              <div className="rounded-2xl border border-border bg-secondary p-6">
+                <h2 className="text-lg font-bold text-foreground mb-4 flex items-center gap-2">
                   <TrendingUp className="h-5 w-5 text-primary" />
                   Recent Users
                 </h2>
@@ -221,7 +221,7 @@ export default function Admin() {
                   {usersLoading ? (
                     <div className="text-muted-foreground">Loading...</div>
                   ) : users.slice(0, 5).map(u => (
-                    <div key={u.id} className="flex items-center gap-3 p-3 rounded-xl bg-white/5">
+                    <div key={u.id} className="flex items-center gap-3 p-3 rounded-xl bg-secondary">
                       {u.profileImageUrl ? (
                         <img src={u.profileImageUrl} alt="" className="h-10 w-10 rounded-full object-cover" />
                       ) : (
@@ -230,11 +230,11 @@ export default function Admin() {
                         </div>
                       )}
                       <div className="flex-1">
-                        <p className="font-medium text-white">{u.firstName} {u.lastName}</p>
+                        <p className="font-medium text-foreground">{u.firstName} {u.lastName}</p>
                         <p className="text-xs text-muted-foreground">{u.email}</p>
                       </div>
                       <span className={`text-xs px-2 py-1 rounded-full ${
-                        u.role === 'admin' ? 'bg-primary/20 text-primary' : 'bg-white/10 text-white/60'
+                        u.role === 'admin' ? 'bg-primary/20 text-primary' : 'bg-secondary text-muted-foreground'
                       }`}>
                         {u.role || 'user'}
                       </span>
@@ -261,16 +261,16 @@ export default function Admin() {
                     value={searchQuery}
                     onChange={(e) => setSearchQuery(e.target.value)}
                     placeholder="Search users..."
-                    className="w-full pl-10 pr-4 py-2 rounded-xl bg-white/5 border border-white/10 focus:border-primary/50 focus:outline-none"
+                    className="w-full pl-10 pr-4 py-2 rounded-xl bg-secondary border border-border focus:border-primary/50 focus:outline-none"
                     data-testid="search-users"
                   />
                 </div>
               </div>
 
-              <div className="rounded-2xl border border-white/10 bg-white/5 overflow-hidden">
+              <div className="rounded-2xl border border-border bg-secondary overflow-hidden">
                 <table className="w-full">
                   <thead>
-                    <tr className="border-b border-white/10">
+                    <tr className="border-b border-border">
                       <th className="text-left p-4 text-sm font-medium text-muted-foreground">User</th>
                       <th className="text-left p-4 text-sm font-medium text-muted-foreground">Email</th>
                       <th className="text-left p-4 text-sm font-medium text-muted-foreground">Role</th>
@@ -288,7 +288,7 @@ export default function Admin() {
                         <td colSpan={5} className="p-4 text-center text-muted-foreground">No users found</td>
                       </tr>
                     ) : filteredUsers.map(u => (
-                      <tr key={u.id} className="border-b border-white/5 hover:bg-white/5">
+                      <tr key={u.id} className="border-b border-border hover:bg-secondary">
                         <td className="p-4">
                           <div className="flex items-center gap-3">
                             {u.profileImageUrl ? (
@@ -298,7 +298,7 @@ export default function Admin() {
                                 <Users className="h-4 w-4 text-primary" />
                               </div>
                             )}
-                            <span className="font-medium text-white">{u.firstName} {u.lastName}</span>
+                            <span className="font-medium text-foreground">{u.firstName} {u.lastName}</span>
                           </div>
                         </td>
                         <td className="p-4 text-sm text-muted-foreground">{u.email}</td>
@@ -306,7 +306,7 @@ export default function Admin() {
                           <DropdownMenu>
                             <DropdownMenuTrigger asChild>
                               <button className={`flex items-center gap-1 text-xs px-2 py-1 rounded-full ${
-                                u.role === 'admin' ? 'bg-primary/20 text-primary' : 'bg-white/10 text-white/60'
+                                u.role === 'admin' ? 'bg-primary/20 text-primary' : 'bg-secondary text-muted-foreground'
                               }`}>
                                 {u.role === 'admin' ? <ShieldCheck className="h-3 w-3" /> : null}
                                 {u.role || 'user'}
@@ -329,7 +329,7 @@ export default function Admin() {
                         <td className="p-4 text-right">
                           <DropdownMenu>
                             <DropdownMenuTrigger asChild>
-                              <button className="p-2 hover:bg-white/10 rounded-lg">
+                              <button className="p-2 hover:bg-secondary rounded-lg">
                                 <MoreVertical className="h-4 w-4 text-muted-foreground" />
                               </button>
                             </DropdownMenuTrigger>
@@ -368,7 +368,7 @@ export default function Admin() {
                     value={searchQuery}
                     onChange={(e) => setSearchQuery(e.target.value)}
                     placeholder="Search content..."
-                    className="w-full pl-10 pr-4 py-2 rounded-xl bg-white/5 border border-white/10 focus:border-primary/50 focus:outline-none"
+                    className="w-full pl-10 pr-4 py-2 rounded-xl bg-secondary border border-border focus:border-primary/50 focus:outline-none"
                     data-testid="search-content"
                   />
                 </div>
@@ -380,7 +380,7 @@ export default function Admin() {
                 ) : filteredContent.length === 0 ? (
                   <div className="col-span-full text-center text-muted-foreground p-8">No content found</div>
                 ) : filteredContent.map(c => (
-                  <div key={c.id} className="rounded-xl border border-white/10 bg-white/5 overflow-hidden">
+                  <div key={c.id} className="rounded-xl border border-border bg-secondary overflow-hidden">
                     {c.thumbnail && (
                       <div className="aspect-video bg-black/50">
                         <img src={c.thumbnail} alt="" className="w-full h-full object-cover" />
@@ -389,12 +389,12 @@ export default function Admin() {
                     <div className="p-4">
                       <div className="flex items-start justify-between gap-2">
                         <div>
-                          <h3 className="font-medium text-white line-clamp-1">{c.title || 'Untitled'}</h3>
+                          <h3 className="font-medium text-foreground line-clamp-1">{c.title || 'Untitled'}</h3>
                           <p className="text-xs text-muted-foreground capitalize">{c.type}</p>
                         </div>
                         <DropdownMenu>
                           <DropdownMenuTrigger asChild>
-                            <button className="p-1.5 hover:bg-white/10 rounded-lg">
+                            <button className="p-1.5 hover:bg-secondary rounded-lg">
                               <MoreVertical className="h-4 w-4 text-muted-foreground" />
                             </button>
                           </DropdownMenuTrigger>
@@ -483,7 +483,7 @@ function StatCard({ icon: Icon, label, value, color, loading }: StatCardProps) {
         <Icon className={`h-6 w-6 ${iconColors[color]}`} />
         <span className="text-sm text-muted-foreground">{label}</span>
       </div>
-      <p className="text-3xl font-bold text-white">
+      <p className="text-3xl font-bold text-foreground">
         {loading ? '...' : value.toLocaleString()}
       </p>
     </div>

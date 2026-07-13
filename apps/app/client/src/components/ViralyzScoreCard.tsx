@@ -44,15 +44,15 @@ export function ViralyzScoreCard({ score, compact = false }: ViralyzScoreCardPro
   };
 
   return (
-    <div className="bg-gradient-to-br from-white/5 to-white/[0.02] border border-white/10 rounded-2xl overflow-hidden">
+    <div className="bg-gradient-to-br from-white/5 to-white/[0.02] border border-border rounded-2xl overflow-hidden">
       <button
         onClick={() => setIsExpanded(!isExpanded)}
-        className="w-full p-4 flex items-center justify-between hover:bg-white/5 transition-colors"
+        className="w-full p-4 flex items-center justify-between hover:bg-secondary transition-colors"
         data-testid="viralyz-score-toggle"
       >
         <div className="flex items-center gap-4">
           <div className={`relative h-16 w-16 rounded-xl bg-gradient-to-br ${gradeColors[score.grade]} flex items-center justify-center shadow-lg`}>
-            <span className="text-2xl font-black text-white">{score.grade}</span>
+            <span className="text-2xl font-black text-foreground">{score.grade}</span>
             <div className="absolute -top-1 -right-1 bg-background rounded-full p-0.5">
               <Sparkles className="h-4 w-4 text-primary" />
             </div>
@@ -60,7 +60,7 @@ export function ViralyzScoreCard({ score, compact = false }: ViralyzScoreCardPro
           
           <div className="text-left">
             <div className="flex items-center gap-2">
-              <span className="text-2xl font-bold text-white">{score.overall}</span>
+              <span className="text-2xl font-bold text-foreground">{score.overall}</span>
               <span className="text-sm text-muted-foreground">/ 100</span>
             </div>
             <div className="flex items-center gap-2">
@@ -90,7 +90,7 @@ export function ViralyzScoreCard({ score, compact = false }: ViralyzScoreCardPro
             className="overflow-hidden"
           >
             <div className="px-4 pb-4 space-y-4">
-              <div className="p-3 rounded-xl bg-white/5 border border-white/10">
+              <div className="p-3 rounded-xl bg-secondary border border-border">
                 <p className="text-sm text-muted-foreground">{score.summary}</p>
               </div>
 
@@ -130,24 +130,24 @@ function FactorRow({ factor, isExpanded, onToggle }: FactorRowProps) {
   };
 
   return (
-    <div className="rounded-xl border border-white/10 overflow-hidden">
+    <div className="rounded-xl border border-border overflow-hidden">
       <button
         onClick={onToggle}
-        className="w-full p-3 flex items-center gap-3 hover:bg-white/5 transition-colors"
+        className="w-full p-3 flex items-center gap-3 hover:bg-secondary transition-colors"
         data-testid={`factor-${factor.name.toLowerCase().replace(/\s/g, '-')}`}
       >
-        <div className="h-8 w-8 rounded-lg bg-white/10 flex items-center justify-center flex-shrink-0">
-          <Icon className="h-4 w-4 text-white/70" />
+        <div className="h-8 w-8 rounded-lg bg-secondary flex items-center justify-center flex-shrink-0">
+          <Icon className="h-4 w-4 text-foreground/70" />
         </div>
         
         <div className="flex-1 min-w-0">
           <div className="flex items-center justify-between mb-1">
-            <span className="text-sm font-medium text-white">{factor.name}</span>
+            <span className="text-sm font-medium text-foreground">{factor.name}</span>
             <span className="text-sm text-muted-foreground">
               {factor.score}/{factor.maxScore}
             </span>
           </div>
-          <div className="h-1.5 bg-white/10 rounded-full overflow-hidden">
+          <div className="h-1.5 bg-secondary rounded-full overflow-hidden">
             <motion.div
               initial={{ width: 0 }}
               animate={{ width: `${percentage}%` }}

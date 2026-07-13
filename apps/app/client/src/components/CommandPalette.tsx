@@ -86,15 +86,15 @@ export function CommandPalette({ open, onOpenChange }: CommandPaletteProps) {
 
         <CommandGroup heading="Quick actions">
           <CommandItem onSelect={() => go("/analyze")} data-testid="cmd-quick-analyze">
-            <Plus className="h-4 w-4 mr-2 text-indigo-400" />
+            <Plus className="h-4 w-4 mr-2 text-primary" />
             New analysis
           </CommandItem>
           <CommandItem onSelect={() => go("/hook-lab")}>
-            <Zap className="h-4 w-4 mr-2 text-indigo-400" />
+            <Zap className="h-4 w-4 mr-2 text-primary" />
             Generate hooks
           </CommandItem>
           <CommandItem onSelect={() => go("/ideas")}>
-            <Lightbulb className="h-4 w-4 mr-2 text-amber-400" />
+            <Lightbulb className="h-4 w-4 mr-2 text-[var(--score-50)]" />
             Brainstorm ideas
           </CommandItem>
           <CommandItem onSelect={() => go("/thumbnails")}>
@@ -114,10 +114,10 @@ export function CommandPalette({ open, onOpenChange }: CommandPaletteProps) {
               <CommandGroup heading="Analyses">
                 {results.analyses.map((a) => (
                   <CommandItem key={a.id} onSelect={() => go(`/analyze/${a.id}`)} value={`analysis-${a.id} ${a.title || ""}`}>
-                    <Sparkles className="h-4 w-4 mr-2 text-indigo-400" />
+                    <Sparkles className="h-4 w-4 mr-2 text-primary" />
                     <span className="flex-1 truncate">{a.title || "Untitled"}</span>
                     {typeof a.viralScore === "number" && (
-                      <span className="text-xs text-slate-400 ml-2">{a.viralScore}</span>
+                      <span className="text-xs text-muted-foreground ml-2">{a.viralScore}</span>
                     )}
                   </CommandItem>
                 ))}
@@ -127,7 +127,7 @@ export function CommandPalette({ open, onOpenChange }: CommandPaletteProps) {
               <CommandGroup heading="Ideas">
                 {results.ideas.map((i) => (
                   <CommandItem key={i.id} onSelect={() => go("/ideas")} value={`idea-${i.id} ${i.title}`}>
-                    <Lightbulb className="h-4 w-4 mr-2 text-amber-400" />
+                    <Lightbulb className="h-4 w-4 mr-2 text-[var(--score-50)]" />
                     <span className="flex-1 truncate">{i.title}</span>
                   </CommandItem>
                 ))}
@@ -137,7 +137,7 @@ export function CommandPalette({ open, onOpenChange }: CommandPaletteProps) {
               <CommandGroup heading="Hooks">
                 {results.hooks.map((h) => (
                   <CommandItem key={h.id} onSelect={() => go("/hook-lab")} value={`hook-${h.id} ${h.topic}`}>
-                    <Zap className="h-4 w-4 mr-2 text-indigo-400" />
+                    <Zap className="h-4 w-4 mr-2 text-primary" />
                     <span className="flex-1 truncate">{h.topic}</span>
                   </CommandItem>
                 ))}
@@ -160,7 +160,7 @@ export function CommandPalette({ open, onOpenChange }: CommandPaletteProps) {
         <CommandGroup heading="Navigation">
           {QUICK_NAV.map((n) => (
             <CommandItem key={n.href} onSelect={() => go(n.href)} value={`nav-${n.label} ${n.keywords}`}>
-              <n.icon className="h-4 w-4 mr-2 text-slate-400" />
+              <n.icon className="h-4 w-4 mr-2 text-muted-foreground" />
               {n.label}
             </CommandItem>
           ))}

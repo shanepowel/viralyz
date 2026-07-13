@@ -6,7 +6,7 @@ function Skeleton({
 }: React.HTMLAttributes<HTMLDivElement>) {
   return (
     <div
-      className={cn("animate-pulse rounded-md bg-white/10", className)}
+      className={cn("animate-pulse rounded-md bg-secondary", className)}
       {...props}
     />
   )
@@ -14,7 +14,7 @@ function Skeleton({
 
 function ContentCardSkeleton() {
   return (
-    <div className="rounded-2xl border border-white/10 bg-card overflow-hidden">
+    <div className="rounded-2xl border border-border bg-card overflow-hidden">
       <Skeleton className="aspect-video w-full" />
       <div className="p-4 space-y-3">
         <div className="flex items-center gap-3">
@@ -43,7 +43,7 @@ function ProfileGridSkeleton({ count = 9 }: { count?: number }) {
 
 function TribeCardSkeleton() {
   return (
-    <div className="flex-shrink-0 w-36 p-4 rounded-2xl bg-white/5 border border-white/10">
+    <div className="flex-shrink-0 w-36 p-4 rounded-2xl bg-secondary border border-border">
       <Skeleton className="h-14 w-14 rounded-xl mx-auto mb-3" />
       <Skeleton className="h-4 w-20 mx-auto mb-2" />
       <Skeleton className="h-3 w-16 mx-auto" />

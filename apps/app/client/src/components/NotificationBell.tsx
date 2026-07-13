@@ -63,7 +63,7 @@ export function NotificationBell() {
         <Button
           variant="ghost"
           size="icon"
-          className="relative text-slate-300 hover:text-white"
+          className="relative text-muted-foreground hover:text-foreground"
           data-testid="button-notifications"
           aria-label="Notifications"
         >
@@ -73,12 +73,12 @@ export function NotificationBell() {
           )}
         </Button>
       </PopoverTrigger>
-      <PopoverContent align="end" className="w-[360px] p-0 border-white/10 bg-slate-950/95 backdrop-blur-xl">
-        <div className="flex items-center justify-between px-4 py-3 border-b border-white/10">
+      <PopoverContent align="end" className="w-[360px] p-0 border-border bg-card backdrop-blur-xl">
+        <div className="flex items-center justify-between px-4 py-3 border-b border-border">
           <div className="font-semibold text-sm">Notifications</div>
           {unread > 0 && (
             <button
-              className="text-xs text-slate-400 hover:text-white inline-flex items-center gap-1"
+              className="text-xs text-muted-foreground hover:text-foreground inline-flex items-center gap-1"
               onClick={() => markAll.mutate()}
               data-testid="button-mark-all-read"
             >
@@ -89,10 +89,10 @@ export function NotificationBell() {
         <ScrollArea className="max-h-[360px]">
           {items.length === 0 ? (
             <div className="px-6 py-10 text-center">
-              <div className="h-10 w-10 rounded-xl bg-white/[0.04] mx-auto mb-3 flex items-center justify-center">
-                <Sparkles className="h-4 w-4 text-slate-400" />
+              <div className="h-10 w-10 rounded-xl bg-secondary mx-auto mb-3 flex items-center justify-center">
+                <Sparkles className="h-4 w-4 text-muted-foreground" />
               </div>
-              <div className="text-sm text-slate-400">You're all caught up.</div>
+              <div className="text-sm text-muted-foreground">You're all caught up.</div>
             </div>
           ) : (
             <div className="py-1">
@@ -102,7 +102,7 @@ export function NotificationBell() {
                     className={cn(
                       "px-4 py-3 cursor-pointer transition-colors",
                       n.readAt ? "opacity-70" : "bg-indigo-500/[0.04]",
-                      "hover:bg-white/[0.04]"
+                      "hover:bg-secondary"
                     )}
                     onClick={() => !n.readAt && markRead.mutate(n.id)}
                     data-testid={`notification-${n.id}`}
@@ -110,9 +110,9 @@ export function NotificationBell() {
                     <div className="flex items-start gap-3">
                       <div className={cn("h-2 w-2 rounded-full mt-1.5 shrink-0", n.readAt ? "bg-transparent" : "bg-indigo-400")} />
                       <div className="flex-1 min-w-0">
-                        <div className="font-medium text-sm text-white">{n.title}</div>
-                        {n.body && <div className="text-xs text-slate-400 mt-0.5 line-clamp-2">{n.body}</div>}
-                        <div className="text-[10px] text-slate-500 mt-1">{timeAgo(n.createdAt)}</div>
+                        <div className="font-medium text-sm text-foreground">{n.title}</div>
+                        {n.body && <div className="text-xs text-muted-foreground mt-0.5 line-clamp-2">{n.body}</div>}
+                        <div className="text-[10px] text-muted-foreground mt-1">{timeAgo(n.createdAt)}</div>
                       </div>
                     </div>
                   </div>
