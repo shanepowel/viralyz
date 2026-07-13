@@ -2,6 +2,7 @@ import Link from "next/link";
 import { getPublicAppUrl } from "@repo/config";
 import { CreatorMosaic } from "@/components/marketing/creator-mosaic";
 import { FinalCta } from "@/components/marketing/final-cta";
+import { LinkScorer } from "@/components/marketing/link-scorer";
 import { MarketingShell } from "@/components/marketing/marketing-shell";
 
 const TICKER = [
@@ -39,17 +40,16 @@ export default function HomePage() {
               what to fix. Post better content, build a track record brands can
               trust, and get hired for it.
             </p>
-            <div className="hero-actions">
-              <Link className="btn btn-violet btn-lg" href={appUrl}>
-                Score your content free
-              </Link>
-              <Link className="btn btn-outline btn-lg" href="/brands">
-                I want to hire creators
+            <LinkScorer />
+            <p className="hero-note" style={{ marginTop: 16 }}>
+              <b>No signup needed to try.</b> Full breakdown is free, 10 scores a
+              month.
+            </p>
+            <div className="hero-actions" style={{ marginTop: 14 }}>
+              <Link className="btn btn-ghost" href="/brands">
+                I want to hire creators →
               </Link>
             </div>
-            <p className="hero-note">
-              <b>Free to start.</b> 10 scores a month. No card needed.
-            </p>
           </div>
           <CreatorMosaic />
         </div>

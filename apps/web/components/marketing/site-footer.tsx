@@ -23,28 +23,28 @@ export function SiteFooter() {
           <div>
             <h5>Product</h5>
             <Link href="/platform">Platform</Link>
+            <Link href="/browse">Browse creators</Link>
+            <Link href="/tools">Free tools</Link>
             <Link href="/pricing">Pricing</Link>
             <Link href="/brands">For brands</Link>
           </div>
           <div>
             <h5>Company</h5>
             <Link href="/about">About</Link>
-            <a href="mailto:hello@viralyz.com">Contact</a>
-            <span style={{ display: "block", padding: "4px 0", color: "var(--ink-3)" }}>
-              Blog
-            </span>
+            <Link href="/contact">Contact</Link>
+            <Link href="/blog">Blog</Link>
           </div>
           <div>
             <h5>Legal</h5>
             <Link href="/privacy">Privacy</Link>
             <Link href="/terms">Terms</Link>
-            <span style={{ display: "block", padding: "4px 0", color: "var(--ink-3)" }}>
-              Cookies
-            </span>
+            <Link href="/cookies">Cookies</Link>
           </div>
         </div>
         <div className="foot-bottom">
-          <span>© {new Date().getFullYear()} {APP_NAME}. All rights reserved.</span>
+          <span>
+            © {new Date().getFullYear()} {APP_NAME}. All rights reserved.
+          </span>
           <span className="digiteq-line">
             <span className="dq">D</span>A Digiteq Holdings company · Windsor, UK
           </span>

@@ -13,9 +13,24 @@ const LINKS = [
     match: (p: string) => p.startsWith("/platform"),
   },
   {
+    href: "/browse",
+    label: "Browse creators",
+    match: (p: string) => p.startsWith("/browse"),
+  },
+  {
+    href: "/tools",
+    label: "Free tools",
+    match: (p: string) => p.startsWith("/tools"),
+  },
+  {
     href: "/brands",
     label: "For brands",
     match: (p: string) => p.startsWith("/brands"),
+  },
+  {
+    href: "/blog",
+    label: "Blog",
+    match: (p: string) => p.startsWith("/blog"),
   },
   {
     href: "/pricing",
