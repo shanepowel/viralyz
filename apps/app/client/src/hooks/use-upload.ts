@@ -67,6 +67,7 @@ export function useUpload(options: UseUploadOptions = {}) {
         headers: {
           "Content-Type": "application/json",
         },
+        credentials: "include",
         body: JSON.stringify({
           name: file.name,
           size: file.size,
@@ -92,6 +93,7 @@ export function useUpload(options: UseUploadOptions = {}) {
       const response = await fetch(uploadURL, {
         method: "PUT",
         body: file,
+        credentials: "include",
         headers: {
           "Content-Type": file.type || "application/octet-stream",
         },
@@ -167,6 +169,7 @@ export function useUpload(options: UseUploadOptions = {}) {
         headers: {
           "Content-Type": "application/json",
         },
+        credentials: "include",
         body: JSON.stringify({
           name: file.name,
           size: file.size,

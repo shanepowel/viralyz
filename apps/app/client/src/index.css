@@ -4,13 +4,14 @@
 @custom-variant dark (&:is(.dark *));
 
 @theme inline {
-  --font-sans: 'Inter', sans-serif;
-  --font-display: 'Outfit', sans-serif;
+  --font-sans: 'Inter', system-ui, sans-serif;
+  --font-display: 'Clash Display', 'Space Grotesk', 'Outfit', sans-serif;
+  --font-mono: 'JetBrains Mono', ui-monospace, monospace;
 
-  --radius-sm: calc(var(--radius) - 4px);
-  --radius-md: calc(var(--radius) - 2px);
-  --radius-lg: var(--radius);
-  --radius-xl: calc(var(--radius) + 4px);
+  --radius-sm: 8px;
+  --radius-md: 12px;
+  --radius-lg: 16px;
+  --radius-xl: 24px;
 
   --color-background: hsl(var(--background));
   --color-foreground: hsl(var(--foreground));
@@ -55,45 +56,58 @@
 }
 
 :root {
-  /* Viralyz dark theme — premium near-black with violet primary */
-  --background: 240 12% 3%;
-  --foreground: 0 0% 98%;
+  /* Signal design system — dark-first (#0A0A0F / #7C5CFF) */
+  --bg-base: #0a0a0f;
+  --bg-surface: #12121a;
+  --bg-elevated: #1a1a26;
+  --border-subtle: #26263a;
+  --text-primary: #f4f4f8;
+  --text-secondary: #a0a0b8;
+  --text-tertiary: #64647a;
+  --signal-accent: #7c5cff;
+  --score-90: #34d399;
+  --score-70: #a3e635;
+  --score-50: #fbbf24;
+  --score-30: #f87171;
 
-  --card: 240 10% 6%;
-  --card-foreground: 0 0% 98%;
+  --background: 240 20% 5%; /* #0A0A0F */
+  --foreground: 240 10% 96%; /* #F4F4F8 */
 
-  --popover: 240 10% 6%;
-  --popover-foreground: 0 0% 98%;
+  --card: 240 16% 9%; /* #12121A */
+  --card-foreground: 240 10% 96%;
 
-  --primary: 262 83% 62%;
+  --popover: 240 16% 12%; /* #1A1A26 */
+  --popover-foreground: 240 10% 96%;
+
+  --primary: 252 100% 68%; /* #7C5CFF */
   --primary-foreground: 0 0% 100%;
 
-  --secondary: 240 5% 12%;
-  --secondary-foreground: 0 0% 98%;
+  --secondary: 240 16% 12%;
+  --secondary-foreground: 240 10% 96%;
 
-  --muted: 240 5% 14%;
-  --muted-foreground: 240 5% 65%;
+  --muted: 240 14% 14%;
+  --muted-foreground: 240 12% 67%; /* #A0A0B8 */
 
-  --accent: 188 95% 55%;
-  --accent-foreground: 240 12% 3%;
+  --accent: 252 100% 68%;
+  --accent-foreground: 0 0% 100%;
 
-  --destructive: 0 84% 60%;
+  --destructive: 0 84% 71%;
   --destructive-foreground: 210 40% 98%;
 
-  --border: 240 5% 14%;
-  --input: 240 5% 14%;
-  --ring: 262 83% 62%;
+  --border: 240 20% 19%; /* #26263A */
+  --input: 240 20% 19%;
+  --ring: 252 100% 68%;
 
-  --radius: 0.875rem;
+  --radius: 0.75rem;
 
-  --sidebar: 240 12% 3%;
-  --sidebar-foreground: 0 0% 98%;
-  --sidebar-primary: 262 83% 62%;
+  --sidebar: 240 20% 5%;
+  --sidebar-foreground: 240 10% 96%;
+  --sidebar-primary: 252 100% 68%;
   --sidebar-primary-foreground: 0 0% 100%;
-  --sidebar-accent: 240 5% 12%;
-  --sidebar-accent-foreground: 0 0% 98%;
-  --sidebar-border: 240 5% 14%;
-  --sidebar-ring: 262 83% 62%;
+  --sidebar-accent: 240 16% 12%;
+  --sidebar-accent-foreground: 240 10% 96%;
+  --sidebar-border: 240 20% 19%;
+  --sidebar-ring: 252 100% 68%;
 }
 
 @layer base {
@@ -168,13 +182,13 @@
     box-shadow: 0 0 0 1px rgba(167, 139, 250, 0.15), 0 20px 60px -20px rgba(124, 58, 237, 0.35);
   }
 
-  /* Aurora mesh background (fixed layer behind app) */
+  /* Aurora mesh background — Signal violet undertone */
   .aurora-bg {
-    background-color: hsl(240 12% 3%);
+    background-color: #0a0a0f;
     background-image:
-      radial-gradient(ellipse 80% 60% at 12% 0%, rgba(124, 58, 237, 0.22), transparent 60%),
-      radial-gradient(ellipse 70% 60% at 90% 10%, rgba(34, 211, 238, 0.10), transparent 60%),
-      radial-gradient(ellipse 70% 60% at 50% 110%, rgba(236, 72, 153, 0.10), transparent 60%);
+      radial-gradient(ellipse 80% 60% at 12% 0%, rgba(124, 92, 255, 0.18), transparent 60%),
+      radial-gradient(ellipse 70% 60% at 90% 10%, rgba(52, 211, 153, 0.06), transparent 60%),
+      radial-gradient(ellipse 70% 60% at 50% 110%, rgba(124, 92, 255, 0.08), transparent 60%);
   }
 
   /* Faint dot grid for headers / hero panels */
@@ -269,12 +283,13 @@
 .card-hover:hover { @apply border-white/[0.12] bg-white/[0.045]; transform: translateY(-1px); }
 .card-pop { box-shadow: var(--shadow-pop); }
 
-/* Score color tokens (consistent across the app) */
-.score-bg-emerald { background: rgba(16,185,129,0.12); color: rgb(110 231 183); }
-.score-bg-indigo  { background: rgba(99,102,241,0.14);  color: rgb(165 180 252); }
-.score-bg-amber   { background: rgba(245,158,11,0.14);  color: rgb(252 211 77); }
-.score-bg-rose    { background: rgba(244,63,94,0.14);   color: rgb(253 164 175); }
-.score-bg-slate   { background: rgba(148,163,184,0.10); color: rgb(203 213 225); }
+/* Score color tokens — Signal semantic scale */
+.score-bg-emerald { background: rgba(52,211,153,0.14);  color: rgb(110 231 183); }
+.score-bg-lime    { background: rgba(163,230,53,0.14);  color: rgb(190 242 100); }
+.score-bg-indigo  { background: rgba(163,230,53,0.14);  color: rgb(190 242 100); } /* legacy alias → lime */
+.score-bg-amber   { background: rgba(251,191,36,0.14);  color: rgb(252 211 77); }
+.score-bg-rose    { background: rgba(248,113,113,0.14); color: rgb(252 165 165); }
+.score-bg-slate   { background: rgba(100,100,122,0.14); color: rgb(160 160 184); }
 
 /* Subtle separators */
 .divider-soft { @apply border-t border-white/[0.06]; }
@@ -314,8 +329,10 @@
   animation: shimmer 1.6s linear infinite;
 }
 
-/* Scoreglow for top section ring */
-.score-glow-emerald { filter: drop-shadow(0 0 24px rgba(16,185,129,0.35)); }
-.score-glow-indigo  { filter: drop-shadow(0 0 24px rgba(99,102,241,0.35)); }
-.score-glow-amber   { filter: drop-shadow(0 0 24px rgba(245,158,11,0.30)); }
-.score-glow-rose    { filter: drop-shadow(0 0 24px rgba(244,63,94,0.30)); }
+/* Scoreglow for top section ring — Signal */
+.score-glow-emerald { filter: drop-shadow(0 0 24px rgba(52,211,153,0.35)); }
+.score-glow-lime    { filter: drop-shadow(0 0 24px rgba(163,230,53,0.30)); }
+.score-glow-indigo  { filter: drop-shadow(0 0 24px rgba(163,230,53,0.30)); } /* legacy */
+.score-glow-amber   { filter: drop-shadow(0 0 24px rgba(251,191,36,0.30)); }
+.score-glow-rose    { filter: drop-shadow(0 0 24px rgba(248,113,113,0.30)); }
+.score-glow-slate   { filter: none; }
