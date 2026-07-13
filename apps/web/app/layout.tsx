@@ -5,6 +5,7 @@ import {
   JetBrains_Mono,
 } from "next/font/google";
 import type { CSSProperties } from "react";
+import { Analytics } from "@vercel/analytics/next";
 import { APP_DESCRIPTION, APP_NAME, APP_TAGLINE } from "@repo/config";
 import "./globals.css";
 
@@ -65,6 +66,7 @@ export default function RootLayout({
         }
       >
         {children}
+        <Analytics />
       </body>
     </html>
   );
