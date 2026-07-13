@@ -329,3 +329,129 @@ export const deliverables = pgTable("deliverables", {
   approvedAt: timestamp("approved_at"),
   paidAt: timestamp("paid_at"),
 });
+
+/**
+ * Fixed-price offers on media kits (Collabstr-style packages).
+ * Brand pays price + 10% fee; creator keeps 100% of listed price.
+ */
+export const kitPackages = pgTable(
+  "kit_packages",
+  {
+    id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
+    mediaKitId: varchar("media_kit_id")
+      .notNull()
+      .references(() => mediaKits.id, { onDelete: "cascade" }),
+    name: varchar("name", { length: 120 }).notNull(),
+    description: text("description"),
+    deliveryDays: integer("delivery_days").notNull().default(7),
+    priceCents: integer("price_cents").notNull(),
+    currency: varchar("currency", { length: 3 }).notNull().default("GBP"),
+    usageRights: text("usage_rights"),
+    sortOrder: integer("sort_order").notNull().default(0),
+    active: boolean("active").notNull().default(true),
+    createdAt: timestamp("created_at").defaultNow().notNull(),
+    updatedAt: timestamp("updated_at").defaultNow().notNull(),
+  },
+  (t) => [
+    index("kit_packages_kit_idx").on(t.mediaKitId),
+    index("kit_packages_active_idx").on(t.active),
+  ],
+);
+
+/** Escrow order lifecycle for kit packages */
+export const packageOrders = pgTable(
+  "package_orders",
+  {
+    id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
+    packageId: varchar("package_id")
+      .notNull()
+      .references(() => kitPackages.id),
+    mediaKitId: varchar("media_kit_id")
+      .notNull()
+      .references(() => mediaKits.id),
+    buyerEmail: varchar("buyer_email", { length: 255 }).notNull(),
+    buyerName: varchar("buyer_name", { length: 120 }).notNull(),
+    brandName: varchar("brand_name", { length: 160 }),
+    amountCents: integer("amount_cents").notNull(),
+    feeCents: integer("fee_cents").notNull(),
+    currency: varchar("currency", { length: 3 }).notNull().default("GBP"),
+    status: varchar("status", { length: 20 }).notNull().default("new"),
+    // new | accepted | delivered | approved | paid | disputed | cancelled
+    stripePaymentIntentId: varchar("stripe_payment_intent_id", { length: 120 }),
+    notes: text("notes"),
+    escrowHeldAt: timestamp("escrow_held_at"),
+    acceptedAt: timestamp("accepted_at"),
+    deliveredAt: timestamp("delivered_at"),
+    approvedAt: timestamp("approved_at"),
+    autoApproveAt: timestamp("auto_approve_at"),
+    paidAt: timestamp("paid_at"),
+    flaggedAt: timestamp("flagged_at"),
+    createdAt: timestamp("created_at").defaultNow().notNull(),
+    updatedAt: timestamp("updated_at").defaultNow().notNull(),
+  },
+  (t) => [
+    index("package_orders_kit_idx").on(t.mediaKitId),
+    index("package_orders_status_idx").on(t.status),
+    index("package_orders_buyer_idx").on(t.buyerEmail),
+  ],
+);
+
+/** Affiliate programme: 30% recurring for 12 months */
+export const affiliates = pgTable(
+  "affiliates",
+  {
+    id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
+    userId: varchar("user_id"),
+    email: varchar("email", { length: 255 }).notNull(),
+    name: varchar("name", { length: 120 }).notNull(),
+    code: varchar("code", { length: 40 }).notNull(),
+    status: varchar("status", { length: 20 }).notNull().default("pending"),
+    // pending | active | paused | rejected
+    commissionBps: integer("commission_bps").notNull().default(3000),
+    recurringMonths: integer("recurring_months").notNull().default(12),
+    payoutDetails: jsonb("payout_details"),
+    createdAt: timestamp("created_at").defaultNow().notNull(),
+    updatedAt: timestamp("updated_at").defaultNow().notNull(),
+  },
+  (t) => [
+    uniqueIndex("affiliates_code_uidx").on(t.code),
+    uniqueIndex("affiliates_email_uidx").on(t.email),
+  ],
+);
+
+export const affiliateReferrals = pgTable(
+  "affiliate_referrals",
+  {
+    id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
+    affiliateId: varchar("affiliate_id")
+      .notNull()
+      .references(() => affiliates.id, { onDelete: "cascade" }),
+    referredUserId: varchar("referred_user_id"),
+    referredEmail: varchar("referred_email", { length: 255 }),
+    plan: varchar("plan", { length: 40 }),
+    status: varchar("status", { length: 20 }).notNull().default("clicked"),
+    // clicked | signed_up | converting | expired
+    firstPaidAt: timestamp("first_paid_at"),
+    createdAt: timestamp("created_at").defaultNow().notNull(),
+  },
+  (t) => [
+    index("affiliate_referrals_aff_idx").on(t.affiliateId),
+    index("affiliate_referrals_status_idx").on(t.status),
+  ],
+);
+
+/** Viral Score Report email gate */
+export const reportLeads = pgTable(
+  "report_leads",
+  {
+    id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
+    email: varchar("email", { length: 255 }).notNull(),
+    reportSlug: varchar("report_slug", { length: 80 }).notNull(),
+    source: varchar("source", { length: 80 }),
+    createdAt: timestamp("created_at").defaultNow().notNull(),
+  },
+  (t) => [
+    index("report_leads_report_idx").on(t.reportSlug),
+    uniqueIndex("report_leads_email_report_uidx").on(t.email, t.reportSlug),
+  ],
+);

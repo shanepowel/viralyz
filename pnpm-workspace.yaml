@@ -1,3 +1,5 @@
 packages:
-  - "apps/*"
+  # Studio is standalone (apps/studio) — install with `cd apps/studio && pnpm install`
+  - "apps/web"
+  - "apps/app"
   - "packages/*"
