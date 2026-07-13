@@ -19,6 +19,7 @@ import { ScoreDiffPanel } from "@/components/ScoreDiffPanel";
 import { RetentionCurveChart } from "@/components/RetentionCurveChart";
 import { useParams } from "wouter";
 import { cn } from "@/lib/utils";
+import { useUpload } from "@/hooks/use-upload";
 import type { RetentionCurve, ScoreDiff, FixSuggestion } from "@repo/score-engine";
 import { PIPELINE_STAGES } from "@repo/score-engine";
 
@@ -112,10 +113,20 @@ export default function Analyze() {
   const [skippedFixes, setSkippedFixes] = useState<Set<number>>(new Set());
   const [appliedFixes, setAppliedFixes] = useState<Set<number>>(new Set());
   const [showHistory, setShowHistory] = useState(false);
+  const [fileUrl, setFileUrl] = useState<string | null>(null);
+  const [uploadProgress, setUploadProgress] = useState(0);
   const dropRef = useRef<HTMLDivElement>(null);
   const pendingReveal = useRef(false);
 
   const { toast } = useToast();
+  const { uploadFile, isUploading } = useUpload({
+    onError: (err) =>
+      toast({
+        title: "Upload failed",
+        description: err.message,
+        variant: "destructive",
+      }),
+  });
 
   const { data: loadedAnalysis, isLoading: isLoadingAnalysis } = useQuery<LoadedAnalysis | null>({
     queryKey: ["/api/analyses", analysisId],
@@ -182,7 +193,7 @@ export default function Analyze() {
     e.stopPropagation();
   }, []);
   const handleDrop = useCallback(
-    (e: React.DragEvent) => {
+    async (e: React.DragEvent) => {
       e.preventDefault();
       e.stopPropagation();
       setIsDragging(false);
@@ -194,7 +205,12 @@ export default function Analyze() {
       ) {
         setFile(droppedFile);
         if (!title) setTitle(droppedFile.name.replace(/\.[^/.]+$/, ""));
-        toast({ title: "File added", description: droppedFile.name });
+        toast({ title: "Uploading…", description: droppedFile.name });
+        const uploaded = await uploadFile(droppedFile);
+        if (uploaded) {
+          setFileUrl(uploaded.objectPath);
+          toast({ title: "File ready", description: droppedFile.name });
+        }
       } else if (droppedFile) {
         toast({
           title: "Unsupported file",
@@ -203,95 +219,150 @@ export default function Analyze() {
         });
       }
     },
-    [title, toast],
+    [title, toast, uploadFile],
   );
+
+  const pollJob = async (jobId: string): Promise<AnalysisResult> => {
+    for (;;) {
+      const res = await fetch(`/api/analyze/jobs/${jobId}`, {
+        credentials: "include",
+      });
+      if (!res.ok) throw new Error("Failed to poll analysis job");
+      const job = await res.json();
+      setAnalysisProgress(job.progress ?? 0);
+      if (Array.isArray(job.stages)) {
+        const completed = job.stages
+          .filter(
+            (s: { status: string }) =>
+              s.status === "completed" || s.status === "skipped",
+          )
+          .map((s: { stageId: string }) => s.stageId);
+        setCompletedStages(completed);
+        const last = job.stages[job.stages.length - 1];
+        if (last) setCurrentStage(last.stageId);
+      }
+      if (job.status === "completed" && job.result) {
+        return job.result as AnalysisResult;
+      }
+      if (job.status === "failed") {
+        throw new Error(job.error || "Analysis failed");
+      }
+      await new Promise((r) => setTimeout(r, 800));
+    }
+  };
 
   const runAnalyzeRequest = async (body: Record<string, unknown>) => {
     setAnalysisProgress(0);
     setCompletedStages([]);
     setCurrentStage(PIPELINE_STAGES[0]?.id ?? null);
 
-    // Prefer SSE for real stage progress; fall back to JSON
-    try {
+    // Media → async job (ffmpeg + whisper); text-only can SSE
+    const hasFile = !!body.fileUrl;
+    if (hasFile) {
       const res = await fetch("/api/analyze", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         credentials: "include",
-        body: JSON.stringify({ ...body, stream: true }),
+        body: JSON.stringify({ ...body, async: true, stream: false }),
       });
-
-      if (!res.ok || !res.body || !res.headers.get("content-type")?.includes("text/event-stream")) {
-        // Non-stream fallback
-        const jsonRes = await fetch("/api/analyze", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          credentials: "include",
-          body: JSON.stringify({ ...body, stream: false }),
-        });
-        if (!jsonRes.ok) {
-          const error = await jsonRes.json();
-          throw new Error(error.error || "Analysis failed");
-        }
-        // Fake stage walk while we already have result
-        for (const s of PIPELINE_STAGES) {
-          setCurrentStage(s.id);
-          setCompletedStages((prev) => [...prev, s.id]);
-          setAnalysisProgress(
-            Math.min(
-              100,
-              PIPELINE_STAGES.filter((x) =>
-                [...PIPELINE_STAGES.slice(0, PIPELINE_STAGES.indexOf(s) + 1)].includes(x),
-              ).reduce((a, x) => a + x.weight, 0),
-            ),
-          );
-          await new Promise((r) => setTimeout(r, 120));
-        }
-        return jsonRes.json() as Promise<AnalysisResult>;
+      if (res.status === 202) {
+        const { jobId } = await res.json();
+        return pollJob(jobId);
       }
-
-      const reader = res.body.getReader();
-      const decoder = new TextDecoder();
-      let buffer = "";
-      let finalResult: AnalysisResult | null = null;
-
-      while (true) {
-        const { done, value } = await reader.read();
-        if (done) break;
-        buffer += decoder.decode(value, { stream: true });
-        const parts = buffer.split("\n\n");
-        buffer = parts.pop() || "";
-        for (const part of parts) {
-          const lines = part.split("\n");
-          const eventLine = lines.find((l) => l.startsWith("event:"));
-          const dataLine = lines.find((l) => l.startsWith("data:"));
-          if (!eventLine || !dataLine) continue;
-          const event = eventLine.replace("event:", "").trim();
-          const data = JSON.parse(dataLine.replace("data:", "").trim());
-          if (event === "stage") {
-            setCurrentStage(data.stage?.id ?? null);
-            setAnalysisProgress(data.progress ?? 0);
-            if (data.status === "completed" || data.status === "skipped") {
-              setCompletedStages((prev) =>
-                prev.includes(data.stage.id) ? prev : [...prev, data.stage.id],
-              );
-            }
-          } else if (event === "complete") {
-            finalResult = data as AnalysisResult;
-          } else if (event === "error") {
-            throw new Error(data.error || "Analysis failed");
-          }
-        }
+      if (!res.ok) {
+        const error = await res.json().catch(() => ({}));
+        throw new Error(error.error || "Analysis failed");
       }
-
-      if (!finalResult) throw new Error("Analysis stream ended without result");
-      return finalResult;
-    } catch (err) {
-      throw err;
+      return res.json() as Promise<AnalysisResult>;
     }
+
+    // Text-only: SSE for live stages
+    const res = await fetch("/api/analyze", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      credentials: "include",
+      body: JSON.stringify({ ...body, stream: true, async: false }),
+    });
+
+    if (
+      !res.ok ||
+      !res.body ||
+      !res.headers.get("content-type")?.includes("text/event-stream")
+    ) {
+      const jsonRes = await fetch("/api/analyze", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        credentials: "include",
+        body: JSON.stringify({ ...body, stream: false, async: false }),
+      });
+      if (!jsonRes.ok) {
+        const error = await jsonRes.json();
+        throw new Error(error.error || "Analysis failed");
+      }
+      for (const s of PIPELINE_STAGES) {
+        setCurrentStage(s.id);
+        setCompletedStages((prev) => [...prev, s.id]);
+        setAnalysisProgress(
+          PIPELINE_STAGES.slice(0, PIPELINE_STAGES.indexOf(s) + 1).reduce(
+            (a, x) => a + x.weight,
+            0,
+          ),
+        );
+        await new Promise((r) => setTimeout(r, 80));
+      }
+      return jsonRes.json() as Promise<AnalysisResult>;
+    }
+
+    const reader = res.body.getReader();
+    const decoder = new TextDecoder();
+    let buffer = "";
+    let finalResult: AnalysisResult | null = null;
+
+    while (true) {
+      const { done, value } = await reader.read();
+      if (done) break;
+      buffer += decoder.decode(value, { stream: true });
+      const parts = buffer.split("\n\n");
+      buffer = parts.pop() || "";
+      for (const part of parts) {
+        const lines = part.split("\n");
+        const eventLine = lines.find((l) => l.startsWith("event:"));
+        const dataLine = lines.find((l) => l.startsWith("data:"));
+        if (!eventLine || !dataLine) continue;
+        const event = eventLine.replace("event:", "").trim();
+        const data = JSON.parse(dataLine.replace("data:", "").trim());
+        if (event === "stage") {
+          setCurrentStage(data.stage?.id ?? null);
+          setAnalysisProgress(data.progress ?? 0);
+          if (data.status === "completed" || data.status === "skipped") {
+            setCompletedStages((prev) =>
+              prev.includes(data.stage.id) ? prev : [...prev, data.stage.id],
+            );
+          }
+        } else if (event === "complete") {
+          finalResult = data as AnalysisResult;
+        } else if (event === "error") {
+          throw new Error(data.error || "Analysis failed");
+        }
+      }
+    }
+
+    if (!finalResult) throw new Error("Analysis stream ended without result");
+    return finalResult;
   };
 
   const analyzeMutation = useMutation({
     mutationFn: async () => {
+      let objectPath = fileUrl;
+      if (file && !objectPath) {
+        setUploadProgress(10);
+        const uploaded = await uploadFile(file);
+        if (!uploaded) throw new Error("Upload failed");
+        objectPath = uploaded.objectPath;
+        setFileUrl(objectPath);
+        setUploadProgress(100);
+      }
+
       const data = await runAnalyzeRequest({
         title: title || "Untitled Content",
         description: description || "",
@@ -301,7 +372,8 @@ export default function Analyze() {
             ? "video"
             : "image"
           : "video",
-        hasMedia: !!(file || url),
+        hasMedia: !!(objectPath || url),
+        fileUrl: objectPath || null,
       });
       return {
         ...data,
@@ -341,23 +413,21 @@ export default function Analyze() {
           description,
           platform: selectedPlatform,
           appliedFixIndexes: Array.from(appliedFixes),
+          fileUrl: fileUrl || null,
+          async: true,
         }),
       });
+      if (res.status === 202) {
+        const { jobId } = await res.json();
+        const data = await pollJob(jobId);
+        return {
+          ...data,
+          top3Fixes: normalizeFixes(data.top3Fixes),
+        } as AnalysisResult;
+      }
       if (!res.ok) {
         const error = await res.json();
         throw new Error(error.error || "Re-analyze failed");
-      }
-      // Progress walk while waiting
-      for (const s of PIPELINE_STAGES) {
-        setCurrentStage(s.id);
-        setCompletedStages((prev) => [...prev, s.id]);
-        setAnalysisProgress(
-          PIPELINE_STAGES.slice(0, PIPELINE_STAGES.indexOf(s) + 1).reduce(
-            (a, x) => a + x.weight,
-            0,
-          ),
-        );
-        await new Promise((r) => setTimeout(r, 80));
       }
       const data = await res.json();
       return {
@@ -388,14 +458,21 @@ export default function Analyze() {
   });
 
   const handleFileChange = useCallback(
-    (e: React.ChangeEvent<HTMLInputElement>) => {
+    async (e: React.ChangeEvent<HTMLInputElement>) => {
       const selectedFile = e.target.files?.[0];
       if (selectedFile) {
         setFile(selectedFile);
+        setFileUrl(null);
         if (!title) setTitle(selectedFile.name.replace(/\.[^/.]+$/, ""));
+        toast({ title: "Uploading…", description: selectedFile.name });
+        const uploaded = await uploadFile(selectedFile);
+        if (uploaded) {
+          setFileUrl(uploaded.objectPath);
+          toast({ title: "File ready", description: selectedFile.name });
+        }
       }
     },
-    [title],
+    [title, toast, uploadFile],
   );
 
   const handleAnalyze = () => {
@@ -711,12 +788,15 @@ export default function Analyze() {
 
                 <Button
                   onClick={handleAnalyze}
-                  disabled={!file && !url && !title && !description}
+                  disabled={
+                    isUploading ||
+                    (!file && !fileUrl && !url && !title && !description)
+                  }
                   className="mt-6 w-full bg-[var(--accent)] py-6 text-base hover:bg-[var(--accent-hover)]"
                   data-testid="button-analyze-now"
                 >
                   <Sparkles className="mr-2 h-5 w-5" />
-                  Analyze Now
+                  {isUploading ? "Uploading…" : "Analyze Now"}
                   <ArrowRight className="ml-2 h-5 w-5" />
                 </Button>
               </div>

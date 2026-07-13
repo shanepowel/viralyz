@@ -27,29 +27,39 @@ export type StageListener = (event: {
   detail?: string;
 }) => void;
 
+export type PipelineWorkers = {
+  ingest?: () => Promise<void>;
+  frames?: () => Promise<void>;
+  transcribe?: () => Promise<void>;
+  thumbnail?: () => Promise<void>;
+  runScore: () => Promise<void>;
+  suggestions?: () => Promise<void>;
+  persist: () => Promise<void>;
+};
+
 /**
- * Run the analysis pipeline stages with progress callbacks.
- * Heavy stages (frames/transcribe) are marked skipped when no media URL —
- * text-only scoring still completes score → suggestions → persist.
+ * Run the analysis pipeline stages with real worker callbacks.
+ * Stages without media skip frames/transcribe when hasMedia is false.
  */
 export async function runAnalysisPipeline(
   opts: {
     hasMedia: boolean;
     onStage?: StageListener;
-    /** Execute the actual score+suggestions work; called during `score` stage */
-    runScore: () => Promise<void>;
-    persist: () => Promise<void>;
+    workers: PipelineWorkers;
   },
 ): Promise<void> {
-  const { hasMedia, onStage, runScore, persist } = opts;
+  const { hasMedia, onStage, workers } = opts;
 
   for (const stage of PIPELINE_STAGES) {
     const skip =
-      !hasMedia && (stage.id === "frames" || stage.id === "transcribe");
+      !hasMedia &&
+      (stage.id === "frames" ||
+        stage.id === "transcribe" ||
+        stage.id === "thumbnail");
 
     onStage?.({
       stage,
-      progress: progressAfterStage(stage.id) - stage.weight,
+      progress: Math.max(0, progressAfterStage(stage.id) - stage.weight),
       status: skip ? "skipped" : "started",
     });
 
@@ -63,20 +73,51 @@ export async function runAnalysisPipeline(
       continue;
     }
 
-    // Simulate lightweight stage latency so UI progress is real relative to work
-    if (stage.id === "ingest" || stage.id === "thumbnail") {
-      await sleep(180);
-    } else if (stage.id === "frames" || stage.id === "transcribe") {
-      // Placeholder until ffmpeg/Whisper workers land — brief yield
-      await sleep(320);
-    } else if (stage.id === "score" || stage.id === "suggestions") {
-      if (stage.id === "score") {
-        await runScore();
-      } else {
-        await sleep(80);
+    try {
+      switch (stage.id) {
+        case "ingest":
+          await workers.ingest?.();
+          break;
+        case "frames":
+          await workers.frames?.();
+          break;
+        case "transcribe":
+          await workers.transcribe?.();
+          break;
+        case "thumbnail":
+          await workers.thumbnail?.();
+          break;
+        case "score":
+          await workers.runScore();
+          break;
+        case "suggestions":
+          await workers.suggestions?.();
+          break;
+        case "persist":
+          await workers.persist();
+          break;
+        default: {
+          const _exhaustive: never = stage.id;
+          void _exhaustive;
+        }
       }
-    } else if (stage.id === "persist") {
-      await persist();
+    } catch (err) {
+      // Soft-fail media stages so text scoring still completes
+      if (
+        stage.id === "frames" ||
+        stage.id === "transcribe" ||
+        stage.id === "thumbnail"
+      ) {
+        console.warn(`[pipeline] ${stage.id} failed, continuing:`, err);
+        onStage?.({
+          stage,
+          progress: progressAfterStage(stage.id),
+          status: "skipped",
+          detail: err instanceof Error ? err.message : "stage failed",
+        });
+        continue;
+      }
+      throw err;
     }
 
     onStage?.({
@@ -85,8 +126,4 @@ export async function runAnalysisPipeline(
       status: "completed",
     });
   }
-}
-
-function sleep(ms: number) {
-  return new Promise((r) => setTimeout(r, ms));
 }

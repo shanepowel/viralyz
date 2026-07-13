@@ -46,6 +46,8 @@
     "@radix-ui/react-toggle": "^1.1.10",
     "@radix-ui/react-toggle-group": "^1.1.11",
     "@radix-ui/react-tooltip": "^1.2.8",
+    "@repo/score-engine": "workspace:*",
+    "@repo/ui": "workspace:*",
     "@tanstack/react-query": "^5.60.5",
     "@types/bcrypt": "^6.0.0",
     "@types/memoizee": "^0.4.12",
@@ -66,6 +68,7 @@
     "express-session": "^1.18.2",
     "framer-motion": "^12.23.24",
     "google-auth-library": "^10.5.0",
+    "inngest": "3",
     "input-otp": "^1.4.2",
     "lucide-react": "^0.545.0",
     "memoizee": "^0.4.17",
@@ -93,9 +96,7 @@
     "wouter": "^3.3.5",
     "ws": "^8.18.0",
     "zod": "^3.25.76",
-    "zod-validation-error": "^3.5.4",
-    "@repo/ui": "workspace:*",
-    "@repo/score-engine": "workspace:*"
+    "zod-validation-error": "^3.5.4"
   },
   "devDependencies": {
     "@replit/vite-plugin-cartographer": "^0.4.4",
@@ -106,9 +107,9 @@
     "@types/express": "4.17.21",
     "@types/express-session": "^1.18.2",
     "@types/node": "^20.19.0",
-    "@types/pg": "^8.11.10",
     "@types/passport": "^1.0.17",
     "@types/passport-local": "^1.0.38",
+    "@types/pg": "^8.11.10",
     "@types/react": "^19.2.0",
     "@types/react-dom": "^19.2.0",
     "@types/ws": "^8.5.13",

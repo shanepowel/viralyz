@@ -22,6 +22,13 @@ import {
   countAnalysesForUser,
   PIPELINE_STAGES,
 } from "./analysis";
+import { getAnalysisJob, createAnalysisJob } from "./analysis-jobs";
+import {
+  enqueueLocalAnalysisJob,
+  inngestFunctions,
+} from "./inngest/functions";
+import { inngest, isInngestConfigured, ANALYSIS_EVENT } from "./inngest/client";
+import { serve } from "inngest/express";
 import { generateHooks, rewriteCaption, generateTrends, generateIdeas, repurposeForPlatforms } from "./ai-tools";
 import { lintCaption } from "./lint";
 import { extractBrandVoice, generateThumbnailIdeas, renderThumbnail } from "./ai-vision";
@@ -94,6 +101,15 @@ export async function registerRoutes(
   registerObjectStorageRoutes(app);
   registerAutopilotRoutes(app);
   registerIntelligenceRoutes(app);
+
+  // Inngest serve endpoint (cloud or `npx inngest-cli dev`)
+  app.use(
+    "/api/inngest",
+    serve({
+      client: inngest,
+      functions: inngestFunctions,
+    }),
+  );
   // Content Routes
   app.get("/api/content", async (req, res) => {
     try {
@@ -324,18 +340,82 @@ export async function registerRoutes(
     res.json({ stages: PIPELINE_STAGES });
   });
 
+  app.get("/api/analyze/jobs/:id", isAuthenticated, async (req, res) => {
+    try {
+      const userId = (req.user as any).claims?.sub || (req.user as any).id;
+      const job = getAnalysisJob(req.params.id);
+      if (!job || job.userId !== userId) {
+        return res.status(404).json({ error: "Job not found" });
+      }
+      res.json(job);
+    } catch (error) {
+      res.status(500).json({ error: "Failed to fetch job" });
+    }
+  });
+
   app.post("/api/analyze", isAuthenticated, async (req, res) => {
     try {
       const userId = (req.user as any).claims?.sub || (req.user as any).id;
-      const { title, description, platform, contentType, hasMedia, stream } = req.body;
+      const {
+        title,
+        description,
+        platform,
+        contentType,
+        hasMedia,
+        stream,
+        async: asyncMode,
+        fileUrl,
+      } = req.body;
 
-      if (!title && !description) {
-        return res.status(400).json({ error: "Please provide a title or description to analyze" });
+      if (!title && !description && !fileUrl) {
+        return res.status(400).json({
+          error: "Please provide a title, description, or uploaded file",
+        });
       }
 
       const historyCount = await countAnalysesForUser(userId);
+      const useAsync =
+        asyncMode === true || (!!fileUrl && stream !== true && asyncMode !== false);
 
-      // SSE stream of pipeline stages when client requests stream:true
+      // Async job path (Inngest or local worker) — best for media
+      if (useAsync && !stream) {
+        if (isInngestConfigured()) {
+          const job = createAnalysisJob(userId, {
+            title: title || "Untitled Content",
+            description: description || "",
+            platform: platform || "youtube",
+            contentType: contentType || "video",
+            fileUrl: fileUrl || null,
+            mode: "analyze",
+          });
+          await inngest.send({
+            name: ANALYSIS_EVENT,
+            data: {
+              jobId: job.id,
+              userId,
+              title: job.input.title,
+              description: job.input.description,
+              platform: job.input.platform,
+              contentType: job.input.contentType,
+              fileUrl: job.input.fileUrl,
+              mode: "analyze",
+            },
+          });
+          return res.status(202).json({ jobId: job.id, status: "queued" });
+        }
+
+        const job = await enqueueLocalAnalysisJob({
+          userId,
+          title: title || "Untitled Content",
+          description: description || "",
+          platform: platform || "youtube",
+          contentType: contentType || "video",
+          fileUrl: fileUrl || null,
+        });
+        return res.status(202).json({ jobId: job.id, status: "queued" });
+      }
+
+      // SSE stream of pipeline stages
       if (stream) {
         res.setHeader("Content-Type", "text/event-stream");
         res.setHeader("Cache-Control", "no-cache");
@@ -347,26 +427,47 @@ export async function registerRoutes(
         };
 
         try {
+          let analysisId = "";
           const result = await analyzeWithPipeline(
             {
-              title,
-              description,
-              platform,
-              contentType,
-              hasMedia: !!hasMedia,
+              title: title || "Untitled Content",
+              description: description || "",
+              platform: platform || "youtube",
+              contentType: contentType || "video",
+              hasMedia: !!(hasMedia || fileUrl),
               historyCount,
+              fileUrl: fileUrl || null,
             },
             (ev) => send("stage", ev),
+            async (scored, media) => {
+              const analysis = await saveAnalysis(
+                userId,
+                title || "Untitled Content",
+                description || "",
+                platform || "youtube",
+                contentType || "video",
+                scored,
+                {
+                  fileUrl: fileUrl || null,
+                  durationSeconds: media.durationSeconds,
+                },
+              );
+              analysisId = analysis.id;
+            },
           );
-          const analysis = await saveAnalysis(
-            userId,
-            title,
-            description,
-            platform,
-            contentType,
-            result,
-          );
-          send("complete", { id: analysis.id, ...result });
+          if (!analysisId) {
+            const analysis = await saveAnalysis(
+              userId,
+              title || "Untitled Content",
+              description || "",
+              platform || "youtube",
+              contentType || "video",
+              result,
+              { fileUrl: fileUrl || null },
+            );
+            analysisId = analysis.id;
+          }
+          send("complete", { id: analysisId, ...result });
           res.end();
         } catch (error) {
           console.error("Analysis stream error:", error);
@@ -376,26 +477,50 @@ export async function registerRoutes(
         return;
       }
 
-      const result = await analyzeWithPipeline({
-        title,
-        description,
-        platform,
-        contentType,
-        hasMedia: !!hasMedia,
-        historyCount,
-      });
-
-      const analysis = await saveAnalysis(
-        userId,
-        title,
-        description,
-        platform,
-        contentType,
-        result,
+      // Sync JSON (text-only / short)
+      let analysisId = "";
+      const result = await analyzeWithPipeline(
+        {
+          title: title || "Untitled Content",
+          description: description || "",
+          platform: platform || "youtube",
+          contentType: contentType || "video",
+          hasMedia: !!(hasMedia || fileUrl),
+          historyCount,
+          fileUrl: fileUrl || null,
+        },
+        undefined,
+        async (scored, media) => {
+          const analysis = await saveAnalysis(
+            userId,
+            title || "Untitled Content",
+            description || "",
+            platform || "youtube",
+            contentType || "video",
+            scored,
+            {
+              fileUrl: fileUrl || null,
+              durationSeconds: media.durationSeconds,
+            },
+          );
+          analysisId = analysis.id;
+        },
       );
+      if (!analysisId) {
+        const analysis = await saveAnalysis(
+          userId,
+          title || "Untitled Content",
+          description || "",
+          platform || "youtube",
+          contentType || "video",
+          result,
+          { fileUrl: fileUrl || null },
+        );
+        analysisId = analysis.id;
+      }
 
       res.json({
-        id: analysis.id,
+        id: analysisId,
         ...result,
       });
     } catch (error) {
@@ -407,12 +532,64 @@ export async function registerRoutes(
   app.post("/api/analyses/:id/reanalyze", isAuthenticated, async (req, res) => {
     try {
       const userId = (req.user as any).claims?.sub || (req.user as any).id;
-      const { title, description, platform, contentType, appliedFixIndexes } = req.body;
+      const {
+        title,
+        description,
+        platform,
+        contentType,
+        appliedFixIndexes,
+        fileUrl,
+        async: asyncMode,
+      } = req.body;
+
+      if (asyncMode !== false) {
+        if (isInngestConfigured()) {
+          const job = createAnalysisJob(userId, {
+            title: title || "Untitled",
+            description: description || "",
+            platform: platform || "youtube",
+            contentType: contentType || "video",
+            fileUrl: fileUrl || null,
+            mode: "reanalyze",
+            analysisId: req.params.id,
+            appliedFixIndexes,
+          });
+          await inngest.send({
+            name: ANALYSIS_EVENT,
+            data: {
+              jobId: job.id,
+              userId,
+              title: job.input.title,
+              description: job.input.description,
+              platform: job.input.platform,
+              contentType: job.input.contentType,
+              fileUrl: job.input.fileUrl,
+              mode: "reanalyze",
+              analysisId: req.params.id,
+              appliedFixIndexes,
+            },
+          });
+          return res.status(202).json({ jobId: job.id, status: "queued" });
+        }
+
+        const job = await enqueueLocalAnalysisJob({
+          userId,
+          title: title || "Untitled",
+          description: description || "",
+          platform: platform || "youtube",
+          contentType: contentType || "video",
+          fileUrl: fileUrl || null,
+          mode: "reanalyze",
+          analysisId: req.params.id,
+          appliedFixIndexes,
+        });
+        return res.status(202).json({ jobId: job.id, status: "queued" });
+      }
 
       const { analysis, result, diff } = await reanalyzeContent(
         req.params.id,
         userId,
-        { title, description, platform, contentType, appliedFixIndexes },
+        { title, description, platform, contentType, appliedFixIndexes, fileUrl },
       );
 
       res.json({

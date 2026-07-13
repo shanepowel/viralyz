@@ -13,13 +13,16 @@ declare module "http" {
   }
 }
 
-app.use(
-  express.json({
+app.use((req, res, next) => {
+  if (req.path.startsWith("/api/uploads/local")) {
+    return next();
+  }
+  return express.json({
     verify: (req, _res, buf) => {
       req.rawBody = buf;
     },
-  }),
-);
+  })(req, res, next);
+});
 
 app.use(express.urlencoded({ extended: false }));
 

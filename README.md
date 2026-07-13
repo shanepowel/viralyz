@@ -78,9 +78,9 @@ pnpm dev
 
 ## Spec roadmap
 
-Phase 1: Signal UI package, landing reskin, content-graph schema, app token alignment.  
-Phase 2 (this branch): Score Engine deep — platform profiles, pipeline stages (SSE), FixCard on analyze, retention curve, re-score diff + history, Analysis Reveal.  
-Later: Whisper/ffmpeg workers via Inngest, Creation Suite extensions, BioPage, Media Kit, Marketplace.
+Phase 1: Signal UI package, landing reskin, content-graph schema.  
+Phase 2: Score Engine — profiles, FixCard, reveal, retention, re-score.  
+Phase 2b (this branch): **Real media pipeline** — local/GCS upload → ffmpeg frames → Whisper transcribe → vision notes → score; Inngest (`/api/inngest`) or local async jobs with polling.
 
 ## License
 
