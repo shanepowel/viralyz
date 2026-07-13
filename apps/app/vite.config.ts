@@ -28,7 +28,20 @@ export default defineConfig({
       "@": path.resolve(import.meta.dirname, "client", "src"),
       "@shared": path.resolve(import.meta.dirname, "shared"),
       "@assets": path.resolve(import.meta.dirname, "attached_assets"),
+      "@repo/ui": path.resolve(import.meta.dirname, "../../packages/ui/src"),
+      "@repo/score-engine": path.resolve(
+        import.meta.dirname,
+        "../../packages/score-engine/src",
+      ),
     },
+  },
+  optimizeDeps: {
+    include: [
+      "@radix-ui/react-slot",
+      "class-variance-authority",
+      "clsx",
+      "tailwind-merge",
+    ],
   },
   css: {
     postcss: {
@@ -44,7 +57,8 @@ export default defineConfig({
     host: "0.0.0.0",
     allowedHosts: true,
     fs: {
-      strict: true,
+      strict: false,
+      allow: [path.resolve(import.meta.dirname, "../..")],
       deny: ["**/.*"],
     },
   },
