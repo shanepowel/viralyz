@@ -1,33 +1,46 @@
 import type { Metadata } from "next";
-import { Geist, Geist_Mono } from "next/font/google";
-import { APP_DESCRIPTION, APP_NAME } from "@repo/config";
+import { Inter, JetBrains_Mono, Space_Grotesk } from "next/font/google";
+import { APP_DESCRIPTION, APP_NAME, APP_TAGLINE } from "@repo/config";
 import "./globals.css";
 
-const geistSans = Geist({
+const inter = Inter({
   subsets: ["latin"],
-  variable: "--font-geist-sans",
+  variable: "--font-inter",
 });
 
-const geistMono = Geist_Mono({
+const spaceGrotesk = Space_Grotesk({
   subsets: ["latin"],
-  variable: "--font-geist-mono",
+  variable: "--font-space",
+  weight: ["500", "600", "700"],
+});
+
+const jetbrains = JetBrains_Mono({
+  subsets: ["latin"],
+  variable: "--font-jetbrains",
+  weight: ["400", "500"],
 });
 
 export const metadata: Metadata = {
   title: {
-    default: `${APP_NAME} — AI toolkit for short-form creators`,
+    default: `${APP_NAME} — ${APP_TAGLINE}`,
     template: `%s | ${APP_NAME}`,
   },
   description: APP_DESCRIPTION,
   keywords: [
-    "viral content",
-    "short-form video",
-    "Instagram",
-    "TikTok",
-    "YouTube Shorts",
-    "AI content tools",
+    "viral score",
     "creator tools",
+    "short-form video",
+    "TikTok",
+    "Instagram Reels",
+    "YouTube Shorts",
+    "media kit",
+    "content intelligence",
   ],
+  openGraph: {
+    title: `${APP_NAME} — ${APP_TAGLINE}`,
+    description: APP_DESCRIPTION,
+    type: "website",
+  },
 };
 
 export default function RootLayout({
@@ -36,8 +49,16 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" className="dark">
-      <body className={`${geistSans.variable} ${geistMono.variable} antialiased`}>
+    <html lang="en" data-theme="dark" className="dark">
+      <head>
+        <link
+          href="https://api.fontshare.com/v2/css?f[]=clash-display@500,600&display=swap"
+          rel="stylesheet"
+        />
+      </head>
+      <body
+        className={`${inter.variable} ${spaceGrotesk.variable} ${jetbrains.variable} antialiased`}
+      >
         {children}
       </body>
     </html>

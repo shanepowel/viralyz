@@ -1142,3 +1142,26 @@ export const intelSignalCorrelations = pgTable("intel_signal_correlations", {
   createdAt: timestamp("created_at").defaultNow().notNull(),
 });
 export type IntelSignalCorrelation = typeof intelSignalCorrelations.$inferSelect;
+
+// ─── Content graph (v2.0) — additive tables; source of truth also in packages/db ───
+export {
+  socialAccounts,
+  contentItems,
+  assets,
+  analyses,
+  performance,
+  audienceModels,
+  competitors as competitorsV2,
+  competitorPosts as competitorPostsV2,
+  trends,
+  dmFlows,
+  dmConversations,
+  biopages,
+  biopageEvents,
+  mediaKits,
+  brands,
+  campaigns,
+  campaignOffers,
+  deliverables,
+} from "./content-graph";
+
