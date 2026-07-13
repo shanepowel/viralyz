@@ -84,19 +84,31 @@ export async function setupDevAuth(app: Express): Promise<void> {
   app.use(getSessionMiddleware());
   app.use((req, _res, next) => {
     hydrateUser(req);
+    (req as any).isAuthenticated = () => Boolean(req.session.userId);
     next();
   });
 
   app.get("/api/login", async (req, res) => {
-    const user = await ensureDevUser();
-    req.session.userId = user.id;
-    hydrateUser(req);
-    res.redirect(process.env.APP_URL || "/");
+    try {
+      const user = await ensureDevUser();
+      req.session.userId = user.id;
+      hydrateUser(req);
+      res.redirect("/");
+    } catch (error) {
+      console.error("[auth] dev login failed:", error);
+      res.status(500).send(
+        "Dev login failed. Check DATABASE_URL and that the schema is pushed (npm run db:push).",
+      );
+    }
+  });
+
+  app.get("/api/callback", (_req, res) => {
+    res.redirect("/api/login");
   });
 
   app.get("/api/logout", (req, res) => {
     req.session.destroy(() => {
-      res.redirect(process.env.APP_URL || "/");
+      res.redirect("/");
     });
   });
 

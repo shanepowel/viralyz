@@ -10,10 +10,11 @@ interface ScoreRingProps {
   animate?: boolean;
 }
 
-export function scoreTone(score: number | null | undefined): "emerald" | "indigo" | "amber" | "rose" | "slate" {
+/** Signal score bands: emerald / lime / amber / red */
+export function scoreTone(score: number | null | undefined): "emerald" | "lime" | "amber" | "rose" | "slate" {
   if (score == null) return "slate";
   if (score >= 80) return "emerald";
-  if (score >= 60) return "indigo";
+  if (score >= 60) return "lime";
   if (score >= 40) return "amber";
   return "rose";
 }
@@ -54,11 +55,11 @@ export function ScoreRing({
   const offset = circumference - (displayScore / 100) * circumference;
 
   const stops: Record<string, [string, string]> = {
-    emerald: ["#34d399", "#22d3ee"],
-    indigo: ["#a78bfa", "#22d3ee"],
-    amber: ["#fbbf24", "#f472b6"],
-    rose: ["#fb7185", "#f97316"],
-    slate: ["#64748b", "#475569"],
+    emerald: ["#34D399", "#34D399"],
+    lime: ["#A3E635", "#A3E635"],
+    amber: ["#FBBF24", "#FBBF24"],
+    rose: ["#F87171", "#F87171"],
+    slate: ["#64647A", "#3A3A52"],
   };
   const [c1, c2] = stops[tone];
   const gradId = `ringGradient-${tone}`;
