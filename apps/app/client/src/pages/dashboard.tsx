@@ -1,93 +1,108 @@
 import { Link } from "wouter";
-import { motion } from "framer-motion";
 import { useQuery } from "@tanstack/react-query";
-import {
-  Bot, ArrowRight, Sparkles, Zap, Wand2, Lightbulb, Radar, Calendar,
-  Image as ImageIcon, Mic2, Bookmark, Repeat, CheckCircle2, Clock,
-  Linkedin, Plus, Pause, Play, ShieldAlert, ChevronRight, Activity,
-} from "lucide-react";
-import { Button } from "@/components/ui/button";
+import { ScoreRing } from "@repo/ui/score-ring";
+import { Panel } from "@repo/ui/panel";
+import { StatCard } from "@repo/ui/stat-card";
+import { StatusChip, type StatusChipTone } from "@repo/ui/status-chip";
 import { DashboardLayout } from "@/components/layout/DashboardLayout";
 import { useAuth } from "@/hooks/use-auth";
-import { PageHeader } from "@/components/ui/page-header";
-import { ScoreRing } from "@/components/ui/score-ring";
-import { EmptyState } from "@/components/ui/empty-state";
-import { cn } from "@/lib/utils";
-
-type Mission = {
-  id: string;
-  name: string;
-  status: string;
-  cadence: string;
-  postsPerWeek: number;
-  nextRunAt: string | null;
-};
 
 type MissionRun = {
   id: string;
-  missionId: string;
   status: string;
   finalText: string | null;
   predictedScore: number | null;
-  scheduledFor: string | null;
-  postedAt: string | null;
   actualImpressions: number | null;
   createdAt: string;
 };
 
 type AutopilotState = {
   paused: boolean;
-  linkedinConfigured: boolean;
-  missions: number;
-  activeMissions: number;
   awaitingApproval: number;
   recentRuns: MissionRun[];
 };
 
-type LinkedInStatus = {
-  configured: boolean;
-  connected: boolean;
-  account: { displayName: string | null } | null;
+type DemoRow = {
+  id: string;
+  title: string;
+  platform: string;
+  duration: string;
+  score: number;
+  status: StatusChipTone;
+  statusLabel: string;
+  predicted: string;
+  thumb: string;
+  href: string;
 };
 
-const manualTools = [
-  { icon: Zap, title: "Hook Lab", href: "/hook-lab" },
-  { icon: Wand2, title: "Caption Studio", href: "/caption-studio" },
-  { icon: Lightbulb, title: "Ideas", href: "/ideas" },
-  { icon: ImageIcon, title: "Thumbnails", href: "/thumbnails" },
-  { icon: Radar, title: "Trends", href: "/trends" },
-  { icon: Bookmark, title: "Swipe File", href: "/swipe-file" },
-  { icon: Repeat, title: "Repurpose", href: "/repurpose" },
-  { icon: Mic2, title: "Brand Voice", href: "/brand-voice" },
+/** Pattern-library demo rows when the account has no scored content yet. */
+const DEMO_ROWS: DemoRow[] = [
+  {
+    id: "demo-1",
+    title: "Kitchen hacks pt.3",
+    platform: "TikTok",
+    duration: "0:42",
+    score: 87,
+    status: "draft",
+    statusLabel: "Draft",
+    predicted: "210K predicted",
+    thumb: "linear-gradient(135deg,#F2994A,#EB5757)",
+    href: "/analyze",
+  },
+  {
+    id: "demo-2",
+    title: "5 minute pasta, honestly",
+    platform: "Reels",
+    duration: "0:38",
+    score: 91,
+    status: "tracking",
+    statusLabel: "Tracking",
+    predicted: "312K vs 260K predicted ▲",
+    thumb: "linear-gradient(135deg,#6C4CF1,#3D2A9E)",
+    href: "/content",
+  },
+  {
+    id: "demo-3",
+    title: "Q&A: your cooking fails",
+    platform: "TikTok",
+    duration: "1:04",
+    score: 72,
+    status: "scheduled",
+    statusLabel: "Scheduled",
+    predicted: "95K predicted",
+    thumb: "linear-gradient(135deg,#56CCF2,#2F80ED)",
+    href: "/calendar",
+  },
+  {
+    id: "demo-4",
+    title: "Behind the scenes, market run",
+    platform: "YouTube",
+    duration: "8:12",
+    score: 58,
+    status: "posted",
+    statusLabel: "Posted",
+    predicted: "23K vs 45K predicted ▼",
+    thumb: "linear-gradient(135deg,#27AE60,#145A32)",
+    href: "/analytics",
+  },
 ];
 
-const STATUS_LABEL: Record<string, { label: string; tone: string }> = {
-  awaiting_approval: { label: "Needs you", tone: "bg-amber-500/15 text-amber-300 border-amber-500/30" },
-  approved: { label: "Approved", tone: "bg-emerald-500/15 text-emerald-300 border-emerald-500/30" },
-  posting: { label: "Posting", tone: "bg-indigo-500/15 text-indigo-300 border-indigo-500/30" },
-  posted: { label: "Posted", tone: "bg-cyan-500/15 text-cyan-300 border-cyan-500/30" },
-  complete: { label: "Complete", tone: "bg-emerald-500/15 text-emerald-300 border-emerald-500/30" },
-  running: { label: "Drafting", tone: "bg-indigo-500/15 text-indigo-300 border-indigo-500/30" },
-  pending: { label: "Queued", tone: "bg-slate-500/15 text-slate-300 border-slate-500/30" },
-  failed: { label: "Failed", tone: "bg-rose-500/15 text-rose-300 border-rose-500/30" },
-};
+function formatTodaySub() {
+  const d = new Date();
+  const day = d.toLocaleDateString("en-GB", {
+    weekday: "long",
+    day: "numeric",
+    month: "long",
+  });
+  return `${day} · your audience peaks at 6pm today`;
+}
 
 export default function Dashboard() {
   const { user } = useAuth();
-
   const { data: autopilot } = useQuery<AutopilotState>({
     queryKey: ["/api/autopilot/state"],
     refetchInterval: 30_000,
   });
-  const { data: missions = [] } = useQuery<Mission[]>({
-    queryKey: ["/api/missions"],
-  });
-  const { data: linkedin } = useQuery<LinkedInStatus>({ queryKey: ["/api/linkedin/status"] });
-  const { data: intel } = useQuery<{ competitors: Array<{ id: string; name: string; latestDigest: { postsThisWeek: number; qualifiedEngagement: number } | null }> }>({
-    queryKey: ["/api/intelligence/competitors"],
-  });
-  const intelCompetitors = intel?.competitors ?? [];
-  const intelSignalCount = intelCompetitors.reduce((sum, c) => sum + (c.latestDigest?.postsThisWeek ?? 0), 0);
 
   const greeting = (() => {
     const h = new Date().getHours();
@@ -95,206 +110,287 @@ export default function Dashboard() {
     if (h < 18) return "Good afternoon";
     return "Good evening";
   })();
-  const name = user?.firstName || (user?.email?.split("@")[0]) || "creator";
-  const awaiting = autopilot?.recentRuns?.filter((r) => r.status === "awaiting_approval") || [];
-  const activeMissions = missions.filter((m) => m.status === "active");
+  const name =
+    user?.firstName || user?.email?.split("@")[0] || "creator";
+
+  const awaiting = autopilot?.recentRuns?.filter(
+    (r) => r.status === "awaiting_approval",
+  );
+  const liveRows: DemoRow[] =
+    awaiting && awaiting.length > 0
+      ? awaiting.slice(0, 4).map((r) => ({
+          id: r.id,
+          title: r.finalText?.slice(0, 48) || "Draft ready for review",
+          platform: "LinkedIn",
+          duration: "",
+          score: r.predictedScore ?? 0,
+          status: "draft" as const,
+          statusLabel: "Needs you",
+          predicted:
+            r.predictedScore != null
+              ? `Score ${r.predictedScore}`
+              : "Awaiting score",
+          thumb: "linear-gradient(135deg,#6C4CF1,#5638D6)",
+          href: "/autopilot",
+        }))
+      : DEMO_ROWS;
+
+  const monthScore = 76;
+  const accuracy = 82;
 
   return (
     <DashboardLayout>
-      <div className="max-w-6xl mx-auto p-6 space-y-6">
-        <PageHeader
-          eyebrow={`${greeting}, ${name}`}
-          title={
-            <span className="inline-flex items-center gap-3">
-              <Bot className="h-7 w-7 text-indigo-300" />
-              Mission Control
-            </span>
-          }
-          description="Here's what your agent is working on right now."
-          actions={
-            <Button asChild className="gap-2 bg-gradient-to-r from-indigo-500 to-fuchsia-500 hover:from-indigo-400 hover:to-fuchsia-400 text-white border-0 shadow-[0_0_24px_-8px_rgba(168,85,247,0.6)]" data-testid="button-new-mission-dash">
-              <Link href="/autopilot"><Plus className="h-4 w-4" /> New mission</Link>
-            </Button>
-          }
-        />
-
-        {autopilot?.paused && (
-          <div className="rounded-lg border border-rose-500/30 bg-rose-500/5 p-3 text-sm text-rose-200 flex items-center gap-2" data-testid="banner-paused">
-            <ShieldAlert className="h-4 w-4" /> Autopilot is paused.
-            <Link href="/autopilot" className="ml-auto underline hover:text-rose-100">Resume</Link>
+      <div className="pb-8 pt-6">
+        <div className="mb-7 flex flex-wrap items-start justify-between gap-4">
+          <div>
+            <h1 className="font-[family-name:var(--font-display)] text-2xl font-bold tracking-tight text-[var(--ink)]">
+              {greeting}, {name}
+            </h1>
+            <p className="mt-0.5 text-[13px] text-[var(--ink-3)]">
+              {formatTodaySub()}
+            </p>
           </div>
-        )}
-
-        {/* Top row: agent status + LinkedIn */}
-        <div className="grid md:grid-cols-3 gap-4">
-          <Link href="/autopilot" className="card-pop p-5 block hover:border-indigo-500/40 transition-all md:col-span-2" data-testid="card-agent-status">
-              <div className="flex items-center justify-between">
-                <div className="flex items-center gap-3">
-                  <div className={cn(
-                    "h-12 w-12 rounded-xl flex items-center justify-center shrink-0 shadow-[0_0_24px_-4px_rgba(168,85,247,0.5)]",
-                    autopilot?.paused
-                      ? "bg-slate-700"
-                      : "bg-gradient-to-br from-indigo-500 to-fuchsia-500",
-                  )}>
-                    <Bot className="h-6 w-6 text-white" />
-                  </div>
-                  <div>
-                    <div className="text-eyebrow text-slate-500">Your agent</div>
-                    <div className="text-h2 leading-tight">
-                      {autopilot?.paused
-                        ? "Paused"
-                        : (activeMissions.length > 0 ? `Running ${activeMissions.length} mission${activeMissions.length === 1 ? "" : "s"}` : "Standing by")}
-                    </div>
-                  </div>
-                </div>
-                <ChevronRight className="h-5 w-5 text-slate-500" />
-              </div>
-              <div className="mt-5 grid grid-cols-3 gap-3">
-                <div className="rounded-lg bg-white/[0.03] border border-white/[0.06] p-3 text-center">
-                  <div className="text-2xl font-bold text-amber-300">{autopilot?.awaitingApproval || 0}</div>
-                  <div className="text-[10px] uppercase tracking-wider text-slate-500 mt-1">Awaiting you</div>
-                </div>
-                <div className="rounded-lg bg-white/[0.03] border border-white/[0.06] p-3 text-center">
-                  <div className="text-2xl font-bold text-indigo-300">{autopilot?.activeMissions || 0}</div>
-                  <div className="text-[10px] uppercase tracking-wider text-slate-500 mt-1">Active missions</div>
-                </div>
-                <div className="rounded-lg bg-white/[0.03] border border-white/[0.06] p-3 text-center">
-                  <div className="text-2xl font-bold text-cyan-300">{autopilot?.recentRuns?.filter((r) => r.status === "posted" || r.status === "complete").length || 0}</div>
-                  <div className="text-[10px] uppercase tracking-wider text-slate-500 mt-1">Recently posted</div>
-                </div>
-              </div>
-          </Link>
-
-          <div className="card-base p-5" data-testid="card-linkedin">
-            <div className="flex items-center gap-3 mb-3">
-              <div className="h-10 w-10 rounded-lg bg-[#0077B5]/15 flex items-center justify-center">
-                <Linkedin className="h-5 w-5 text-[#0A85C7]" />
-              </div>
-              <div className="flex-1">
-                <div className="text-eyebrow text-slate-500">LinkedIn</div>
-                <div className="text-sm font-semibold">
-                  {linkedin?.connected ? "Connected" : linkedin?.configured ? "Not connected" : "Not configured"}
-                </div>
-              </div>
-            </div>
-            {linkedin?.connected ? (
-              <div className="text-xs text-slate-400 truncate">{linkedin.account?.displayName}</div>
-            ) : linkedin?.configured ? (
-              <Button asChild size="sm" className="w-full bg-[#0077B5] hover:bg-[#006399] text-white border-0">
-                <a href="/api/linkedin/connect">Connect</a>
-              </Button>
-            ) : (
-              <p className="text-xs text-slate-500">Ask the admin to set LinkedIn keys.</p>
-            )}
+          <div className="flex items-center gap-2.5">
+            <Link href="/settings">
+              <button
+                type="button"
+                className="rounded-full border-[1.5px] border-[var(--line-strong)] bg-[var(--card)] px-4 py-2 text-[13.5px] font-semibold text-[var(--ink)] transition-colors hover:border-[var(--ink)]"
+                data-testid="button-connect-platform"
+              >
+                Connect platform
+              </button>
+            </Link>
           </div>
         </div>
 
-        {/* Approval queue spotlight */}
-        {awaiting.length > 0 && (
-          <div className="space-y-3">
-            <div className="flex items-baseline justify-between">
-              <h2 className="text-h2 inline-flex items-center gap-2">
-                <Clock className="h-5 w-5 text-amber-400 animate-pulse" /> Waiting on you
-              </h2>
-              <Link href="/autopilot" className="text-sm text-indigo-300 hover:text-indigo-200">Open queue <ArrowRight className="inline h-3.5 w-3.5" /></Link>
-            </div>
-            <div className="space-y-2">
-              {awaiting.slice(0, 3).map((r) => {
-                const m = missions.find((mm) => mm.id === r.missionId);
-                return (
-                  <Link key={r.id} href="/autopilot" className="card-base p-4 hover:border-amber-500/30 transition-all flex items-start gap-4 cursor-pointer" data-testid={`approval-quick-${r.id}`}>
-                    <ScoreRing score={r.predictedScore || 0} size={48} />
-                    <div className="flex-1 min-w-0">
-                      <div className="flex items-center gap-2 text-xs text-slate-500 mb-1">
-                        <Linkedin className="h-3 w-3" />
-                        <span className="truncate">{m?.name || "Mission"}</span>
-                        <span>·</span>
-                        <span>{r.scheduledFor ? new Date(r.scheduledFor).toLocaleString() : "TBD"}</span>
-                      </div>
-                      <div className="text-sm text-slate-200 line-clamp-2">{r.finalText}</div>
-                    </div>
-                    <ArrowRight className="h-4 w-4 text-slate-500 mt-1.5 shrink-0" />
-                  </Link>
-                );
-              })}
-            </div>
-          </div>
-        )}
-
-        {/* Competitive Pulse mini-card */}
-        {intelCompetitors.length > 0 && (
-          <Link href="/intelligence" className="block">
-            <div className="card-base p-4 hover:border-[#E85D3B]/40 transition-all flex items-center gap-4 cursor-pointer" data-testid="card-intel-pulse">
-              <div className="h-10 w-10 rounded-lg bg-[#E85D3B]/15 flex items-center justify-center shrink-0">
-                <Activity className="h-5 w-5 text-[#E85D3B]" />
-              </div>
-              <div className="flex-1 min-w-0">
-                <div className="text-eyebrow text-slate-500">Competitive Pulse</div>
-                <div className="text-sm text-slate-200">
-                  <span className="font-semibold text-white">{intelSignalCount}</span> competitor posts in the latest digest across {intelCompetitors.length} tracked
-                </div>
-              </div>
-              <ArrowRight className="h-4 w-4 text-slate-500" />
-            </div>
-          </Link>
-        )}
-
-        {/* Empty state if no missions yet */}
-        {missions.length === 0 && (
-          <div className="card-pop p-8" data-testid="empty-state-no-missions">
-            <div className="grid md:grid-cols-[1fr_auto] gap-6 items-center">
-              <div>
-                <div className="text-eyebrow text-fuchsia-300 mb-2">Get started in 60 seconds</div>
-                <h3 className="text-h2 mb-2">Launch your first mission</h3>
-                <p className="text-slate-400 mb-4">Tell the agent your audience, niche, and goal. It'll draft the first post within minutes — you just approve.</p>
-                <Button asChild className="gap-2 bg-gradient-to-r from-indigo-500 to-fuchsia-500 text-white border-0">
-                  <Link href="/autopilot"><Bot className="h-4 w-4" /> Launch a mission</Link>
-                </Button>
-              </div>
-              <div className="hidden md:flex items-center justify-center">
-                <div className="h-32 w-32 rounded-2xl bg-gradient-to-br from-indigo-500/20 to-fuchsia-500/20 border border-white/10 flex items-center justify-center shadow-[0_0_60px_-12px_rgba(168,85,247,0.4)]">
-                  <Bot className="h-16 w-16 text-indigo-300" />
-                </div>
-              </div>
-            </div>
-          </div>
-        )}
-
-        {/* Recent runs */}
-        {autopilot && autopilot.recentRuns.length > 0 && (
-          <div className="space-y-2">
-            <h2 className="text-h2">Recent activity</h2>
-            <div className="card-base p-2">
-              {autopilot.recentRuns.slice(0, 6).map((r) => {
-                const s = STATUS_LABEL[r.status] || { label: r.status, tone: "bg-slate-500/15 text-slate-300 border-slate-500/30" };
-                return (
-                  <div key={r.id} className="flex items-center gap-3 px-3 py-2 rounded-lg hover:bg-white/[0.03] text-sm">
-                    <span className={cn("inline-flex items-center px-2 py-0.5 rounded-full text-[10px] font-medium border w-24 justify-center", s.tone)}>{s.label}</span>
-                    <span className="flex-1 truncate text-slate-300">{r.finalText?.slice(0, 80) || <span className="text-slate-500 italic">(drafting…)</span>}</span>
-                    {r.predictedScore != null && <span className="text-xs text-slate-400">{r.predictedScore}</span>}
-                    {r.actualImpressions != null && <span className="text-xs text-cyan-300">{r.actualImpressions.toLocaleString()} views</span>}
-                  </div>
-                );
-              })}
-            </div>
-          </div>
-        )}
-
-        {/* Manual mode */}
-        <div className="space-y-3">
-          <div className="flex items-baseline justify-between">
-            <div>
-              <h2 className="text-h2">Manual mode</h2>
-              <p className="text-sm text-slate-500">When you want to drive yourself.</p>
-            </div>
-          </div>
-          <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
-            {manualTools.map((t) => (
-              <Link key={t.href} href={t.href} className="card-base p-4 hover:border-indigo-500/30 transition-all flex flex-col items-start gap-2 cursor-pointer" data-testid={`tool-${t.title.toLowerCase().replace(/\s+/g, '-')}`}>
-                <t.icon className="h-5 w-5 text-indigo-300" />
-                <div className="text-sm font-medium">{t.title}</div>
+        {/* Exactly four above-fold signals: two stats + NBA (spans 2) */}
+        <div className="mb-7 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+          <StatCard
+            label="Your score this month"
+            value={monthScore}
+            delta={{ value: "8", direction: "up" }}
+            footnote="Average across 12 posts"
+            sparkline={[8, 11, 9, 14, 17, 22]}
+          />
+          <StatCard
+            label="Predictions right"
+            value={`${accuracy}%`}
+            delta={{ value: "5", direction: "up" }}
+            footnote={
+              <>
+                Based on your last 34 posts ·{" "}
+                <Link
+                  href="/analytics"
+                  className="text-[var(--violet-deep)] hover:underline"
+                >
+                  how we work this out
+                </Link>
+              </>
+            }
+          />
+          <StatCard
+            variant="nba"
+            label="Next best thing to do"
+            value=""
+            className="sm:col-span-2"
+          >
+            <div className="relative z-[1]">
+              <p className="mb-3 font-[family-name:var(--font-display)] text-[17px] font-semibold leading-snug text-white">
+                &ldquo;Kitchen hacks pt.3&rdquo; scored 87 but is not scheduled.
+                Tonight at 6pm is your best slot this week.
+              </p>
+              <Link href="/calendar">
+                <button
+                  type="button"
+                  className="rounded-full bg-white px-3.5 py-2 text-[12.5px] font-semibold text-[var(--violet-deep)] transition-transform hover:-translate-y-px"
+                  data-testid="button-nba-schedule"
+                >
+                  Schedule it for 6pm
+                </button>
               </Link>
-            ))}
+            </div>
+          </StatCard>
+        </div>
+
+        <div className="grid items-start gap-5 lg:grid-cols-[1.7fr_1fr]">
+          <Panel
+            title="Recent scores"
+            action={
+              <Link
+                href="/content"
+                className="text-[12.5px] font-semibold text-[var(--violet-deep)]"
+              >
+                View library
+              </Link>
+            }
+          >
+            <div className="overflow-x-auto">
+              <table className="w-full border-collapse">
+                <thead>
+                  <tr>
+                    {["Content", "Score", "Status", "Predicted vs real"].map(
+                      (h) => (
+                        <th
+                          key={h}
+                          className="border-b border-[var(--line)] px-5 py-2.5 text-left font-[family-name:var(--font-mono)] text-[9.5px] font-medium uppercase tracking-[0.09em] text-[var(--ink-3)]"
+                        >
+                          {h}
+                        </th>
+                      ),
+                    )}
+                  </tr>
+                </thead>
+                <tbody>
+                  {liveRows.map((row) => (
+                    <tr
+                      key={row.id}
+                      className="cursor-pointer transition-colors hover:bg-[var(--tint)]"
+                    >
+                      <td className="border-b border-[var(--line)] px-5 py-3">
+                        <Link href={row.href}>
+                          <div className="flex items-center gap-3">
+                            <div
+                              className="h-8 w-11 shrink-0 rounded-[7px]"
+                              style={{ background: row.thumb }}
+                            />
+                            <div>
+                              <div className="text-[13px] font-semibold text-[var(--ink)]">
+                                {row.title}
+                              </div>
+                              <div className="text-[11px] text-[var(--ink-3)]">
+                                {row.platform}
+                                {row.duration ? ` · ${row.duration}` : ""}
+                              </div>
+                            </div>
+                          </div>
+                        </Link>
+                      </td>
+                      <td className="border-b border-[var(--line)] px-5 py-3">
+                        <ScoreRing score={row.score} size={34} animate={false} />
+                      </td>
+                      <td className="border-b border-[var(--line)] px-5 py-3">
+                        <StatusChip tone={row.status}>
+                          {row.statusLabel}
+                        </StatusChip>
+                      </td>
+                      <td className="border-b border-[var(--line)] px-5 py-3 font-[family-name:var(--font-mono)] text-[12px] text-[var(--ink)]">
+                        {row.predicted.includes("vs") ? (
+                          <>
+                            {row.predicted.split(" vs ")[0]}{" "}
+                            <span className="text-[10.5px] text-[var(--ink-3)]">
+                              vs {row.predicted.split(" vs ")[1]}
+                            </span>
+                          </>
+                        ) : (
+                          <>
+                            {row.predicted.replace(" predicted", "")}{" "}
+                            <span className="text-[10.5px] text-[var(--ink-3)]">
+                              predicted
+                            </span>
+                          </>
+                        )}
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          </Panel>
+
+          <div className="flex flex-col gap-5">
+            <Panel
+              title="What works for you"
+              action={
+                <Link
+                  href="/analytics"
+                  className="text-[12.5px] font-semibold text-[var(--violet-deep)]"
+                >
+                  Analytics
+                </Link>
+              }
+            >
+              <div className="space-y-0 px-5 py-2">
+                {[
+                  {
+                    icon: "?",
+                    title: "Questions in your first line",
+                    body: "do 2.1 times better than statements.",
+                    note: "Based on your last 34 posts",
+                  },
+                  {
+                    icon: "◷",
+                    title: "Tuesday and Thursday, 6pm",
+                    body: "are your strongest slots.",
+                    note: "From your real results",
+                  },
+                  {
+                    icon: "▭",
+                    title: "40 to 60 second videos",
+                    body: "hold your viewers best.",
+                    note: "Longer ones lose people at the midpoint",
+                  },
+                ].map((row) => (
+                  <div
+                    key={row.title}
+                    className="flex gap-3 border-b border-[var(--line)] py-2.5 last:border-0"
+                  >
+                    <div className="flex h-[26px] w-[26px] shrink-0 items-center justify-center rounded-lg bg-[var(--score-90-soft)] text-[12px] font-bold text-[var(--score-90)]">
+                      {row.icon}
+                    </div>
+                    <div className="text-[13px] text-[var(--ink-2)]">
+                      <b className="text-[var(--ink)]">{row.title}</b> {row.body}
+                      <span className="mt-0.5 block text-[11px] text-[var(--ink-3)]">
+                        {row.note}
+                      </span>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </Panel>
+
+            <Panel
+              title="Your media kit"
+              action={
+                <Link
+                  href="/settings"
+                  className="text-[12.5px] font-semibold text-[var(--violet-deep)]"
+                >
+                  Open
+                </Link>
+              }
+            >
+              <div className="px-5 py-4">
+                {[
+                  ["Kit views this week", "142"],
+                  ["Package orders", "2 new"],
+                  ["Verified sync", "2h ago"],
+                ].map(([label, val]) => (
+                  <div
+                    key={label}
+                    className="flex justify-between py-1.5 text-[13px] text-[var(--ink-2)]"
+                  >
+                    <span>{label}</span>
+                    <b
+                      className={
+                        val === "2h ago"
+                          ? "font-[family-name:var(--font-mono)] text-[var(--score-90)]"
+                          : "font-[family-name:var(--font-mono)] text-[var(--ink)]"
+                      }
+                    >
+                      {val}
+                    </b>
+                  </div>
+                ))}
+                <Link href="/settings">
+                  <button
+                    type="button"
+                    className="mt-2.5 w-full rounded-full border-[1.5px] border-[var(--line-strong)] bg-[var(--card)] py-2 text-[13px] font-semibold hover:border-[var(--ink)]"
+                  >
+                    View orders
+                  </button>
+                </Link>
+              </div>
+            </Panel>
           </div>
         </div>
       </div>

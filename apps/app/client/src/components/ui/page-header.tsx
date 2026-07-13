@@ -21,9 +21,9 @@ export function PageHeader({ eyebrow, title, description, actions, children, cla
     >
       <div className="min-w-0 flex-1">
         {eyebrow && <div className="text-eyebrow mb-2" data-testid="text-page-eyebrow">{eyebrow}</div>}
-        <h1 className="text-h1 text-white" data-testid="text-page-title">{title}</h1>
+        <h1 className="text-h1 text-[var(--ink,#1B1826)]" data-testid="text-page-title">{title}</h1>
         {description && (
-          <p className="mt-2 text-slate-400 max-w-2xl" data-testid="text-page-description">{description}</p>
+          <p className="mt-2 text-[var(--ink-2,#5B5768)] max-w-2xl" data-testid="text-page-description">{description}</p>
         )}
         {children}
       </div>

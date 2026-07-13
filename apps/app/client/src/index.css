@@ -5,7 +5,7 @@
 
 @theme inline {
   --font-sans: 'Inter', system-ui, sans-serif;
-  --font-display: 'Clash Display', 'Space Grotesk', 'Outfit', sans-serif;
+  --font-display: 'Bricolage Grotesque', ui-sans-serif, sans-serif;
   --font-mono: 'JetBrains Mono', ui-monospace, monospace;
 
   --radius-sm: 8px;
@@ -56,58 +56,58 @@
 }
 
 :root {
-  /* Signal design system — dark-first (#0A0A0F / #7C5CFF) */
-  --bg-base: #0a0a0f;
-  --bg-surface: #12121a;
-  --bg-elevated: #1a1a26;
-  --border-subtle: #26263a;
-  --text-primary: #f4f4f8;
-  --text-secondary: #a0a0b8;
-  --text-tertiary: #64647a;
-  --signal-accent: #7c5cff;
-  --score-90: #34d399;
-  --score-70: #a3e635;
-  --score-50: #fbbf24;
-  --score-30: #f87171;
+  /* Signal warm paper — matches marketing */
+  --bg-base: #fafaf7;
+  --bg-surface: #ffffff;
+  --bg-elevated: #ffffff;
+  --border-subtle: #e7e4dd;
+  --text-primary: #1b1826;
+  --text-secondary: #5b5768;
+  --text-tertiary: #928fa0;
+  --signal-accent: #6c4cf1;
+  --score-90: #0fa968;
+  --score-70: #7ca426;
+  --score-50: #d9950b;
+  --score-30: #de4e4e;
 
-  --background: 240 20% 5%; /* #0A0A0F */
-  --foreground: 240 10% 96%; /* #F4F4F8 */
+  --background: 60 20% 97%; /* #FAFAF7 */
+  --foreground: 255 20% 12%; /* #1B1826 */
 
-  --card: 240 16% 9%; /* #12121A */
-  --card-foreground: 240 10% 96%;
+  --card: 0 0% 100%;
+  --card-foreground: 255 20% 12%;
 
-  --popover: 240 16% 12%; /* #1A1A26 */
-  --popover-foreground: 240 10% 96%;
+  --popover: 0 0% 100%;
+  --popover-foreground: 255 20% 12%;
 
-  --primary: 252 100% 68%; /* #7C5CFF */
+  --primary: 251 85% 62%; /* #6C4CF1 */
   --primary-foreground: 0 0% 100%;
 
-  --secondary: 240 16% 12%;
-  --secondary-foreground: 240 10% 96%;
+  --secondary: 40 14% 94%; /* #F1EFEA */
+  --secondary-foreground: 255 20% 12%;
 
-  --muted: 240 14% 14%;
-  --muted-foreground: 240 12% 67%; /* #A0A0B8 */
+  --muted: 40 14% 94%;
+  --muted-foreground: 255 8% 60%;
 
-  --accent: 252 100% 68%;
+  --accent: 251 85% 62%;
   --accent-foreground: 0 0% 100%;
 
-  --destructive: 0 84% 71%;
-  --destructive-foreground: 210 40% 98%;
+  --destructive: 0 68% 59%;
+  --destructive-foreground: 0 0% 100%;
 
-  --border: 240 20% 19%; /* #26263A */
-  --input: 240 20% 19%;
-  --ring: 252 100% 68%;
+  --border: 40 18% 89%; /* #E7E4DD */
+  --input: 40 18% 89%;
+  --ring: 251 85% 62%;
 
   --radius: 0.75rem;
 
-  --sidebar: 240 20% 5%;
-  --sidebar-foreground: 240 10% 96%;
-  --sidebar-primary: 252 100% 68%;
+  --sidebar: 0 0% 100%;
+  --sidebar-foreground: 255 20% 12%;
+  --sidebar-primary: 251 85% 62%;
   --sidebar-primary-foreground: 0 0% 100%;
-  --sidebar-accent: 240 16% 12%;
-  --sidebar-accent-foreground: 240 10% 96%;
-  --sidebar-border: 240 20% 19%;
-  --sidebar-ring: 252 100% 68%;
+  --sidebar-accent: 40 14% 94%;
+  --sidebar-accent-foreground: 255 20% 12%;
+  --sidebar-border: 40 18% 89%;
+  --sidebar-ring: 251 85% 62%;
 }
 
 @layer base {
@@ -115,7 +115,7 @@
     @apply border-border;
   }
   html {
-    @apply [color-scheme:dark];
+    @apply [color-scheme:light];
   }
   body {
     @apply font-sans antialiased bg-background text-foreground;
@@ -125,7 +125,8 @@
     @apply font-display tracking-tight;
   }
   ::selection {
-    @apply bg-primary/40 text-white;
+    background: var(--violet-soft, #efebff);
+    color: var(--violet-deep, #5638d6);
   }
   /* Refined scrollbars */
   ::-webkit-scrollbar {
@@ -182,13 +183,12 @@
     box-shadow: 0 0 0 1px rgba(167, 139, 250, 0.15), 0 20px 60px -20px rgba(124, 58, 237, 0.35);
   }
 
-  /* Aurora mesh background — Signal violet undertone */
+  /* Paper field background */
   .aurora-bg {
-    background-color: #0a0a0f;
+    background-color: #fafaf7;
     background-image:
-      radial-gradient(ellipse 80% 60% at 12% 0%, rgba(124, 92, 255, 0.18), transparent 60%),
-      radial-gradient(ellipse 70% 60% at 90% 10%, rgba(52, 211, 153, 0.06), transparent 60%),
-      radial-gradient(ellipse 70% 60% at 50% 110%, rgba(124, 92, 255, 0.08), transparent 60%);
+      radial-gradient(ellipse 80% 50% at 10% 0%, rgba(108, 76, 241, 0.06), transparent 55%),
+      radial-gradient(ellipse 60% 40% at 90% 5%, rgba(15, 169, 104, 0.04), transparent 50%);
   }
 
   /* Faint dot grid for headers / hero panels */
@@ -277,19 +277,19 @@
 .text-eyebrow { font-size: 0.6875rem; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; color: hsl(var(--muted-foreground)); }
 .text-meta { font-size: 0.75rem; color: hsl(var(--muted-foreground)); }
 
-/* Cards */
-.card-base { @apply rounded-2xl bg-white/[0.025] border border-white/[0.06]; }
+/* Cards — warm paper */
+.card-base { @apply rounded-[14px] bg-white border border-[var(--line,#E7E4DD)] shadow-[var(--shadow-card)]; }
 .card-hover { transition: border-color var(--motion-base) var(--motion-spring), background-color var(--motion-base) var(--motion-spring), transform var(--motion-base) var(--motion-spring); }
-.card-hover:hover { @apply border-white/[0.12] bg-white/[0.045]; transform: translateY(-1px); }
-.card-pop { box-shadow: var(--shadow-pop); }
+.card-hover:hover { @apply border-[var(--line-strong,#D6D2C8)] bg-[var(--tint,#F1EFEA)]; transform: translateY(-1px); }
+.card-pop { box-shadow: var(--shadow-card); }
 
-/* Score color tokens — Signal semantic scale */
-.score-bg-emerald { background: rgba(52,211,153,0.14);  color: rgb(110 231 183); }
-.score-bg-lime    { background: rgba(163,230,53,0.14);  color: rgb(190 242 100); }
-.score-bg-indigo  { background: rgba(163,230,53,0.14);  color: rgb(190 242 100); } /* legacy alias → lime */
-.score-bg-amber   { background: rgba(251,191,36,0.14);  color: rgb(252 211 77); }
-.score-bg-rose    { background: rgba(248,113,113,0.14); color: rgb(252 165 165); }
-.score-bg-slate   { background: rgba(100,100,122,0.14); color: rgb(160 160 184); }
+/* Score color tokens — paper semantic scale */
+.score-bg-emerald { background: var(--score-90-soft, #E3F6ED);  color: var(--score-90, #0FA968); }
+.score-bg-lime    { background: var(--score-70-soft, #F2F8E2);  color: var(--score-70, #7CA426); }
+.score-bg-indigo  { background: var(--score-70-soft, #F2F8E2);  color: var(--score-70, #7CA426); }
+.score-bg-amber   { background: var(--score-50-soft, #FCF3E1);  color: var(--score-50, #D9950B); }
+.score-bg-rose    { background: var(--score-30-soft, #FBEAEA); color: var(--score-30, #DE4E4E); }
+.score-bg-slate   { background: var(--tint, #F1EFEA); color: var(--ink-3, #928FA0); }
 
 /* Subtle separators */
 .divider-soft { @apply border-t border-white/[0.06]; }

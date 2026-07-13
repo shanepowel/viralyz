@@ -1,109 +1,125 @@
 import { useEffect, useState } from "react";
 import { Link, useLocation } from "wouter";
 import {
-  Home, Sparkles, FolderOpen, BarChart3, Users, Settings,
-  LogOut, CreditCard, Plus, MessageSquare,
-  Wand2, Radar, Lightbulb, Zap, Calendar, Mic2, Image as ImageIcon, Clock,
-  Search, User as UserIcon, Bookmark, Repeat, Bot, Activity,
+  Home,
+  FolderOpen,
+  BarChart3,
+  Settings,
+  LogOut,
+  CreditCard,
+  MessageSquare,
+  Zap,
+  Radar,
+  Calendar,
+  Image as ImageIcon,
+  Search,
+  User as UserIcon,
+  Activity,
+  Sparkles,
+  PenLine,
+  LayoutTemplate,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { useAuth } from "@/hooks/use-auth";
-import { Button } from "@/components/ui/button";
 import {
-  DropdownMenu, DropdownMenuContent, DropdownMenuItem,
-  DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger,
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { CommandPalette } from "@/components/CommandPalette";
 import { NotificationBell } from "@/components/NotificationBell";
 
-function ViralyzMark({ size = 32 }: { size?: number }) {
+function LogoMark() {
   return (
-    <span className="inline-flex items-center gap-2">
+    <span className="inline-flex items-center gap-2.5 font-[family-name:var(--font-display)] text-[17px] font-bold tracking-tight text-[var(--ink)]">
       <span
-        className="rounded-lg bg-[#E85D3B] flex items-center justify-center shadow-[0_0_18px_-6px_rgba(232,93,59,0.65)]"
-        style={{ width: size, height: size }}
-      >
-        <span className="bg-white rounded-sm" style={{ width: size * 0.36, height: size * 0.36 }} />
-      </span>
-      <span className="font-semibold text-lg tracking-tight text-white">Viralyz</span>
+        className="inline-block h-5 w-5 rounded-full border-[3px] border-[var(--violet)] border-t-[var(--score-90)] -rotate-45"
+        aria-hidden
+      />
+      Viralyz
     </span>
   );
 }
 
-type NavItem = { icon: any; label: string; href: string; badge?: string };
+type NavItem = {
+  icon: React.ComponentType<{ className?: string }>;
+  label: string;
+  href: string;
+  badge?: string;
+};
 type NavSection = { title: string | null; items: NavItem[] };
 
+/** Journey map: Create → Grow → Earn (reference: docs/design/APP_SKIN.md) */
 const sidebarSections: NavSection[] = [
   {
     title: null,
     items: [
-      { icon: Home, label: "Mission Control", href: "/" },
-      { icon: Bot, label: "Autopilot", href: "/autopilot", badge: "NEW" },
+      { icon: Home, label: "Home", href: "/" },
+      { icon: FolderOpen, label: "Library", href: "/content", badge: undefined },
     ],
   },
   {
-    title: "Competitive Intelligence",
+    title: "Create",
     items: [
-      { icon: Activity, label: "Pulse", href: "/intelligence", badge: "NEW" },
-    ],
-  },
-  {
-    title: "Manual mode",
-    items: [
-      { icon: Sparkles, label: "Analyze", href: "/analyze" },
       { icon: Zap, label: "Hook Lab", href: "/hook-lab" },
-      { icon: Wand2, label: "Caption Studio", href: "/caption-studio" },
-      { icon: Lightbulb, label: "Idea Generator", href: "/ideas" },
+      { icon: PenLine, label: "Script Doctor", href: "/caption-studio" },
       { icon: ImageIcon, label: "Thumbnails", href: "/thumbnails" },
-      { icon: Radar, label: "Trend Radar", href: "/trends" },
-      { icon: Bookmark, label: "Swipe File", href: "/swipe-file" },
-      { icon: Repeat, label: "Repurpose", href: "/repurpose" },
+      { icon: MessageSquare, label: "Captions", href: "/caption-studio" },
     ],
   },
   {
-    title: "Plan & measure",
+    title: "Grow",
     items: [
       { icon: Calendar, label: "Calendar", href: "/calendar" },
-      { icon: Clock, label: "Best Time", href: "/insights" },
-      { icon: FolderOpen, label: "My Content", href: "/content" },
-      { icon: BarChart3, label: "Analytics", href: "/analytics" },
-      { icon: Mic2, label: "Brand Voice", href: "/brand-voice" },
+      { icon: Radar, label: "Trends", href: "/trends" },
+      { icon: Activity, label: "Competitors", href: "/competitors" },
     ],
   },
   {
-    title: "Community",
+    title: "Earn",
     items: [
-      { icon: Users, label: "Community", href: "/community" },
-      { icon: MessageSquare, label: "Messages", href: "/messages" },
-      { icon: Settings, label: "Settings", href: "/settings" },
+      { icon: LayoutTemplate, label: "Media Kit", href: "/settings" },
+      { icon: MessageSquare, label: "Engage", href: "/messages" },
+      { icon: BarChart3, label: "Analytics", href: "/analytics" },
     ],
   },
 ];
 
 const mobileNavItems = [
   { icon: Home, label: "Home", href: "/" },
-  { icon: Sparkles, label: "Analyze", href: "/analyze" },
-  { icon: Lightbulb, label: "Ideas", href: "/ideas" },
+  { icon: Sparkles, label: "Score", href: "/analyze" },
+  { icon: FolderOpen, label: "Library", href: "/content" },
   { icon: Calendar, label: "Plan", href: "/calendar" },
-  { icon: Radar, label: "Trends", href: "/trends" },
+  { icon: BarChart3, label: "Earn", href: "/analytics" },
 ];
 
 interface DashboardLayoutProps {
   children: React.ReactNode;
 }
 
-const PLAN_LABEL: Record<string, string> = { free: "Free", pro: "Pro", team: "Team" };
-const PLAN_TONE: Record<string, string> = {
-  free: "bg-slate-500/15 text-slate-300 border-slate-400/20",
-  pro: "bg-indigo-500/15 text-indigo-200 border-indigo-400/30",
-  team: "bg-amber-500/15 text-amber-200 border-amber-400/30",
+const PLAN_LABEL: Record<string, string> = {
+  free: "Free",
+  pro: "Creator",
+  team: "Team",
+  creator: "Creator",
 };
 
 export function DashboardLayout({ children }: DashboardLayoutProps) {
   const [location] = useLocation();
   const { user, logout } = useAuth();
   const [paletteOpen, setPaletteOpen] = useState(false);
-  const isMac = typeof navigator !== "undefined" && /Mac|iPhone|iPad/.test(navigator.platform);
+  const isMac =
+    typeof navigator !== "undefined" &&
+    /Mac|iPhone|iPad/.test(navigator.platform);
+
+  useEffect(() => {
+    document.documentElement.setAttribute("data-theme", "paper");
+    document.documentElement.classList.remove("dark");
+    document.documentElement.style.colorScheme = "light";
+  }, []);
 
   useEffect(() => {
     const onKey = (e: KeyboardEvent) => {
@@ -119,100 +135,135 @@ export function DashboardLayout({ children }: DashboardLayoutProps) {
   const credits = user?.creditsRemaining ?? 0;
   const plan = (user?.plan ?? "free") as string;
   const planLabel = PLAN_LABEL[plan] ?? "Free";
-  const planTone = PLAN_TONE[plan] ?? PLAN_TONE.free;
-  const initials = (user?.firstName?.[0] ?? user?.email?.[0] ?? "U").toUpperCase();
+  const first = user?.firstName || user?.email?.split("@")[0] || "Creator";
+  const initials = (
+    user?.firstName?.[0] ??
+    user?.email?.[0] ??
+    "U"
+  ).toUpperCase();
+  const sparkHeights = [5, 7, 6, 9, 11, 14];
 
   const profileMenu = (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
         <button
-          className="h-9 w-9 rounded-full overflow-hidden border border-white/10 bg-white/[0.04] hover:border-white/20 transition-colors flex items-center justify-center"
+          className="flex h-9 w-9 items-center justify-center overflow-hidden rounded-full border border-[var(--line)] bg-[var(--tint)] transition-colors hover:border-[var(--line-strong)]"
           aria-label="Profile menu"
           data-testid="button-profile-menu"
         >
           {user?.profileImageUrl ? (
-            <img src={user.profileImageUrl} alt="" className="w-full h-full object-cover" />
+            <img
+              src={user.profileImageUrl}
+              alt=""
+              className="h-full w-full object-cover"
+            />
           ) : (
-            <span className="text-sm font-semibold text-indigo-300">{initials}</span>
+            <span className="font-[family-name:var(--font-display)] text-sm font-bold text-[var(--violet-deep)]">
+              {initials}
+            </span>
           )}
         </button>
       </DropdownMenuTrigger>
-      <DropdownMenuContent align="end" className="w-56 border-white/10 bg-slate-950">
+      <DropdownMenuContent
+        align="end"
+        className="w-56 border-[var(--line)] bg-[var(--card)] text-[var(--ink)]"
+      >
         <DropdownMenuLabel className="flex flex-col">
-          <span className="font-medium text-sm truncate">{user?.firstName || user?.email || "User"}</span>
-          {user?.email && <span className="text-xs text-slate-500 truncate font-normal">{user.email}</span>}
+          <span className="truncate text-sm font-medium">{first}</span>
+          {user?.email && (
+            <span className="truncate text-xs font-normal text-[var(--ink-3)]">
+              {user.email}
+            </span>
+          )}
         </DropdownMenuLabel>
-        <DropdownMenuSeparator className="bg-white/[0.06]" />
+        <DropdownMenuSeparator className="bg-[var(--line)]" />
         <Link href={user?.id ? `/profile/${user.id}` : "/settings"}>
           <DropdownMenuItem className="cursor-pointer" data-testid="menu-profile">
-            <UserIcon className="h-4 w-4 mr-2" /> Profile
+            <UserIcon className="mr-2 h-4 w-4" /> Profile
           </DropdownMenuItem>
         </Link>
         <Link href="/settings">
           <DropdownMenuItem className="cursor-pointer" data-testid="menu-settings">
-            <Settings className="h-4 w-4 mr-2" /> Settings
+            <Settings className="mr-2 h-4 w-4" /> Settings
           </DropdownMenuItem>
         </Link>
         <Link href="/settings">
           <DropdownMenuItem className="cursor-pointer" data-testid="menu-billing">
-            <CreditCard className="h-4 w-4 mr-2" /> Plans &amp; billing
+            <CreditCard className="mr-2 h-4 w-4" /> Plans &amp; billing
           </DropdownMenuItem>
         </Link>
-        <DropdownMenuSeparator className="bg-white/[0.06]" />
+        <DropdownMenuSeparator className="bg-[var(--line)]" />
         <DropdownMenuItem
-          className="cursor-pointer text-rose-300 focus:text-rose-200"
+          className="cursor-pointer text-[var(--score-30)] focus:text-[var(--score-30)]"
           onClick={() => logout()}
           data-testid="menu-logout"
         >
-          <LogOut className="h-4 w-4 mr-2" /> Log out
+          <LogOut className="mr-2 h-4 w-4" /> Log out
         </DropdownMenuItem>
       </DropdownMenuContent>
     </DropdownMenu>
   );
 
   return (
-    <div className="min-h-screen bg-background text-white flex aurora-bg">
+    <div
+      className="flex min-h-screen bg-[var(--paper)] text-[var(--ink)]"
+      data-theme="paper"
+    >
       <CommandPalette open={paletteOpen} onOpenChange={setPaletteOpen} />
 
-      <aside className="hidden lg:flex w-60 flex-col fixed inset-y-0 left-0 bg-black/30 backdrop-blur-md border-r border-white/[0.06] z-30">
-        <div className="px-5 py-5">
-          <Link href="/">
-            <div className="inline-flex items-center cursor-pointer" data-testid="link-logo">
-              <ViralyzMark size={32} />
-            </div>
-          </Link>
-        </div>
+      <aside className="fixed inset-y-0 left-0 z-30 hidden w-[232px] flex-col border-r border-[var(--line)] bg-[var(--card)] px-3.5 py-5 lg:flex">
+        <Link href="/">
+          <div className="mb-4 cursor-pointer px-2.5" data-testid="link-logo">
+            <LogoMark />
+          </div>
+        </Link>
 
-        <nav className="flex-1 px-3 space-y-3 overflow-y-auto pb-2">
+        <Link href="/analyze">
+          <button
+            type="button"
+            className="mb-4 flex w-full items-center justify-center gap-2 rounded-full bg-[var(--violet)] px-4 py-2.5 text-[13.5px] font-semibold text-white shadow-[var(--shadow-card)] transition-all hover:-translate-y-px hover:bg-[var(--violet-deep)] hover:shadow-[var(--shadow-modal)]"
+            data-testid="button-score-content"
+          >
+            <Sparkles className="h-4 w-4" />
+            Score content
+          </button>
+        </Link>
+
+        <nav className="flex-1 space-y-0.5 overflow-y-auto pb-2">
           {sidebarSections.map((section, sIdx) => (
             <div key={sIdx} className="space-y-0.5">
               {section.title && (
-                <div className="px-3 pt-2 pb-1 text-[10px] font-semibold uppercase tracking-[0.12em] text-slate-500">
+                <div className="px-2.5 pb-1.5 pt-3.5 font-[family-name:var(--font-mono)] text-[9.5px] uppercase tracking-[0.1em] text-[var(--ink-3)]">
                   {section.title}
                 </div>
               )}
               {section.items.map((item) => {
-                const isActive = location === item.href ||
+                const isActive =
+                  location === item.href ||
                   (item.href !== "/" && location.startsWith(item.href));
                 return (
-                  <Link key={item.href} href={item.href}>
+                  <Link key={`${item.href}-${item.label}`} href={item.href}>
                     <div
                       className={cn(
-                        "flex items-center gap-3 px-3 py-2 rounded-lg text-sm font-medium cursor-pointer transition-colors duration-150",
+                        "flex cursor-pointer items-center gap-2.5 rounded-[var(--r-sm)] border-l-[2.5px] border-transparent px-2.5 py-2 text-[13.5px] font-medium transition-colors",
                         isActive
-                          ? "bg-white/[0.06] text-white"
-                          : "text-slate-400 hover:text-white hover:bg-white/[0.03]"
+                          ? "border-l-[var(--violet)] bg-[var(--violet-soft)] font-semibold text-[var(--violet-deep)]"
+                          : "text-[var(--ink-2)] hover:bg-[var(--tint)] hover:text-[var(--ink)]",
                       )}
-                      data-testid={`nav-${item.label.toLowerCase().replace(/\s+/g, '-')}`}
+                      data-testid={`nav-${item.label.toLowerCase().replace(/\s+/g, "-")}`}
                     >
-                      <item.icon className={cn("h-[18px] w-[18px]", isActive && "text-indigo-300")} />
+                      <item.icon
+                        className={cn(
+                          "h-[17px] w-[17px] shrink-0 opacity-75",
+                          isActive && "opacity-100",
+                        )}
+                      />
                       <span className="flex-1">{item.label}</span>
                       {item.badge && (
-                        <span className="px-1.5 py-0.5 text-[9px] font-bold uppercase tracking-wider rounded bg-gradient-to-r from-fuchsia-500 to-indigo-500 text-white shadow-[0_0_12px_rgba(168,85,247,0.4)]">
+                        <span className="rounded-full bg-[var(--tint)] px-1.5 py-0.5 font-[family-name:var(--font-mono)] text-[10px] text-[var(--ink-3)]">
                           {item.badge}
                         </span>
                       )}
-                      {isActive && !item.badge && <span className="h-1.5 w-1.5 rounded-full bg-indigo-400" />}
                     </div>
                   </Link>
                 );
@@ -221,120 +272,114 @@ export function DashboardLayout({ children }: DashboardLayoutProps) {
           ))}
         </nav>
 
-        <div className="p-3 border-t border-white/[0.06]">
-          <Link href="/settings">
-            <div className="card-base card-hover p-3 cursor-pointer" data-testid="card-credits-sidebar">
-              <div className="flex items-center justify-between mb-1.5">
-                <span className="text-xs text-slate-400">Credits</span>
-                <span className="text-xs font-semibold text-indigo-300 tabular-nums">{credits} left</span>
+        <div className="mt-auto border-t border-[var(--line)] px-2.5 pt-3.5">
+          <div className="flex items-center gap-2.5">
+            <div className="flex h-[34px] w-[34px] shrink-0 items-center justify-center rounded-full bg-gradient-to-br from-[#F2994A] to-[#EB5757] font-[family-name:var(--font-display)] text-[13px] font-bold text-white">
+              {initials}
+            </div>
+            <div className="min-w-0 flex-1">
+              <div className="truncate text-[13px] font-semibold leading-tight">
+                {first}
               </div>
-              <div className="w-full h-1.5 bg-white/5 rounded-full overflow-hidden">
-                <div
-                  className="h-full bg-gradient-to-r from-indigo-400 to-purple-400 transition-all duration-500"
-                  style={{ width: `${Math.min(100, credits * 10)}%` }}
-                />
-              </div>
-              <div className="mt-2 flex items-center text-[11px] text-slate-400">
-                <CreditCard className="h-3 w-3 mr-1" />
-                {plan === "pro" ? "Pro plan" : plan === "team" ? "Team plan" : "Upgrade plan"}
+              <div
+                className="mt-0.5 flex h-3.5 items-end gap-0.5"
+                aria-hidden
+                title="Your momentum"
+              >
+                {sparkHeights.map((h, i) => (
+                  <i
+                    key={i}
+                    className={cn(
+                      "w-1 rounded-sm",
+                      i >= 3 ? "bg-[var(--score-90)]" : "bg-[var(--line-strong)]",
+                    )}
+                    style={{ height: `${h}px` }}
+                  />
+                ))}
               </div>
             </div>
-          </Link>
+            <Link href="/settings">
+              <Settings className="h-[15px] w-[15px] shrink-0 text-[var(--ink-3)] hover:text-[var(--ink)]" />
+            </Link>
+          </div>
+          <div className="px-0 pt-2.5 text-[10.5px] text-[var(--ink-3)]">
+            A Digiteq Holdings company
+          </div>
         </div>
       </aside>
 
-      <div className="flex-1 lg:ml-60 min-w-0">
-        {/* Top bar (desktop) */}
-        <header className="hidden lg:flex sticky top-0 z-20 h-14 items-center gap-3 px-6 border-b border-white/[0.06] bg-background/70 backdrop-blur-xl">
+      <div className="min-w-0 flex-1 lg:ml-[232px]">
+        <header className="sticky top-0 z-20 hidden items-center gap-3 border-b border-[var(--line)] bg-[color-mix(in_srgb,var(--paper)_92%,transparent)] px-9 py-3.5 backdrop-blur-xl lg:flex">
           <button
             onClick={() => setPaletteOpen(true)}
-            className="flex-1 max-w-md flex items-center gap-3 px-3 py-2 rounded-lg text-left bg-white/[0.03] border border-white/[0.06] hover:border-white/[0.12] transition-colors text-slate-400 hover:text-slate-200"
+            className="flex max-w-md flex-1 items-center gap-3 rounded-[var(--r-sm)] border border-[var(--line)] bg-[var(--card)] px-3 py-2 text-left text-[var(--ink-3)] transition-colors hover:border-[var(--line-strong)] hover:text-[var(--ink-2)]"
             data-testid="button-search"
           >
             <Search className="h-4 w-4" />
-            <span className="text-sm flex-1">Search anything…</span>
-            <span className="kbd-pill">{isMac ? "⌘" : "Ctrl"}</span>
-            <span className="kbd-pill">K</span>
+            <span className="flex-1 text-sm">Search anything…</span>
+            <span className="rounded bg-[var(--tint)] px-1.5 py-0.5 font-[family-name:var(--font-mono)] text-[10px]">
+              {isMac ? "⌘" : "Ctrl"}K
+            </span>
           </button>
           <div className="flex-1" />
-          <Link href="/settings">
-            <div
-              className="hidden xl:flex items-center gap-2 px-3 h-9 rounded-full bg-white/[0.04] border border-white/[0.08] hover:border-white/[0.12] cursor-pointer transition-colors"
-              data-testid="chip-credits"
-              title="Credits remaining"
-            >
-              <Sparkles className="h-3.5 w-3.5 text-indigo-300" />
-              <span className="text-xs font-semibold tabular-nums text-slate-200">{credits}</span>
-              <span className="text-[11px] text-slate-500">credits</span>
-            </div>
-          </Link>
-          <Link href="/settings">
-            <span
-              className={cn(
-                "inline-flex items-center px-2.5 h-9 rounded-full border text-[11px] font-semibold uppercase tracking-wide cursor-pointer",
-                planTone
-              )}
-              data-testid="badge-plan"
-            >
-              {planLabel}
-            </span>
-          </Link>
-          <Link href="/analyze">
-            <Button size="sm" className="bg-indigo-600 hover:bg-indigo-500" data-testid="button-new-analysis">
-              <Plus className="h-4 w-4 mr-1.5" /> New analysis
-            </Button>
-          </Link>
+          <span
+            className="rounded-full border border-[var(--line)] bg-[var(--card)] px-3.5 py-1.5 font-[family-name:var(--font-mono)] text-[11.5px] text-[var(--ink-2)]"
+            data-testid="chip-credits"
+          >
+            {planLabel} plan ·{" "}
+            <b className="text-[var(--violet-deep)]">
+              {plan === "free" ? `${credits} credits` : "unlimited scores"}
+            </b>
+          </span>
           <NotificationBell />
           {profileMenu}
         </header>
 
-        {/* Mobile top bar */}
-        <header className="lg:hidden sticky top-0 z-30 bg-background/85 backdrop-blur-xl border-b border-white/[0.06]">
-          <div className="flex items-center justify-between px-4 h-14 gap-2">
+        <header className="sticky top-0 z-30 border-b border-[var(--line)] bg-[color-mix(in_srgb,var(--paper)_92%,transparent)] backdrop-blur-xl lg:hidden">
+          <div className="flex h-14 items-center justify-between gap-2 px-4">
             <Link href="/">
               <div className="cursor-pointer">
-                <ViralyzMark size={26} />
+                <LogoMark />
               </div>
             </Link>
-            <Link href="/settings" className="flex-1">
-              <div className="inline-flex items-center gap-1.5 px-2.5 h-8 rounded-full bg-white/[0.04] border border-white/[0.08]" data-testid="chip-credits-mobile">
-                <Sparkles className="h-3 w-3 text-indigo-300" />
-                <span className="text-[11px] font-semibold tabular-nums text-slate-200">{credits}</span>
-                <span className={cn("ml-1 inline-flex items-center px-1.5 h-5 rounded-full border text-[9px] font-semibold uppercase tracking-wide", planTone)}>
-                  {planLabel}
-                </span>
-              </div>
-            </Link>
-            <button
-              onClick={() => setPaletteOpen(true)}
-              className="h-9 w-9 rounded-lg bg-white/[0.04] flex items-center justify-center text-slate-300"
-              data-testid="button-search-mobile"
-              aria-label="Search"
-            >
-              <Search className="h-4 w-4" />
-            </button>
-            <NotificationBell />
-            {profileMenu}
+            <div className="flex items-center gap-2">
+              <Link href="/analyze">
+                <button
+                  type="button"
+                  className="rounded-full bg-[var(--violet)] px-3 py-1.5 text-[12px] font-semibold text-white"
+                  data-testid="button-score-content-mobile"
+                >
+                  Score
+                </button>
+              </Link>
+              <NotificationBell />
+              {profileMenu}
+            </div>
           </div>
         </header>
 
-        <main className="px-4 sm:px-6 lg:px-8 py-6 pb-24 lg:pb-12 min-h-[calc(100vh-3.5rem)]">
+        <main className="min-h-[calc(100vh-3.5rem)] px-4 pb-24 pt-0 sm:px-6 lg:max-w-[1160px] lg:px-9 lg:pb-12">
           {children}
         </main>
       </div>
 
-      <nav className="lg:hidden fixed bottom-0 left-0 right-0 z-20 bg-background/85 backdrop-blur-xl border-t border-white/[0.06] safe-area-pb">
+      <nav className="safe-area-pb fixed bottom-0 left-0 right-0 z-20 border-t border-[var(--line)] bg-[color-mix(in_srgb,var(--paper)_92%,transparent)] backdrop-blur-xl lg:hidden">
         <div className="flex items-center justify-around py-1.5">
           {mobileNavItems.map((item) => {
-            const isActive = location === item.href ||
+            const isActive =
+              location === item.href ||
               (item.href !== "/" && location.startsWith(item.href));
             return (
               <Link key={item.href} href={item.href}>
-                <div className={cn(
-                  "flex flex-col items-center gap-0.5 px-3 py-2 rounded-lg transition-colors",
-                  isActive ? "text-white" : "text-slate-500"
-                )}>
-                  <item.icon className={cn("h-5 w-5", isActive && "text-indigo-300")} />
+                <div
+                  className={cn(
+                    "flex flex-col items-center gap-0.5 rounded-lg px-3 py-2 transition-colors",
+                    isActive
+                      ? "text-[var(--violet-deep)]"
+                      : "text-[var(--ink-3)]",
+                  )}
+                >
+                  <item.icon className="h-5 w-5" />
                   <span className="text-[10px] font-medium">{item.label}</span>
                 </div>
               </Link>
