@@ -2,8 +2,7 @@ import OpenAI from "openai";
 
 function resolveOpenAIConfig() {
   const apiKey =
-    process.env.AI_INTEGRATIONS_OPENAI_API_KEY ||
-    process.env.OPENAI_API_KEY;
+    process.env.AI_INTEGRATIONS_OPENAI_API_KEY || process.env.OPENAI_API_KEY;
 
   const baseURL =
     process.env.AI_INTEGRATIONS_OPENAI_BASE_URL ||
@@ -19,10 +18,25 @@ function resolveOpenAIConfig() {
   return { apiKey, baseURL };
 }
 
-export const openai = new OpenAI(resolveOpenAIConfig());
+let _client: OpenAI | null = null;
 
-export const OPENAI_CHAT_MODEL =
-  process.env.OPENAI_CHAT_MODEL || "gpt-4o";
+export function getOpenAI(): OpenAI {
+  if (!_client) {
+    _client = new OpenAI(resolveOpenAIConfig());
+  }
+  return _client;
+}
+
+/** Lazy proxy — avoids boot crash when API keys are not set yet. */
+export const openai = new Proxy({} as OpenAI, {
+  get(_target, prop, receiver) {
+    const client = getOpenAI();
+    const value = Reflect.get(client, prop, receiver);
+    return typeof value === "function" ? value.bind(client) : value;
+  },
+});
+
+export const OPENAI_CHAT_MODEL = process.env.OPENAI_CHAT_MODEL || "gpt-4o";
 
 export const OPENAI_IMAGE_MODEL =
   process.env.OPENAI_IMAGE_MODEL || "dall-e-3";

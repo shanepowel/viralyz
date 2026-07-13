@@ -5,7 +5,7 @@
  * just hired a Head of Demand Gen + their content shifted toward enterprise
  * positioning." Correlations are regenerated wholesale per competitor.
  */
-import OpenAI from "openai";
+import { openai } from "../lib/openai";
 import { db } from "../db";
 import { and, desc, eq, gte } from "drizzle-orm";
 import {
@@ -16,11 +16,6 @@ import {
   intelSignalCorrelations,
   type IntelSignalCorrelation,
 } from "@shared/schema";
-
-const openai = new OpenAI({
-  apiKey: process.env.AI_INTEGRATIONS_OPENAI_API_KEY,
-  baseURL: process.env.AI_INTEGRATIONS_OPENAI_BASE_URL,
-});
 
 type SignalRef = { type: "hiring" | "funding" | "podcast"; id: string; label: string };
 
