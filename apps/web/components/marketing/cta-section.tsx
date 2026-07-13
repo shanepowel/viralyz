@@ -1,9 +1,9 @@
 import Link from "next/link";
 import { ArrowRight } from "lucide-react";
 import { Button } from "@repo/ui/button";
-import { APP_NAME } from "@repo/config";
+import { APP_NAME, getPublicAppUrl } from "@repo/config";
 
-const APP_URL = process.env.NEXT_PUBLIC_APP_URL || "http://localhost:5000";
+const APP_URL = getPublicAppUrl();
 
 export function CtaSection() {
   return (

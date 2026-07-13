@@ -268,6 +268,42 @@ export const APP_DESCRIPTION =
 export const APP_POSITIONING =
   "Creators use the tools to grow. Brands use the marketplace to hire creators with proof, not promises.";
 
+/**
+ * Public CTA target for marketing → product.
+ *
+ * - Prefer `NEXT_PUBLIC_APP_URL` when it points at a real (non-localhost) host.
+ * - Otherwise use same-origin `/dashboard` so Vercel / preview deploys never
+ *   bounce users to `http://localhost:5000`.
+ */
+export function getPublicAppUrl(
+  envUrl: string | undefined = process.env.NEXT_PUBLIC_APP_URL,
+): string {
+  const trimmed = envUrl?.trim();
+  if (!trimmed) return "/dashboard";
+
+  try {
+    const host = new URL(trimmed).hostname;
+    if (host === "localhost" || host === "127.0.0.1") {
+      return "/dashboard";
+    }
+  } catch {
+    // Relative paths like "/dashboard" or "/api/login" are fine as-is.
+    if (trimmed.startsWith("/")) return trimmed;
+    return "/dashboard";
+  }
+
+  return trimmed.replace(/\/$/, "");
+}
+
+/** Sign-in entry — Express `/api/login` when a real app host is configured. */
+export function getPublicLoginUrl(
+  envUrl: string | undefined = process.env.NEXT_PUBLIC_APP_URL,
+): string {
+  const app = getPublicAppUrl(envUrl);
+  if (app.startsWith("/")) return "/dashboard";
+  return `${app}/api/login`;
+}
+
 export const CASE_STUDIES = [
   {
     handle: "@mayacreates",
