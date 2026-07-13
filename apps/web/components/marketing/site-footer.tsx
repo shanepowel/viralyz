@@ -25,6 +25,7 @@ export function SiteFooter() {
             <Link href="/platform">Platform</Link>
             <Link href="/browse">Browse creators</Link>
             <Link href="/tools">Free tools</Link>
+            <Link href="/report">Viral Score Report</Link>
             <Link href="/pricing">Pricing</Link>
             <Link href="/brands">For brands</Link>
           </div>
@@ -33,6 +34,7 @@ export function SiteFooter() {
             <Link href="/about">About</Link>
             <Link href="/contact">Contact</Link>
             <Link href="/blog">Blog</Link>
+            <Link href="/affiliates">Affiliates</Link>
           </div>
           <div>
             <h5>Legal</h5>
