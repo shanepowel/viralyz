@@ -1,5 +1,10 @@
 import type { Metadata } from "next";
-import { Inter, JetBrains_Mono, Space_Grotesk } from "next/font/google";
+import {
+  Bricolage_Grotesque,
+  Inter,
+  JetBrains_Mono,
+} from "next/font/google";
+import type { CSSProperties } from "react";
 import { APP_DESCRIPTION, APP_NAME, APP_TAGLINE } from "@repo/config";
 import "./globals.css";
 
@@ -8,9 +13,9 @@ const inter = Inter({
   variable: "--font-inter",
 });
 
-const spaceGrotesk = Space_Grotesk({
+const bricolage = Bricolage_Grotesque({
   subsets: ["latin"],
-  variable: "--font-space",
+  variable: "--font-bricolage",
   weight: ["500", "600", "700"],
 });
 
@@ -22,22 +27,21 @@ const jetbrains = JetBrains_Mono({
 
 export const metadata: Metadata = {
   title: {
-    default: `${APP_NAME} — ${APP_TAGLINE}`,
+    default: `${APP_NAME}. ${APP_TAGLINE}`,
     template: `%s | ${APP_NAME}`,
   },
   description: APP_DESCRIPTION,
   keywords: [
     "viral score",
     "creator tools",
-    "short-form video",
     "TikTok",
     "Instagram Reels",
     "YouTube Shorts",
     "media kit",
-    "content intelligence",
+    "content scoring",
   ],
   openGraph: {
-    title: `${APP_NAME} — ${APP_TAGLINE}`,
+    title: `${APP_NAME}. ${APP_TAGLINE}`,
     description: APP_DESCRIPTION,
     type: "website",
   },
@@ -49,15 +53,16 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" data-theme="dark" className="dark">
-      <head>
-        <link
-          href="https://api.fontshare.com/v2/css?f[]=clash-display@500,600&display=swap"
-          rel="stylesheet"
-        />
-      </head>
+    <html lang="en">
       <body
-        className={`${inter.variable} ${spaceGrotesk.variable} ${jetbrains.variable} antialiased`}
+        className={`${inter.variable} ${bricolage.variable} ${jetbrains.variable} antialiased`}
+        style={
+          {
+            ["--font-sans"]: "var(--font-inter)",
+            ["--font-display"]: "var(--font-bricolage)",
+            ["--font-mono"]: "var(--font-jetbrains)",
+          } as CSSProperties
+        }
       >
         {children}
       </body>

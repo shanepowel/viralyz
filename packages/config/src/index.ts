@@ -262,11 +262,11 @@ export const PLANS: PlanDefinition[] = [
 ];
 
 export const APP_NAME = "Viralyz";
-export const APP_TAGLINE = "The creator operating system";
+export const APP_TAGLINE = "Score your content before you post it.";
 export const APP_DESCRIPTION =
-  "Every tool feeds one intelligence layer — your Viral Score history — which becomes your verified track record. Create, score, publish, and prove performance.";
+  "Viralyz gives every video a score out of 100 and tells you exactly what to fix. Post better content, build a track record brands can trust, and get hired for it.";
 export const APP_POSITIONING =
-  "Creators use the tools to grow. Brands use the marketplace to hire creators with proof, not promises.";
+  "Creators bring the proof. Brands bring the work. One scored network.";
 
 /**
  * Public CTA target for marketing → product.
