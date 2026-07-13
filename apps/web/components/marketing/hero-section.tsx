@@ -4,9 +4,9 @@ import Link from "next/link";
 import { ArrowRight } from "lucide-react";
 import { Button } from "@repo/ui/button";
 import { ScoreRing } from "@repo/ui/score-ring";
-import { APP_NAME, APP_TAGLINE } from "@repo/config";
+import { APP_NAME, APP_TAGLINE, getPublicAppUrl } from "@repo/config";
 
-const APP_URL = process.env.NEXT_PUBLIC_APP_URL || "http://localhost:5000";
+const APP_URL = getPublicAppUrl();
 
 export function HeroSection() {
   return (

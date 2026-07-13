@@ -1,8 +1,8 @@
 import Link from "next/link";
 import { Button } from "@repo/ui/button";
-import { PLANS } from "@repo/config";
+import { PLANS, getPublicAppUrl } from "@repo/config";
 
-const APP_URL = process.env.NEXT_PUBLIC_APP_URL || "http://localhost:5000";
+const APP_URL = getPublicAppUrl();
 
 export function PricingSection() {
   return (

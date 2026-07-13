@@ -1,8 +1,9 @@
 import Link from "next/link";
 import { Button } from "@repo/ui/button";
-import { APP_NAME } from "@repo/config";
+import { APP_NAME, getPublicAppUrl, getPublicLoginUrl } from "@repo/config";
 
-const APP_URL = process.env.NEXT_PUBLIC_APP_URL || "http://localhost:5000";
+const APP_URL = getPublicAppUrl();
+const LOGIN_URL = getPublicLoginUrl();
 
 export function SiteHeader() {
   return (
@@ -41,7 +42,7 @@ export function SiteHeader() {
         </nav>
         <div className="flex items-center gap-2">
           <Button variant="ghost" size="sm" asChild>
-            <Link href={APP_URL}>Sign in</Link>
+            <Link href={LOGIN_URL}>Sign in</Link>
           </Button>
           <Button size="sm" asChild>
             <Link href={APP_URL}>Open app</Link>
