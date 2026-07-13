@@ -53,7 +53,14 @@ migrations/ Drizzle output (schema is applied with drizzle-kit push)
    ```bash
    npm run dev
    ```
-   The app serves on `http://localhost:5000`.
+   The app loads `.env` automatically (via `dotenv`) and serves on
+   `http://localhost:5000`.
+
+5. Sign in locally:
+   With `AUTH_MODE=dev` (the default when `REPL_ID` is unset), open the app and
+   click **Sign in** — that hits `/api/login` and creates a local demo user
+   (`creator@viralyz.local`) with a normal session cookie. You do **not** need
+   Replit OIDC for local development.
 
 Production build:
 ```bash

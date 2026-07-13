@@ -26,7 +26,11 @@
     "types": ["node", "vite/client"],
     "paths": {
       "@/*": ["./client/src/*"],
-      "@shared/*": ["./shared/*"]
+      "@shared/*": ["./shared/*"],
+      "@repo/ui": ["../../packages/ui/src/index.ts"],
+      "@repo/ui/*": ["../../packages/ui/src/*"],
+      "@repo/score-engine": ["../../packages/score-engine/src/index.ts"],
+      "@repo/score-engine/*": ["../../packages/score-engine/src/*"]
     }
   }
 }
