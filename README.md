@@ -78,8 +78,9 @@ pnpm dev
 
 ## Spec roadmap
 
-Phase 1 (this branch): Signal UI package, landing reskin, content-graph schema, app token alignment.  
-Later: Inngest analysis pipeline, Creation Suite extensions, BioPage, Media Kit, Marketplace (feature-flagged).
+Phase 1: Signal UI package, landing reskin, content-graph schema, app token alignment.  
+Phase 2 (this branch): Score Engine deep — platform profiles, pipeline stages (SSE), FixCard on analyze, retention curve, re-score diff + history, Analysis Reveal.  
+Later: Whisper/ffmpeg workers via Inngest, Creation Suite extensions, BioPage, Media Kit, Marketplace.
 
 ## License
 

@@ -8,7 +8,20 @@ import { setupAuth, registerAuthRoutes, isAuthenticated } from "./replit_integra
 import { registerObjectStorageRoutes } from "./replit_integrations/object_storage";
 import { registerAutopilotRoutes } from "./autopilot-routes";
 import { registerIntelligenceRoutes } from "./intelligence-routes";
-import { analyzeContent, saveAnalysis, getRecentAnalyses, getAllAnalyses, getAnalysis, getUserStats, decrementUserCredits } from "./analysis";
+import {
+  analyzeContent,
+  analyzeWithPipeline,
+  saveAnalysis,
+  reanalyzeContent,
+  getAnalysisHistory,
+  getRecentAnalyses,
+  getAllAnalyses,
+  getAnalysis,
+  getUserStats,
+  decrementUserCredits,
+  countAnalysesForUser,
+  PIPELINE_STAGES,
+} from "./analysis";
 import { generateHooks, rewriteCaption, generateTrends, generateIdeas, repurposeForPlatforms } from "./ai-tools";
 import { lintCaption } from "./lint";
 import { extractBrandVoice, generateThumbnailIdeas, renderThumbnail } from "./ai-vision";
@@ -307,28 +320,125 @@ export async function registerRoutes(
   });
 
   // VIRALYZ 2.0 - Analysis Routes
+  app.get("/api/analyze/stages", (_req, res) => {
+    res.json({ stages: PIPELINE_STAGES });
+  });
+
   app.post("/api/analyze", isAuthenticated, async (req, res) => {
     try {
       const userId = (req.user as any).claims?.sub || (req.user as any).id;
-      const { title, description, platform, contentType } = req.body;
+      const { title, description, platform, contentType, hasMedia, stream } = req.body;
 
       if (!title && !description) {
         return res.status(400).json({ error: "Please provide a title or description to analyze" });
       }
 
-      // Analyze content using OpenAI
-      const result = await analyzeContent(title, description, platform, contentType);
-      
-      // Save to database
-      const analysis = await saveAnalysis(userId, title, description, platform, contentType, result);
+      const historyCount = await countAnalysesForUser(userId);
 
-      res.json({ 
+      // SSE stream of pipeline stages when client requests stream:true
+      if (stream) {
+        res.setHeader("Content-Type", "text/event-stream");
+        res.setHeader("Cache-Control", "no-cache");
+        res.setHeader("Connection", "keep-alive");
+        res.flushHeaders?.();
+
+        const send = (event: string, data: unknown) => {
+          res.write(`event: ${event}\ndata: ${JSON.stringify(data)}\n\n`);
+        };
+
+        try {
+          const result = await analyzeWithPipeline(
+            {
+              title,
+              description,
+              platform,
+              contentType,
+              hasMedia: !!hasMedia,
+              historyCount,
+            },
+            (ev) => send("stage", ev),
+          );
+          const analysis = await saveAnalysis(
+            userId,
+            title,
+            description,
+            platform,
+            contentType,
+            result,
+          );
+          send("complete", { id: analysis.id, ...result });
+          res.end();
+        } catch (error) {
+          console.error("Analysis stream error:", error);
+          send("error", { error: "Failed to analyze content" });
+          res.end();
+        }
+        return;
+      }
+
+      const result = await analyzeWithPipeline({
+        title,
+        description,
+        platform,
+        contentType,
+        hasMedia: !!hasMedia,
+        historyCount,
+      });
+
+      const analysis = await saveAnalysis(
+        userId,
+        title,
+        description,
+        platform,
+        contentType,
+        result,
+      );
+
+      res.json({
         id: analysis.id,
-        ...result 
+        ...result,
       });
     } catch (error) {
       console.error("Analysis error:", error);
       res.status(500).json({ error: "Failed to analyze content" });
+    }
+  });
+
+  app.post("/api/analyses/:id/reanalyze", isAuthenticated, async (req, res) => {
+    try {
+      const userId = (req.user as any).claims?.sub || (req.user as any).id;
+      const { title, description, platform, contentType, appliedFixIndexes } = req.body;
+
+      const { analysis, result, diff } = await reanalyzeContent(
+        req.params.id,
+        userId,
+        { title, description, platform, contentType, appliedFixIndexes },
+      );
+
+      res.json({
+        id: analysis.id,
+        ...result,
+        diff,
+      });
+    } catch (error: any) {
+      console.error("Reanalyze error:", error);
+      if (error?.message === "Analysis not found") {
+        return res.status(404).json({ error: "Analysis not found" });
+      }
+      res.status(500).json({ error: "Failed to re-analyze content" });
+    }
+  });
+
+  app.get("/api/analyses/:id/history", isAuthenticated, async (req, res) => {
+    try {
+      const userId = (req.user as any).claims?.sub || (req.user as any).id;
+      const history = await getAnalysisHistory(req.params.id, userId);
+      if (!history) {
+        return res.status(404).json({ error: "Analysis not found" });
+      }
+      res.json(history);
+    } catch (error) {
+      res.status(500).json({ error: "Failed to fetch analysis history" });
     }
   });
 

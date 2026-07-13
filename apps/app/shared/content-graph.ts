@@ -214,7 +214,7 @@ export const trends = pgTable(
   ],
 );
 
-export const dmFlows = pgTable("dm_flows", {
+export const dmFlows = pgTable("engage_dm_flows", {
   id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
   userId: varchar("user_id").notNull(),
   socialAccountId: varchar("social_account_id").references(() => socialAccounts.id),
@@ -226,7 +226,7 @@ export const dmFlows = pgTable("dm_flows", {
   createdAt: timestamp("created_at").defaultNow().notNull(),
 });
 
-export const dmConversations = pgTable("dm_conversations", {
+export const dmConversations = pgTable("engage_dm_conversations", {
   id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
   flowId: varchar("flow_id")
     .notNull()

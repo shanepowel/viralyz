@@ -2,22 +2,28 @@ import { useState, useCallback, useEffect, useRef } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import {
   Upload, Link as LinkIcon, Sparkles, Clock, ArrowRight, Check, Loader2,
-  RefreshCw, Zap, ChevronDown, Copy, Share2, Target, Repeat,
+  RefreshCw, Zap, ChevronDown, Share2, Target, Repeat, History,
 } from "lucide-react";
-import { Link as WouterLink } from "wouter";
+import { Link as WouterLink, useLocation } from "wouter";
 import { Button } from "@/components/ui/button";
 import { DashboardLayout } from "@/components/layout/DashboardLayout";
 import { PageHeader } from "@/components/ui/page-header";
 import { ScoreRing, scoreTone } from "@/components/ui/score-ring";
+import { FixCard, type FixComponent } from "@repo/ui/fix-card";
 import { useToast } from "@/hooks/use-toast";
 import { useMutation, useQuery } from "@tanstack/react-query";
 import { ShareDialog } from "@/components/ShareDialog";
 import { ScheduleAndActuals } from "@/components/ScheduleAndActuals";
+import { AnalysisReveal } from "@/components/AnalysisReveal";
+import { ScoreDiffPanel } from "@/components/ScoreDiffPanel";
+import { RetentionCurveChart } from "@/components/RetentionCurveChart";
 import { useParams } from "wouter";
 import { cn } from "@/lib/utils";
+import type { RetentionCurve, ScoreDiff, FixSuggestion } from "@repo/score-engine";
+import { PIPELINE_STAGES } from "@repo/score-engine";
 
-type Platform = 'youtube' | 'tiktok' | 'instagram' | 'twitter' | 'linkedin';
-type Step = 'upload' | 'analyzing' | 'results' | 'loading';
+type Platform = "youtube" | "tiktok" | "instagram" | "twitter" | "linkedin";
+type Step = "upload" | "analyzing" | "results" | "loading";
 
 interface LoadedAnalysis {
   id: string;
@@ -58,158 +64,361 @@ interface AnalysisResult {
   timingScore: number;
   timingAnalysis: string;
   optimalPostingTime: string;
-  top3Fixes: Array<{ issue: string; fix: string; predictedImpact: number }>;
+  top3Fixes: FixSuggestion[];
   predictedScoreAfterFixes: number;
+  confidence?: number;
+  scoringProfileVersion?: string;
+  retentionCurve?: RetentionCurve | null;
+  diff?: ScoreDiff;
 }
 
 const platforms: { id: Platform; name: string; icon: string }[] = [
-  { id: 'youtube', name: 'YouTube', icon: '▶️' },
-  { id: 'tiktok', name: 'TikTok', icon: '🎵' },
-  { id: 'instagram', name: 'Instagram', icon: '📸' },
-  { id: 'twitter', name: 'Twitter', icon: '𝕏' },
-  { id: 'linkedin', name: 'LinkedIn', icon: '💼' },
+  { id: "youtube", name: "YouTube", icon: "▶️" },
+  { id: "tiktok", name: "TikTok", icon: "🎵" },
+  { id: "instagram", name: "Instagram", icon: "📸" },
+  { id: "twitter", name: "X", icon: "𝕏" },
+  { id: "linkedin", name: "LinkedIn", icon: "💼" },
 ];
 
-const ANALYSIS_STEP_NAMES = [
-  'Extracting frames',
-  'Analyzing hook (first 3 seconds)',
-  'Evaluating visual composition',
-  'Checking metadata optimization',
-  'Calculating optimal posting time',
-];
+function normalizeFixes(
+  fixes: Array<Partial<FixSuggestion> & { issue?: string; fix?: string }> | undefined,
+): FixSuggestion[] {
+  if (!fixes?.length) return [];
+  return fixes.map((f) => ({
+    component: (f.component as FixComponent) || "hook",
+    issue: f.issue || "Improve this section",
+    fix: f.fix || "",
+    predictedImpact: f.predictedImpact ?? 5,
+  }));
+}
 
 export default function Analyze() {
   const params = useParams<{ id?: string }>();
   const analysisId = params?.id;
-  const [step, setStep] = useState<Step>(analysisId ? 'loading' : 'upload');
-  const [selectedPlatform, setSelectedPlatform] = useState<Platform>('youtube');
-  const [title, setTitle] = useState('');
-  const [description, setDescription] = useState('');
-  const [url, setUrl] = useState('');
+  const [, setLocation] = useLocation();
+  const [step, setStep] = useState<Step>(analysisId ? "loading" : "upload");
+  const [selectedPlatform, setSelectedPlatform] = useState<Platform>("youtube");
+  const [title, setTitle] = useState("");
+  const [description, setDescription] = useState("");
+  const [url, setUrl] = useState("");
   const [file, setFile] = useState<File | null>(null);
   const [isDragging, setIsDragging] = useState(false);
   const [analysisProgress, setAnalysisProgress] = useState(0);
-  const [analysisSteps, setAnalysisSteps] = useState<string[]>([]);
+  const [completedStages, setCompletedStages] = useState<string[]>([]);
+  const [currentStage, setCurrentStage] = useState<string | null>(null);
   const [result, setResult] = useState<AnalysisResult | null>(null);
   const [expandedSection, setExpandedSection] = useState<string | null>(null);
+  const [showReveal, setShowReveal] = useState(false);
+  const [skippedFixes, setSkippedFixes] = useState<Set<number>>(new Set());
+  const [appliedFixes, setAppliedFixes] = useState<Set<number>>(new Set());
+  const [showHistory, setShowHistory] = useState(false);
   const dropRef = useRef<HTMLDivElement>(null);
+  const pendingReveal = useRef(false);
 
   const { toast } = useToast();
 
   const { data: loadedAnalysis, isLoading: isLoadingAnalysis } = useQuery<LoadedAnalysis | null>({
     queryKey: ["/api/analyses", analysisId],
     queryFn: async () => {
-      const res = await fetch(`/api/analyses/${analysisId}`, { credentials: 'include' });
+      const res = await fetch(`/api/analyses/${analysisId}`, { credentials: "include" });
       if (!res.ok) return null;
       return res.json();
     },
     enabled: !!analysisId,
   });
 
+  const { data: historyRows } = useQuery({
+    queryKey: ["/api/analyses", analysisId, "history"],
+    queryFn: async () => {
+      const res = await fetch(`/api/analyses/${analysisId}/history`, {
+        credentials: "include",
+      });
+      if (!res.ok) return [];
+      return res.json();
+    },
+    enabled: !!analysisId && showHistory,
+  });
+
   useEffect(() => {
     if (loadedAnalysis && analysisId) {
+      const raw = (loadedAnalysis.analysisResults || {}) as AnalysisResult;
       const merged: AnalysisResult = {
-        ...(loadedAnalysis.analysisResults as AnalysisResult),
+        ...raw,
         id: loadedAnalysis.id,
+        top3Fixes: normalizeFixes(raw.top3Fixes),
+        viralScore: raw.viralScore ?? loadedAnalysis.viralScore ?? 0,
+        hookScore: raw.hookScore ?? loadedAnalysis.hookScore ?? 0,
+        visualScore: raw.visualScore ?? loadedAnalysis.visualScore ?? 0,
+        structureScore: raw.structureScore ?? loadedAnalysis.structureScore ?? 0,
+        metadataScore: raw.metadataScore ?? loadedAnalysis.metadataScore ?? 0,
+        timingScore: raw.timingScore ?? loadedAnalysis.timingScore ?? 0,
       };
       setResult(merged);
-      setTitle(loadedAnalysis.title || '');
-      setDescription(loadedAnalysis.description || '');
+      setTitle(loadedAnalysis.title || "");
+      setDescription(loadedAnalysis.description || "");
       if (loadedAnalysis.targetPlatform) {
         setSelectedPlatform(loadedAnalysis.targetPlatform as Platform);
       }
-      setStep('results');
-      setExpandedSection('Hook Strength');
+      setStep("results");
+      setExpandedSection("Hook Strength");
     } else if (!isLoadingAnalysis && analysisId && !loadedAnalysis) {
-      setStep('upload');
+      setStep("upload");
     }
   }, [loadedAnalysis, isLoadingAnalysis, analysisId]);
 
   const handleDragEnter = useCallback((e: React.DragEvent) => {
-    e.preventDefault(); e.stopPropagation(); setIsDragging(true);
+    e.preventDefault();
+    e.stopPropagation();
+    setIsDragging(true);
   }, []);
   const handleDragLeave = useCallback((e: React.DragEvent) => {
-    e.preventDefault(); e.stopPropagation();
-    if (dropRef.current && !dropRef.current.contains(e.relatedTarget as Node)) setIsDragging(false);
+    e.preventDefault();
+    e.stopPropagation();
+    if (dropRef.current && !dropRef.current.contains(e.relatedTarget as Node))
+      setIsDragging(false);
   }, []);
   const handleDragOver = useCallback((e: React.DragEvent) => {
-    e.preventDefault(); e.stopPropagation();
+    e.preventDefault();
+    e.stopPropagation();
   }, []);
-  const handleDrop = useCallback((e: React.DragEvent) => {
-    e.preventDefault(); e.stopPropagation(); setIsDragging(false);
-    const droppedFile = e.dataTransfer.files[0];
-    if (droppedFile && (droppedFile.type.startsWith('video/') || droppedFile.type.startsWith('image/'))) {
-      setFile(droppedFile);
-      if (!title) setTitle(droppedFile.name.replace(/\.[^/.]+$/, ''));
-      toast({ title: "File added", description: droppedFile.name });
-    } else if (droppedFile) {
-      toast({ title: "Unsupported file", description: "Please drop a video or image file", variant: "destructive" });
+  const handleDrop = useCallback(
+    (e: React.DragEvent) => {
+      e.preventDefault();
+      e.stopPropagation();
+      setIsDragging(false);
+      const droppedFile = e.dataTransfer.files[0];
+      if (
+        droppedFile &&
+        (droppedFile.type.startsWith("video/") ||
+          droppedFile.type.startsWith("image/"))
+      ) {
+        setFile(droppedFile);
+        if (!title) setTitle(droppedFile.name.replace(/\.[^/.]+$/, ""));
+        toast({ title: "File added", description: droppedFile.name });
+      } else if (droppedFile) {
+        toast({
+          title: "Unsupported file",
+          description: "Please drop a video or image file",
+          variant: "destructive",
+        });
+      }
+    },
+    [title, toast],
+  );
+
+  const runAnalyzeRequest = async (body: Record<string, unknown>) => {
+    setAnalysisProgress(0);
+    setCompletedStages([]);
+    setCurrentStage(PIPELINE_STAGES[0]?.id ?? null);
+
+    // Prefer SSE for real stage progress; fall back to JSON
+    try {
+      const res = await fetch("/api/analyze", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        credentials: "include",
+        body: JSON.stringify({ ...body, stream: true }),
+      });
+
+      if (!res.ok || !res.body || !res.headers.get("content-type")?.includes("text/event-stream")) {
+        // Non-stream fallback
+        const jsonRes = await fetch("/api/analyze", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          credentials: "include",
+          body: JSON.stringify({ ...body, stream: false }),
+        });
+        if (!jsonRes.ok) {
+          const error = await jsonRes.json();
+          throw new Error(error.error || "Analysis failed");
+        }
+        // Fake stage walk while we already have result
+        for (const s of PIPELINE_STAGES) {
+          setCurrentStage(s.id);
+          setCompletedStages((prev) => [...prev, s.id]);
+          setAnalysisProgress(
+            Math.min(
+              100,
+              PIPELINE_STAGES.filter((x) =>
+                [...PIPELINE_STAGES.slice(0, PIPELINE_STAGES.indexOf(s) + 1)].includes(x),
+              ).reduce((a, x) => a + x.weight, 0),
+            ),
+          );
+          await new Promise((r) => setTimeout(r, 120));
+        }
+        return jsonRes.json() as Promise<AnalysisResult>;
+      }
+
+      const reader = res.body.getReader();
+      const decoder = new TextDecoder();
+      let buffer = "";
+      let finalResult: AnalysisResult | null = null;
+
+      while (true) {
+        const { done, value } = await reader.read();
+        if (done) break;
+        buffer += decoder.decode(value, { stream: true });
+        const parts = buffer.split("\n\n");
+        buffer = parts.pop() || "";
+        for (const part of parts) {
+          const lines = part.split("\n");
+          const eventLine = lines.find((l) => l.startsWith("event:"));
+          const dataLine = lines.find((l) => l.startsWith("data:"));
+          if (!eventLine || !dataLine) continue;
+          const event = eventLine.replace("event:", "").trim();
+          const data = JSON.parse(dataLine.replace("data:", "").trim());
+          if (event === "stage") {
+            setCurrentStage(data.stage?.id ?? null);
+            setAnalysisProgress(data.progress ?? 0);
+            if (data.status === "completed" || data.status === "skipped") {
+              setCompletedStages((prev) =>
+                prev.includes(data.stage.id) ? prev : [...prev, data.stage.id],
+              );
+            }
+          } else if (event === "complete") {
+            finalResult = data as AnalysisResult;
+          } else if (event === "error") {
+            throw new Error(data.error || "Analysis failed");
+          }
+        }
+      }
+
+      if (!finalResult) throw new Error("Analysis stream ended without result");
+      return finalResult;
+    } catch (err) {
+      throw err;
     }
-  }, [title, toast]);
+  };
 
   const analyzeMutation = useMutation({
     mutationFn: async () => {
-      const animateSteps = async () => {
-        for (let i = 0; i < ANALYSIS_STEP_NAMES.length; i++) {
-          setAnalysisSteps(ANALYSIS_STEP_NAMES.slice(0, i + 1));
-          setAnalysisProgress((i + 1) * 20);
-          await new Promise(resolve => setTimeout(resolve, 600));
-        }
-      };
-      const [apiResult] = await Promise.all([
-        fetch('/api/analyze', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          credentials: 'include',
-          body: JSON.stringify({
-            title: title || 'Untitled Content',
-            description: description || '',
-            platform: selectedPlatform,
-            contentType: file ? (file.type.startsWith('video/') ? 'video' : 'image') : 'video'
-          })
-        }).then(async (res) => {
-          if (!res.ok) {
-            const error = await res.json();
-            throw new Error(error.error || 'Analysis failed');
-          }
-          return res.json();
-        }),
-        animateSteps()
-      ]);
-      return apiResult as AnalysisResult;
+      const data = await runAnalyzeRequest({
+        title: title || "Untitled Content",
+        description: description || "",
+        platform: selectedPlatform,
+        contentType: file
+          ? file.type.startsWith("video/")
+            ? "video"
+            : "image"
+          : "video",
+        hasMedia: !!(file || url),
+      });
+      return {
+        ...data,
+        top3Fixes: normalizeFixes(data.top3Fixes),
+      } as AnalysisResult;
     },
     onSuccess: (data) => {
       setResult(data);
-      setStep('results');
-      setExpandedSection('Hook Strength');
+      setSkippedFixes(new Set());
+      setAppliedFixes(new Set());
+      pendingReveal.current = true;
+      setShowReveal(true);
+      if (data.id) setLocation(`/analyze/${data.id}`);
     },
     onError: () => {
-      toast({ title: "Analysis failed", description: "Please try again", variant: "destructive" });
-      setStep('upload');
-    }
+      toast({
+        title: "Analysis failed",
+        description: "Please try again",
+        variant: "destructive",
+      });
+      setStep("upload");
+    },
   });
 
-  const handleFileChange = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
-    const selectedFile = e.target.files?.[0];
-    if (selectedFile) {
-      setFile(selectedFile);
-      if (!title) setTitle(selectedFile.name.replace(/\.[^/.]+$/, ''));
-    }
-  }, [title]);
+  const reanalyzeMutation = useMutation({
+    mutationFn: async () => {
+      if (!result?.id) throw new Error("No analysis");
+      setStep("analyzing");
+      setAnalysisProgress(0);
+      setCompletedStages([]);
+      const res = await fetch(`/api/analyses/${result.id}/reanalyze`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        credentials: "include",
+        body: JSON.stringify({
+          title: title || "Untitled Content",
+          description,
+          platform: selectedPlatform,
+          appliedFixIndexes: Array.from(appliedFixes),
+        }),
+      });
+      if (!res.ok) {
+        const error = await res.json();
+        throw new Error(error.error || "Re-analyze failed");
+      }
+      // Progress walk while waiting
+      for (const s of PIPELINE_STAGES) {
+        setCurrentStage(s.id);
+        setCompletedStages((prev) => [...prev, s.id]);
+        setAnalysisProgress(
+          PIPELINE_STAGES.slice(0, PIPELINE_STAGES.indexOf(s) + 1).reduce(
+            (a, x) => a + x.weight,
+            0,
+          ),
+        );
+        await new Promise((r) => setTimeout(r, 80));
+      }
+      const data = await res.json();
+      return {
+        ...data,
+        top3Fixes: normalizeFixes(data.top3Fixes),
+      } as AnalysisResult;
+    },
+    onSuccess: (data) => {
+      setResult(data);
+      pendingReveal.current = true;
+      setShowReveal(true);
+      toast({
+        title: "Re-scored",
+        description:
+          data.diff != null
+            ? `${data.diff.deltaViral >= 0 ? "+" : ""}${data.diff.deltaViral} pts vs previous`
+            : "Updated analysis saved",
+      });
+    },
+    onError: () => {
+      toast({
+        title: "Re-analyze failed",
+        description: "Please try again",
+        variant: "destructive",
+      });
+      setStep("results");
+    },
+  });
+
+  const handleFileChange = useCallback(
+    (e: React.ChangeEvent<HTMLInputElement>) => {
+      const selectedFile = e.target.files?.[0];
+      if (selectedFile) {
+        setFile(selectedFile);
+        if (!title) setTitle(selectedFile.name.replace(/\.[^/.]+$/, ""));
+      }
+    },
+    [title],
+  );
 
   const handleAnalyze = () => {
     if (!file && !url && !title && !description) {
       toast({
         title: "No content provided",
         description: "Please upload a file, paste a URL, or enter content details",
-        variant: "destructive"
+        variant: "destructive",
       });
       return;
     }
-    setStep('analyzing');
-    setAnalysisProgress(0);
-    setAnalysisSteps([]);
+    setStep("analyzing");
     analyzeMutation.mutate();
+  };
+
+  const applyFix = (index: number, fix: FixSuggestion) => {
+    const addition = `\n\n[Applied fix — ${fix.component}]: ${fix.fix}`;
+    setDescription((d) => (d.includes(fix.fix) ? d : `${d}${addition}`.trim()));
+    setAppliedFixes((prev) => new Set(prev).add(index));
+    toast({
+      title: "Fix applied to draft",
+      description: "Re-analyze to measure impact",
+    });
   };
 
   const getScoreLabel = (score: number) => {
@@ -219,12 +428,21 @@ export default function Analyze() {
     return "Poor";
   };
 
-  const ScoreBar = ({ score, max = 20, label }: { score: number; max?: number; label: string }) => {
+  const ScoreBar = ({
+    score,
+    max = 20,
+    label,
+  }: {
+    score: number;
+    max?: number;
+    label: string;
+  }) => {
     const percentage = (score / max) * 100;
     const tone = scoreTone(score * 5);
     const fillColor: Record<string, string> = {
       emerald: "bg-emerald-400",
-      indigo: "bg-indigo-400",
+      lime: "bg-lime-400",
+      indigo: "bg-lime-400",
       amber: "bg-amber-400",
       rose: "bg-rose-400",
       slate: "bg-slate-500",
@@ -233,19 +451,26 @@ export default function Analyze() {
     return (
       <button
         type="button"
-        className="w-full text-left cursor-pointer hover:bg-white/[0.03] rounded-lg p-3 -mx-3 transition-colors"
+        className="w-full cursor-pointer rounded-lg p-3 text-left transition-colors hover:bg-white/[0.03] -mx-3"
         onClick={() => setExpandedSection(isExpanded ? null : label)}
       >
-        <div className="flex items-center justify-between mb-2">
-          <span className="text-slate-300 text-sm font-medium">{label}</span>
+        <div className="mb-2 flex items-center justify-between">
+          <span className="text-sm font-medium text-slate-300">{label}</span>
           <div className="flex items-center gap-2">
-            <span className={`px-2 py-0.5 rounded text-xs font-bold tabular-nums score-bg-${tone}`}>
+            <span
+              className={`rounded px-2 py-0.5 text-xs font-bold tabular-nums score-bg-${tone}`}
+            >
               {score}/{max}
             </span>
-            <ChevronDown className={cn("h-4 w-4 text-slate-500 transition-transform", isExpanded && "rotate-180")} />
+            <ChevronDown
+              className={cn(
+                "h-4 w-4 text-slate-500 transition-transform",
+                isExpanded && "rotate-180",
+              )}
+            />
           </div>
         </div>
-        <div className="w-full h-1.5 bg-white/[0.06] rounded-full overflow-hidden">
+        <div className="h-1.5 w-full overflow-hidden rounded-full bg-white/[0.06]">
           <motion.div
             className={`h-full ${fillColor[tone]}`}
             initial={{ width: 0 }}
@@ -257,32 +482,81 @@ export default function Analyze() {
     );
   };
 
-  const sections: Array<{ key: string; analysis: string; suggestions?: string[]; extra?: React.ReactNode }> = result ? [
-    { key: 'Hook Strength', analysis: result.hookAnalysis, suggestions: result.hookSuggestions },
-    { key: 'Visual Impact', analysis: result.visualAnalysis, suggestions: result.visualSuggestions },
-    { key: 'Structure', analysis: result.structureAnalysis, suggestions: result.structureSuggestions },
-    { key: 'Metadata', analysis: result.metadataAnalysis, suggestions: result.metadataSuggestions },
-    { key: 'Timing', analysis: result.timingAnalysis, extra: (
-      <p className="text-sm text-emerald-300">
-        <Clock className="inline h-4 w-4 mr-1" />
-        Optimal time: {result.optimalPostingTime}
-      </p>
-    ) },
-  ] : [];
+  const sections: Array<{
+    key: string;
+    analysis: string;
+    suggestions?: string[];
+    extra?: React.ReactNode;
+  }> = result
+    ? [
+        {
+          key: "Hook Strength",
+          analysis: result.hookAnalysis,
+          suggestions: result.hookSuggestions,
+        },
+        {
+          key: "Visual Impact",
+          analysis: result.visualAnalysis,
+          suggestions: result.visualSuggestions,
+        },
+        {
+          key: "Structure",
+          analysis: result.structureAnalysis,
+          suggestions: result.structureSuggestions,
+        },
+        {
+          key: "Metadata",
+          analysis: result.metadataAnalysis,
+          suggestions: result.metadataSuggestions,
+        },
+        {
+          key: "Timing",
+          analysis: result.timingAnalysis,
+          extra: (
+            <p className="text-sm text-emerald-300">
+              <Clock className="mr-1 inline h-4 w-4" />
+              Optimal time: {result.optimalPostingTime}
+            </p>
+          ),
+        },
+      ]
+    : [];
 
-  const sectionScores: Record<string, number> = result ? {
-    'Hook Strength': result.hookScore,
-    'Visual Impact': result.visualScore,
-    'Structure': result.structureScore,
-    'Metadata': result.metadataScore,
-    'Timing': result.timingScore,
-  } : {};
+  const sectionScores: Record<string, number> = result
+    ? {
+        "Hook Strength": result.hookScore,
+        "Visual Impact": result.visualScore,
+        Structure: result.structureScore,
+        Metadata: result.metadataScore,
+        Timing: result.timingScore,
+      }
+    : {};
 
   return (
     <DashboardLayout>
-      <div className="max-w-5xl mx-auto">
+      {result && (
+        <AnalysisReveal
+          open={showReveal}
+          score={result.viralScore}
+          components={{
+            hook: result.hookScore,
+            visual: result.visualScore,
+            structure: result.structureScore,
+            metadata: result.metadataScore,
+            timing: result.timingScore,
+          }}
+          onComplete={() => {
+            setShowReveal(false);
+            setStep("results");
+            setExpandedSection("Hook Strength");
+            pendingReveal.current = false;
+          }}
+        />
+      )}
+
+      <div className="mx-auto max-w-5xl">
         <AnimatePresence mode="wait">
-          {step === 'loading' && (
+          {step === "loading" && (
             <motion.div
               key="loading"
               initial={{ opacity: 0 }}
@@ -291,13 +565,13 @@ export default function Analyze() {
               className="flex items-center justify-center py-20"
             >
               <div className="text-center">
-                <Loader2 className="h-12 w-12 text-indigo-400 animate-spin mx-auto mb-4" />
+                <Loader2 className="mx-auto mb-4 h-12 w-12 animate-spin text-[var(--accent,#7C5CFF)]" />
                 <p className="text-slate-400">Loading analysis…</p>
               </div>
             </motion.div>
           )}
 
-          {step === 'upload' && (
+          {step === "upload" && (
             <motion.div
               key="upload"
               initial={{ opacity: 0, y: 8 }}
@@ -308,7 +582,7 @@ export default function Analyze() {
               <PageHeader
                 eyebrow="Pre-publish"
                 title="Analyze content"
-                description="Get your Viral Score in 30 seconds — across hook, visuals, structure, metadata, and timing."
+                description="Get your Viral Score in 30 seconds — platform-tuned across hook, visuals, structure, metadata, and timing."
               />
 
               <div className="card-base card-pop p-7">
@@ -319,68 +593,70 @@ export default function Analyze() {
                   onDragOver={handleDragOver}
                   onDrop={handleDrop}
                   className={cn(
-                    "border-2 border-dashed rounded-2xl p-8 text-center transition-all relative",
+                    "relative rounded-2xl border-2 border-dashed p-8 text-center transition-all",
                     isDragging
-                      ? 'border-indigo-400 bg-indigo-500/10 scale-[1.01]'
+                      ? "scale-[1.01] border-[var(--accent)] bg-[var(--accent-muted)]"
                       : file
-                      ? 'border-emerald-500/50 bg-emerald-500/[0.04]'
-                      : 'border-white/[0.10] hover:border-indigo-500/40'
+                        ? "border-emerald-500/50 bg-emerald-500/[0.04]"
+                        : "border-white/[0.10] hover:border-[var(--accent)]/40",
                   )}
                 >
                   <input
                     type="file"
                     accept="video/*,image/*"
                     onChange={handleFileChange}
-                    className="absolute inset-0 w-full h-full opacity-0 cursor-pointer"
+                    className="absolute inset-0 h-full w-full cursor-pointer opacity-0"
                     data-testid="file-input"
                   />
                   {isDragging ? (
                     <>
-                      <div className="h-14 w-14 rounded-2xl bg-indigo-500/20 flex items-center justify-center mx-auto mb-3 animate-pulse">
-                        <Upload className="h-7 w-7 text-indigo-300" />
+                      <div className="mx-auto mb-3 flex h-14 w-14 animate-pulse items-center justify-center rounded-2xl bg-[var(--accent-muted)]">
+                        <Upload className="h-7 w-7 text-[var(--accent)]" />
                       </div>
-                      <h3 className="text-h3 mb-1 text-indigo-300">Drop it right here</h3>
-                      <p className="text-slate-400 text-sm">Release to add your file</p>
+                      <h3 className="text-h3 mb-1 text-[var(--accent-hover)]">
+                        Drop it right here
+                      </h3>
+                      <p className="text-sm text-slate-400">Release to add your file</p>
                     </>
                   ) : file ? (
                     <>
-                      <div className="h-14 w-14 rounded-2xl score-bg-emerald flex items-center justify-center mx-auto mb-3">
+                      <div className="score-bg-emerald mx-auto mb-3 flex h-14 w-14 items-center justify-center rounded-2xl">
                         <Check className="h-7 w-7" />
                       </div>
                       <h3 className="text-h3 mb-1 text-emerald-300">{file.name}</h3>
-                      <p className="text-slate-400 text-sm">
+                      <p className="text-sm text-slate-400">
                         {(file.size / (1024 * 1024)).toFixed(1)} MB · Click or drop to change
                       </p>
                     </>
                   ) : (
                     <>
-                      <div className="h-14 w-14 rounded-2xl bg-indigo-500/15 text-indigo-300 flex items-center justify-center mx-auto mb-3">
+                      <div className="mx-auto mb-3 flex h-14 w-14 items-center justify-center rounded-2xl bg-[var(--accent-muted)] text-[var(--accent)]">
                         <Upload className="h-7 w-7" />
                       </div>
                       <h3 className="text-h3 mb-1 text-white">Drag & drop your file here</h3>
-                      <p className="text-slate-400 text-sm">or click to browse</p>
+                      <p className="text-sm text-slate-400">or click to browse</p>
                       <p className="text-meta mt-2">Supports: MP4, MOV, JPG, PNG (max 500MB)</p>
                     </>
                   )}
                 </div>
 
-                <div className="flex items-center gap-4 my-6">
-                  <div className="flex-1 divider-soft" />
+                <div className="my-6 flex items-center gap-4">
+                  <div className="divider-soft flex-1" />
                   <span className="text-meta">OR</span>
-                  <div className="flex-1 divider-soft" />
+                  <div className="divider-soft flex-1" />
                 </div>
 
                 <div className="space-y-4">
                   <div>
                     <label className="text-eyebrow mb-2 block">Paste a URL</label>
                     <div className="relative">
-                      <LinkIcon className="absolute left-4 top-1/2 -translate-y-1/2 h-4 w-4 text-slate-500" />
+                      <LinkIcon className="absolute left-4 top-1/2 h-4 w-4 -translate-y-1/2 text-slate-500" />
                       <input
                         type="url"
                         value={url}
                         onChange={(e) => setUrl(e.target.value)}
                         placeholder="https://youtube.com/watch?v=…"
-                        className="w-full bg-white/[0.04] border border-white/[0.08] rounded-xl py-2.5 pl-11 pr-4 text-white placeholder:text-slate-500 focus:outline-none focus:ring-2 focus:ring-indigo-500/50"
+                        className="w-full rounded-xl border border-white/[0.08] bg-white/[0.04] py-2.5 pl-11 pr-4 text-white placeholder:text-slate-500 focus:outline-none focus:ring-2 focus:ring-[var(--accent)]/50"
                         data-testid="url-input"
                       />
                     </div>
@@ -393,19 +669,19 @@ export default function Analyze() {
                       value={title}
                       onChange={(e) => setTitle(e.target.value)}
                       placeholder="My awesome video…"
-                      className="w-full bg-white/[0.04] border border-white/[0.08] rounded-xl py-2.5 px-4 text-white placeholder:text-slate-500 focus:outline-none focus:ring-2 focus:ring-indigo-500/50"
+                      className="w-full rounded-xl border border-white/[0.08] bg-white/[0.04] px-4 py-2.5 text-white placeholder:text-slate-500 focus:outline-none focus:ring-2 focus:ring-[var(--accent)]/50"
                       data-testid="title-input"
                     />
                   </div>
 
                   <div>
-                    <label className="text-eyebrow mb-2 block">Description (optional)</label>
+                    <label className="text-eyebrow mb-2 block">Description / script</label>
                     <textarea
                       value={description}
                       onChange={(e) => setDescription(e.target.value)}
-                      placeholder="What's your video about?"
+                      placeholder="What's your video about? Paste your script for better scoring."
                       rows={3}
-                      className="w-full bg-white/[0.04] border border-white/[0.08] rounded-xl py-2.5 px-4 text-white placeholder:text-slate-500 focus:outline-none focus:ring-2 focus:ring-indigo-500/50 resize-none"
+                      className="w-full resize-none rounded-xl border border-white/[0.08] bg-white/[0.04] px-4 py-2.5 text-white placeholder:text-slate-500 focus:outline-none focus:ring-2 focus:ring-[var(--accent)]/50"
                       data-testid="description-input"
                     />
                   </div>
@@ -418,10 +694,10 @@ export default function Analyze() {
                           key={p.id}
                           onClick={() => setSelectedPlatform(p.id)}
                           className={cn(
-                            "px-3.5 py-2 rounded-lg border text-sm transition-colors",
+                            "rounded-lg border px-3.5 py-2 text-sm transition-colors",
                             selectedPlatform === p.id
-                              ? 'bg-indigo-500/20 border-indigo-500/40 text-indigo-200'
-                              : 'bg-white/[0.025] border-white/[0.06] text-slate-400 hover:text-white hover:border-white/[0.12]'
+                              ? "border-[var(--accent)]/40 bg-[var(--accent-muted)] text-[var(--accent-hover)]"
+                              : "border-white/[0.06] bg-white/[0.025] text-slate-400 hover:border-white/[0.12] hover:text-white",
                           )}
                           data-testid={`platform-${p.id}`}
                         >
@@ -436,18 +712,18 @@ export default function Analyze() {
                 <Button
                   onClick={handleAnalyze}
                   disabled={!file && !url && !title && !description}
-                  className="w-full mt-6 bg-indigo-600 hover:bg-indigo-500 py-6 text-base"
+                  className="mt-6 w-full bg-[var(--accent)] py-6 text-base hover:bg-[var(--accent-hover)]"
                   data-testid="button-analyze-now"
                 >
-                  <Sparkles className="h-5 w-5 mr-2" />
+                  <Sparkles className="mr-2 h-5 w-5" />
                   Analyze Now
-                  <ArrowRight className="h-5 w-5 ml-2" />
+                  <ArrowRight className="ml-2 h-5 w-5" />
                 </Button>
               </div>
             </motion.div>
           )}
 
-          {step === 'analyzing' && (
+          {step === "analyzing" && (
             <motion.div
               key="analyzing"
               initial={{ opacity: 0, y: 8 }}
@@ -456,19 +732,19 @@ export default function Analyze() {
               transition={{ ease: [0.22, 1, 0.36, 1] }}
             >
               <PageHeader
-                eyebrow="Working"
+                eyebrow="Pipeline"
                 title="Analyzing…"
-                description="This usually takes 10–30 seconds."
+                description="Real stage progress from the score engine."
               />
 
               <div className="card-base card-pop p-8">
-                <div className="flex justify-center mb-8">
+                <div className="mb-8 flex justify-center">
                   <ScoreRing score={analysisProgress} size={160} label="Progress" />
                 </div>
 
-                <div className="w-full h-2 bg-white/[0.06] rounded-full overflow-hidden mb-8">
+                <div className="mb-8 h-2 w-full overflow-hidden rounded-full bg-white/[0.06]">
                   <motion.div
-                    className="h-full bg-gradient-to-r from-indigo-500 to-cyan-400"
+                    className="h-full bg-gradient-to-r from-[var(--accent)] to-[var(--score-90)]"
                     initial={{ width: 0 }}
                     animate={{ width: `${analysisProgress}%` }}
                     transition={{ duration: 0.3 }}
@@ -476,20 +752,20 @@ export default function Analyze() {
                 </div>
 
                 <div className="space-y-3">
-                  {ANALYSIS_STEP_NAMES.map((stepName, i) => {
-                    const isCompleted = analysisSteps.includes(stepName);
-                    const isCurrent = analysisSteps.length === i + 1 && !result;
+                  {PIPELINE_STAGES.map((s) => {
+                    const isCompleted = completedStages.includes(s.id);
+                    const isCurrent = currentStage === s.id && !isCompleted;
                     return (
-                      <div key={stepName} className="flex items-center gap-3">
+                      <div key={s.id} className="flex items-center gap-3">
                         {isCompleted ? (
                           <Check className="h-5 w-5 text-emerald-400" />
                         ) : isCurrent ? (
-                          <Loader2 className="h-5 w-5 text-indigo-400 animate-spin" />
+                          <Loader2 className="h-5 w-5 animate-spin text-[var(--accent)]" />
                         ) : (
                           <div className="h-5 w-5 rounded-full border-2 border-white/[0.10]" />
                         )}
-                        <span className={isCompleted ? 'text-white' : 'text-slate-500'}>
-                          {stepName}
+                        <span className={isCompleted || isCurrent ? "text-white" : "text-slate-500"}>
+                          {s.label}
                         </span>
                       </div>
                     );
@@ -499,7 +775,7 @@ export default function Analyze() {
             </motion.div>
           )}
 
-          {step === 'results' && result && (
+          {step === "results" && result && (
             <motion.div
               key="results"
               initial={{ opacity: 0, y: 8 }}
@@ -511,41 +787,76 @@ export default function Analyze() {
               <PageHeader
                 eyebrow="Result"
                 title="Your Viral Score"
-                description={title || 'Content analysis'}
+                description={title || "Content analysis"}
                 actions={
                   <>
                     <ShareDialog
                       analysisId={result.id}
-                      analysisTitle={title || 'Content Analysis'}
+                      analysisTitle={title || "Content Analysis"}
                       trigger={
-                        <Button variant="outline" className="border-white/[0.10] bg-white/[0.025]">
-                          <Share2 className="h-4 w-4 mr-2" />
+                        <Button
+                          variant="outline"
+                          className="border-white/[0.10] bg-white/[0.025]"
+                        >
+                          <Share2 className="mr-2 h-4 w-4" />
                           Share
                         </Button>
                       }
                     />
-                    <Button variant="outline" onClick={() => setStep('upload')} className="border-white/[0.10] bg-white/[0.025]">
-                      <RefreshCw className="h-4 w-4 mr-2" />
+                    <Button
+                      variant="outline"
+                      onClick={() => setShowHistory((v) => !v)}
+                      className="border-white/[0.10] bg-white/[0.025]"
+                    >
+                      <History className="mr-2 h-4 w-4" />
+                      History
+                    </Button>
+                    <Button
+                      variant="outline"
+                      onClick={() => {
+                        setStep("upload");
+                        setResult(null);
+                        setLocation("/analyze");
+                      }}
+                      className="border-white/[0.10] bg-white/[0.025]"
+                    >
+                      <RefreshCw className="mr-2 h-4 w-4" />
                       New analysis
                     </Button>
                   </>
                 }
               />
 
-              <div className="grid md:grid-cols-2 gap-6">
-                <div className="card-base card-pop p-7 relative overflow-hidden">
-                  <div className="absolute -top-20 -right-20 h-60 w-60 rounded-full bg-indigo-500/10 blur-3xl" />
+              <div className="grid gap-6 md:grid-cols-2">
+                <div className="card-base card-pop relative overflow-hidden p-7">
+                  <div className="absolute -right-20 -top-20 h-60 w-60 rounded-full bg-[var(--accent)]/10 blur-3xl" />
                   <div className="text-eyebrow mb-4 flex items-center gap-1.5">
                     <Target className="h-3 w-3" /> Latest Viral Score
                   </div>
                   <div className="flex flex-col items-center text-center">
                     <ScoreRing score={result.viralScore} size={180} strokeWidth={12} />
-                    <div className={`mt-4 inline-block px-3 py-1 rounded-full text-xs font-medium score-bg-${scoreTone(result.viralScore)}`}>
-                      {result.viralScore >= 60 ? '✓' : '⚠'} {getScoreLabel(result.viralScore)}
+                    <div
+                      className={`mt-4 inline-block rounded-full px-3 py-1 text-xs font-medium score-bg-${scoreTone(result.viralScore)}`}
+                    >
+                      {result.viralScore >= 60 ? "✓" : "⚠"}{" "}
+                      {getScoreLabel(result.viralScore)}
                     </div>
-                    <div className="mt-6 pt-5 divider-soft w-full">
+                    {(result.confidence != null || result.scoringProfileVersion) && (
+                      <p className="mt-3 font-mono text-[11px] text-slate-500">
+                        {result.scoringProfileVersion && (
+                          <span>{result.scoringProfileVersion}</span>
+                        )}
+                        {result.confidence != null && (
+                          <span>
+                            {result.scoringProfileVersion ? " · " : ""}
+                            {Math.round(result.confidence * 100)}% confidence
+                          </span>
+                        )}
+                      </p>
+                    )}
+                    <div className="divider-soft mt-6 w-full pt-5">
                       <p className="text-meta">If you fix the issues below, predicted score</p>
-                      <p className="text-display text-3xl text-emerald-300 mt-1.5 tabular-nums">
+                      <p className="text-display mt-1.5 text-3xl tabular-nums text-emerald-300">
                         {result.predictedScoreAfterFixes}
                       </p>
                     </div>
@@ -553,26 +864,29 @@ export default function Analyze() {
                 </div>
 
                 <div className="card-base p-6">
-                  <h3 className="text-h3 text-white mb-4">Score breakdown</h3>
+                  <h3 className="text-h3 mb-4 text-white">Score breakdown</h3>
                   <div className="space-y-1">
                     {sections.map((s) => (
                       <div key={s.key}>
-                        <ScoreBar score={sectionScores[s.key]} label={s.key} />
+                        <ScoreBar score={sectionScores[s.key] ?? 0} label={s.key} />
                         <AnimatePresence>
                           {expandedSection === s.key && (
                             <motion.div
                               initial={{ height: 0, opacity: 0 }}
-                              animate={{ height: 'auto', opacity: 1 }}
+                              animate={{ height: "auto", opacity: 1 }}
                               exit={{ height: 0, opacity: 0 }}
                               className="overflow-hidden"
                             >
-                              <div className="rounded-lg bg-white/[0.03] border border-white/[0.06] p-4 mb-3">
-                                <p className="text-sm text-slate-300 mb-3">{s.analysis}</p>
+                              <div className="mb-3 rounded-lg border border-white/[0.06] bg-white/[0.03] p-4">
+                                <p className="mb-3 text-sm text-slate-300">{s.analysis}</p>
                                 {s.suggestions && (
                                   <ul className="space-y-2">
                                     {s.suggestions.map((sg, i) => (
-                                      <li key={i} className="flex items-start gap-2 text-sm text-slate-400">
-                                        <Zap className="h-4 w-4 text-amber-300 mt-0.5 flex-shrink-0" />
+                                      <li
+                                        key={i}
+                                        className="flex items-start gap-2 text-sm text-slate-400"
+                                      >
+                                        <Zap className="mt-0.5 h-4 w-4 flex-shrink-0 text-amber-300" />
                                         {sg}
                                       </li>
                                     ))}
@@ -589,37 +903,84 @@ export default function Analyze() {
                 </div>
               </div>
 
-              <div className="card-base p-6">
-                <h3 className="text-h3 text-white mb-4">Top 3 fixes (do these first)</h3>
+              {result.diff && <ScoreDiffPanel diff={result.diff} />}
+
+              {result.retentionCurve && (
+                <RetentionCurveChart curve={result.retentionCurve} />
+              )}
+
+              <div>
+                <h3 className="text-h3 mb-4 text-white">Top fixes (do these first)</h3>
                 <div className="space-y-3">
-                  {result.top3Fixes.map((fix, i) => (
-                    <div key={i} className="rounded-xl bg-white/[0.03] border border-white/[0.06] p-4 flex items-start gap-4">
-                      <div className="h-9 w-9 rounded-lg bg-indigo-500/15 text-indigo-300 flex items-center justify-center font-bold flex-shrink-0">
-                        {i + 1}
-                      </div>
-                      <div className="flex-1 min-w-0">
-                        <div className="flex items-center gap-2 mb-1 flex-wrap">
-                          <span className="font-medium text-white">{fix.issue}</span>
-                          <span className="text-xs px-2 py-0.5 rounded-full score-bg-emerald font-medium">
-                            +{fix.predictedImpact} points
-                          </span>
-                        </div>
-                        <p className="text-slate-400 text-sm">{fix.fix}</p>
-                      </div>
-                      <Button
-                        variant="ghost"
-                        size="sm"
-                        onClick={() => {
+                  {result.top3Fixes
+                    .map((fix, i) => ({ fix, i }))
+                    .filter(({ i }) => !skippedFixes.has(i))
+                    .map(({ fix, i }) => (
+                      <FixCard
+                        key={`${fix.component}-${i}`}
+                        component={fix.component}
+                        title={fix.component.toUpperCase()}
+                        predictedImpact={fix.predictedImpact}
+                        diagnosis={fix.issue}
+                        suggestion={fix.fix}
+                        busy={reanalyzeMutation.isPending}
+                        onApply={() => applyFix(i, fix)}
+                        onGenerateMore={() => {
+                          toast({
+                            title: "Generating variants",
+                            description: "Hook Lab / Script Doctor coming next — copied fix for now",
+                          });
                           navigator.clipboard.writeText(fix.fix);
-                          toast({ title: "Copied to clipboard" });
                         }}
-                      >
-                        <Copy className="h-4 w-4" />
-                      </Button>
-                    </div>
-                  ))}
+                        onSkip={() =>
+                          setSkippedFixes((prev) => new Set(prev).add(i))
+                        }
+                      />
+                    ))}
+                  {result.top3Fixes.every((_, i) => skippedFixes.has(i)) && (
+                    <p className="text-sm text-slate-500">All fixes skipped.</p>
+                  )}
                 </div>
+                {appliedFixes.size > 0 && (
+                  <p className="mt-3 text-sm text-[var(--score-90)]">
+                    {appliedFixes.size} fix{appliedFixes.size > 1 ? "es" : ""} applied to
+                    draft — hit Re-analyze to measure impact.
+                  </p>
+                )}
               </div>
+
+              {showHistory && (
+                <div className="card-base p-5">
+                  <h3 className="text-h3 mb-3 text-white">Analysis history</h3>
+                  {!historyRows?.length ? (
+                    <p className="text-sm text-slate-500">No prior versions yet.</p>
+                  ) : (
+                    <ul className="space-y-2">
+                      {(historyRows as Array<{ id: string; viralScore: number | null; analyzedAt: string }>).map(
+                        (row, idx) => (
+                          <li
+                            key={row.id}
+                            className="flex items-center justify-between rounded-lg border border-white/[0.06] bg-white/[0.02] px-3 py-2 text-sm"
+                          >
+                            <span className="text-slate-400">
+                              v{(historyRows as unknown[]).length - idx}
+                              {idx === 0 ? " (latest snapshot)" : ""}
+                            </span>
+                            <span className="font-mono tabular-nums text-white">
+                              {row.viralScore ?? "—"}
+                            </span>
+                            <span className="font-mono text-xs text-slate-500">
+                              {row.analyzedAt
+                                ? new Date(row.analyzedAt).toLocaleString()
+                                : ""}
+                            </span>
+                          </li>
+                        ),
+                      )}
+                    </ul>
+                  )}
+                </div>
+              )}
 
               <ScheduleAndActuals
                 analysisId={result.id}
@@ -635,24 +996,30 @@ export default function Analyze() {
                 }}
               />
 
-              <div className="flex gap-4 flex-wrap">
+              <div className="flex flex-wrap gap-4">
                 <Button
-                  onClick={() => setStep('upload')}
-                  className="flex-1 bg-indigo-600 hover:bg-indigo-500 py-6"
+                  onClick={() => reanalyzeMutation.mutate()}
+                  disabled={reanalyzeMutation.isPending || !result.id}
+                  className="flex-1 bg-[var(--accent)] py-6 hover:bg-[var(--accent-hover)]"
                   data-testid="button-reanalyze"
                 >
-                  <RefreshCw className="h-5 w-5 mr-2" />
+                  <RefreshCw
+                    className={cn(
+                      "mr-2 h-5 w-5",
+                      reanalyzeMutation.isPending && "animate-spin",
+                    )}
+                  />
                   Re-analyze with changes
                 </Button>
                 <WouterLink
-                  href={`/repurpose?source=${encodeURIComponent((description || title || '').slice(0, 4000))}&analysisId=${result.id}`}
+                  href={`/repurpose?source=${encodeURIComponent((description || title || "").slice(0, 4000))}&analysisId=${result.id}`}
                 >
                   <Button
                     variant="outline"
                     className="flex-1 border-white/[0.10] bg-white/[0.025] py-6"
                     data-testid="button-repurpose-from-analysis"
                   >
-                    <Repeat className="h-5 w-5 mr-2" />
+                    <Repeat className="mr-2 h-5 w-5" />
                     Repurpose for other platforms
                   </Button>
                 </WouterLink>
