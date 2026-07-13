@@ -1,4 +1,5 @@
 import { NextResponse } from "next/server";
+import { createDb, hasDatabaseUrl, upsertReportLead } from "@repo/db";
 
 type Body = {
   email?: string;
@@ -18,11 +19,33 @@ export async function POST(req: Request) {
   if (!email.includes("@")) {
     return NextResponse.json({ error: "Valid email required" }, { status: 400 });
   }
-  // TODO: upsert report_leads via @repo/db
-  return NextResponse.json({
-    ok: true,
-    email,
-    reportSlug,
-    source: body.source || "web",
-  });
+
+  if (!hasDatabaseUrl()) {
+    return NextResponse.json(
+      { error: "DATABASE_URL is not configured on this deployment" },
+      { status: 503 },
+    );
+  }
+
+  try {
+    const db = createDb();
+    const row = await upsertReportLead(db, {
+      email,
+      reportSlug,
+      source: body.source || "web",
+    });
+    return NextResponse.json({
+      ok: true,
+      id: row.id,
+      email: row.email,
+      reportSlug: row.reportSlug,
+      persisted: true,
+    });
+  } catch (err) {
+    console.error("report subscribe failed", err);
+    return NextResponse.json(
+      { error: "Could not save your email." },
+      { status: 500 },
+    );
+  }
 }

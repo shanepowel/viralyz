@@ -1,4 +1,5 @@
 import { NextResponse } from "next/server";
+import { createDb, hasDatabaseUrl, upsertAffiliate } from "@repo/db";
 
 type Body = {
   name?: string;
@@ -15,7 +16,6 @@ function makeCode(name: string) {
   return `${base || "vz"}${suffix}`;
 }
 
-/** Affiliate apply: 30% recurring / 12 months. Persists when DB is wired. */
 export async function POST(req: Request) {
   let body: Body;
   try {
@@ -31,14 +31,37 @@ export async function POST(req: Request) {
       { status: 400 },
     );
   }
-  const code = makeCode(name);
-  // TODO: insert affiliates row via @repo/db
-  return NextResponse.json({
-    ok: true,
-    code,
-    commissionBps: 3000,
-    recurringMonths: 12,
-    status: "pending",
-    channel: (body.channel || "").trim() || null,
-  });
+
+  if (!hasDatabaseUrl()) {
+    return NextResponse.json(
+      { error: "DATABASE_URL is not configured on this deployment" },
+      { status: 503 },
+    );
+  }
+
+  try {
+    const db = createDb();
+    const code = makeCode(name);
+    const row = await upsertAffiliate(db, {
+      email,
+      name,
+      code,
+      channel: (body.channel || "").trim() || null,
+    });
+    return NextResponse.json({
+      ok: true,
+      code: row.code,
+      id: row.id,
+      commissionBps: row.commissionBps,
+      recurringMonths: row.recurringMonths,
+      status: row.status,
+      persisted: true,
+    });
+  } catch (err) {
+    console.error("affiliate apply failed", err);
+    return NextResponse.json(
+      { error: "Could not apply. Try again." },
+      { status: 500 },
+    );
+  }
 }

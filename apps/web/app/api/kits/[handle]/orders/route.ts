@@ -1,8 +1,11 @@
 import { NextResponse } from "next/server";
 import {
-  brandFeeCents,
-  getKitByHandle,
-} from "@/lib/kits";
+  createDb,
+  createPackageOrder,
+  ensureKitAndPackages,
+  hasDatabaseUrl,
+} from "@repo/db";
+import { brandFeeCents, getKitByHandle } from "@/lib/kits";
 
 type Body = {
   packageId?: string;
@@ -12,11 +15,6 @@ type Body = {
   notes?: string;
 };
 
-/**
- * Creates a package order in escrow.
- * Persists to package_orders when DATABASE_URL is wired; otherwise returns a
- * demo order id so the marketing checkout flow is end-to-end testable.
- */
 export async function POST(
   req: Request,
   ctx: { params: Promise<{ handle: string }> },
@@ -48,30 +46,63 @@ export async function POST(
   }
 
   const feeCents = brandFeeCents(pkg.priceCents);
-  const orderId = `ord_${Date.now().toString(36)}_${Math.random().toString(36).slice(2, 8)}`;
-  const autoApproveAt = new Date(Date.now() + 7 * 24 * 60 * 60 * 1000).toISOString();
 
-  // TODO: insert into package_orders via @repo/db when web has a DB client.
-  const order = {
-    id: orderId,
-    packageId: pkg.id,
-    mediaKitHandle: kit.handle,
-    buyerName,
-    buyerEmail,
-    brandName: (body.brandName || "").trim() || null,
-    notes: (body.notes || "").trim() || null,
-    amountCents: pkg.priceCents,
-    feeCents,
-    currency: pkg.currency,
-    status: "new",
-    escrowHeldAt: new Date().toISOString(),
-    autoApproveAt,
-  };
+  if (!hasDatabaseUrl()) {
+    return NextResponse.json(
+      { error: "DATABASE_URL is not configured on this deployment" },
+      { status: 503 },
+    );
+  }
 
-  return NextResponse.json({
-    orderId: order.id,
-    order,
-    message:
-      "Funds marked as held in escrow. Stripe capture wires before production payments.",
-  });
+  try {
+    const db = createDb();
+    const mediaKitId = await ensureKitAndPackages(db, {
+      id: `kit_${kit.handle}`,
+      userId: `demo_${kit.handle}`,
+      slug: kit.handle,
+      verified: kit.verified,
+      sections: {
+        displayName: kit.displayName,
+        niche: kit.niche,
+        followers: kit.followers,
+        score: kit.score,
+      },
+      packages: kit.packages.map((p, i) => ({
+        id: p.id,
+        name: p.name,
+        description: p.description,
+        deliveryDays: p.deliveryDays,
+        priceCents: p.priceCents,
+        currency: p.currency,
+        usageRights: p.usageRights,
+        sortOrder: i,
+      })),
+    });
+
+    const order = await createPackageOrder(db, {
+      packageId: pkg.id,
+      mediaKitId,
+      buyerEmail,
+      buyerName,
+      brandName: (body.brandName || "").trim() || null,
+      notes: (body.notes || "").trim() || null,
+      amountCents: pkg.priceCents,
+      feeCents,
+      currency: pkg.currency,
+    });
+
+    return NextResponse.json({
+      orderId: order.id,
+      order,
+      persisted: true,
+      message:
+        "Funds marked as held in escrow. Stripe capture wires before production payments.",
+    });
+  } catch (err) {
+    console.error("package order failed", err);
+    return NextResponse.json(
+      { error: "Could not create order. Try again." },
+      { status: 500 },
+    );
+  }
 }
