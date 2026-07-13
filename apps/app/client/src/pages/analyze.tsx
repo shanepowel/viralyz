@@ -2,14 +2,17 @@ import { useState, useCallback, useEffect, useRef } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import {
   Upload, Link as LinkIcon, Sparkles, Clock, ArrowRight, Check, Loader2,
-  RefreshCw, Zap, ChevronDown, Share2, Target, Repeat, History,
+  RefreshCw, Zap, Share2,
 } from "lucide-react";
 import { Link as WouterLink, useLocation } from "wouter";
 import { Button } from "@/components/ui/button";
 import { DashboardLayout } from "@/components/layout/DashboardLayout";
 import { PageHeader } from "@/components/ui/page-header";
-import { ScoreRing, scoreTone } from "@/components/ui/score-ring";
+import { ScoreRing } from "@/components/ui/score-ring";
 import { FixCard, type FixComponent } from "@repo/ui/fix-card";
+import { Panel } from "@repo/ui/panel";
+import { StickyActionBar } from "@repo/ui/sticky-action-bar";
+import { scoreColor } from "@repo/ui/lib/score";
 import { useToast } from "@/hooks/use-toast";
 import { useMutation, useQuery } from "@tanstack/react-query";
 import { ShareDialog } from "@/components/ShareDialog";
@@ -108,7 +111,6 @@ export default function Analyze() {
   const [completedStages, setCompletedStages] = useState<string[]>([]);
   const [currentStage, setCurrentStage] = useState<string | null>(null);
   const [result, setResult] = useState<AnalysisResult | null>(null);
-  const [expandedSection, setExpandedSection] = useState<string | null>(null);
   const [showReveal, setShowReveal] = useState(false);
   const [skippedFixes, setSkippedFixes] = useState<Set<number>>(new Set());
   const [appliedFixes, setAppliedFixes] = useState<Set<number>>(new Set());
@@ -171,7 +173,6 @@ export default function Analyze() {
         setSelectedPlatform(loadedAnalysis.targetPlatform as Platform);
       }
       setStep("results");
-      setExpandedSection("Hook Strength");
     } else if (!isLoadingAnalysis && analysisId && !loadedAnalysis) {
       setStep("upload");
     }
@@ -505,109 +506,18 @@ export default function Analyze() {
     return "Poor";
   };
 
-  const ScoreBar = ({
-    score,
-    max = 20,
-    label,
-  }: {
-    score: number;
-    max?: number;
-    label: string;
-  }) => {
-    const percentage = (score / max) * 100;
-    const tone = scoreTone(score * 5);
-    const fillColor: Record<string, string> = {
-      emerald: "bg-emerald-400",
-      lime: "bg-lime-400",
-      indigo: "bg-lime-400",
-      amber: "bg-amber-400",
-      rose: "bg-rose-400",
-      slate: "bg-slate-500",
-    };
-    const isExpanded = expandedSection === label;
-    return (
-      <button
-        type="button"
-        className="w-full cursor-pointer rounded-lg p-3 text-left transition-colors hover:bg-white/[0.03] -mx-3"
-        onClick={() => setExpandedSection(isExpanded ? null : label)}
-      >
-        <div className="mb-2 flex items-center justify-between">
-          <span className="text-sm font-medium text-slate-300">{label}</span>
-          <div className="flex items-center gap-2">
-            <span
-              className={`rounded px-2 py-0.5 text-xs font-bold tabular-nums score-bg-${tone}`}
-            >
-              {score}/{max}
-            </span>
-            <ChevronDown
-              className={cn(
-                "h-4 w-4 text-slate-500 transition-transform",
-                isExpanded && "rotate-180",
-              )}
-            />
-          </div>
-        </div>
-        <div className="h-1.5 w-full overflow-hidden rounded-full bg-white/[0.06]">
-          <motion.div
-            className={`h-full ${fillColor[tone]}`}
-            initial={{ width: 0 }}
-            animate={{ width: `${percentage}%` }}
-            transition={{ duration: 0.5, ease: [0.22, 1, 0.36, 1] }}
-          />
-        </div>
-      </button>
-    );
+  const getVerdict = (score: number) => {
+    if (score >= 85) return "Ready to post. One small fix would make it great.";
+    if (score >= 70) return "Close. A couple of fixes will get you there.";
+    if (score >= 50) return "Not ready yet. Start with the top fix.";
+    return "Needs work before you post. Fix the opening first.";
   };
 
-  const sections: Array<{
-    key: string;
-    analysis: string;
-    suggestions?: string[];
-    extra?: React.ReactNode;
-  }> = result
-    ? [
-        {
-          key: "Hook Strength",
-          analysis: result.hookAnalysis,
-          suggestions: result.hookSuggestions,
-        },
-        {
-          key: "Visual Impact",
-          analysis: result.visualAnalysis,
-          suggestions: result.visualSuggestions,
-        },
-        {
-          key: "Structure",
-          analysis: result.structureAnalysis,
-          suggestions: result.structureSuggestions,
-        },
-        {
-          key: "Metadata",
-          analysis: result.metadataAnalysis,
-          suggestions: result.metadataSuggestions,
-        },
-        {
-          key: "Timing",
-          analysis: result.timingAnalysis,
-          extra: (
-            <p className="text-sm text-emerald-300">
-              <Clock className="mr-1 inline h-4 w-4" />
-              Optimal time: {result.optimalPostingTime}
-            </p>
-          ),
-        },
-      ]
-    : [];
-
-  const sectionScores: Record<string, number> = result
-    ? {
-        "Hook Strength": result.hookScore,
-        "Visual Impact": result.visualScore,
-        Structure: result.structureScore,
-        Metadata: result.metadataScore,
-        Timing: result.timingScore,
-      }
-    : {};
+  const firstSentence = (text: string | null | undefined) => {
+    if (!text) return "No finding yet for this part.";
+    const cut = text.split(/(?<=[.!?])\s+/)[0] || text;
+    return cut.length > 120 ? `${cut.slice(0, 117)}…` : cut;
+  };
 
   return (
     <DashboardLayout>
@@ -625,7 +535,6 @@ export default function Analyze() {
           onComplete={() => {
             setShowReveal(false);
             setStep("results");
-            setExpandedSection("Hook Strength");
             pendingReveal.current = false;
           }}
         />
@@ -862,209 +771,297 @@ export default function Analyze() {
               animate={{ opacity: 1, y: 0 }}
               exit={{ opacity: 0, y: -8 }}
               transition={{ ease: [0.22, 1, 0.36, 1] }}
-              className="space-y-6"
+              className="space-y-5 pb-4"
             >
-              <PageHeader
-                eyebrow="Result"
-                title="Your Viral Score"
-                description={title || "Content analysis"}
-                actions={
-                  <>
-                    <ShareDialog
-                      analysisId={result.id}
-                      analysisTitle={title || "Content Analysis"}
-                      trigger={
-                        <Button
-                          variant="outline"
-                          className="border-white/[0.10] bg-white/[0.025]"
+              <div className="flex flex-wrap items-start justify-between gap-4 pt-6">
+                <div>
+                  <h1 className="font-[family-name:var(--font-display)] text-2xl font-bold tracking-tight text-[var(--ink)]">
+                    {title || "Untitled content"}
+                  </h1>
+                  <p className="mt-0.5 text-[13px] text-[var(--ink-3)]">
+                    Scored just now · {getScoreLabel(result.viralScore)}
+                    {historyRows && (historyRows as unknown[]).length > 1 && (
+                      <>
+                        {" · "}
+                        <button
+                          type="button"
+                          className="text-[var(--violet-deep)]"
+                          onClick={() => setShowHistory((v) => !v)}
                         >
-                          <Share2 className="mr-2 h-4 w-4" />
-                          Share
-                        </Button>
-                      }
-                    />
-                    <Button
-                      variant="outline"
-                      onClick={() => setShowHistory((v) => !v)}
-                      className="border-white/[0.10] bg-white/[0.025]"
-                    >
-                      <History className="mr-2 h-4 w-4" />
-                      History
-                    </Button>
-                    <Button
-                      variant="outline"
-                      onClick={() => {
-                        setStep("upload");
-                        setResult(null);
-                        setLocation("/analyze");
-                      }}
-                      className="border-white/[0.10] bg-white/[0.025]"
-                    >
-                      <RefreshCw className="mr-2 h-4 w-4" />
-                      New analysis
-                    </Button>
-                  </>
-                }
-              />
-
-              <div className="grid gap-6 md:grid-cols-2">
-                <div className="card-base card-pop relative overflow-hidden p-7">
-                  <div className="absolute -right-20 -top-20 h-60 w-60 rounded-full bg-[var(--accent)]/10 blur-3xl" />
-                  <div className="text-eyebrow mb-4 flex items-center gap-1.5">
-                    <Target className="h-3 w-3" /> Latest Viral Score
-                  </div>
-                  <div className="flex flex-col items-center text-center">
-                    <ScoreRing score={result.viralScore} size={180} strokeWidth={12} />
-                    <div
-                      className={`mt-4 inline-block rounded-full px-3 py-1 text-xs font-medium score-bg-${scoreTone(result.viralScore)}`}
-                    >
-                      {result.viralScore >= 60 ? "✓" : "⚠"}{" "}
-                      {getScoreLabel(result.viralScore)}
-                    </div>
-                    {(result.confidence != null || result.scoringProfileVersion) && (
-                      <p className="mt-3 font-mono text-[11px] text-slate-500">
-                        {result.scoringProfileVersion && (
-                          <span>{result.scoringProfileVersion}</span>
-                        )}
-                        {result.confidence != null && (
-                          <span>
-                            {result.scoringProfileVersion ? " · " : ""}
-                            {Math.round(result.confidence * 100)}% confidence
-                          </span>
-                        )}
-                      </p>
+                          see earlier versions
+                        </button>
+                      </>
                     )}
-                    <div className="divider-soft mt-6 w-full pt-5">
-                      <p className="text-meta">If you fix the issues below, predicted score</p>
-                      <p className="text-display mt-1.5 text-3xl tabular-nums text-emerald-300">
-                        {result.predictedScoreAfterFixes}
+                  </p>
+                </div>
+                <div className="flex flex-wrap gap-2">
+                  <ShareDialog
+                    analysisId={result.id}
+                    analysisTitle={title || "Content Analysis"}
+                    trigger={
+                      <Button
+                        variant="outline"
+                        className="rounded-full border-[var(--line-strong)] bg-[var(--card)] text-[var(--ink)]"
+                      >
+                        <Share2 className="mr-2 h-4 w-4" />
+                        Share
+                      </Button>
+                    }
+                  />
+                  <Button
+                    variant="outline"
+                    onClick={() => {
+                      setStep("upload");
+                      setResult(null);
+                      setLocation("/analyze");
+                    }}
+                    className="rounded-full border-[var(--line-strong)] bg-[var(--card)] text-[var(--ink)]"
+                  >
+                    New score
+                  </Button>
+                </div>
+              </div>
+
+              <div className="grid items-center gap-7 rounded-[var(--r-md)] border border-[var(--line)] bg-[var(--card)] px-7 py-6 shadow-[var(--shadow-card)] md:grid-cols-[150px_1fr_auto]">
+                <ScoreRing
+                  score={result.viralScore}
+                  size={150}
+                  label="Viral Score"
+                />
+                <div>
+                  <h2 className="mb-1.5 font-[family-name:var(--font-display)] text-[21px] font-semibold text-[var(--ink)]">
+                    {getVerdict(result.viralScore)}
+                  </h2>
+                  <div className="mb-3 flex flex-wrap items-center gap-2.5">
+                    <span className="inline-flex items-center gap-1.5 rounded-full bg-[var(--tint)] px-3 py-1 text-[11.5px] font-semibold text-[var(--ink)]">
+                      <span
+                        className="h-1.5 w-1.5 rounded-sm bg-[#FF0050]"
+                        aria-hidden
+                      />
+                      {selectedPlatform.charAt(0).toUpperCase() +
+                        selectedPlatform.slice(1)}
+                    </span>
+                    {result.predictedScoreAfterFixes != null &&
+                      result.predictedScoreAfterFixes > result.viralScore && (
+                        <span className="rounded-full bg-[var(--score-90-soft)] px-3 py-1 text-[11.5px] font-semibold text-[var(--score-90)]">
+                          Up to {result.predictedScoreAfterFixes} with fixes
+                        </span>
+                      )}
+                  </div>
+                  <p className="text-[12.5px] text-[var(--ink-3)]">
+                    {result.confidence != null ? (
+                      <>
+                        We are{" "}
+                        <b className="text-[var(--ink-2)]">
+                          {Math.round(result.confidence * 100)}% confident
+                        </b>{" "}
+                        in this prediction.
+                      </>
+                    ) : (
+                      <>Prediction based on your content graph.</>
+                    )}{" "}
+                    Predicted after fixes:{" "}
+                    <b className="text-[var(--ink-2)]">
+                      {result.predictedScoreAfterFixes ?? result.viralScore}
+                    </b>
+                    .
+                  </p>
+                </div>
+                <div className="flex flex-col gap-2">
+                  <WouterLink href="/calendar">
+                    <Button className="w-full rounded-full bg-[var(--violet)] hover:bg-[var(--violet-deep)]">
+                      Schedule for 6pm
+                    </Button>
+                  </WouterLink>
+                  <Button
+                    variant="outline"
+                    className="w-full rounded-full border-[var(--line-strong)] bg-[var(--card)] text-[var(--ink)]"
+                    onClick={() => reanalyzeMutation.mutate()}
+                    disabled={reanalyzeMutation.isPending || !result.id}
+                  >
+                    Score again
+                  </Button>
+                </div>
+              </div>
+
+              <div className="grid gap-3.5 sm:grid-cols-2 lg:grid-cols-5">
+                {[
+                  {
+                    name: "Opening",
+                    score: result.hookScore,
+                    text: firstSentence(result.hookAnalysis),
+                  },
+                  {
+                    name: "Visuals",
+                    score: result.visualScore,
+                    text: firstSentence(result.visualAnalysis),
+                  },
+                  {
+                    name: "Pacing",
+                    score: result.structureScore,
+                    text: firstSentence(result.structureAnalysis),
+                  },
+                  {
+                    name: "Words",
+                    score: result.metadataScore,
+                    text: firstSentence(result.metadataAnalysis),
+                  },
+                  {
+                    name: "Timing",
+                    score: result.timingScore,
+                    text: firstSentence(
+                      result.optimalPostingTime
+                        ? `${result.timingAnalysis} Best slot: ${result.optimalPostingTime}.`
+                        : result.timingAnalysis,
+                    ),
+                  },
+                ].map((c) => {
+                  const pct = Math.min(100, (c.score / 20) * 100);
+                  const fill = scoreColor(c.score * 5);
+                  return (
+                    <div
+                      key={c.name}
+                      className="rounded-[var(--r-md)] border border-[var(--line)] bg-[var(--card)] p-4 shadow-[var(--shadow-card)]"
+                    >
+                      <div className="mb-2 flex items-baseline justify-between">
+                        <span className="text-[13px] font-semibold text-[var(--ink)]">
+                          {c.name}
+                        </span>
+                        <span className="font-[family-name:var(--font-mono)] text-[12px] text-[var(--ink-3)]">
+                          {c.score}/20
+                        </span>
+                      </div>
+                      <div className="mb-2 h-1.5 overflow-hidden rounded-full bg-[var(--tint)]">
+                        <div
+                          className="h-full rounded-full"
+                          style={{ width: `${pct}%`, background: fill }}
+                        />
+                      </div>
+                      <p className="text-[11.5px] leading-snug text-[var(--ink-2)]">
+                        {c.text}
                       </p>
                     </div>
-                  </div>
-                </div>
-
-                <div className="card-base p-6">
-                  <h3 className="text-h3 mb-4 text-white">Score breakdown</h3>
-                  <div className="space-y-1">
-                    {sections.map((s) => (
-                      <div key={s.key}>
-                        <ScoreBar score={sectionScores[s.key] ?? 0} label={s.key} />
-                        <AnimatePresence>
-                          {expandedSection === s.key && (
-                            <motion.div
-                              initial={{ height: 0, opacity: 0 }}
-                              animate={{ height: "auto", opacity: 1 }}
-                              exit={{ height: 0, opacity: 0 }}
-                              className="overflow-hidden"
-                            >
-                              <div className="mb-3 rounded-lg border border-white/[0.06] bg-white/[0.03] p-4">
-                                <p className="mb-3 text-sm text-slate-300">{s.analysis}</p>
-                                {s.suggestions && (
-                                  <ul className="space-y-2">
-                                    {s.suggestions.map((sg, i) => (
-                                      <li
-                                        key={i}
-                                        className="flex items-start gap-2 text-sm text-slate-400"
-                                      >
-                                        <Zap className="mt-0.5 h-4 w-4 flex-shrink-0 text-amber-300" />
-                                        {sg}
-                                      </li>
-                                    ))}
-                                  </ul>
-                                )}
-                                {s.extra}
-                              </div>
-                            </motion.div>
-                          )}
-                        </AnimatePresence>
-                      </div>
-                    ))}
-                  </div>
-                </div>
+                  );
+                })}
               </div>
 
               {result.diff && <ScoreDiffPanel diff={result.diff} />}
 
-              {result.retentionCurve && (
-                <RetentionCurveChart curve={result.retentionCurve} />
-              )}
-
-              <div>
-                <h3 className="text-h3 mb-4 text-white">Top fixes (do these first)</h3>
-                <div className="space-y-3">
-                  {result.top3Fixes
-                    .map((fix, i) => ({ fix, i }))
-                    .filter(({ i }) => !skippedFixes.has(i))
-                    .map(({ fix, i }) => (
+              <Panel
+                title="Fixes"
+                action={
+                  <span className="text-[12px] text-[var(--ink-3)]">
+                    Ordered by what they are worth
+                  </span>
+                }
+              >
+                {result.top3Fixes
+                  .map((fix, i) => ({ fix, i }))
+                  .filter(({ i }) => !skippedFixes.has(i))
+                  .map(({ fix, i }) => {
+                    const isApplied = appliedFixes.has(i);
+                    return (
                       <FixCard
                         key={`${fix.component}-${i}`}
                         component={fix.component}
-                        title={fix.component.toUpperCase()}
+                        title={
+                          fix.component === "hook"
+                            ? "Rewrite the first line"
+                            : fix.component === "structure"
+                              ? "Tighten the pacing"
+                              : fix.component === "visual"
+                                ? "Strengthen the visuals"
+                                : fix.component === "metadata"
+                                  ? "Improve the words"
+                                  : "Improve the timing"
+                        }
                         predictedImpact={fix.predictedImpact}
                         diagnosis={fix.issue}
                         suggestion={fix.fix}
                         busy={reanalyzeMutation.isPending}
-                        onApply={() => applyFix(i, fix)}
-                        onGenerateMore={() => {
-                          toast({
-                            title: "Generating variants",
-                            description: "Hook Lab / Script Doctor coming next — copied fix for now",
-                          });
-                          navigator.clipboard.writeText(fix.fix);
-                        }}
-                        onSkip={() =>
-                          setSkippedFixes((prev) => new Set(prev).add(i))
+                        applied={isApplied}
+                        earnedPoints={
+                          isApplied ? fix.predictedImpact : undefined
+                        }
+                        onApply={
+                          isApplied ? undefined : () => applyFix(i, fix)
+                        }
+                        onSkip={
+                          isApplied
+                            ? undefined
+                            : () =>
+                                setSkippedFixes((prev) =>
+                                  new Set(prev).add(i),
+                                )
                         }
                       />
-                    ))}
-                  {result.top3Fixes.every((_, i) => skippedFixes.has(i)) && (
-                    <p className="text-sm text-slate-500">All fixes skipped.</p>
-                  )}
-                </div>
-                {appliedFixes.size > 0 && (
-                  <p className="mt-3 text-sm text-[var(--score-90)]">
-                    {appliedFixes.size} fix{appliedFixes.size > 1 ? "es" : ""} applied to
-                    draft — hit Re-analyze to measure impact.
+                    );
+                  })}
+                {result.top3Fixes.every((_, i) => skippedFixes.has(i)) && (
+                  <p className="px-5 py-4 text-sm text-[var(--ink-3)]">
+                    All fixes skipped.
                   </p>
                 )}
-              </div>
+              </Panel>
+
+              {result.retentionCurve && (
+                <Panel
+                  title="Where people will stay and leave"
+                  action={
+                    <span className="text-[12px] text-[var(--ink-3)]">
+                      Predicted watch curve
+                    </span>
+                  }
+                >
+                  <RetentionCurveChart curve={result.retentionCurve} />
+                </Panel>
+              )}
 
               {showHistory && (
-                <div className="card-base p-5">
-                  <h3 className="text-h3 mb-3 text-white">Analysis history</h3>
-                  {!historyRows?.length ? (
-                    <p className="text-sm text-slate-500">No prior versions yet.</p>
-                  ) : (
-                    <ul className="space-y-2">
-                      {(historyRows as Array<{ id: string; viralScore: number | null; analyzedAt: string }>).map(
-                        (row, idx) => (
+                <Panel title="Analysis history">
+                  <div className="px-5 py-4">
+                    {!historyRows?.length ? (
+                      <p className="text-sm text-[var(--ink-3)]">
+                        No prior versions yet.
+                      </p>
+                    ) : (
+                      <ul className="space-y-2">
+                        {(
+                          historyRows as Array<{
+                            id: string;
+                            viralScore: number | null;
+                            analyzedAt: string;
+                          }>
+                        ).map((row, idx) => (
                           <li
                             key={row.id}
-                            className="flex items-center justify-between rounded-lg border border-white/[0.06] bg-white/[0.02] px-3 py-2 text-sm"
+                            className="flex items-center justify-between rounded-[var(--r-sm)] border border-[var(--line)] bg-[var(--tint)] px-3 py-2 text-sm"
                           >
-                            <span className="text-slate-400">
+                            <span className="text-[var(--ink-2)]">
                               v{(historyRows as unknown[]).length - idx}
-                              {idx === 0 ? " (latest snapshot)" : ""}
+                              {idx === 0 ? " (latest)" : ""}
                             </span>
-                            <span className="font-mono tabular-nums text-white">
+                            <span className="font-[family-name:var(--font-mono)] tabular-nums text-[var(--ink)]">
                               {row.viralScore ?? "—"}
                             </span>
-                            <span className="font-mono text-xs text-slate-500">
+                            <span className="font-[family-name:var(--font-mono)] text-xs text-[var(--ink-3)]">
                               {row.analyzedAt
                                 ? new Date(row.analyzedAt).toLocaleString()
                                 : ""}
                             </span>
                           </li>
-                        ),
-                      )}
-                    </ul>
-                  )}
-                </div>
+                        ))}
+                      </ul>
+                    )}
+                  </div>
+                </Panel>
               )}
 
               <ScheduleAndActuals
                 analysisId={result.id}
-                predictedScore={result.predictedScoreAfterFixes ?? result.viralScore}
+                predictedScore={
+                  result.predictedScoreAfterFixes ?? result.viralScore
+                }
                 initialScheduledFor={loadedAnalysis?.scheduledFor ?? null}
                 initialPostedAt={loadedAnalysis?.postedAt ?? null}
                 initialStatus={loadedAnalysis?.status ?? null}
@@ -1076,41 +1073,38 @@ export default function Analyze() {
                 }}
               />
 
-              <div className="flex flex-wrap gap-4">
+              <StickyActionBar>
                 <Button
+                  variant="ghost"
+                  className="rounded-full text-[var(--ink-2)]"
+                  data-testid="button-save-draft"
+                >
+                  Save draft
+                </Button>
+                <Button
+                  variant="outline"
+                  className="rounded-full border-[var(--line-strong)] bg-[var(--card)] text-[var(--ink)]"
                   onClick={() => reanalyzeMutation.mutate()}
                   disabled={reanalyzeMutation.isPending || !result.id}
-                  className="flex-1 bg-[var(--accent)] py-6 hover:bg-[var(--accent-hover)]"
                   data-testid="button-reanalyze"
                 >
                   <RefreshCw
                     className={cn(
-                      "mr-2 h-5 w-5",
+                      "mr-2 h-4 w-4",
                       reanalyzeMutation.isPending && "animate-spin",
                     )}
                   />
-                  Re-analyze with changes
+                  Score again
                 </Button>
-                <WouterLink
-                  href={`/repurpose?source=${encodeURIComponent((description || title || "").slice(0, 4000))}&analysisId=${result.id}`}
-                >
+                <WouterLink href="/calendar">
                   <Button
-                    variant="outline"
-                    className="flex-1 border-white/[0.10] bg-white/[0.025] py-6"
-                    data-testid="button-repurpose-from-analysis"
+                    className="rounded-full bg-[var(--violet)] hover:bg-[var(--violet-deep)]"
+                    data-testid="button-schedule-results"
                   >
-                    <Repeat className="mr-2 h-5 w-5" />
-                    Repurpose for other platforms
+                    Schedule for 6pm
                   </Button>
                 </WouterLink>
-                <Button
-                  variant="outline"
-                  className="flex-1 border-white/[0.10] bg-white/[0.025] py-6"
-                  data-testid="button-save-draft"
-                >
-                  Save Draft
-                </Button>
-              </div>
+              </StickyActionBar>
             </motion.div>
           )}
         </AnimatePresence>

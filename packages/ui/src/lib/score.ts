@@ -8,19 +8,20 @@ export function scoreBand(score: number | null | undefined): ScoreBand {
   return "poor";
 }
 
+/** Paper-theme score palette (matches marketing rings). */
 export function scoreColor(score: number | null | undefined): string {
   const band = scoreBand(score);
   switch (band) {
     case "excellent":
-      return "#34D399";
+      return "#0FA968";
     case "good":
-      return "#A3E635";
+      return "#7CA426";
     case "fair":
-      return "#FBBF24";
+      return "#D9950B";
     case "poor":
-      return "#F87171";
+      return "#DE4E4E";
     case "none":
-      return "#64647A";
+      return "#928FA0";
     default: {
       const _exhaustive: never = band;
       return _exhaustive;

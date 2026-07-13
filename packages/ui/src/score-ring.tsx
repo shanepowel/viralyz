@@ -6,8 +6,8 @@ import { scoreBandClass, scoreColor } from "./lib/score";
 
 export interface ScoreRingProps {
   score: number | null | undefined;
-  /** Preset sizes: 32 table, 64 card, 120 header, 200 reveal — or custom px */
-  size?: 32 | 64 | 120 | 200 | number;
+  /** Preset sizes: 34 table, 64 card, 120/150 header, 200 reveal — or custom px */
+  size?: 32 | 34 | 64 | 120 | 150 | 200 | number;
   strokeWidth?: number;
   label?: string;
   className?: string;
@@ -24,8 +24,10 @@ export interface ScoreRingProps {
 
 const SIZE_STROKE: Record<number, number> = {
   32: 3,
+  34: 3.5,
   64: 5,
   120: 8,
+  150: 10,
   200: 10,
 };
 
@@ -68,7 +70,7 @@ export function ScoreRing({
   const circumference = 2 * Math.PI * radius;
   const offset = circumference - (displayScore / 100) * circumference;
   const fontSize =
-    size >= 200 ? 56 : size >= 120 ? 36 : size >= 64 ? 20 : 11;
+    size >= 200 ? 56 : size >= 150 ? 44 : size >= 120 ? 36 : size >= 64 ? 20 : 10.5;
 
   const componentValues = components
     ? [

@@ -59,7 +59,7 @@ export function AnalysisReveal({
     <AnimatePresence>
   {open && (
         <motion.div
-          className="fixed inset-0 z-[100] flex items-center justify-center bg-[#0A0A0F]/95 backdrop-blur-md"
+          className="fixed inset-0 z-[100] flex items-center justify-center bg-[color-mix(in_srgb,var(--paper,#FAFAF7)_92%,transparent)] backdrop-blur-md"
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           exit={{ opacity: 0, scale: 0.98 }}
@@ -110,9 +110,9 @@ export function AnalysisReveal({
                         {value}/20
                       </span>
                     </div>
-                    <div className="h-1.5 overflow-hidden rounded-full bg-white/[0.06]">
+                    <div className="h-1.5 overflow-hidden rounded-full bg-[var(--tint,#F1EFEA)]">
                       <motion.div
-                        className="h-full rounded-full bg-[var(--accent,#7C5CFF)]"
+                        className="h-full rounded-full bg-[var(--accent,#6C4CF1)]"
                         initial={{ width: 0 }}
                         animate={showBars ? { width: `${pct}%` } : { width: 0 }}
                         transition={{
