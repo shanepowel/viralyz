@@ -96,8 +96,8 @@ export async function registerRoutes(
   httpServer: Server,
   app: Express
 ): Promise<Server> {
+  // setupAuth also registers /api/auth/user (and login/logout for the active mode)
   await setupAuth(app);
-  registerAuthRoutes(app);
   registerObjectStorageRoutes(app);
   registerAutopilotRoutes(app);
   registerIntelligenceRoutes(app);
