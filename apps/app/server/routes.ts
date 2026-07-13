@@ -4,7 +4,7 @@ import { storage } from "./storage";
 import { insertContentSchema, insertCommentSchema, insertTribePostSchema, type InsertSwipePost } from "@shared/schema";
 import { z } from "zod";
 import { fromError } from "zod-validation-error";
-import { setupAuth, registerAuthRoutes, isAuthenticated } from "./replit_integrations/auth";
+import { setupAuth, isAuthenticated } from "./auth";
 import { registerObjectStorageRoutes } from "./replit_integrations/object_storage";
 import { registerAutopilotRoutes } from "./autopilot-routes";
 import { registerIntelligenceRoutes } from "./intelligence-routes";
