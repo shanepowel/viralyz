@@ -1,11 +1,67 @@
 /**
- * Signal design system — Viralyz brand tokens
- * Dark-first; light theme via [data-theme="light"]
+ * Viralyz design system — paper / violet
+ * Matches marketing site. Light-first; dark via [data-theme="dark"].
  */
 
 :root,
+[data-theme="light"] {
+  --bg-base: #fafaf7;
+  --bg-surface: #ffffff;
+  --bg-elevated: #f1efea;
+  --bg-hover: #ebe8e1;
+  --border-subtle: #e7e4dd;
+  --border-strong: #d6d2c8;
+
+  --text-primary: #1b1826;
+  --text-secondary: #5b5768;
+  --text-tertiary: #928fa0;
+
+  --accent: #6c4cf1;
+  --accent-hover: #5638d6;
+  --accent-muted: rgba(108, 76, 241, 0.1);
+  --accent-foreground: #ffffff;
+
+  /* Score semantic scale (marketing) */
+  --score-90: #0fa968;
+  --score-70: #7ca426;
+  --score-50: #d9950b;
+  --score-30: #de4e4e;
+
+  --success: #0fa968;
+  --warning: #d9950b;
+  --danger: #de4e4e;
+
+  --font-display: "Bricolage Grotesque", ui-sans-serif, sans-serif;
+  --font-body: "Inter", system-ui, ui-sans-serif, sans-serif;
+  --font-mono: "JetBrains Mono", ui-monospace, monospace;
+
+  --s-1: 4px;
+  --s-2: 8px;
+  --s-3: 12px;
+  --s-4: 16px;
+  --s-6: 24px;
+  --s-8: 32px;
+  --s-12: 48px;
+  --s-16: 64px;
+  --s-24: 96px;
+
+  --r-sm: 10px;
+  --r-md: 16px;
+  --r-lg: 22px;
+  --r-xl: 28px;
+  --r-full: 9999px;
+
+  --shadow-card: 0 1px 2px rgba(27, 24, 38, 0.05), 0 8px 24px rgba(27, 24, 38, 0.06);
+  --shadow-modal: 0 2px 4px rgba(27, 24, 38, 0.06), 0 20px 48px rgba(27, 24, 38, 0.12);
+  --glow-accent: 0 8px 28px rgba(108, 76, 241, 0.22);
+
+  --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
+  --dur-fast: 150ms;
+  --dur-med: 300ms;
+  --dur-slow: 600ms;
+}
+
 [data-theme="dark"] {
-  /* Color — dark (default) */
   --bg-base: #0a0a0f;
   --bg-surface: #12121a;
   --bg-elevated: #1a1a26;
@@ -20,86 +76,32 @@
   --accent: #7c5cff;
   --accent-hover: #937bff;
   --accent-muted: rgba(124, 92, 255, 0.12);
-  --accent-foreground: #ffffff;
 
-  /* Score semantic scale */
   --score-90: #34d399;
   --score-70: #a3e635;
   --score-50: #fbbf24;
   --score-30: #f87171;
 
-  --success: #34d399;
-  --warning: #fbbf24;
-  --danger: #f87171;
-
-  /* Typography */
-  --font-display: "Clash Display", "Space Grotesk", ui-sans-serif, sans-serif;
-  --font-body: "Inter", system-ui, ui-sans-serif, sans-serif;
-  --font-mono: "JetBrains Mono", ui-monospace, monospace;
-
-  /* Spacing (8pt grid) */
-  --s-1: 4px;
-  --s-2: 8px;
-  --s-3: 12px;
-  --s-4: 16px;
-  --s-6: 24px;
-  --s-8: 32px;
-  --s-12: 48px;
-  --s-16: 64px;
-  --s-24: 96px;
-
-  /* Radii */
-  --r-sm: 8px;
-  --r-md: 12px;
-  --r-lg: 16px;
-  --r-xl: 24px;
-  --r-full: 9999px;
-
-  /* Elevation */
   --shadow-card: 0 1px 2px rgba(0, 0, 0, 0.4);
   --shadow-modal: 0 24px 64px rgba(0, 0, 0, 0.6);
   --glow-accent: 0 0 32px rgba(124, 92, 255, 0.25);
-
-  /* Motion */
-  --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
-  --dur-fast: 150ms;
-  --dur-med: 300ms;
-  --dur-slow: 600ms;
 }
 
-[data-theme="light"] {
-  --bg-base: #fafafc;
-  --bg-surface: #ffffff;
-  --bg-elevated: #ffffff;
-  --bg-hover: #f0f0f5;
-  --border-subtle: #e8e8f0;
-  --border-strong: #d0d0dc;
-
-  --text-primary: #14141f;
-  --text-secondary: #5a5a72;
-  --text-tertiary: #8a8aa0;
-
-  --accent-muted: rgba(124, 92, 255, 0.1);
-  --shadow-card: 0 1px 2px rgba(20, 20, 31, 0.06);
-  --shadow-modal: 0 24px 64px rgba(20, 20, 31, 0.16);
-}
-
-/* Score color helper — set --score-color from JS or utility class */
 .score-excellent {
   --score-color: var(--score-90);
-  --score-color-alpha: rgba(52, 211, 153, 0.25);
+  --score-color-alpha: rgba(15, 169, 104, 0.18);
 }
 .score-good {
   --score-color: var(--score-70);
-  --score-color-alpha: rgba(163, 230, 53, 0.25);
+  --score-color-alpha: rgba(124, 164, 38, 0.18);
 }
 .score-fair {
   --score-color: var(--score-50);
-  --score-color-alpha: rgba(251, 191, 36, 0.25);
+  --score-color-alpha: rgba(217, 149, 11, 0.18);
 }
 .score-poor {
   --score-color: var(--score-30);
-  --score-color-alpha: rgba(248, 113, 113, 0.2);
+  --score-color-alpha: rgba(222, 78, 78, 0.16);
 }
 
 .glow-score {

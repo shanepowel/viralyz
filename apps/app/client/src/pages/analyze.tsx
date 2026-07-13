@@ -528,11 +528,11 @@ export default function Analyze() {
     return (
       <button
         type="button"
-        className="w-full cursor-pointer rounded-lg p-3 text-left transition-colors hover:bg-white/[0.03] -mx-3"
+        className="w-full cursor-pointer rounded-lg p-3 text-left transition-colors hover:bg-secondary/80 -mx-3"
         onClick={() => setExpandedSection(isExpanded ? null : label)}
       >
         <div className="mb-2 flex items-center justify-between">
-          <span className="text-sm font-medium text-slate-300">{label}</span>
+          <span className="text-sm font-medium text-muted-foreground">{label}</span>
           <div className="flex items-center gap-2">
             <span
               className={`rounded px-2 py-0.5 text-xs font-bold tabular-nums score-bg-${tone}`}
@@ -541,7 +541,7 @@ export default function Analyze() {
             </span>
             <ChevronDown
               className={cn(
-                "h-4 w-4 text-slate-500 transition-transform",
+                "h-4 w-4 text-muted-foreground transition-transform",
                 isExpanded && "rotate-180",
               )}
             />
@@ -643,7 +643,7 @@ export default function Analyze() {
             >
               <div className="text-center">
                 <Loader2 className="mx-auto mb-4 h-12 w-12 animate-spin text-[var(--accent,#7C5CFF)]" />
-                <p className="text-slate-400">Loading analysis…</p>
+                <p className="text-muted-foreground">Loading analysis…</p>
               </div>
             </motion.div>
           )}
@@ -675,7 +675,7 @@ export default function Analyze() {
                       ? "scale-[1.01] border-[var(--accent)] bg-[var(--accent-muted)]"
                       : file
                         ? "border-emerald-500/50 bg-emerald-500/[0.04]"
-                        : "border-white/[0.10] hover:border-[var(--accent)]/40",
+                        : "border-border hover:border-[var(--accent)]/40",
                   )}
                 >
                   <input
@@ -693,7 +693,7 @@ export default function Analyze() {
                       <h3 className="text-h3 mb-1 text-[var(--accent-hover)]">
                         Drop it right here
                       </h3>
-                      <p className="text-sm text-slate-400">Release to add your file</p>
+                      <p className="text-sm text-muted-foreground">Release to add your file</p>
                     </>
                   ) : file ? (
                     <>
@@ -701,7 +701,7 @@ export default function Analyze() {
                         <Check className="h-7 w-7" />
                       </div>
                       <h3 className="text-h3 mb-1 text-emerald-300">{file.name}</h3>
-                      <p className="text-sm text-slate-400">
+                      <p className="text-sm text-muted-foreground">
                         {(file.size / (1024 * 1024)).toFixed(1)} MB · Click or drop to change
                       </p>
                     </>
@@ -710,8 +710,8 @@ export default function Analyze() {
                       <div className="mx-auto mb-3 flex h-14 w-14 items-center justify-center rounded-2xl bg-[var(--accent-muted)] text-[var(--accent)]">
                         <Upload className="h-7 w-7" />
                       </div>
-                      <h3 className="text-h3 mb-1 text-white">Drag & drop your file here</h3>
-                      <p className="text-sm text-slate-400">or click to browse</p>
+                      <h3 className="text-h3 mb-1 text-foreground">Drag & drop your file here</h3>
+                      <p className="text-sm text-muted-foreground">or click to browse</p>
                       <p className="text-meta mt-2">Supports: MP4, MOV, JPG, PNG (max 500MB)</p>
                     </>
                   )}
@@ -727,13 +727,13 @@ export default function Analyze() {
                   <div>
                     <label className="text-eyebrow mb-2 block">Paste a URL</label>
                     <div className="relative">
-                      <LinkIcon className="absolute left-4 top-1/2 h-4 w-4 -translate-y-1/2 text-slate-500" />
+                      <LinkIcon className="absolute left-4 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
                       <input
                         type="url"
                         value={url}
                         onChange={(e) => setUrl(e.target.value)}
                         placeholder="https://youtube.com/watch?v=…"
-                        className="w-full rounded-xl border border-white/[0.08] bg-white/[0.04] py-2.5 pl-11 pr-4 text-white placeholder:text-slate-500 focus:outline-none focus:ring-2 focus:ring-[var(--accent)]/50"
+                        className="w-full rounded-xl border border-border bg-secondary py-2.5 pl-11 pr-4 text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-[var(--accent)]/50"
                         data-testid="url-input"
                       />
                     </div>
@@ -746,7 +746,7 @@ export default function Analyze() {
                       value={title}
                       onChange={(e) => setTitle(e.target.value)}
                       placeholder="My awesome video…"
-                      className="w-full rounded-xl border border-white/[0.08] bg-white/[0.04] px-4 py-2.5 text-white placeholder:text-slate-500 focus:outline-none focus:ring-2 focus:ring-[var(--accent)]/50"
+                      className="w-full rounded-xl border border-border bg-secondary px-4 py-2.5 text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-[var(--accent)]/50"
                       data-testid="title-input"
                     />
                   </div>
@@ -758,7 +758,7 @@ export default function Analyze() {
                       onChange={(e) => setDescription(e.target.value)}
                       placeholder="What's your video about? Paste your script for better scoring."
                       rows={3}
-                      className="w-full resize-none rounded-xl border border-white/[0.08] bg-white/[0.04] px-4 py-2.5 text-white placeholder:text-slate-500 focus:outline-none focus:ring-2 focus:ring-[var(--accent)]/50"
+                      className="w-full resize-none rounded-xl border border-border bg-secondary px-4 py-2.5 text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-[var(--accent)]/50"
                       data-testid="description-input"
                     />
                   </div>
@@ -774,7 +774,7 @@ export default function Analyze() {
                             "rounded-lg border px-3.5 py-2 text-sm transition-colors",
                             selectedPlatform === p.id
                               ? "border-[var(--accent)]/40 bg-[var(--accent-muted)] text-[var(--accent-hover)]"
-                              : "border-white/[0.06] bg-white/[0.025] text-slate-400 hover:border-white/[0.12] hover:text-white",
+                              : "border-border bg-card text-muted-foreground hover:border-[var(--border-strong)] hover:text-foreground",
                           )}
                           data-testid={`platform-${p.id}`}
                         >
@@ -842,9 +842,9 @@ export default function Analyze() {
                         ) : isCurrent ? (
                           <Loader2 className="h-5 w-5 animate-spin text-[var(--accent)]" />
                         ) : (
-                          <div className="h-5 w-5 rounded-full border-2 border-white/[0.10]" />
+                          <div className="h-5 w-5 rounded-full border-2 border-border" />
                         )}
-                        <span className={isCompleted || isCurrent ? "text-white" : "text-slate-500"}>
+                        <span className={isCompleted || isCurrent ? "text-foreground" : "text-muted-foreground"}>
                           {s.label}
                         </span>
                       </div>
@@ -876,7 +876,7 @@ export default function Analyze() {
                       trigger={
                         <Button
                           variant="outline"
-                          className="border-white/[0.10] bg-white/[0.025]"
+                          className="border-border bg-card"
                         >
                           <Share2 className="mr-2 h-4 w-4" />
                           Share
@@ -886,7 +886,7 @@ export default function Analyze() {
                     <Button
                       variant="outline"
                       onClick={() => setShowHistory((v) => !v)}
-                      className="border-white/[0.10] bg-white/[0.025]"
+                      className="border-border bg-card"
                     >
                       <History className="mr-2 h-4 w-4" />
                       History
@@ -898,7 +898,7 @@ export default function Analyze() {
                         setResult(null);
                         setLocation("/analyze");
                       }}
-                      className="border-white/[0.10] bg-white/[0.025]"
+                      className="border-border bg-card"
                     >
                       <RefreshCw className="mr-2 h-4 w-4" />
                       New analysis
@@ -922,7 +922,7 @@ export default function Analyze() {
                       {getScoreLabel(result.viralScore)}
                     </div>
                     {(result.confidence != null || result.scoringProfileVersion) && (
-                      <p className="mt-3 font-mono text-[11px] text-slate-500">
+                      <p className="mt-3 font-mono text-[11px] text-muted-foreground">
                         {result.scoringProfileVersion && (
                           <span>{result.scoringProfileVersion}</span>
                         )}
@@ -944,7 +944,7 @@ export default function Analyze() {
                 </div>
 
                 <div className="card-base p-6">
-                  <h3 className="text-h3 mb-4 text-white">Score breakdown</h3>
+                  <h3 className="text-h3 mb-4 text-foreground">Score breakdown</h3>
                   <div className="space-y-1">
                     {sections.map((s) => (
                       <div key={s.key}>
@@ -957,14 +957,14 @@ export default function Analyze() {
                               exit={{ height: 0, opacity: 0 }}
                               className="overflow-hidden"
                             >
-                              <div className="mb-3 rounded-lg border border-white/[0.06] bg-white/[0.03] p-4">
-                                <p className="mb-3 text-sm text-slate-300">{s.analysis}</p>
+                              <div className="mb-3 rounded-lg border border-border bg-secondary/80 p-4">
+                                <p className="mb-3 text-sm text-muted-foreground">{s.analysis}</p>
                                 {s.suggestions && (
                                   <ul className="space-y-2">
                                     {s.suggestions.map((sg, i) => (
                                       <li
                                         key={i}
-                                        className="flex items-start gap-2 text-sm text-slate-400"
+                                        className="flex items-start gap-2 text-sm text-muted-foreground"
                                       >
                                         <Zap className="mt-0.5 h-4 w-4 flex-shrink-0 text-amber-300" />
                                         {sg}
@@ -990,7 +990,7 @@ export default function Analyze() {
               )}
 
               <div>
-                <h3 className="text-h3 mb-4 text-white">Top fixes (do these first)</h3>
+                <h3 className="text-h3 mb-4 text-foreground">Top fixes (do these first)</h3>
                 <div className="space-y-3">
                   {result.top3Fixes
                     .map((fix, i) => ({ fix, i }))
@@ -1018,7 +1018,7 @@ export default function Analyze() {
                       />
                     ))}
                   {result.top3Fixes.every((_, i) => skippedFixes.has(i)) && (
-                    <p className="text-sm text-slate-500">All fixes skipped.</p>
+                    <p className="text-sm text-muted-foreground">All fixes skipped.</p>
                   )}
                 </div>
                 {appliedFixes.size > 0 && (
@@ -1031,25 +1031,25 @@ export default function Analyze() {
 
               {showHistory && (
                 <div className="card-base p-5">
-                  <h3 className="text-h3 mb-3 text-white">Analysis history</h3>
+                  <h3 className="text-h3 mb-3 text-foreground">Analysis history</h3>
                   {!historyRows?.length ? (
-                    <p className="text-sm text-slate-500">No prior versions yet.</p>
+                    <p className="text-sm text-muted-foreground">No prior versions yet.</p>
                   ) : (
                     <ul className="space-y-2">
                       {(historyRows as Array<{ id: string; viralScore: number | null; analyzedAt: string }>).map(
                         (row, idx) => (
                           <li
                             key={row.id}
-                            className="flex items-center justify-between rounded-lg border border-white/[0.06] bg-white/[0.02] px-3 py-2 text-sm"
+                            className="flex items-center justify-between rounded-lg border border-border bg-card px-3 py-2 text-sm"
                           >
-                            <span className="text-slate-400">
+                            <span className="text-muted-foreground">
                               v{(historyRows as unknown[]).length - idx}
                               {idx === 0 ? " (latest snapshot)" : ""}
                             </span>
-                            <span className="font-mono tabular-nums text-white">
+                            <span className="font-mono tabular-nums text-foreground">
                               {row.viralScore ?? "—"}
                             </span>
-                            <span className="font-mono text-xs text-slate-500">
+                            <span className="font-mono text-xs text-muted-foreground">
                               {row.analyzedAt
                                 ? new Date(row.analyzedAt).toLocaleString()
                                 : ""}
@@ -1096,7 +1096,7 @@ export default function Analyze() {
                 >
                   <Button
                     variant="outline"
-                    className="flex-1 border-white/[0.10] bg-white/[0.025] py-6"
+                    className="flex-1 border-border bg-card py-6"
                     data-testid="button-repurpose-from-analysis"
                   >
                     <Repeat className="mr-2 h-5 w-5" />
@@ -1105,7 +1105,7 @@ export default function Analyze() {
                 </WouterLink>
                 <Button
                   variant="outline"
-                  className="flex-1 border-white/[0.10] bg-white/[0.025] py-6"
+                  className="flex-1 border-border bg-card py-6"
                   data-testid="button-save-draft"
                 >
                   Save Draft

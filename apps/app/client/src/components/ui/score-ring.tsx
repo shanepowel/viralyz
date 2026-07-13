@@ -55,11 +55,11 @@ export function ScoreRing({
   const offset = circumference - (displayScore / 100) * circumference;
 
   const stops: Record<string, [string, string]> = {
-    emerald: ["#34D399", "#34D399"],
-    lime: ["#A3E635", "#A3E635"],
-    amber: ["#FBBF24", "#FBBF24"],
-    rose: ["#F87171", "#F87171"],
-    slate: ["#64647A", "#3A3A52"],
+    emerald: ["#0FA968", "#0FA968"],
+    lime: ["#7CA426", "#7CA426"],
+    amber: ["#D9950B", "#D9950B"],
+    rose: ["#DE4E4E", "#DE4E4E"],
+    slate: ["#928FA0", "#D6D2C8"],
   };
   const [c1, c2] = stops[tone];
   const gradId = `ringGradient-${tone}`;
@@ -99,7 +99,7 @@ export function ScoreRing({
         />
       </svg>
       <div className="absolute inset-0 flex flex-col items-center justify-center">
-        <span className="text-display text-4xl text-white tabular-nums">
+        <span className="text-display text-4xl text-foreground tabular-nums font-mono">
           {score == null ? "—" : displayScore}
         </span>
         {label && <span className="text-eyebrow mt-1">{label}</span>}
