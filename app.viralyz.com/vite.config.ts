@@ -28,10 +28,10 @@ export default defineConfig({
       "@": path.resolve(import.meta.dirname, "client", "src"),
       "@shared": path.resolve(import.meta.dirname, "shared"),
       "@assets": path.resolve(import.meta.dirname, "attached_assets"),
-      "@repo/ui": path.resolve(import.meta.dirname, "../../packages/ui/src"),
+      "@repo/ui": path.resolve(import.meta.dirname, "packages/ui/src"),
       "@repo/score-engine": path.resolve(
         import.meta.dirname,
-        "../../packages/score-engine/src",
+        "packages/score-engine/src",
       ),
     },
   },
@@ -57,8 +57,8 @@ export default defineConfig({
     host: "0.0.0.0",
     allowedHosts: true,
     fs: {
-      strict: false,
-      allow: [path.resolve(import.meta.dirname, "../..")],
+      strict: true,
+      allow: [path.resolve(import.meta.dirname)],
       deny: ["**/.*"],
     },
   },

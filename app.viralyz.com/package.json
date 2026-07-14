@@ -1,5 +1,5 @@
 {
-  "name": "app",
+  "name": "viralyz-app",
   "version": "1.0.0",
   "type": "module",
   "private": true,
@@ -126,5 +126,10 @@
   },
   "optionalDependencies": {
     "bufferutil": "^4.0.8"
+  },
+  "description": "Standalone Viralyz product app (app.viralyz.com)",
+  "packageManager": "pnpm@9.0.0",
+  "engines": {
+    "node": ">=20"
   }
 }

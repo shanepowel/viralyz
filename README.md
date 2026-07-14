@@ -6,35 +6,59 @@
 
 | App / Package | Purpose |
 |---------------|---------|
-| `apps/web` | Marketing + dashboard shell (Next.js, Signal design) — Vercel |
-| `apps/app` | Full product (Express API + React) — analyze, tools, intelligence |
-| `packages/ui` | **Signal** design system (tokens, ScoreRing, FixCard, …) |
-| `packages/db` | Content-graph Drizzle schema (analyses, media kits, marketplace) |
+| `apps/web` | Marketing site (Next.js, Signal design) — viralyz.com on Vercel |
+| `app.viralyz.com` | **Standalone** product app (Express + React) — analyze, tools, kit |
+| `apps/studio` | Sanity Studio (standalone install) |
+| `packages/ui` | Signal design system shared with marketing |
+| `packages/db` | Content-graph / marketplace Drizzle schema (marketing APIs) |
 | `packages/config` | Shared positioning, tools, v2 pricing |
 
 ```
 viralyz/
+├── app.viralyz.com/       # Standalone product (own pnpm lockfile)
+│   ├── client/            # React UI
+│   ├── server/            # Express API
+│   └── packages/          # Vendored ui + score-engine
 ├── apps/
-│   ├── web/                 # Next.js — Signal landing + shell
-│   └── app/                 # Express + Vite product
+│   ├── web/               # Next.js marketing
+│   └── studio/            # Sanity (optional)
 ├── packages/
-│   ├── ui/                  # Signal design system
-│   ├── db/                  # Content graph schema
-│   ├── config/              # Constants & pricing
+│   ├── ui/                # Signal (marketing)
+│   ├── db/                # Marketplace schema
 │   └── …
 └── scripts/
-    └── backfill-content-graph.ts
+```
+
+## Product app (app.viralyz.com)
+
+Not part of the root workspace. Install and run from its folder:
+
+```bash
+cd app.viralyz.com
+cp ../.env.example .env
+# Set DATABASE_URL, SESSION_SECRET, OPENAI_API_KEY
+pnpm install
+pnpm db:push
+pnpm dev
+```
+
+- **App:** http://localhost:5000  
+- **Dev login:** http://localhost:5000/api/login  
+
+From repo root you can also: `pnpm dev:app` / `pnpm build:app` / `pnpm db:push`.
+
+## Marketing site
+
+```bash
+pnpm install          # root workspace (web + packages)
+pnpm dev:web          # http://localhost:3000
 ```
 
 ## Signal design system
 
-Dark-first tokens (`#0A0A0F` / accent `#7C5CFF`), Clash Display + Inter + JetBrains Mono.
+Warm paper tokens (`#FAFAF7` / violet `#6C4CF1`), Bricolage Grotesque + Inter + JetBrains Mono.
 
-Signature components in `@repo/ui`:
-- **ScoreRing** — brand mark; count-up; glow at 80+
-- **FixCard** — actionable suggestion with predicted impact
-- **MomentumSparkline** — score trend
-- **PlatformChips** — TikTok / YouTube / IG / X
+Signature components: ScoreRing (34 / 150), FixCard, Panel, StatCard, StatusChip, StickyActionBar.
 
 ## Pricing (v2)
 
@@ -51,37 +75,9 @@ Signature components in `@repo/ui`:
 | Region | `us-west-2` |
 
 ```bash
-# Legacy + product tables
+# Product tables (standalone app)
 pnpm db:push
 
-# Content-graph tables (packages/db)
+# Marketplace / content-graph (packages/db, used by apps/web)
 DATABASE_URL=… pnpm db:push:graph
-
-# Backfill content_analyses → content_items
-DATABASE_URL=… pnpm db:backfill
 ```
-
-## Quick start
-
-```bash
-pnpm install
-cp .env.example apps/app/.env
-# Set DATABASE_URL, SESSION_SECRET, OPENAI_API_KEY
-
-pnpm db:push
-pnpm dev
-```
-
-- **Marketing:** http://localhost:3000  
-- **App:** http://localhost:5000  
-- **Dev login:** http://localhost:5000/api/login  
-
-## Spec roadmap
-
-Phase 1: Signal UI package, landing reskin, content-graph schema.  
-Phase 2: Score Engine — profiles, FixCard, reveal, retention, re-score.  
-Phase 2b (this branch): **Real media pipeline** — local/GCS upload → ffmpeg frames → Whisper transcribe → vision notes → score; Inngest (`/api/inngest`) or local async jobs with polling.
-
-## License
-
-Private — all rights reserved.
