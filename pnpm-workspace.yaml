@@ -1,5 +1,5 @@
 packages:
-  # Studio is standalone (apps/studio) — install with `cd apps/studio && pnpm install`
+  # Product app lives at /app.viralyz.com (standalone — own pnpm install)
+  # Studio: cd apps/studio && pnpm install
   - "apps/web"
-  - "apps/app"
   - "packages/*"

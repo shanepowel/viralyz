@@ -1,12 +1,12 @@
 /**
  * Viralyz content-graph schema (v2.0)
  *
- * Additive tables that extend the existing product schema in apps/app.
+ * Additive tables that extend the existing product schema in this app.
  * These are the spine for Score Engine → Media Kit → Marketplace.
  *
- * Note: `users` / `content_analyses` already exist in apps/app/shared.
+ * Note: `users` / `content_analyses` already exist in ./schema.ts.
  * New tables reference users by varchar id without FK to keep packages/db
- * portable; apps/app adds FK constraints when integrating.
+ * portable; this app adds FK constraints when integrating.
  */
 import { sql } from "drizzle-orm";
 import {
