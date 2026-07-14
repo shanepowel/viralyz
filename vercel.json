@@ -12,5 +12,37 @@
     "env": {
       "ENABLE_EXPERIMENTAL_COREPACK": "1"
     }
-  }
+  },
+  "redirects": [
+    {
+      "source": "/dashboard",
+      "destination": "https://app.viralyz.com/",
+      "permanent": false
+    },
+    {
+      "source": "/dashboard/settings",
+      "destination": "https://app.viralyz.com/settings",
+      "permanent": false
+    },
+    {
+      "source": "/dashboard/tools/score-engine",
+      "destination": "https://app.viralyz.com/analyze",
+      "permanent": false
+    },
+    {
+      "source": "/dashboard/tools/hook-lab",
+      "destination": "https://app.viralyz.com/hook-lab",
+      "permanent": false
+    },
+    {
+      "source": "/dashboard/tools/:slug",
+      "destination": "https://app.viralyz.com/",
+      "permanent": false
+    },
+    {
+      "source": "/dashboard/:path*",
+      "destination": "https://app.viralyz.com/:path*",
+      "permanent": false
+    }
+  ]
 }

@@ -33,7 +33,7 @@ export const TOOLS: ToolDefinition[] = [
     name: "Viral Score",
     description:
       "Five-component score (0–100) with platform-tuned models and fix cards that predict impact.",
-    href: "/dashboard/tools/score-engine",
+    href: "/analyze",
     icon: "TrendingUp",
     category: "analyze",
     module: "A",
@@ -43,7 +43,7 @@ export const TOOLS: ToolDefinition[] = [
     name: "Hook Lab",
     description:
       "Generate hooks by style — question, pattern-interrupt, bold claim — tuned to what works for you.",
-    href: "/dashboard/tools/hook-lab",
+    href: "/hook-lab",
     icon: "Zap",
     category: "create",
     module: "B",
@@ -53,7 +53,7 @@ export const TOOLS: ToolDefinition[] = [
     name: "Script Doctor",
     description:
       "Inline annotations for weak hooks, buried payoffs, and pacing — plus teleprompter mode.",
-    href: "/dashboard/tools/script-doctor",
+    href: "/caption-studio",
     icon: "FileText",
     category: "create",
     module: "B",
@@ -63,7 +63,7 @@ export const TOOLS: ToolDefinition[] = [
     name: "Caption Studio",
     description:
       "Platform-aware captions with hashtag tiers, A/B pairs, and first-comment strategy.",
-    href: "/dashboard/tools/caption-studio",
+    href: "/caption-studio",
     icon: "Hash",
     category: "create",
     module: "B",
@@ -73,7 +73,7 @@ export const TOOLS: ToolDefinition[] = [
     name: "Thumbnail Studio",
     description:
       "Score and design thumbnails with feed simulator and platform safe-zone guides.",
-    href: "/dashboard/tools/thumbnail-studio",
+    href: "/thumbnails",
     icon: "Image",
     category: "create",
     module: "B",
@@ -83,7 +83,7 @@ export const TOOLS: ToolDefinition[] = [
     name: "Idea Generator",
     description:
       "Ideas with hook, outline, predicted score range, and trend linkage — one click to Script Doctor.",
-    href: "/dashboard/tools/idea-generator",
+    href: "/ideas",
     icon: "Lightbulb",
     category: "create",
     module: "B",
@@ -93,7 +93,7 @@ export const TOOLS: ToolDefinition[] = [
     name: "Trend Radar",
     description:
       "Niche-scoped formats, sounds, and hashtags with lifecycle stages — emerging to declining.",
-    href: "/dashboard/tools/trend-radar",
+    href: "/trends",
     icon: "Radar",
     category: "intelligence",
     module: "C",
@@ -103,7 +103,7 @@ export const TOOLS: ToolDefinition[] = [
     name: "Competitor Intel",
     description:
       "Score their posts, learn why they worked, then create your angle — never clone.",
-    href: "/dashboard/tools/competitor-intel",
+    href: "/competitors",
     icon: "Users",
     category: "intelligence",
     module: "C",
@@ -113,7 +113,7 @@ export const TOOLS: ToolDefinition[] = [
     name: "DM Automation",
     description:
       "Comment-to-DM triggers via official Meta APIs — keywords, templates, conversion tracking.",
-    href: "/dashboard/tools/auto-dm",
+    href: "/messages",
     icon: "MessageCircle",
     category: "grow",
     module: "D",
@@ -123,7 +123,7 @@ export const TOOLS: ToolDefinition[] = [
     name: "BioPage",
     description:
       "viralyz.com/@handle link-in-bio with analytics, tip jar, and Signal themes.",
-    href: "/dashboard/tools/biopage",
+    href: "/settings",
     icon: "Store",
     category: "publish",
     module: "E",
@@ -268,40 +268,45 @@ export const APP_DESCRIPTION =
 export const APP_POSITIONING =
   "Creatify makes it. Collabstr sells it. Viralyz is how you know it will work.";
 
+/** Production product host. Marketing CTAs always land here unless overridden. */
+export const PUBLIC_APP_ORIGIN = "https://app.viralyz.com";
+
 /**
- * Public CTA target for marketing → product.
+ * Public CTA target for marketing → product (app.viralyz.com).
  *
- * - Prefer `NEXT_PUBLIC_APP_URL` when it points at a real (non-localhost) host.
- * - Otherwise use same-origin `/dashboard` so Vercel / preview deploys never
- *   bounce users to `http://localhost:5000`.
+ * - Default: `https://app.viralyz.com`
+ * - Override with `NEXT_PUBLIC_APP_URL` (e.g. http://localhost:5000 for local)
  */
 export function getPublicAppUrl(
   envUrl: string | undefined = process.env.NEXT_PUBLIC_APP_URL,
 ): string {
   const trimmed = envUrl?.trim();
-  if (!trimmed) return "/dashboard";
+  if (!trimmed) return PUBLIC_APP_ORIGIN;
 
   try {
-    const host = new URL(trimmed).hostname;
-    if (host === "localhost" || host === "127.0.0.1") {
-      return "/dashboard";
-    }
+    return new URL(trimmed).origin;
   } catch {
-    // Relative paths like "/dashboard" or "/api/login" are fine as-is.
-    if (trimmed.startsWith("/")) return trimmed;
-    return "/dashboard";
+    if (trimmed.startsWith("/")) return PUBLIC_APP_ORIGIN;
+    return PUBLIC_APP_ORIGIN;
   }
-
-  return trimmed.replace(/\/$/, "");
 }
 
-/** Sign-in entry — Express `/api/login` when a real app host is configured. */
+/** Join an app path onto the public product origin. */
+export function getPublicAppPath(
+  path: string,
+  envUrl: string | undefined = process.env.NEXT_PUBLIC_APP_URL,
+): string {
+  const base = getPublicAppUrl(envUrl);
+  if (!path || path === "/") return base;
+  const normalized = path.startsWith("/") ? path : `/${path}`;
+  return `${base}${normalized}`;
+}
+
+/** Sign-in entry on the product app. */
 export function getPublicLoginUrl(
   envUrl: string | undefined = process.env.NEXT_PUBLIC_APP_URL,
 ): string {
-  const app = getPublicAppUrl(envUrl);
-  if (app.startsWith("/")) return "/dashboard";
-  return `${app}/api/login`;
+  return getPublicAppPath("/api/login", envUrl);
 }
 
 export const CASE_STUDIES = [
