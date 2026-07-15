@@ -1,3 +1,4 @@
+import "dotenv/config";
 import express, { type Request, Response, NextFunction } from "express";
 import { registerRoutes } from "./routes";
 import { serveStatic } from "./static";
@@ -6,6 +7,14 @@ import { startScheduler } from "./scheduler";
 
 const app = express();
 const httpServer = createServer(app);
+
+// A rejected promise inside an async Express 4 route/middleware doesn't
+// reach Express's error handler — it becomes an unhandled rejection, which
+// crashes the whole process (and every other in-flight request) by default.
+// Log and keep serving instead of taking the server down for one bad request.
+process.on("unhandledRejection", (reason) => {
+  console.error("Unhandled rejection:", reason);
+});
 
 declare module "http" {
   interface IncomingMessage {

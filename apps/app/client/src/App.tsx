@@ -13,7 +13,6 @@ import Dashboard from "@/pages/dashboard";
 import Analyze from "@/pages/analyze";
 import ContentLibrary from "@/pages/content-library";
 import Analytics from "@/pages/analytics-page";
-import Competitors from "@/pages/competitors";
 import Community from "@/pages/community";
 import Profile from "@/pages/profile";
 import MessagesPage from "@/pages/messages";
@@ -89,7 +88,6 @@ function AuthenticatedRoutes() {
           <Route path="/repurpose" component={RepurposePage} />
           <Route path="/insights" component={InsightsPage} />
           <Route path="/analytics" component={Analytics} />
-          <Route path="/competitors" component={Competitors} />
           <Route path="/community" component={Community} />
           <Route path="/profile/:userId" component={Profile} />
           <Route path="/messages" component={MessagesPage} />

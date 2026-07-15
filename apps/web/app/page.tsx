@@ -7,6 +7,8 @@ import {
   TOOLS,
 } from "@repo/config";
 import { Button } from "@/components/ui/button";
+import { SiteHeader } from "@/components/site-header";
+import { SiteFooter } from "@/components/site-footer";
 import {
   ArrowRight,
   Calendar,
@@ -14,7 +16,6 @@ import {
   Hash,
   Image,
   MessageCircle,
-  Sparkles,
   Store,
   TrendingUp,
   UserCircle,
@@ -39,37 +40,7 @@ const iconMap = {
 export default function HomePage() {
   return (
     <div className="min-h-screen bg-background">
-      <header className="sticky top-0 z-50 border-b border-border/50 bg-background/80 backdrop-blur-xl">
-        <div className="mx-auto flex h-16 max-w-7xl items-center justify-between px-6">
-          <Link href="/" className="flex items-center gap-2">
-            <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-primary">
-              <Sparkles className="h-4 w-4 text-primary-foreground" />
-            </div>
-            <span className="text-lg font-bold">{APP_NAME}</span>
-          </Link>
-          <nav className="hidden items-center gap-8 md:flex">
-            <a href="#tools" className="text-sm text-muted-foreground hover:text-foreground">
-              Tools
-            </a>
-            <a href="#pricing" className="text-sm text-muted-foreground hover:text-foreground">
-              Pricing
-            </a>
-          </nav>
-          <div className="flex items-center gap-3">
-            <Link href="/dashboard">
-              <Button variant="ghost" size="sm">
-                Sign in
-              </Button>
-            </Link>
-            <Link href={process.env.NEXT_PUBLIC_APP_URL || "http://localhost:5000"}>
-              <Button size="sm">
-                Open App
-                <ArrowRight className="ml-2 h-4 w-4" />
-              </Button>
-            </Link>
-          </div>
-        </div>
-      </header>
+      <SiteHeader />
 
       <main>
         <section className="relative overflow-hidden px-6 py-24 md:py-32">
@@ -101,6 +72,41 @@ export default function HomePage() {
             <p className="mt-4 text-sm text-muted-foreground">
               No credit card required. Start with free credits.
             </p>
+          </div>
+        </section>
+
+        <section className="border-t border-border px-6 py-16">
+          <div className="mx-auto grid max-w-6xl gap-6 md:grid-cols-2">
+            <Link
+              href="/for-creators"
+              className="group rounded-2xl border border-border bg-card p-8 transition-colors hover:border-primary/50"
+            >
+              <span className="text-sm font-medium text-primary">For creators</span>
+              <h3 className="mt-2 text-2xl font-bold">Grow your score. Get booked on proof.</h3>
+              <p className="mt-3 text-sm text-muted-foreground">
+                Score every video before you post, and turn your track record into a media kit
+                brands trust.
+              </p>
+              <span className="mt-4 inline-flex items-center gap-1 text-sm font-medium text-primary">
+                Explore for creators
+                <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
+              </span>
+            </Link>
+            <Link
+              href="/for-brands"
+              className="group rounded-2xl border border-border bg-card p-8 transition-colors hover:border-primary/50"
+            >
+              <span className="text-sm font-medium text-primary">For brands</span>
+              <h3 className="mt-2 text-2xl font-bold">Hire creators who can prove it.</h3>
+              <p className="mt-3 text-sm text-muted-foreground">
+                Search verified profiles by real performance and book campaigns safely through the
+                platform.
+              </p>
+              <span className="mt-4 inline-flex items-center gap-1 text-sm font-medium text-primary">
+                Explore for brands
+                <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
+              </span>
+            </Link>
           </div>
         </section>
 
@@ -208,19 +214,7 @@ export default function HomePage() {
         </section>
       </main>
 
-      <footer className="border-t border-border px-6 py-8">
-        <div className="mx-auto flex max-w-7xl flex-col items-center justify-between gap-4 md:flex-row">
-          <div className="flex items-center gap-2">
-            <div className="flex h-6 w-6 items-center justify-center rounded bg-primary">
-              <Sparkles className="h-3 w-3 text-primary-foreground" />
-            </div>
-            <span className="text-sm font-medium">{APP_NAME}</span>
-          </div>
-          <p className="text-sm text-muted-foreground">
-            © {new Date().getFullYear()} {APP_NAME}. All rights reserved.
-          </p>
-        </div>
-      </footer>
+      <SiteFooter />
     </div>
   );
 }
