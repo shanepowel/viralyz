@@ -4,15 +4,19 @@
   "scripts": {
     "build": "turbo run build",
     "dev": "turbo run dev",
-    "dev:app": "turbo run dev --filter=app",
+    "dev:app": "pnpm --dir app.viralyz.com dev",
     "dev:web": "turbo run dev --filter=web",
     "lint": "turbo run lint",
     "format": "prettier --write \"**/*.{ts,tsx,md}\"",
     "check-types": "turbo run check-types",
-    "db:push": "turbo run db:push --filter=app"
+    "db:push": "pnpm --dir app.viralyz.com db:push",
+    "db:push:graph": "pnpm --filter @repo/db push",
+    "db:backfill": "tsx scripts/backfill-content-graph.ts",
+    "build:app": "pnpm --dir app.viralyz.com build"
   },
   "devDependencies": {
     "prettier": "^3.7.4",
+    "tsx": "^4.20.5",
     "turbo": "^2.10.2",
     "typescript": "5.9.2"
   },

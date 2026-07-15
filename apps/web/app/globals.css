@@ -1,23 +1,25 @@
 @import "tailwindcss";
+@import "@repo/ui/tokens.css";
 
 @theme {
-  --font-sans: var(--font-geist-sans), ui-sans-serif, system-ui, sans-serif;
-  --font-mono: var(--font-geist-mono), ui-monospace, monospace;
+  --font-sans: var(--font-manrope), "Manrope", system-ui, sans-serif;
+  --font-display: var(--font-sora), "Sora", sans-serif;
+  --font-mono: var(--font-jetbrains), "JetBrains Mono", ui-monospace, monospace;
 
-  --color-background: #09090b;
-  --color-foreground: #fafafa;
-  --color-card: #18181b;
-  --color-card-foreground: #fafafa;
-  --color-primary: #a855f7;
-  --color-primary-foreground: #fafafa;
-  --color-secondary: #27272a;
-  --color-secondary-foreground: #fafafa;
-  --color-muted: #27272a;
-  --color-muted-foreground: #a1a1aa;
-  --color-accent: #7c3aed;
-  --color-accent-foreground: #fafafa;
-  --color-border: #27272a;
-  --color-ring: #a855f7;
+  --color-background: var(--bg-base);
+  --color-foreground: var(--text-primary);
+  --color-card: var(--bg-surface);
+  --color-card-foreground: var(--text-primary);
+  --color-primary: var(--accent);
+  --color-primary-foreground: var(--accent-foreground);
+  --color-secondary: var(--bg-elevated);
+  --color-secondary-foreground: var(--text-primary);
+  --color-muted: var(--bg-elevated);
+  --color-muted-foreground: var(--text-secondary);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-border: var(--border-subtle);
+  --color-ring: var(--accent);
 }
 
 * {
@@ -31,9 +33,7 @@ body {
 }
 
 body {
-  color: var(--color-foreground);
-  background: var(--color-background);
-  font-family: var(--font-sans);
+  margin: 0;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
@@ -43,13 +43,6 @@ a {
   text-decoration: none;
 }
 
-.gradient-text {
-  background: linear-gradient(135deg, #c084fc 0%, #a855f7 50%, #7c3aed 100%);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
-}
-
-.glow {
-  box-shadow: 0 0 60px rgba(168, 85, 247, 0.15);
+html {
+  scroll-behavior: smooth;
 }
