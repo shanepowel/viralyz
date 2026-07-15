@@ -5,7 +5,6 @@
  * just hired a Head of Demand Gen + their content shifted toward enterprise
  * positioning." Correlations are regenerated wholesale per competitor.
  */
-import OpenAI from "openai";
 import { db } from "../db";
 import { and, desc, eq, gte } from "drizzle-orm";
 import {
@@ -16,11 +15,7 @@ import {
   intelSignalCorrelations,
   type IntelSignalCorrelation,
 } from "@shared/schema";
-
-const openai = new OpenAI({
-  apiKey: process.env.AI_INTEGRATIONS_OPENAI_API_KEY,
-  baseURL: process.env.AI_INTEGRATIONS_OPENAI_BASE_URL,
-});
+import { openai } from "../lib/openai";
 
 type SignalRef = { type: "hiring" | "funding" | "podcast"; id: string; label: string };
 
@@ -65,7 +60,11 @@ export async function correlateSignals(competitorId: string): Promise<IntelSigna
   // Always clear stale correlations so removed signals don't linger.
   await db.delete(intelSignalCorrelations).where(eq(intelSignalCorrelations.competitorId, competitorId));
 
-  if (signalRefs.length === 0 || themes.length === 0 || !process.env.AI_INTEGRATIONS_OPENAI_API_KEY) {
+  if (
+    signalRefs.length === 0 ||
+    themes.length === 0 ||
+    !(process.env.AI_INTEGRATIONS_OPENAI_API_KEY || process.env.OPENAI_API_KEY)
+  ) {
     return [];
   }
 

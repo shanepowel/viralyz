@@ -1,4 +1,4 @@
-import { Shell } from "@/components/layout/Shell";
+import { DashboardLayout } from "@/components/layout/DashboardLayout";
 import { useAuth } from "@/hooks/use-auth";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { apiRequest } from "@/lib/queryClient";
@@ -138,7 +138,7 @@ export default function Admin() {
   ];
 
   return (
-    <Shell>
+    <DashboardLayout>
       <div className="max-w-7xl mx-auto py-8">
         <div className="flex items-center justify-between mb-8">
           <div>
@@ -450,7 +450,7 @@ export default function Admin() {
           </AlertDialogContent>
         </AlertDialog>
       </div>
-    </Shell>
+    </DashboardLayout>
   );
 }
 

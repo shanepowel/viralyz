@@ -10,7 +10,6 @@
  * column is reserved for a future release — even when set to "auto" the
  * runtime still requires an explicit user click to approve before posting.
  */
-import OpenAI from "openai";
 import { db } from "./db";
 import { and, asc, desc, eq, gte, isNull, lte, or } from "drizzle-orm";
 import {
@@ -44,11 +43,7 @@ import {
 // for the same path. Other LinkedIn helpers are now reached via the
 // dispatcher above.
 import { getConnectionForUser, findRecentPostByText } from "./integrations/linkedin";
-
-const openai = new OpenAI({
-  apiKey: process.env.AI_INTEGRATIONS_OPENAI_API_KEY,
-  baseURL: process.env.AI_INTEGRATIONS_OPENAI_BASE_URL,
-});
+import { openai } from "./lib/openai";
 
 const HOUR_MS = 60 * 60 * 1000;
 const DAY_MS = 24 * HOUR_MS;

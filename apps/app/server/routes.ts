@@ -4,7 +4,7 @@ import { storage } from "./storage";
 import { insertContentSchema, insertCommentSchema, insertTribePostSchema, type InsertSwipePost } from "@shared/schema";
 import { z } from "zod";
 import { fromError } from "zod-validation-error";
-import { setupAuth, registerAuthRoutes, isAuthenticated } from "./replit_integrations/auth";
+import { setupAuth, registerAuthRoutes, isAuthenticated } from "./auth";
 import { registerObjectStorageRoutes } from "./replit_integrations/object_storage";
 import { registerAutopilotRoutes } from "./autopilot-routes";
 import { registerIntelligenceRoutes } from "./intelligence-routes";
@@ -58,7 +58,7 @@ import { randomBytes } from "crypto";
 import bcrypt from "bcrypt";
 
 const isAdmin = async (req: Request, res: Response, next: NextFunction) => {
-  if (!req.isAuthenticated() || !req.user) {
+  if (!req.user) {
     return res.status(401).json({ error: "Unauthorized" });
   }
   const userId = (req.user as any).claims?.sub || (req.user as any).id;
@@ -94,6 +94,19 @@ export async function registerRoutes(
       res.json(contentList);
     } catch (error) {
       res.status(500).json({ error: "Failed to fetch content" });
+    }
+  });
+
+  app.get("/api/content/board", isAuthenticated, async (req, res) => {
+    try {
+      const userId = (req.user as any).claims?.sub || (req.user as any).id;
+      const platform = (req.query.platform as string | undefined) || undefined;
+      const niche = (req.query.niche as string | undefined) || undefined;
+      const q = (req.query.q as string | undefined) || undefined;
+      const data = await getBoardItems(userId, { platform, niche, q });
+      res.json(data);
+    } catch (e) {
+      res.status(500).json({ error: "Failed to fetch board" });
     }
   });
 
@@ -1152,19 +1165,6 @@ export async function registerRoutes(
     }
   });
 
-  app.get("/api/content/board", isAuthenticated, async (req, res) => {
-    try {
-      const userId = (req.user as any).claims?.sub || (req.user as any).id;
-      const platform = (req.query.platform as string | undefined) || undefined;
-      const niche = (req.query.niche as string | undefined) || undefined;
-      const q = (req.query.q as string | undefined) || undefined;
-      const data = await getBoardItems(userId, { platform, niche, q });
-      res.json(data);
-    } catch (e) {
-      res.status(500).json({ error: "Failed to fetch board" });
-    }
-  });
-
   const viewModeSchema = z.object({ mode: z.enum(["board", "list"]) });
   app.post("/api/user/view-mode", isAuthenticated, async (req, res) => {
     try {
@@ -1482,7 +1482,7 @@ export async function registerRoutes(
     tags: z.array(z.string().trim().min(1).max(40)).max(20).optional(),
   });
 
-  app.post("/api/admin/swipe-file", isAdmin, async (req, res) => {
+  app.post("/api/admin/swipe-file", isAuthenticated, isAdmin, async (req, res) => {
     try {
       const userId = (req.user as any).claims?.sub || (req.user as any).id;
       const parsed = swipeCreateSchema.safeParse(req.body);

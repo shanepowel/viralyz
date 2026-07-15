@@ -3,7 +3,7 @@ import { z } from "zod";
 import { fromError } from "zod-validation-error";
 import { db } from "./db";
 import { and, desc, eq, gte, lt } from "drizzle-orm";
-import { isAuthenticated } from "./replit_integrations/auth";
+import { isAuthenticated } from "./auth";
 import {
   intelCompetitors,
   intelCompetitorPosts,
@@ -33,12 +33,16 @@ type IntelligenceRequest = Request & { intel?: { planCap: number; planName: stri
 // isAuthenticated and through this guard, which loads the user's plan once
 // and attaches the cap to a typed `req.intel` field used by the handlers.
 async function requireIntelligencePlan(req: IntelligenceRequest, res: Response, next: NextFunction) {
-  const uid = userId(req);
-  if (!uid) return res.status(401).json({ error: "Not authenticated" });
-  const [me] = await db.select().from(users).where(eq(users.id, uid)).limit(1);
-  if (!me) return res.status(401).json({ error: "Account not found" });
-  req.intel = { planCap: planCap(me.plan), planName: me.plan ?? "free" };
-  next();
+  try {
+    const uid = userId(req);
+    if (!uid) return res.status(401).json({ error: "Not authenticated" });
+    const [me] = await db.select().from(users).where(eq(users.id, uid)).limit(1);
+    if (!me) return res.status(401).json({ error: "Account not found" });
+    req.intel = { planCap: planCap(me.plan), planName: me.plan ?? "free" };
+    next();
+  } catch (e) {
+    res.status(500).json({ error: "Failed to load plan" });
+  }
 }
 
 async function loadCompetitor(uid: string, id: string) {
