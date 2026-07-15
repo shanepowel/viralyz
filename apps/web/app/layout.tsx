@@ -1,22 +1,23 @@
 import type { Metadata } from "next";
 import {
-  Bricolage_Grotesque,
-  Inter,
+  Manrope,
+  Sora,
   JetBrains_Mono,
 } from "next/font/google";
 import type { CSSProperties } from "react";
 import { APP_DESCRIPTION, APP_NAME, APP_TAGLINE } from "@repo/config";
 import "./globals.css";
 
-const inter = Inter({
+const manrope = Manrope({
   subsets: ["latin"],
-  variable: "--font-inter",
+  variable: "--font-manrope",
+  weight: ["400", "500", "600", "700"],
 });
 
-const bricolage = Bricolage_Grotesque({
+const sora = Sora({
   subsets: ["latin"],
-  variable: "--font-bricolage",
-  weight: ["500", "600", "700"],
+  variable: "--font-sora",
+  weight: ["500", "600", "700", "800"],
 });
 
 const jetbrains = JetBrains_Mono({
@@ -55,11 +56,11 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body
-        className={`${inter.variable} ${bricolage.variable} ${jetbrains.variable} antialiased`}
+        className={`${manrope.variable} ${sora.variable} ${jetbrains.variable} antialiased`}
         style={
           {
-            ["--font-sans"]: "var(--font-inter)",
-            ["--font-display"]: "var(--font-bricolage)",
+            ["--font-sans"]: "var(--font-manrope)",
+            ["--font-display"]: "var(--font-sora)",
             ["--font-mono"]: "var(--font-jetbrains)",
           } as CSSProperties
         }

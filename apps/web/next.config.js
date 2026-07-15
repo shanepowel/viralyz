@@ -10,6 +10,21 @@ const nextConfig = {
     const app = "https://app.viralyz.com";
     return [
       {
+        source: "/browse",
+        destination: "/creators",
+        permanent: true,
+      },
+      {
+        source: "/browse/:path*",
+        destination: "/creators",
+        permanent: true,
+      },
+      {
+        source: "/brands",
+        destination: "/for-brands",
+        permanent: true,
+      },
+      {
         source: "/dashboard",
         destination: `${app}/`,
         permanent: false,
