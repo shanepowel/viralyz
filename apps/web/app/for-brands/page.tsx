@@ -45,7 +45,7 @@ export default function Page() {
           <div className="stat"><div className="num">0%</div><div className="label">Self-reported stats</div></div>
         </section>
 
-        <section className="band">
+        <section className="band" id="campaigns">
           <span className="kicker">How campaigns work</span>
           <div className="features-grid" style={{marginTop: "24px"}}>
             <div className="feature">

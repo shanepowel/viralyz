@@ -1,9 +1,18 @@
 import Link from "next/link";
-import { APP_NAME, getPublicAppPath } from "@repo/config";
+import { APP_NAME } from "@repo/config";
 import { ImageSlot } from "@/components/marketing/image-slot";
+import { getMarketingFooterColumns } from "@/components/marketing/nav-data";
+
+const SOCIAL = [
+  { label: "Tk", href: "https://www.tiktok.com", name: "TikTok" },
+  { label: "Yt", href: "https://www.youtube.com", name: "YouTube" },
+  { label: "Ig", href: "https://www.instagram.com", name: "Instagram" },
+  { label: "X", href: "https://x.com", name: "X" },
+] as const;
 
 export function SiteFooter() {
   const year = new Date().getFullYear();
+  const columns = getMarketingFooterColumns();
 
   return (
     <footer className="site-foot">
@@ -24,41 +33,22 @@ export function SiteFooter() {
               <ImageSlot id="foot-logo-3" shape="rect" label="Logo" />
             </div>
           </div>
-          <div className="foot-col">
-            <h4>Platform</h4>
-            <a href={getPublicAppPath("/analyze")}>Video scoring</a>
-            <a href={getPublicAppPath("/hook-lab")}>Hook tester</a>
-            <a href={getPublicAppPath("/caption-studio")}>Teleprompter</a>
-            <a href={getPublicAppPath("/thumbnails")}>Thumbnail tests</a>
-          </div>
-          <div className="foot-col">
-            <h4>Creators</h4>
-            <Link href="/for-creators">Verified profile</Link>
-            <a href={getPublicAppPath("/")}>Media kit builder</a>
-            <Link href="/tools/engagement-calculator">Rate calculator</Link>
-            <Link href="/blog">Academy</Link>
-          </div>
-          <div className="foot-col">
-            <h4>Brands</h4>
-            <Link href="/creators">Search creators</Link>
-            <Link href="/for-brands">Campaign manager</Link>
-            <Link href="/for-brands">Case studies</Link>
-            <Link href="/contact">Agencies</Link>
-          </div>
-          <div className="foot-col">
-            <h4>Resources</h4>
-            <Link href="/blog">Blog</Link>
-            <Link href="/contact">Help center</Link>
-            <Link href="/platform">API docs</Link>
-            <Link href="/about">Status</Link>
-          </div>
-          <div className="foot-col">
-            <h4>Company</h4>
-            <Link href="/about">About</Link>
-            <Link href="/affiliates">Affiliates</Link>
-            <Link href="/contact">Contact</Link>
-            <Link href="/privacy">Privacy</Link>
-          </div>
+          {columns.map((col) => (
+            <div className="foot-col" key={col.heading}>
+              <h4>{col.heading}</h4>
+              {col.links.map((link) =>
+                link.external ? (
+                  <a key={link.label} href={link.href}>
+                    {link.label}
+                  </a>
+                ) : (
+                  <Link key={link.label} href={link.href}>
+                    {link.label}
+                  </Link>
+                ),
+              )}
+            </div>
+          ))}
         </div>
         <div className="foot-bottom">
           <span>
@@ -68,11 +58,18 @@ export function SiteFooter() {
               · A Digiteq Holdings company · Windsor, UK
             </span>
           </span>
-          <div className="social" aria-hidden>
-            <span>Tk</span>
-            <span>Yt</span>
-            <span>Ig</span>
-            <span>X</span>
+          <div className="social">
+            {SOCIAL.map((s) => (
+              <a
+                key={s.label}
+                href={s.href}
+                target="_blank"
+                rel="noopener noreferrer"
+                aria-label={s.name}
+              >
+                {s.label}
+              </a>
+            ))}
           </div>
         </div>
       </div>

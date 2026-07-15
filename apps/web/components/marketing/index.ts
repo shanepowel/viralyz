@@ -11,3 +11,7 @@ export { AffiliateApplyForm } from "./affiliate-apply-form";
 export { ReportGateForm } from "./report-gate-form";
 export { ImageSlot } from "./image-slot";
 export { ThemeToggle } from "./theme-toggle";
+export {
+  getMarketingFooterColumns,
+  getMarketingNavGroups,
+} from "./nav-data";

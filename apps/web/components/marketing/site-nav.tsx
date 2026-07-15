@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { useId, useState } from "react";
+import { useEffect, useId, useRef, useState } from "react";
 import {
   APP_NAME,
   getPublicAppPath,
@@ -9,17 +9,20 @@ import {
   getPublicLoginUrl,
 } from "@repo/config";
 import { ImageSlot } from "@/components/marketing/image-slot";
+import {
+  getMarketingNavGroups,
+  type NavGroup,
+  type NavLink,
+} from "@/components/marketing/nav-data";
 import { ThemeToggle } from "@/components/marketing/theme-toggle";
 
-type MegaLink = {
-  href: string;
-  ico: string;
-  title: string;
-  desc: string;
-  external?: boolean;
-};
-
-function MegaItem({ link }: { link: MegaLink }) {
+function MegaItem({
+  link,
+  onNavigate,
+}: {
+  link: NavLink;
+  onNavigate?: () => void;
+}) {
   const inner = (
     <>
       <span className="ico">{link.ico}</span>
@@ -31,273 +34,143 @@ function MegaItem({ link }: { link: MegaLink }) {
   );
   if (link.external) {
     return (
-      <a className="mega-link" href={link.href}>
+      <a className="mega-link" href={link.href} onClick={onNavigate}>
         {inner}
       </a>
     );
   }
   return (
-    <Link className="mega-link" href={link.href}>
+    <Link className="mega-link" href={link.href} onClick={onNavigate}>
       {inner}
     </Link>
   );
 }
 
+function NavGroupMenu({
+  group,
+  open,
+  onOpen,
+  onClose,
+}: {
+  group: NavGroup;
+  open: boolean;
+  onOpen: () => void;
+  onClose: () => void;
+}) {
+  return (
+    <div
+      className={`nav-item${open ? " is-open" : ""}`}
+      onMouseEnter={onOpen}
+      onMouseLeave={onClose}
+      onFocusCapture={onOpen}
+    >
+      <Link
+        href={group.href}
+        className="nav-trigger"
+        aria-expanded={open}
+        aria-haspopup="true"
+      >
+        {group.label}
+        <span className="caret" aria-hidden />
+      </Link>
+      <div className="mega" role="menu" aria-label={group.label}>
+        {group.columns.map((col) => (
+          <div className="mega-col" key={col.heading}>
+            <h5>{col.heading}</h5>
+            {col.links.map((link) => (
+              <MegaItem key={link.title} link={link} onNavigate={onClose} />
+            ))}
+          </div>
+        ))}
+        {group.feature ? (
+          group.feature.external ? (
+            <a
+              className="mega-feat"
+              href={group.feature.href}
+              onClick={onClose}
+            >
+              <ImageSlot
+                id={group.feature.slotId}
+                shape="rect"
+                label={group.feature.slotLabel}
+              />
+              <div className="txt">
+                <strong>{group.feature.title}</strong>
+                <span>{group.feature.desc}</span>
+              </div>
+            </a>
+          ) : (
+            <Link
+              className="mega-feat"
+              href={group.feature.href}
+              onClick={onClose}
+            >
+              <ImageSlot
+                id={group.feature.slotId}
+                shape="rect"
+                label={group.feature.slotLabel}
+              />
+              <div className="txt">
+                <strong>{group.feature.title}</strong>
+                <span>{group.feature.desc}</span>
+              </div>
+            </Link>
+          )
+        ) : null}
+      </div>
+    </div>
+  );
+}
+
 export function SiteNav() {
   const toggleId = useId();
-  const [open, setOpen] = useState(false);
+  const [mobileOpen, setMobileOpen] = useState(false);
+  const [openGroup, setOpenGroup] = useState<NavGroup["id"] | null>(null);
+  const navRef = useRef<HTMLElement>(null);
+  const groups = getMarketingNavGroups();
   const appUrl = getPublicAppUrl();
   const loginUrl = getPublicLoginUrl();
 
-  const platformLinks: MegaLink[] = [
-    {
-      href: getPublicAppPath("/analyze"),
-      ico: "Sc",
-      title: "Video scoring",
-      desc: "Score out of 100 in 30 seconds",
-      external: true,
-    },
-    {
-      href: getPublicAppPath("/hook-lab"),
-      ico: "Hk",
-      title: "Hook tester",
-      desc: "Ten opening lines, ranked",
-      external: true,
-    },
-    {
-      href: getPublicAppPath("/caption-studio"),
-      ico: "Tp",
-      title: "Teleprompter",
-      desc: "Script feedback while you record",
-      external: true,
-    },
-    {
-      href: getPublicAppPath("/thumbnails"),
-      ico: "Th",
-      title: "Thumbnail tests",
-      desc: "Compare against your feed rivals",
-      external: true,
-    },
-    {
-      href: getPublicAppPath("/"),
-      ico: "An",
-      title: "Analytics",
-      desc: "Track score trends over time",
-      external: true,
-    },
-    {
-      href: "/platform",
-      ico: "Ap",
-      title: "Integrations",
-      desc: "TikTok, YouTube, Instagram, X",
-    },
-  ];
+  const closeMobile = () => setMobileOpen(false);
+  const closeMega = () => setOpenGroup(null);
 
-  const creatorLinks: MegaLink[] = [
-    {
-      href: "/for-creators",
-      ico: "Pr",
-      title: "Verified profile",
-      desc: "Real numbers, checked hourly",
-    },
-    {
-      href: getPublicAppPath("/"),
-      ico: "Mk",
-      title: "Media kit builder",
-      desc: "One link brands can trust",
-      external: true,
-    },
-    {
-      href: "/tools/engagement-calculator",
-      ico: "Rt",
-      title: "Rate calculator",
-      desc: "Suggested rates by niche",
-    },
-    {
-      href: "/blog",
-      ico: "Ac",
-      title: "Creator academy",
-      desc: "Courses on scoring higher",
-    },
-    {
-      href: "/for-creators",
-      ico: "St",
-      title: "Success stories",
-      desc: "Creators booked through Viralyz",
-    },
-    {
-      href: "/contact",
-      ico: "Cm",
-      title: "Community",
-      desc: "Swap notes with other creators",
-    },
-  ];
-
-  const brandLinks: MegaLink[] = [
-    {
-      href: "/creators",
-      ico: "Se",
-      title: "Search creators",
-      desc: "Filter by niche, score, platform",
-    },
-    {
-      href: "/for-brands",
-      ico: "Cg",
-      title: "Campaign manager",
-      desc: "Brief, book, and pay in one place",
-    },
-    {
-      href: "/for-brands",
-      ico: "Vd",
-      title: "Verified data",
-      desc: "No self-reported follower counts",
-    },
-    {
-      href: "/for-brands",
-      ico: "Cs",
-      title: "Case studies",
-      desc: "Real campaign results",
-    },
-    {
-      href: "/contact",
-      ico: "Ag",
-      title: "Agencies",
-      desc: "Manage multiple client rosters",
-    },
-  ];
-
-  const resourceLinks: MegaLink[] = [
-    {
-      href: "/blog",
-      ico: "Bl",
-      title: "Blog",
-      desc: "Scoring breakdowns & case studies",
-    },
-    {
-      href: "/contact",
-      ico: "He",
-      title: "Help center",
-      desc: "Guides and how-tos",
-    },
-    {
-      href: "/platform",
-      ico: "Ap",
-      title: "API docs",
-      desc: "Pull scores into your own tools",
-    },
-    {
-      href: "/about",
-      ico: "St",
-      title: "Status",
-      desc: "Uptime and incident history",
-    },
-  ];
-
-  const closeMobile = () => setOpen(false);
+  useEffect(() => {
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === "Escape") {
+        setOpenGroup(null);
+        setMobileOpen(false);
+      }
+    };
+    const onPointer = (e: MouseEvent) => {
+      if (!navRef.current?.contains(e.target as Node)) {
+        setOpenGroup(null);
+      }
+    };
+    window.addEventListener("keydown", onKey);
+    window.addEventListener("mousedown", onPointer);
+    return () => {
+      window.removeEventListener("keydown", onKey);
+      window.removeEventListener("mousedown", onPointer);
+    };
+  }, []);
 
   return (
     <>
-      <nav className="nav">
+      <nav className="nav" ref={navRef}>
         <Link href="/" className="brand" onClick={closeMobile}>
           <span className="mark" aria-hidden />
           {APP_NAME}
         </Link>
         <div className="nav-links">
-          <div className="nav-item">
-            <button type="button" className="nav-trigger">
-              Platform
-              <span className="caret" />
-            </button>
-            <div className="mega">
-              <div className="mega-col">
-                <h5>Score &amp; fix</h5>
-                {platformLinks.slice(0, 3).map((link) => (
-                  <MegaItem key={link.title} link={link} />
-                ))}
-              </div>
-              <div className="mega-col">
-                <h5>Grow</h5>
-                {platformLinks.slice(3).map((link) => (
-                  <MegaItem key={link.title} link={link} />
-                ))}
-              </div>
-              <div className="mega-feat">
-                <ImageSlot
-                  id="mega-platform"
-                  shape="rect"
-                  label="Product screenshot"
-                />
-                <div className="txt">
-                  <strong>New: live score while recording</strong>
-                  <span>See your number before you even post</span>
-                </div>
-              </div>
-            </div>
-          </div>
-
-          <div className="nav-item">
-            <button type="button" className="nav-trigger">
-              For creators
-              <span className="caret" />
-            </button>
-            <div className="mega">
-              <div className="mega-col">
-                <h5>Get discovered</h5>
-                {creatorLinks.slice(0, 3).map((link) => (
-                  <MegaItem key={link.title} link={link} />
-                ))}
-              </div>
-              <div className="mega-col">
-                <h5>Learn</h5>
-                {creatorLinks.slice(3).map((link) => (
-                  <MegaItem key={link.title} link={link} />
-                ))}
-              </div>
-            </div>
-          </div>
-
-          <div className="nav-item">
-            <button type="button" className="nav-trigger">
-              For brands
-              <span className="caret" />
-            </button>
-            <div className="mega">
-              <div className="mega-col">
-                <h5>Find talent</h5>
-                {brandLinks.slice(0, 3).map((link) => (
-                  <MegaItem key={link.title} link={link} />
-                ))}
-              </div>
-              <div className="mega-col">
-                <h5>Proof</h5>
-                {brandLinks.slice(3).map((link) => (
-                  <MegaItem key={link.title} link={link} />
-                ))}
-              </div>
-            </div>
-          </div>
-
-          <div className="nav-item">
-            <button type="button" className="nav-trigger">
-              Resources
-              <span className="caret" />
-            </button>
-            <div className="mega">
-              <div className="mega-col">
-                <h5>Learn</h5>
-                {resourceLinks.slice(0, 2).map((link) => (
-                  <MegaItem key={link.title} link={link} />
-                ))}
-              </div>
-              <div className="mega-col">
-                <h5>Build</h5>
-                {resourceLinks.slice(2).map((link) => (
-                  <MegaItem key={link.title} link={link} />
-                ))}
-              </div>
-            </div>
-          </div>
-
+          {groups.map((group) => (
+            <NavGroupMenu
+              key={group.id}
+              group={group}
+              open={openGroup === group.id}
+              onOpen={() => setOpenGroup(group.id)}
+              onClose={closeMega}
+            />
+          ))}
           <Link
             href="/pricing"
             className="nav-trigger"
@@ -325,64 +198,60 @@ export function SiteNav() {
         type="checkbox"
         id={toggleId}
         className="nav-toggle"
-        checked={open}
-        onChange={(e) => setOpen(e.target.checked)}
+        checked={mobileOpen}
+        onChange={(e) => setMobileOpen(e.target.checked)}
       />
       <div className="mobile-panel">
-        <details className="m-group">
-          <summary>Platform</summary>
-          <div className="m-sub">
-            {platformLinks.map((link) =>
-              link.external ? (
-                <a key={link.title} href={link.href} onClick={closeMobile}>
-                  {link.title}
-                </a>
-              ) : (
-                <Link key={link.title} href={link.href} onClick={closeMobile}>
-                  {link.title}
-                </Link>
-              ),
-            )}
-          </div>
-        </details>
-        <details className="m-group">
-          <summary>For creators</summary>
-          <div className="m-sub">
-            {creatorLinks.map((link) =>
-              link.external ? (
-                <a key={link.title} href={link.href} onClick={closeMobile}>
-                  {link.title}
-                </a>
-              ) : (
-                <Link key={link.title} href={link.href} onClick={closeMobile}>
-                  {link.title}
-                </Link>
-              ),
-            )}
-          </div>
-        </details>
-        <details className="m-group">
-          <summary>For brands</summary>
-          <div className="m-sub">
-            {brandLinks.map((link) => (
-              <Link key={link.title} href={link.href} onClick={closeMobile}>
-                {link.title}
+        {groups.map((group) => (
+          <details className="m-group" key={group.id}>
+            <summary>{group.label}</summary>
+            <div className="m-sub">
+              <Link href={group.href} onClick={closeMobile}>
+                Overview
               </Link>
-            ))}
-          </div>
-        </details>
-        <details className="m-group">
-          <summary>Resources</summary>
-          <div className="m-sub">
-            {resourceLinks.map((link) => (
-              <Link key={link.title} href={link.href} onClick={closeMobile}>
-                {link.title}
-              </Link>
-            ))}
-          </div>
-        </details>
+              {group.columns.flatMap((col) =>
+                col.links.map((link) =>
+                  link.external ? (
+                    <a
+                      key={`${group.id}-${link.title}`}
+                      href={link.href}
+                      onClick={closeMobile}
+                    >
+                      {link.title}
+                    </a>
+                  ) : (
+                    <Link
+                      key={`${group.id}-${link.title}`}
+                      href={link.href}
+                      onClick={closeMobile}
+                    >
+                      {link.title}
+                    </Link>
+                  ),
+                ),
+              )}
+              {group.feature ? (
+                group.feature.external ? (
+                  <a href={group.feature.href} onClick={closeMobile}>
+                    {group.feature.title}
+                  </a>
+                ) : (
+                  <Link href={group.feature.href} onClick={closeMobile}>
+                    {group.feature.title}
+                  </Link>
+                )
+              ) : null}
+            </div>
+          </details>
+        ))}
         <Link href="/pricing" className="m-plain" onClick={closeMobile}>
           Pricing
+        </Link>
+        <Link href="/tools" className="m-plain" onClick={closeMobile}>
+          Free tools
+        </Link>
+        <Link href="/contact" className="m-plain" onClick={closeMobile}>
+          Contact
         </Link>
         <div className="m-actions">
           <a href={loginUrl} className="btn btn-ghost" onClick={closeMobile}>
@@ -390,6 +259,13 @@ export function SiteNav() {
           </a>
           <a href={appUrl} className="btn btn-primary" onClick={closeMobile}>
             Start free
+          </a>
+          <a
+            href={getPublicAppPath("/analyze")}
+            className="btn btn-ghost"
+            onClick={closeMobile}
+          >
+            Score a video
           </a>
         </div>
       </div>

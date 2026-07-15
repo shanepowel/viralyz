@@ -104,89 +104,89 @@ export default function HomePage() {
         <section className="categories">
           <div className="categories-head">
             <h2>Browse by category</h2>
-            <a href="/creators" className="signin">All categories →</a>
+            <Link href="/creators" className="signin">All categories →</Link>
           </div>
           <div className="cat-scroll">
-            <div className="cat-card"><ImageSlot id="cat-1" shape="rect" label="Food photo" /><div className="label">Food<span>4,120 creators</span></div></div>
-            <div className="cat-card"><ImageSlot id="cat-2" shape="rect" label="Beauty photo" /><div className="label">Beauty<span>6,340 creators</span></div></div>
-            <div className="cat-card"><ImageSlot id="cat-3" shape="rect" label="Fitness photo" /><div className="label">Fitness<span>3,780 creators</span></div></div>
-            <div className="cat-card"><ImageSlot id="cat-4" shape="rect" label="Tech photo" /><div className="label">Tech<span>2,210 creators</span></div></div>
-            <div className="cat-card"><ImageSlot id="cat-5" shape="rect" label="Travel photo" /><div className="label">Travel<span>2,960 creators</span></div></div>
-            <div className="cat-card"><ImageSlot id="cat-6" shape="rect" label="Gaming photo" /><div className="label">Gaming<span>1,830 creators</span></div></div>
+            <Link href="/creators?niche=Food" className="cat-card"><ImageSlot id="cat-1" shape="rect" label="Food photo" /><div className="label">Food<span>4,120 creators</span></div></Link>
+            <Link href="/creators?niche=Beauty" className="cat-card"><ImageSlot id="cat-2" shape="rect" label="Beauty photo" /><div className="label">Beauty<span>6,340 creators</span></div></Link>
+            <Link href="/creators?niche=Fitness" className="cat-card"><ImageSlot id="cat-3" shape="rect" label="Fitness photo" /><div className="label">Fitness<span>3,780 creators</span></div></Link>
+            <Link href="/creators?niche=Tech" className="cat-card"><ImageSlot id="cat-4" shape="rect" label="Tech photo" /><div className="label">Tech<span>2,210 creators</span></div></Link>
+            <Link href="/creators?niche=Travel" className="cat-card"><ImageSlot id="cat-5" shape="rect" label="Travel photo" /><div className="label">Travel<span>2,960 creators</span></div></Link>
+            <Link href="/creators?niche=Gaming" className="cat-card"><ImageSlot id="cat-6" shape="rect" label="Gaming photo" /><div className="label">Gaming<span>1,830 creators</span></div></Link>
           </div>
         </section>
 
         <section className="creators">
           <div className="creators-head">
             <h2>On the network right now</h2>
-            <a href="/creators" className="signin">Browse all creators →</a>
+            <Link href="/creators" className="signin">Browse all creators →</Link>
           </div>
           <div className="filter-row">
-            <button type="button" className="filter-pill active">All</button>
-            <button type="button" className="filter-pill">Food</button>
-            <button type="button" className="filter-pill">Beauty</button>
-            <button type="button" className="filter-pill">Fitness</button>
-            <button type="button" className="filter-pill">Tech</button>
-            <button type="button" className="filter-pill">Travel</button>
-            <button type="button" className="filter-pill">Gaming</button>
+            <Link href="/creators" className="filter-pill active">All</Link>
+            <Link href="/creators?niche=Food" className="filter-pill">Food</Link>
+            <Link href="/creators?niche=Beauty" className="filter-pill">Beauty</Link>
+            <Link href="/creators?niche=Fitness" className="filter-pill">Fitness</Link>
+            <Link href="/creators?niche=Tech" className="filter-pill">Tech</Link>
+            <Link href="/creators?niche=Travel" className="filter-pill">Travel</Link>
+            <Link href="/creators?niche=Gaming" className="filter-pill">Gaming</Link>
           </div>
           <div className="creators-grid">
-            <div className="creator-card">
+            <Link href="/kit/mayacooks" className="creator-card">
               <div className="creator-photo"><ImageSlot id="creator-photo-1" shape="rect" label="Content still" /><span className="plat">TikTok</span></div>
               <div className="creator-body">
                 <div className="creator-top"><ImageSlot id="creator-1" shape="circle" label="Photo" /><div><div className="creator-name">Maya R.</div><div className="creator-meta">Food · 214K</div></div></div>
                 <div className="creator-stat"><span className="num">89</span><span className="label">Score · avg views 412K</span></div>
               </div>
-            </div>
-            <div className="creator-card">
+            </Link>
+            <Link href="/kit/jordanlifts" className="creator-card">
               <div className="creator-photo"><ImageSlot id="creator-photo-2" shape="rect" label="Content still" /><span className="plat">Instagram</span></div>
               <div className="creator-body">
                 <div className="creator-top"><ImageSlot id="creator-2" shape="circle" label="Photo" /><div><div className="creator-name">Jordan T.</div><div className="creator-meta">Fitness · 88K</div></div></div>
                 <div className="creator-stat"><span className="num">···</span><span className="label">Checking the hook</span></div>
               </div>
-            </div>
-            <div className="creator-card">
+            </Link>
+            <Link href="/kit/amaraglow" className="creator-card">
               <div className="creator-photo"><ImageSlot id="creator-photo-3" shape="rect" label="Content still" /><span className="plat">YouTube</span></div>
               <div className="creator-body">
                 <div className="creator-top"><ImageSlot id="creator-3" shape="circle" label="Photo" /><div><div className="creator-name">Amara D.</div><div className="creator-meta">Beauty · 1.2M</div></div></div>
                 <div className="creator-stat"><span className="num">94</span><span className="label">Predictions right 91%</span></div>
               </div>
-            </div>
-            <div className="creator-card">
+            </Link>
+            <Link href="/kit/sambuilds" className="creator-card">
               <div className="creator-photo"><ImageSlot id="creator-photo-4" shape="rect" label="Content still" /><span className="plat">X</span></div>
               <div className="creator-body">
                 <div className="creator-top"><ImageSlot id="creator-4" shape="circle" label="Photo" /><div><div className="creator-name">Sam K.</div><div className="creator-meta">Tech · 340K</div></div></div>
                 <div className="creator-stat"><span className="num">74</span><span className="label">This month ▲ +6</span></div>
               </div>
-            </div>
-            <div className="creator-card">
+            </Link>
+            <Link href="/kit/niawanders" className="creator-card">
               <div className="creator-photo"><ImageSlot id="creator-photo-5" shape="rect" label="Content still" /><span className="plat">TikTok</span></div>
               <div className="creator-body">
                 <div className="creator-top"><ImageSlot id="creator-5" shape="circle" label="Photo" /><div><div className="creator-name">Priya N.</div><div className="creator-meta">Travel · 512K</div></div></div>
                 <div className="creator-stat"><span className="num">91</span><span className="label">Score · avg views 300K</span></div>
               </div>
-            </div>
-            <div className="creator-card">
+            </Link>
+            <Link href="/kit/omargames" className="creator-card">
               <div className="creator-photo"><ImageSlot id="creator-photo-6" shape="rect" label="Content still" /><span className="plat">YouTube</span></div>
               <div className="creator-body">
                 <div className="creator-top"><ImageSlot id="creator-6" shape="circle" label="Photo" /><div><div className="creator-name">Leo B.</div><div className="creator-meta">Gaming · 780K</div></div></div>
                 <div className="creator-stat"><span className="num">82</span><span className="label">This month ▲ +3</span></div>
               </div>
-            </div>
-            <div className="creator-card">
+            </Link>
+            <Link href="/kit/lenamakes" className="creator-card">
               <div className="creator-photo"><ImageSlot id="creator-photo-7" shape="rect" label="Content still" /><span className="plat">Instagram</span></div>
               <div className="creator-body">
                 <div className="creator-top"><ImageSlot id="creator-7" shape="circle" label="Photo" /><div><div className="creator-name">Nina F.</div><div className="creator-meta">Beauty · 96K</div></div></div>
                 <div className="creator-stat"><span className="num">77</span><span className="label">Score · avg views 60K</span></div>
               </div>
-            </div>
-            <div className="creator-card">
+            </Link>
+            <Link href="/creators" className="creator-card">
               <div className="creator-photo"><ImageSlot id="creator-photo-8" shape="rect" label="Content still" /><span className="plat">TikTok</span></div>
               <div className="creator-body">
                 <div className="creator-top"><ImageSlot id="creator-8" shape="circle" label="Photo" /><div><div className="creator-name">Owen G.</div><div className="creator-meta">Food · 128K</div></div></div>
                 <div className="creator-stat"><span className="num">86</span><span className="label">Score · avg views 190K</span></div>
               </div>
-            </div>
+            </Link>
           </div>
         </section>
 
