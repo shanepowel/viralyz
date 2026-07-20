@@ -1,33 +1,39 @@
 import type { Metadata } from "next";
-import { Geist, Geist_Mono } from "next/font/google";
-import { APP_DESCRIPTION, APP_NAME } from "@repo/config";
+import {
+  Manrope,
+  Sora,
+  JetBrains_Mono,
+} from "next/font/google";
+import type { CSSProperties } from "react";
+import { APP_DESCRIPTION, APP_NAME, APP_TAGLINE } from "@repo/config";
+import { SITE_URL } from "@/lib/site";
 import "./globals.css";
 
-const geistSans = Geist({
+const manrope = Manrope({
   subsets: ["latin"],
-  variable: "--font-geist-sans",
+  variable: "--font-manrope",
+  weight: ["400", "500", "600", "700"],
 });
 
-const geistMono = Geist_Mono({
+const sora = Sora({
   subsets: ["latin"],
-  variable: "--font-geist-mono",
+  variable: "--font-sora",
+  weight: ["500", "600", "700", "800"],
+});
+
+const jetbrains = JetBrains_Mono({
+  subsets: ["latin"],
+  variable: "--font-jetbrains",
+  weight: ["400", "500"],
 });
 
 export const metadata: Metadata = {
+  metadataBase: new URL(SITE_URL),
   title: {
-    default: `${APP_NAME} — AI toolkit for short-form creators`,
+    default: `${APP_NAME}. ${APP_TAGLINE}`,
     template: `%s | ${APP_NAME}`,
   },
   description: APP_DESCRIPTION,
-  keywords: [
-    "viral content",
-    "short-form video",
-    "Instagram",
-    "TikTok",
-    "YouTube Shorts",
-    "AI content tools",
-    "creator tools",
-  ],
 };
 
 export default function RootLayout({
@@ -36,8 +42,17 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" className="dark">
-      <body className={`${geistSans.variable} ${geistMono.variable} antialiased`}>
+    <html lang="en">
+      <body
+        className={`${manrope.variable} ${sora.variable} ${jetbrains.variable} antialiased`}
+        style={
+          {
+            ["--font-sans"]: "var(--font-manrope)",
+            ["--font-display"]: "var(--font-sora)",
+            ["--font-mono"]: "var(--font-jetbrains)",
+          } as CSSProperties
+        }
+      >
         {children}
       </body>
     </html>
