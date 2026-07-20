@@ -10,7 +10,7 @@
   --bg-sunken: #f3f1eb;
   --ink: #1a1d23;
   --ink-secondary: #4b5058;
-  --ink-tertiary: #7a7f88;
+  --ink-tertiary: #5e646e; /* ≥4.5:1 on paper bg */
   --line: #e7e4dc;
   --line-strong: #d5d1c6;
 
@@ -71,7 +71,7 @@
   --bg-sunken: #101216;
   --ink: #f2f1ed;
   --ink-secondary: #b8bcc4;
-  --ink-tertiary: #82868f;
+  --ink-tertiary: #9aa0aa;
   --line: #2a2e36;
   --line-strong: #3a3f49;
   --accent: #818cf8;

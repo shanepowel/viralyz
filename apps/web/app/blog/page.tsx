@@ -67,7 +67,6 @@ export default async function BlogPage({
         <Container>
           <div
             className="mb-8 flex flex-wrap gap-2"
-            role="tablist"
             aria-label="Categories"
           >
             <Link

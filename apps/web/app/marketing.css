@@ -1,39 +1,31 @@
-
+/* Legacy marketing layout classes — tokens come from styles/tokens.css.
+   Do not redeclare palette vars here; it overrides the design system. */
 :root {
-  --bg: #FAFAF7;
-  --surface: #FFFFFF;
-  --surface-2: #F1EFEA;
-  --surface-3: #E7E4DD;
-  --border: #E7E4DD;
-  --text: #1B1826;
-  --text-dim: #5B5768;
-  --text-dim-2: #928FA0;
-  --accent: #6C4CF1;
-  --accent-ink: #FFFFFF;
-  --accent-2: #0FA968;
-  --score-good: #0FA968;
-  --score-mid: #D9950B;
-  --score-low: #DE4E4E;
-  --radius-lg: 24px;
-  --radius-md: 14px;
+  --surface: var(--bg-raised);
+  --surface-2: var(--bg-sunken);
+  --surface-3: var(--bg-sunken);
+  --border: var(--line);
+  --text: var(--ink);
+  --text-dim: var(--ink-secondary);
+  --text-dim-2: var(--ink-tertiary);
+  --accent-ink: var(--accent-foreground);
+  --accent-2: var(--score-high);
   --edge: clamp(20px, 5vw, 72px);
-  font-family: var(--font-manrope), Manrope, sans-serif;
 }
-.vz[data-theme="dark"] {
-  --bg: #0a0b0d; --surface: #15171b; --surface-2: #1d2025; --surface-3: #24272d;
-  --border: #2a2d33; --text: #f4f5f7; --text-dim: #9aa0a8; --text-dim-2: #6b7078;
-  --accent: #c8ff5c; --accent-ink: #0a0b0d; --accent-2: #8b5cf6;
+.vz[data-theme="dark"],
+.dark {
+  /* dark palette already set in tokens.css */
 }
-.vz[data-theme="dark"] a:hover { color: #dcffa0; }
-.vz[data-theme="dark"] .btn-primary:hover { background: #d9ff85; }
-.vz[data-theme="dark"] .btn-primary:active { background: #b8ef47; }
-.vz[data-theme="dark"] .mega { box-shadow: 0 20px 50px rgba(0,0,0,0.45); }
+.vz[data-theme="dark"] a:hover { color: var(--accent-hover); }
+.vz[data-theme="dark"] .btn-primary:hover { background: var(--accent-hover); }
+.vz[data-theme="dark"] .btn-primary:active { background: var(--accent-hover); }
+.vz[data-theme="dark"] .mega { box-shadow: var(--shadow-md); }
 * { box-sizing: border-box; }
 html { scroll-behavior: smooth; }
 @media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } }
-.vz { margin: 0; background: var(--bg); color: var(--text); text-wrap: pretty; overflow-x: clip; min-height: 100vh; font-family: var(--font-manrope), Manrope, sans-serif; }
+.vz { margin: 0; background: var(--bg); color: var(--ink); text-wrap: pretty; overflow-x: clip; min-height: 100vh; font-family: var(--font-sans); }
 .vz a { color: var(--accent); text-decoration: none; }
-.vz a:hover { color: #5638D6; }
+.vz a:hover { color: var(--accent-hover); }
 .wrap { max-width: 1200px; margin: 0 auto; padding: 0 var(--edge); }
 
 /* — nav with nested/mega menus — */
@@ -98,9 +90,9 @@ html { scroll-behavior: smooth; }
 .btn { display: inline-flex; align-items: center; justify-content: center; gap: 8px;
   border: none; border-radius: 999px; font-family: var(--font-manrope), Manrope, sans-serif; font-weight: 700;
   font-size: 14.5px; cursor: pointer; padding: 13px 24px; white-space: nowrap; }
-.btn-primary { background: var(--accent); color: var(--accent-ink); }
-.btn-primary:hover { background: #5638D6; }
-.btn-primary:active { background: #4a2fc0; }
+.btn-primary { background: var(--accent); color: #fff; }
+.btn-primary:hover { background: var(--accent-hover); }
+.btn-primary:active { background: var(--accent-hover); }
 .btn-ghost { background: transparent; color: var(--text); border: 1px solid var(--border); }
 .btn-ghost:hover { border-color: var(--text-dim-2); background: var(--surface); }
 .btn:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
