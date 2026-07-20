@@ -310,7 +310,7 @@ export function getMarketingFooterColumns(): FooterColumn[] {
         { href: "/tools", label: "Free tools" },
         { href: "/report", label: "Viral Score Report" },
         { href: "/platform#api", label: "API docs" },
-        { href: "/contact", label: "Help center" },
+        { href: "/contact#help", label: "Help center" },
       ],
     },
     {

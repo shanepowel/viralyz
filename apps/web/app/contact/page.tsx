@@ -21,7 +21,7 @@ export default function ContactPage() {
           </p>
         </div>
       </div>
-      <section style={{ paddingTop: 24, paddingBottom: 80 }}>
+      <section id="help" style={{ paddingTop: 24, paddingBottom: 80 }}>
         <div className="wrap">
           <div className="split">
             <div
