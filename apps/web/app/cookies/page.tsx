@@ -1,56 +1,44 @@
-"use client";
-
-import Link from "next/link";
+import type { Metadata } from "next";
 import { MarketingShell } from "@/components/marketing/marketing-shell";
-import { openCookieSettings } from "@/components/marketing/cookie-banner";
+import { LegalTemplate } from "@/components/legal/LegalTemplate";
+import { pageMeta } from "@/lib/meta";
 import { routes } from "@/lib/site";
+import { fetchSanity } from "@/sanity/lib/fetch";
+import { LEGAL_PAGE_QUERY } from "@/sanity/lib/queries";
 
-export default function CookiesPage() {
+export const metadata: Metadata = pageMeta({
+  title: "Cookies",
+  description: "How Viralyz uses cookies and analytics.",
+  path: routes.cookies,
+});
+
+export default async function CookiesPage() {
+  const doc = await fetchSanity<{
+    title: string;
+    lastUpdated?: string;
+    body?: unknown;
+  }>({
+    query: LEGAL_PAGE_QUERY,
+    params: { slug: "cookies" },
+    published: true,
+    stega: false,
+  });
+
   return (
     <MarketingShell>
-      <div className="wrap">
-        <div className="page-hero">
-          <span className="eyebrow">Legal</span>
-          <h1>Cookie policy</h1>
-          <p>
-            What we store on your device, why, and how to say no. Last updated
-            July 2026.
-          </p>
-        </div>
-        <div className="legal-body">
-          <h3>1. What cookies are</h3>
-          <p>
-            Small files stored on your device that help websites work and
-            remember preferences. Some are essential; some are optional.
-          </p>
-          <h3>2. Essential cookies</h3>
-          <p>
-            These keep sessions secure and remember your cookie choices. They
-            are always on because the site needs them to function.
-          </p>
-          <h3>3. Analytics cookies (optional)</h3>
-          <p>
-            If we enable analytics, they help us understand which pages people
-            use. You can refuse optional cookies and the site still works. We do
-            not load optional analytics until you opt in via the consent banner.
-          </p>
-          <h3>4. Manage choices</h3>
-          <p>
-            <button
-              type="button"
-              className="btn btn-ghost"
-              onClick={() => openCookieSettings()}
-            >
-              Open cookie settings
-            </button>
-          </p>
-          <h3>5. More</h3>
-          <p>
-            See our <Link href={routes.privacy}>privacy policy</Link> for how we
-            handle personal data.
-          </p>
-        </div>
-      </div>
+      <LegalTemplate
+        title={doc?.title ?? "Cookies"}
+        lastUpdated={doc?.lastUpdated}
+        body={doc?.body}
+        fallback={
+          <div className="prose-vz space-y-4">
+            <p>
+              We use Plausible Analytics, which is cookieless. Essential cookies
+              keep you signed in on the product app.
+            </p>
+          </div>
+        }
+      />
     </MarketingShell>
   );
 }

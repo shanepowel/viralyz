@@ -1,8 +1,11 @@
 import type { Metadata, Viewport } from "next";
 import type { CSSProperties } from "react";
+import { draftMode } from "next/headers";
+import { VisualEditing } from "next-sanity/visual-editing";
 import { APP_DESCRIPTION, APP_NAME, APP_TAGLINE } from "@repo/config";
 import { ThemeProvider } from "@/components/theme-provider";
 import { JsonLd } from "@/components/seo/JsonLd";
+import { SanityLive } from "@/sanity/lib/live";
 import { display, mono, sans } from "@/app/fonts";
 import { SITE_URL } from "@/lib/site";
 import "./globals.css";
@@ -43,11 +46,13 @@ const orgLd = {
   },
 };
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  const isDraft = (await draftMode()).isEnabled;
+
   return (
     <html
       lang="en"
@@ -67,6 +72,8 @@ export default function RootLayout({
         <ThemeProvider>
           <JsonLd data={orgLd} />
           {children}
+          <SanityLive />
+          {isDraft ? <VisualEditing /> : null}
         </ThemeProvider>
       </body>
     </html>

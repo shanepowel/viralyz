@@ -11,8 +11,10 @@
     "check-types": "turbo run check-types",
     "db:push": "turbo run db:push --filter=app",
     "check:site": "node scripts/check-site.mjs",
+    "check:content": "node scripts/content-lint.mjs",
     "test:e2e": "playwright test",
-    "test:e2e:install": "playwright install chromium"
+    "test:e2e:install": "playwright install chromium",
+    "dev:studio": "turbo run dev --filter=studio"
   },
   "devDependencies": {
     "@axe-core/playwright": "^4.10.2",

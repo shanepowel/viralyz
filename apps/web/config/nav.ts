@@ -206,7 +206,7 @@ export const footerExtras: FooterColumn[] = [
       { label: "About", href: routes.about },
       { label: "Trust & data", href: routes.trust },
       { label: "Changelog", href: routes.changelog },
-      { label: "Affiliates", href: routes.affiliates },
+      // Affiliates omitted until program terms are live (v3 4.3)
       { label: "Contact", href: routes.contact },
       { label: "Privacy", href: routes.privacy },
       { label: "Terms", href: routes.terms },

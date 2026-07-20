@@ -6,6 +6,12 @@ const nextConfig = {
     "@neondatabase/serverless",
     "drizzle-orm",
   ],
+  images: {
+    remotePatterns: [
+      { protocol: "https", hostname: "cdn.sanity.io" },
+      { protocol: "https", hostname: "image.mux.com" },
+    ],
+  },
   async redirects() {
     const app = "https://app.viralyz.com";
     return [

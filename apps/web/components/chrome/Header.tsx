@@ -96,7 +96,11 @@ export function Header() {
           </span>
         </Link>
 
-        <NavigationMenu.Root className="relative hidden flex-1 md:flex">
+        <NavigationMenu.Root
+          className="relative hidden flex-1 md:flex"
+          delayDuration={100}
+          skipDelayDuration={300}
+        >
           <NavigationMenu.List className="flex items-center gap-1">
             {mainNav.map((section) =>
               section.groups?.length ? (
