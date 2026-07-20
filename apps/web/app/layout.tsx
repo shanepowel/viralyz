@@ -1,33 +1,46 @@
-import type { Metadata } from "next";
-import { Geist, Geist_Mono } from "next/font/google";
-import { APP_DESCRIPTION, APP_NAME } from "@repo/config";
+import type { Metadata, Viewport } from "next";
+import type { CSSProperties } from "react";
+import { APP_DESCRIPTION, APP_NAME, APP_TAGLINE } from "@repo/config";
+import { ThemeProvider } from "@/components/theme-provider";
+import { JsonLd } from "@/components/seo/JsonLd";
+import { display, mono, sans } from "@/app/fonts";
+import { SITE_URL } from "@/lib/site";
 import "./globals.css";
 
-const geistSans = Geist({
-  subsets: ["latin"],
-  variable: "--font-geist-sans",
-});
-
-const geistMono = Geist_Mono({
-  subsets: ["latin"],
-  variable: "--font-geist-mono",
-});
-
 export const metadata: Metadata = {
+  metadataBase: new URL(SITE_URL),
   title: {
-    default: `${APP_NAME} — AI toolkit for short-form creators`,
+    default: `${APP_NAME}. ${APP_TAGLINE}`,
     template: `%s | ${APP_NAME}`,
   },
   description: APP_DESCRIPTION,
-  keywords: [
-    "viral content",
-    "short-form video",
-    "Instagram",
-    "TikTok",
-    "YouTube Shorts",
-    "AI content tools",
-    "creator tools",
+  other: {
+    "color-scheme": "light dark",
+  },
+  alternates: {
+    types: {
+      "application/rss+xml": `${SITE_URL}/feed.xml`,
+    },
+  },
+};
+
+export const viewport: Viewport = {
+  themeColor: [
+    { media: "(prefers-color-scheme: light)", color: "#FBFAF7" },
+    { media: "(prefers-color-scheme: dark)", color: "#16181D" },
   ],
+  colorScheme: "light dark",
+};
+
+const orgLd = {
+  "@context": "https://schema.org",
+  "@type": "Organization",
+  name: APP_NAME,
+  url: SITE_URL,
+  parentOrganization: {
+    "@type": "Organization",
+    name: "Digiteq Holdings Limited",
+  },
 };
 
 export default function RootLayout({
@@ -36,9 +49,25 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" className="dark">
-      <body className={`${geistSans.variable} ${geistMono.variable} antialiased`}>
-        {children}
+    <html
+      lang="en"
+      suppressHydrationWarning
+      className={`${display.variable} ${sans.variable} ${mono.variable}`}
+    >
+      <body
+        className="antialiased"
+        style={
+          {
+            ["--font-sans"]: "var(--font-sans)",
+            ["--font-display"]: "var(--font-display)",
+            ["--font-mono"]: "var(--font-mono)",
+          } as CSSProperties
+        }
+      >
+        <ThemeProvider>
+          <JsonLd data={orgLd} />
+          {children}
+        </ThemeProvider>
       </body>
     </html>
   );

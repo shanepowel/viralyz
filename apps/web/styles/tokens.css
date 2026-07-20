@@ -1,0 +1,107 @@
+/**
+ * Paper & Signal — Viralyz marketing design tokens.
+ * No raw hex outside this file (and OG generation).
+ */
+
+:root {
+  /* Surfaces & ink */
+  --bg: #fbfaf7;
+  --bg-raised: #ffffff;
+  --bg-sunken: #f3f1eb;
+  --ink: #1a1d23;
+  --ink-secondary: #4b5058;
+  --ink-tertiary: #5e646e; /* ≥4.5:1 on paper bg */
+  --line: #e7e4dc;
+  --line-strong: #d5d1c6;
+
+  /* Brand accent — interactive emphasis only */
+  --accent: #4f46e5;
+  --accent-hover: #4338ca;
+  --accent-soft: #eef0fe;
+  --accent-foreground: #ffffff;
+
+  /* Score ramp — semantic, never decorative */
+  --score-low: #dc4a3d;
+  --score-mid: #d9930d;
+  --score-high: #1e9e5a;
+  --score-low-soft: #fdedeb;
+  --score-mid-soft: #fcf3e1;
+  --score-high-soft: #e7f6ee;
+
+  /* Radii — exactly three */
+  --radius-sm: 6px;
+  --radius-md: 12px;
+  --radius-lg: 20px;
+
+  /* Shadows — warm-tinted */
+  --shadow-sm: 0 1px 2px rgb(26 29 35 / 0.06);
+  --shadow-md: 0 8px 24px -8px rgb(26 29 35 / 0.12);
+
+  /* Motion */
+  --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
+  --dur-fast: 150ms;
+  --dur-med: 250ms;
+  --dur-slow: 450ms;
+
+  /* Legacy aliases used by marketing.css during migration */
+  --paper: var(--bg);
+  --card: var(--bg-raised);
+  --tint: var(--bg-sunken);
+  --violet: var(--accent);
+  --violet-deep: var(--accent-hover);
+  --violet-soft: var(--accent-soft);
+  --surface-3: var(--bg-sunken);
+  --score-good: var(--score-high);
+  --score-ok: var(--score-mid);
+  --score-bad: var(--score-low);
+  --s90: var(--score-high);
+  --s70: var(--score-mid);
+  --s50: var(--score-mid);
+  --s30: var(--score-low);
+  --r-sm: var(--radius-sm);
+  --r-md: var(--radius-md);
+  --r-lg: var(--radius-lg);
+  --ink-2: var(--ink-secondary);
+  --ink-3: var(--ink-tertiary);
+}
+
+.dark {
+  --bg: #16181d;
+  --bg-raised: #1e2128;
+  --bg-sunken: #101216;
+  --ink: #f2f1ed;
+  --ink-secondary: #b8bcc4;
+  --ink-tertiary: #9aa0aa;
+  --line: #2a2e36;
+  --line-strong: #3a3f49;
+  --accent: #818cf8;
+  --accent-hover: #a5b0fc;
+  --accent-soft: #23263b;
+  --accent-foreground: #16181d;
+  --score-low-soft: #3a2220;
+  --score-mid-soft: #383016;
+  --score-high-soft: #17301f;
+  --shadow-sm: 0 1px 2px rgb(0 0 0 / 0.35);
+  --shadow-md: 0 8px 24px -8px rgb(0 0 0 / 0.5);
+
+  --paper: var(--bg);
+  --card: var(--bg-raised);
+  --tint: var(--bg-sunken);
+  --violet: var(--accent);
+  --violet-deep: var(--accent-hover);
+  --violet-soft: var(--accent-soft);
+  --surface-3: var(--bg-sunken);
+  --ink-2: var(--ink-secondary);
+  --ink-3: var(--ink-tertiary);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}

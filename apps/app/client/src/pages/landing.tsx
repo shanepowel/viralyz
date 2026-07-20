@@ -460,10 +460,12 @@ export default function Landing() {
             <span className="font-semibold text-lg">Viralyz</span>
             <span className="text-xs text-[#6B625E] tracking-wide">Signal</span>
           </Link>
-          <div className="flex gap-8 text-sm font-medium text-[#6B625E]">
+          <div className="flex flex-wrap justify-center gap-6 md:gap-8 text-sm font-medium text-[#6B625E]">
             <Link href="/terms" className="hover:text-[#2A2522]">Terms</Link>
             <Link href="/privacy" className="hover:text-[#2A2522]">Privacy</Link>
             <Link href="/accessibility" className="hover:text-[#2A2522]">Accessibility</Link>
+            <Link href="/press" className="hover:text-[#2A2522]">Press</Link>
+            <Link href="/modern-slavery" className="hover:text-[#2A2522]">Modern slavery</Link>
           </div>
           <p className="text-sm text-[#6B625E]">© {new Date().getFullYear()} Viralyz Inc. All rights reserved.</p>
         </div>

@@ -10,14 +10,16 @@ export function Navigation() {
   const [location] = useLocation();
   const { user } = useAuth();
 
+  const profileHref = user?.id ? `/profile/${user.id}` : "/settings";
+
   const baseNavItems = [
-    { icon: Home, label: "Home", href: "/", description: "Your personalized feed" },
-    { icon: Compass, label: "Discover", href: "/discover", description: "Explore trending content" },
-    { icon: Wand2, label: "Studio", href: "/studio", primary: true, description: "Content Studio" },
-    { icon: Film, label: "Films", href: "/films", description: "Long-form video content" },
-    { icon: GraduationCap, label: "Learn", href: "/learning", description: "Courses & tutorials" },
-    { icon: Users, label: "Tribes", href: "/community", description: "Your communities" },
-    { icon: User, label: "Profile", href: "/profile", description: "Your profile & settings" },
+    { icon: Home, label: "Home", href: "/", description: "Mission Control" },
+    { icon: Compass, label: "Trends", href: "/trends", description: "Explore trending content" },
+    { icon: Wand2, label: "Analyze", href: "/analyze", primary: true, description: "Score your content" },
+    { icon: Film, label: "Content", href: "/content", description: "Your content library" },
+    { icon: GraduationCap, label: "Ideas", href: "/ideas", description: "Idea generator" },
+    { icon: Users, label: "Community", href: "/community", description: "Your communities" },
+    { icon: User, label: "Profile", href: profileHref, description: "Your profile & settings" },
   ];
 
   const navItems = (user as any)?.role === 'admin' 
