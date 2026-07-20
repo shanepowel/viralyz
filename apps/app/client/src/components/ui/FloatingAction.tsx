@@ -12,10 +12,10 @@ interface QuickAction {
 }
 
 const quickActions: QuickAction[] = [
-  { label: "Clip", href: "/create?type=clip", icon: "📹", color: "from-red-500 to-pink-500" },
-  { label: "Film", href: "/create?type=film", icon: "🎬", color: "from-blue-500 to-purple-500" },
-  { label: "Still", href: "/create?type=still", icon: "📷", color: "from-green-500 to-teal-500" },
-  { label: "Flash", href: "/create?type=flash", icon: "⚡", color: "from-yellow-500 to-orange-500" },
+  { label: "Analyze", href: "/analyze", icon: "✨", color: "from-red-500 to-pink-500" },
+  { label: "Hooks", href: "/hook-lab", icon: "⚡", color: "from-blue-500 to-purple-500" },
+  { label: "Ideas", href: "/ideas", icon: "💡", color: "from-green-500 to-teal-500" },
+  { label: "Thumbs", href: "/thumbnails", icon: "🖼️", color: "from-yellow-500 to-orange-500" },
 ];
 
 export function FloatingAction() {
