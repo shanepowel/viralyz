@@ -1,101 +1,165 @@
 import type { Metadata } from "next";
 import Link from "next/link";
+import { EarlyAccess } from "@/components/marketing/early-access";
+import { FinalCta } from "@/components/marketing/final-cta";
 import { MarketingShell } from "@/components/marketing/marketing-shell";
-import { ImageSlot } from "@/components/marketing/image-slot";
+import { DemoBadge } from "@/components/marketing/demo-badge";
+import { creators, creatorInitials, formatFollowers } from "@/data/creators";
+import { formatGBP } from "@/lib/currency";
+import { flags } from "@/lib/flags";
+import { pageMeta } from "@/lib/meta";
+import { routes } from "@/lib/site";
 
-export const metadata: Metadata = {
+export const metadata: Metadata = pageMeta({
   title: "For brands",
-  description: "Hire creators who can prove their performance with verified scores.",
-};
+  description:
+    "Hire creators who can prove it. Verified track records and score gates before content goes live.",
+  path: routes.forBrands,
+});
 
-export default function Page() {
+const sample = creators[0]!;
+
+export default function ForBrandsPage() {
   return (
     <MarketingShell>
       <div className="wrap">
-        <section className="hero">
-          <div>
-            <p className="crumb"><Link href="/">Home</Link> / For brands</p>
-            <span className="kicker">For brands</span>
-            <h1 className="display">Hire creators who can prove it.</h1>
-            <p className="sub">Search verified profiles by real performance, see how content will score before it goes live, and pay safely through the platform.</p>
-            <div className="row">
-              <Link href="/creators" className="btn btn-primary">Search creators</Link>
-              <Link href="#cases" className="btn btn-ghost">See case studies</Link>
-            </div>
-            <p className="fine">2,140 verified creators, checked hourly.</p>
+        <div className="page-hero">
+          <p className="crumb">
+            <Link href="/">Home</Link> / For brands
+          </p>
+          <span className="eyebrow">For brands</span>
+          <h1>Hire creators who can prove it.</h1>
+          <p>
+            Follower counts do not tell you if a campaign will work. On Viralyz,
+            every creator has a track record from connected accounts, and you
+            can see how content scores before it goes live.
+          </p>
+          <div className="hero-actions" style={{ marginTop: 28 }}>
+            <Link href={routes.creators} className="btn btn-primary">
+              Browse creators
+            </Link>
+            <Link href="#campaigns" className="btn btn-ghost">
+              How campaigns work
+            </Link>
           </div>
-          <div className="kit">
+          <p className="fine">Founding creator roster now onboarding.</p>
+        </div>
+      </div>
+
+      <section style={{ paddingTop: 24 }}>
+        <div className="wrap">
+          <div className="kit" style={{ maxWidth: 420, marginBottom: 48 }}>
             <div className="kit-top">
-              <div className="kit-ava">MR</div>
-              <div><div className="kit-name">Maya R.</div><div className="kit-verified">✓ Verified today</div></div>
+              <div className="kit-ava" style={{ background: sample.face }}>
+                {creatorInitials(sample)}
+              </div>
+              <div>
+                <div className="kit-name">
+                  {sample.name}{" "}
+                  {!flags.marketplaceLive ? (
+                    <DemoBadge label="Example" />
+                  ) : null}
+                </div>
+                <div className="kit-verified">Example profile</div>
+              </div>
             </div>
             <div className="kit-grid">
-              <div className="kit-cell"><div className="kv">214K</div><div className="kl">Followers</div></div>
-              <div className="kit-cell"><div className="kv">6.8%</div><div className="kl">Engagement</div></div>
-              <div className="kit-cell"><div className="kv">412K</div><div className="kl">Avg views</div></div>
-              <div className="kit-cell"><div className="kv">$850</div><div className="kl">Suggested rate</div></div>
+              <div className="kit-cell">
+                <div className="kv">{formatFollowers(sample.followers)}</div>
+                <div className="kl">Followers</div>
+              </div>
+              <div className="kit-cell">
+                <div className="kv">{sample.engagementPct}%</div>
+                <div className="kl">Engagement</div>
+              </div>
+              <div className="kit-cell">
+                <div className="kv">{sample.score}</div>
+                <div className="kl">Viral Score</div>
+              </div>
+              <div className="kit-cell">
+                <div className="kv">{formatGBP(sample.suggestedRateGbp)}</div>
+                <div className="kl">Suggested rate</div>
+              </div>
             </div>
           </div>
-        </section>
 
-        <section className="stats" aria-label="Viralyz for brands, by the numbers">
-          <div className="stat"><div className="num">2,140</div><div className="label">Verified creators</div></div>
-          <div className="stat"><div className="num">82%</div><div className="label">Prediction accuracy</div></div>
-          <div className="stat"><div className="num">4.2×</div><div className="label">More views after fixes</div></div>
-          <div className="stat"><div className="num">0%</div><div className="label">Self-reported stats</div></div>
-        </section>
-
-        <section className="band" id="campaigns">
-          <span className="kicker">How campaigns work</span>
-          <div className="features-grid" style={{marginTop: "24px"}}>
-            <div className="feature">
-              <span className="num">01</span>
-              <h3>Search &amp; shortlist</h3>
-              <p>Filter by niche, score, platform and followers. Every number is verified, not self-reported.</p>
+          <div className="stats" aria-label="Product truths">
+            <div className="stat">
+              <div className="num">100</div>
+              <div className="label">Point score per video</div>
             </div>
-            <div className="feature">
-              <span className="num">02</span>
-              <h3>Brief &amp; book</h3>
-              <p>Send a brief, agree scope and rate, and book directly. No back-and-forth over email.</p>
+            <div className="stat">
+              <div className="num">5</div>
+              <div className="label">Areas analyzed</div>
             </div>
-            <div className="feature">
-              <span className="num">03</span>
-              <h3>Score before it goes live</h3>
-              <p>Preview how content will perform before it's posted, and pay safely once it's delivered.</p>
+            <div className="stat">
+              <div className="num">&lt;30s</div>
+              <div className="label">To a first score</div>
+            </div>
+            <div className="stat">
+              <div className="num">10%</div>
+              <div className="label">Brand fee at launch</div>
             </div>
           </div>
-        </section>
+        </div>
+      </section>
 
-        <section className="band" id="cases">
-          <span className="kicker">Case studies</span>
-          <h2 className="split-title" style={{margin: 0}}>Real campaign results</h2>
-          <div className="case-grid">
-            <div className="case-card">
-              <div className="cs-fig"><ImageSlot id="case-1" shape="rect" label="Campaign photo" /></div>
-              <div className="cs-body"><span className="cs-tag">Food &amp; bev</span><h4>3.1× ROAS from a 4-creator roster</h4><p>A snack brand booked four food creators through Viralyz and tracked return in real time.</p></div>
+      <section className="band" id="campaigns">
+        <div className="wrap">
+          <div className="sec-head" style={{ marginBottom: 28 }}>
+            <span className="eyebrow">Campaigns</span>
+            <h2>How campaigns will work</h2>
+            <p>
+              Brief, book, and pay in one place when payments go live. Until
+              then, talk to us for early-access campaigns with founding
+              creators.
+            </p>
+          </div>
+          <div className="tool-grid">
+            <div className="tool">
+              <span className="t-tag">01</span>
+              <h3>Brief</h3>
+              <p>
+                Set niche, score floor, and deliverables. Creators see the brief
+                before they accept.
+              </p>
             </div>
-            <div className="case-card">
-              <div className="cs-fig"><ImageSlot id="case-2" shape="rect" label="Campaign photo" /></div>
-              <div className="cs-body"><span className="cs-tag">Beauty</span><h4>Launch hit 1.2M views in a week</h4><p>Verified creator data let the team pick partners with proven hook strength.</p></div>
+            <div className="tool">
+              <span className="t-tag">02</span>
+              <h3>Book</h3>
+              <p>
+                Fixed package prices. Creators keep 100% of the listed price;
+                brands pay a 10% platform fee on top.
+              </p>
             </div>
-            <div className="case-card">
-              <div className="cs-fig"><ImageSlot id="case-3" shape="rect" label="Campaign photo" /></div>
-              <div className="cs-body"><span className="cs-tag">Fitness app</span><h4>Cut creator sourcing time by 70%</h4><p>An agency used the campaign manager to run five clients' rosters from one dashboard.</p></div>
+            <div className="tool">
+              <span className="t-tag">03</span>
+              <h3>Approve</h3>
+              <p>
+                At launch, escrow holds payment until you approve the
+                deliverable. Score gates optional before content goes live.
+              </p>
             </div>
           </div>
-        </section>
-
-        <section className="close">
-          <div className="patch">
-            <h3>Book your first creator this week</h3>
-            <p className="sub">Search verified profiles and brief your first campaign in minutes.</p>
-            <div className="row">
-              <Link href="/creators" className="btn btn-primary">Search creators</Link>
-              <Link href="/contact" className="btn btn-ghost">Talk to sales</Link>
-            </div>
+          <div style={{ marginTop: 28 }}>
+            <Link href={routes.creators} className="btn btn-primary">
+              Browse creators
+            </Link>{" "}
+            <Link href={routes.contact} className="btn btn-ghost">
+              Talk to sales
+            </Link>
           </div>
-        </section>
-      </div>
+        </div>
+      </section>
+
+      <EarlyAccess />
+
+      <FinalCta
+        title="Ready to hire on proof?"
+        subtitle="Apply for early access or browse example creator profiles."
+        cta="Talk to sales"
+        href={routes.contact}
+      />
     </MarketingShell>
   );
 }

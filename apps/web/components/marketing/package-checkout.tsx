@@ -133,11 +133,11 @@ export function PackageCheckout({
       </label>
       {error ? <p className="form-error">{error}</p> : null}
       <button type="submit" className="btn btn-violet" disabled={busy}>
-        {busy ? "Holding funds…" : `Pay ${formatGbp(total)} into escrow`}
+        {busy ? "Starting order…" : `Confirm ${formatGbp(total)}`}
       </button>
       <p className="fine">
-        Stripe checkout wires in before live payments. This flow creates the
-        order record and escrow state.
+        Creators keep 100% of the listed price. You pay a 10% platform fee on
+        top.
       </p>
     </form>
   );

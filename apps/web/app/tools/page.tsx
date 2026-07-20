@@ -1,51 +1,21 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import { getPublicAppUrl } from "@repo/config";
 import { EngagementCalculator } from "@/components/marketing/engagement-calculator";
 import { FinalCta } from "@/components/marketing/final-cta";
 import { MarketingShell } from "@/components/marketing/marketing-shell";
+import { liveTools } from "@/data/tools";
+import { pageMeta } from "@/lib/meta";
+import { routes } from "@/lib/site";
 
-export const metadata: Metadata = {
+export const metadata: Metadata = pageMeta({
   title: "Free tools",
   description:
-    "Engagement rate calculator, link scorer, and more. Useful on their own. Free forever. No account needed.",
-};
-
-const TOOLS = [
-  {
-    href: "/report",
-    title: "Link scorer",
-    body: "Paste any TikTok, Reel or YouTube link and get a Viral Score with one fix, instantly.",
-  },
-  {
-    href: "/tools/engagement-calculator",
-    title: "Engagement rate calculator",
-    body: "Work out any account's true engagement rate in seconds. Try it below.",
-  },
-  {
-    href: "/tools/fake-follower-checker",
-    title: "Fake follower checker",
-    body: "Check whether an account's audience is real before you work with them.",
-  },
-  {
-    href: "/tools/influencer-price-calculator",
-    title: "Influencer price calculator",
-    body: "A fair price range for any creator, based on real booking data, not guesses.",
-  },
-  {
-    href: "/tools/best-time-to-post",
-    title: "Best time to post",
-    body: "The best posting times for your platform and niche, updated monthly.",
-  },
-  {
-    href: "/tools/thumbnail-checker",
-    title: "Thumbnail checker",
-    body: "See your thumbnail at real feed size and find out if anyone can read it.",
-  },
-] as const;
+    "Engagement rate calculator, thumbnail checker, and more. Useful on their own. Free forever. No signup.",
+  path: routes.tools,
+});
 
 export default function ToolsPage() {
-  const appUrl = getPublicAppUrl();
+  const tools = liveTools();
 
   return (
     <MarketingShell>
@@ -63,10 +33,14 @@ export default function ToolsPage() {
       <section style={{ paddingTop: 24 }}>
         <div className="wrap">
           <div className="tools-grid">
-            {TOOLS.map((t) => (
-              <Link key={t.title} href={t.href} className="tcard">
-                <h3>{t.title}</h3>
-                <p>{t.body}</p>
+            {tools.map((t) => (
+              <Link
+                key={t.slug}
+                href={`/tools/${t.slug}`}
+                className="tcard"
+              >
+                <h3>{t.name}</h3>
+                <p>{t.description}</p>
                 <span className="t-free">Free · No signup</span>
               </Link>
             ))}
@@ -79,7 +53,10 @@ export default function ToolsPage() {
           <EngagementCalculator />
           <p style={{ marginTop: 16, fontSize: 13.5, color: "var(--ink-3)" }}>
             Want the full suite?{" "}
-            <Link href={appUrl} style={{ color: "var(--violet-deep)", fontWeight: 600 }}>
+            <Link
+              href={routes.signup}
+              style={{ color: "var(--violet-deep)", fontWeight: 600 }}
+            >
               Start scoring free
             </Link>
             .
@@ -91,6 +68,7 @@ export default function ToolsPage() {
         title="The tools are free. The score is the magic."
         subtitle="Ten free scores a month. See what these calculators cannot show you."
         cta="Start free"
+        href={routes.signup}
       />
     </MarketingShell>
   );

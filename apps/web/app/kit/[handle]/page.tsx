@@ -2,12 +2,16 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { PackageCheckout } from "@/components/marketing/package-checkout";
+import { DemoBadge } from "@/components/marketing/demo-badge";
 import { MarketingShell } from "@/components/marketing/marketing-shell";
 import {
   formatGbp,
   getKitByHandle,
   PUBLIC_KITS,
 } from "@/lib/kits";
+import { flags } from "@/lib/flags";
+import { pageMeta } from "@/lib/meta";
+import { routes } from "@/lib/site";
 
 export function generateStaticParams() {
   return PUBLIC_KITS.map((k) => ({ handle: k.handle }));
@@ -21,10 +25,12 @@ export async function generateMetadata({
   const { handle } = await params;
   const kit = getKitByHandle(handle);
   if (!kit) return { title: "Media kit" };
-  return {
+  return pageMeta({
     title: `${kit.displayName} · Media kit`,
-    description: `${kit.niche} creator · score ${kit.score} · packages from ${formatGbp(kit.packages[0]?.priceCents ?? 0)}. Creators keep 100%.`,
-  };
+    description: `${kit.niche} creator · score ${kit.score} · packages from ${formatGbp(kit.packages[0]?.priceCents ?? 0)}.`,
+    path: `/kit/${kit.handle}`,
+    robots: kit.demo ? { index: false, follow: false } : undefined,
+  });
 }
 
 export default async function KitPage({
@@ -53,15 +59,16 @@ export default async function KitPage({
             <span className="eyebrow">Media kit</span>
             <h1>
               {kit.displayName}{" "}
-              {kit.verified ? (
-                <span className="kit-verified-inline">✓ Verified</span>
+              {kit.demo && !flags.marketplaceLive ? (
+                <DemoBadge label="Example media kit" />
               ) : null}
             </h1>
             <p className="handle mono">@{kit.handle}</p>
             <p className="bio">{kit.bio}</p>
             <p className="meta-line">
               {kit.niche}
-              {kit.city ? ` · ${kit.city}` : ""} · {kit.followers} followers
+              {kit.city ? ` · ${kit.city}` : ""} · {kit.followers} followers ·{" "}
+              {kit.platform}
             </p>
           </div>
         </div>
@@ -78,27 +85,27 @@ export default async function KitPage({
             <div className="kl">Engagement</div>
           </div>
           <div className="kit-stat">
-            <div className="kv tick-up">{kit.scoreDelta}</div>
-            <div className="kl">Last 90 days</div>
+            <div className="kv">{kit.avgViews}</div>
+            <div className="kl">Avg views</div>
           </div>
           <div className="kit-stat">
-            <div className="kv">{kit.predictionsRight}</div>
-            <div className="kl">Predictions right</div>
+            <div className="kv">{kit.followers}</div>
+            <div className="kl">Followers</div>
           </div>
         </div>
         <p className="verified-note">
-          Every number marked verified is pulled from connected platforms, not
-          typed in by the creator.
+          Example numbers for illustration. When marketplace is live, every
+          figure comes from connected platforms, not typed in by the creator.
         </p>
 
         <div className="kit-grid-2">
           <div>
             <div className="sec-head" style={{ marginBottom: 24 }}>
               <span className="eyebrow">Packages</span>
-              <h2>Book a fixed offer</h2>
+              <h2>Fixed offers</h2>
               <p>
-                Upfront prices. Escrow until you approve. Creators keep 100% of
-                the listed price; you pay a 10% fee on top.
+                Upfront prices. At launch, escrow until you approve. Creators
+                keep 100% of the listed price; brands pay a 10% fee on top.
               </p>
             </div>
             <div className="pkg-list">
@@ -128,16 +135,41 @@ export default async function KitPage({
             </div>
           </div>
           <div>
-            {selected ? (
+            {flags.paymentsLive && selected ? (
               <PackageCheckout kit={kit} pkg={selected} />
             ) : (
-              <p>No packages listed yet.</p>
+              <div
+                className="rounded-lg border p-6"
+                style={{
+                  border: "1px solid var(--line)",
+                  borderRadius: 16,
+                  padding: 28,
+                  background: "var(--card)",
+                }}
+              >
+                <h3 style={{ marginBottom: 8 }}>Booking opens soon</h3>
+                <p style={{ color: "var(--ink-2)", fontSize: 14.5 }}>
+                  Packages will be bookable with upfront pricing and escrow.
+                  Creators keep 100% of the listed price; brands pay a 10%
+                  platform fee.
+                </p>
+                <Link
+                  href={routes.contact}
+                  className="btn btn-ghost"
+                  style={{ marginTop: 16 }}
+                >
+                  Get notified at launch
+                </Link>
+              </div>
             )}
           </div>
         </div>
 
         <p className="kit-back">
-          <Link href="/browse" style={{ color: "var(--violet-deep)" }}>
+          <Link
+            href={routes.creators}
+            style={{ color: "var(--violet-deep)" }}
+          >
             ← Browse all creators
           </Link>
         </p>

@@ -9,7 +9,8 @@
     "lint": "turbo run lint",
     "format": "prettier --write \"**/*.{ts,tsx,md}\"",
     "check-types": "turbo run check-types",
-    "db:push": "turbo run db:push --filter=app"
+    "db:push": "turbo run db:push --filter=app",
+    "check:site": "node scripts/check-site.mjs"
   },
   "devDependencies": {
     "prettier": "^3.7.4",

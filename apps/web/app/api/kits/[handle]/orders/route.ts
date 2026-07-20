@@ -60,7 +60,7 @@ export async function POST(
       id: `kit_${kit.handle}`,
       userId: `demo_${kit.handle}`,
       slug: kit.handle,
-      verified: kit.verified,
+      verified: false,
       sections: {
         displayName: kit.displayName,
         niche: kit.niche,

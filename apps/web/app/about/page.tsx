@@ -1,12 +1,15 @@
 import type { Metadata } from "next";
 import { FinalCta } from "@/components/marketing/final-cta";
 import { MarketingShell } from "@/components/marketing/marketing-shell";
+import { pageMeta } from "@/lib/meta";
+import { routes } from "@/lib/site";
 
-export const metadata: Metadata = {
+export const metadata: Metadata = pageMeta({
   title: "About",
   description:
     "Creators deserve to know, not guess. Viralyz is a Digiteq company building the scored creator network.",
-};
+  path: routes.about,
+});
 
 export default function AboutPage() {
   return (
@@ -34,8 +37,9 @@ export default function AboutPage() {
           <p>
             <b>Viralyz makes them visible.</b> We score content before it goes
             live, explain what is wrong in plain language, and show what each
-            fix is worth. Then we track what really happened, tell you honestly
-            how accurate we were, and get better with every post.
+            fix is worth. Then we track what really happened against the
+            prediction, and publish our accuracy on your profile when we have
+            enough data.
           </p>
           <p>
             Over time, those scores become something bigger: a track record. A
@@ -67,8 +71,8 @@ export default function AboutPage() {
             <div className="value">
               <h4>Honest numbers</h4>
               <p>
-                We publish our prediction accuracy on every profile. If we are
-                wrong, you will see it.
+                We will publish our prediction accuracy on every profile once
+                we have enough measured data. If we are wrong, you will see it.
               </p>
             </div>
             <div className="value">
@@ -79,10 +83,10 @@ export default function AboutPage() {
               </p>
             </div>
             <div className="value">
-              <h4>By the rules</h4>
+              <h4>Platform-safe</h4>
               <p>
-                Every integration uses official platform channels. We will never
-                put your account at risk.
+                Automation stays inside the rules. A banned account helps
+                nobody.
               </p>
             </div>
           </div>
@@ -90,9 +94,10 @@ export default function AboutPage() {
       </section>
 
       <FinalCta
-        title="Come and see your first score."
-        subtitle="It takes less than a minute, and it might change how you post forever."
+        title="See your score"
+        subtitle="Ten free scores a month. No card required."
         cta="Start free"
+        href={routes.signup}
       />
     </MarketingShell>
   );

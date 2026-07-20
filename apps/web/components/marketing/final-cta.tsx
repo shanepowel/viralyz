@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { getPublicAppUrl } from "@repo/config";
+import { routes } from "@/lib/site";
 
 export function FinalCta({
   title,
@@ -12,7 +12,7 @@ export function FinalCta({
   cta?: string;
   href?: string;
 }) {
-  const appUrl = href ?? getPublicAppUrl();
+  const appUrl = href ?? routes.signup;
   return (
     <section className="final">
       <div className="wrap">

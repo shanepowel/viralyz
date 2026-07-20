@@ -8,6 +8,8 @@ import {
   getPostBySlug,
   PLACEHOLDER_POSTS,
 } from "@/lib/blog";
+import { pageMeta } from "@/lib/meta";
+import { SITE_URL } from "@/lib/site";
 
 export async function generateStaticParams() {
   return PLACEHOLDER_POSTS.map((p) => ({ slug: p.slug }));
@@ -21,10 +23,12 @@ export async function generateMetadata({
   const { slug } = await params;
   const post = await getPostBySlug(slug);
   if (!post) return { title: "Post" };
-  return {
+  return pageMeta({
     title: post.seoTitle || post.title,
     description: post.seoDescription || post.excerpt,
-  };
+    path: `/blog/${post.slug}`,
+    article: { publishedTime: post.publishedAt },
+  });
 }
 
 export default async function BlogPostPage({
@@ -36,8 +40,24 @@ export default async function BlogPostPage({
   const post = await getPostBySlug(slug);
   if (!post) notFound();
 
+  const jsonLd = {
+    "@context": "https://schema.org",
+    "@type": "BlogPosting",
+    headline: post.title,
+    description: post.excerpt,
+    datePublished: post.publishedAt,
+    author: post.author
+      ? { "@type": "Person", name: post.author.name }
+      : undefined,
+    mainEntityOfPage: `${SITE_URL}/blog/${post.slug}`,
+  };
+
   return (
     <MarketingShell>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+      />
       <article className="wrap" style={{ paddingBottom: 80 }}>
         <div className="page-hero" style={{ maxWidth: 720 }}>
           <span className="eyebrow">{post.category.title}</span>

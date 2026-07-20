@@ -7,12 +7,15 @@ import {
   formatPostDate,
   listPosts,
 } from "@/lib/blog";
+import { pageMeta } from "@/lib/meta";
+import { routes } from "@/lib/site";
 
-export const metadata: Metadata = {
+export const metadata: Metadata = pageMeta({
   title: "Blog",
   description:
     "Teardowns of viral videos, honest pricing data, and lessons from scored posts.",
-};
+  path: routes.blog,
+});
 
 export default async function BlogPage({
   searchParams,
@@ -28,10 +31,7 @@ export default async function BlogPage({
         <div className="page-hero">
           <span className="eyebrow">Blog</span>
           <h1>What the scores are telling us.</h1>
-          <p>
-            Teardowns of viral videos, honest pricing data, and lessons from
-            millions of scored posts.
-          </p>
+          <p>Teardowns of viral videos and honest pricing data.</p>
         </div>
       </div>
       <section style={{ paddingTop: 24, paddingBottom: 80 }}>

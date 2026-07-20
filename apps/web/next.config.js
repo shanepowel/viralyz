@@ -25,6 +25,21 @@ const nextConfig = {
         permanent: true,
       },
       {
+        source: "/academy",
+        destination: "/blog",
+        permanent: false,
+      },
+      {
+        source: "/community",
+        destination: "/for-creators",
+        permanent: false,
+      },
+      {
+        source: "/help",
+        destination: "/contact",
+        permanent: false,
+      },
+      {
         source: "/dashboard",
         destination: `${app}/`,
         permanent: false,

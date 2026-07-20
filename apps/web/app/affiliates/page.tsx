@@ -3,12 +3,15 @@ import Link from "next/link";
 import { AffiliateApplyForm } from "@/components/marketing/affiliate-apply-form";
 import { FinalCta } from "@/components/marketing/final-cta";
 import { MarketingShell } from "@/components/marketing/marketing-shell";
+import { pageMeta } from "@/lib/meta";
+import { routes } from "@/lib/site";
 
-export const metadata: Metadata = {
+export const metadata: Metadata = pageMeta({
   title: "Affiliate programme",
   description:
     "Earn 30% recurring for 12 months when creators you refer upgrade. Creators talking to creators.",
-};
+  path: routes.affiliates,
+});
 
 export default function AffiliatesPage() {
   return (

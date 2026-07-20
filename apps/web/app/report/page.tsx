@@ -3,12 +3,15 @@ import Link from "next/link";
 import { LinkScorer } from "@/components/marketing/link-scorer";
 import { MarketingShell } from "@/components/marketing/marketing-shell";
 import { ReportGateForm } from "@/components/marketing/report-gate-form";
+import { pageMeta } from "@/lib/meta";
+import { routes } from "@/lib/site";
 
-export const metadata: Metadata = {
+export const metadata: Metadata = pageMeta({
   title: "Viral Score Report 2026",
   description:
     "What scored videos say about what actually works. Average scores by niche, fixes that move results, hook styles, posting times.",
-};
+  path: routes.report,
+});
 
 export default function ReportPage() {
   return (
@@ -18,9 +21,9 @@ export default function ReportPage() {
           <span className="eyebrow">Data report</span>
           <h1>The Viral Score Report 2026.</h1>
           <p>
-            Industry surveys tell you what people say. Transaction reports tell
-            you what people paid. This report shows what scored content actually
-            did. Gate the PDF with your email.
+            Industry surveys tell you what people say. This report will show
+            what scored content actually did — once we have enough measured
+            data. Gate the PDF with your email to get it when it ships.
           </p>
         </div>
 
@@ -28,16 +31,16 @@ export default function ReportPage() {
           <div className="report-preview">
             <div className="proof-band" style={{ padding: 36 }}>
               <div className="proof-cell">
-                <div className="pnum">2.1M+</div>
-                <div className="plab">Videos in the scoring set (target)</div>
-              </div>
-              <div className="proof-cell">
                 <div className="pnum">5</div>
-                <div className="plab">Components in every score</div>
+                <div className="plab">Areas in every score</div>
               </div>
               <div className="proof-cell">
-                <div className="pnum">82%</div>
-                <div className="plab">Shown accuracy, never hidden</div>
+                <div className="pnum">&lt;30s</div>
+                <div className="plab">To a first score</div>
+              </div>
+              <div className="proof-cell">
+                <div className="pnum">100</div>
+                <div className="plab">Point scale</div>
               </div>
             </div>
             <div className="values" style={{ marginTop: 24 }}>
@@ -48,11 +51,11 @@ export default function ReportPage() {
                 ],
                 [
                   "Fixes that pay",
-                  "Which suggested changes moved re-scores and real performance most.",
+                  "Which notes move scores the most, with honest sample sizes.",
                 ],
                 [
-                  "Hooks and timing",
-                  "Opening styles by platform, and posting-time effects from tracked results.",
+                  "Accuracy",
+                  "Predicted versus actual — published when we have enough posts to measure.",
                 ],
               ].map(([h, p]) => (
                 <div className="value" key={h}>
@@ -62,29 +65,19 @@ export default function ReportPage() {
               ))}
             </div>
           </div>
-          <div className="report-card">
-            <h3 style={{ fontSize: 20, marginBottom: 8 }}>Get the PDF</h3>
-            <p style={{ fontSize: 14, color: "var(--ink-2)", marginBottom: 18 }}>
-              First edition compiles as scoring volume grows. Leave your email
-              for the drop, and see the outline now.
-            </p>
+          <div>
             <ReportGateForm />
+            <p style={{ marginTop: 24, fontSize: 13.5, color: "var(--ink-3)" }}>
+              Prefer to score a video now?{" "}
+              <Link href={routes.tools} style={{ color: "var(--violet-deep)" }}>
+                Try free tools
+              </Link>
+              .
+            </p>
+            <div style={{ marginTop: 24 }}>
+              <LinkScorer />
+            </div>
           </div>
-        </div>
-
-        <div style={{ marginTop: 72, marginBottom: 80, maxWidth: 560 }}>
-          <div className="sec-head" style={{ marginBottom: 20 }}>
-            <span className="eyebrow">While you wait</span>
-            <h2>Score one of your own videos.</h2>
-          </div>
-          <LinkScorer />
-          <p style={{ marginTop: 20, fontSize: 13.5, color: "var(--ink-3)" }}>
-            Prefer tools?{" "}
-            <Link href="/tools" style={{ color: "var(--violet-deep)" }}>
-              Free calculators
-            </Link>
-            .
-          </p>
         </div>
       </div>
     </MarketingShell>

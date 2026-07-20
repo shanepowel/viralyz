@@ -1,4 +1,3 @@
-export { CreatorMosaic } from "./creator-mosaic";
 export { FinalCta } from "./final-cta";
 export { MarketingShell } from "./marketing-shell";
 export { SiteFooter } from "./site-footer";
@@ -11,7 +10,5 @@ export { AffiliateApplyForm } from "./affiliate-apply-form";
 export { ReportGateForm } from "./report-gate-form";
 export { ImageSlot } from "./image-slot";
 export { ThemeToggle } from "./theme-toggle";
-export {
-  getMarketingFooterColumns,
-  getMarketingNavGroups,
-} from "./nav-data";
+export { DemoBadge } from "./demo-badge";
+export { EarlyAccess } from "./early-access";

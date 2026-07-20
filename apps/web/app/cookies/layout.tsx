@@ -2,8 +2,7 @@ import type { Metadata } from "next";
 
 export const metadata: Metadata = {
   title: "Cookie policy",
-  description:
-    "What Viralyz stores on your device, why, and how to say no.",
+  description: "Cookies used on Viralyz and how to manage them.",
 };
 
 export default function CookiesLayout({

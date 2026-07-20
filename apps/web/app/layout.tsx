@@ -6,6 +6,7 @@ import {
 } from "next/font/google";
 import type { CSSProperties } from "react";
 import { APP_DESCRIPTION, APP_NAME, APP_TAGLINE } from "@repo/config";
+import { SITE_URL } from "@/lib/site";
 import "./globals.css";
 
 const manrope = Manrope({
@@ -27,25 +28,12 @@ const jetbrains = JetBrains_Mono({
 });
 
 export const metadata: Metadata = {
+  metadataBase: new URL(SITE_URL),
   title: {
     default: `${APP_NAME}. ${APP_TAGLINE}`,
     template: `%s | ${APP_NAME}`,
   },
   description: APP_DESCRIPTION,
-  keywords: [
-    "viral score",
-    "creator tools",
-    "TikTok",
-    "Instagram Reels",
-    "YouTube Shorts",
-    "media kit",
-    "content scoring",
-  ],
-  openGraph: {
-    title: `${APP_NAME}. ${APP_TAGLINE}`,
-    description: APP_DESCRIPTION,
-    type: "website",
-  },
 };
 
 export default function RootLayout({

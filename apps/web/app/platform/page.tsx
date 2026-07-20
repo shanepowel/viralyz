@@ -1,75 +1,43 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import { getPublicAppUrl } from "@repo/config";
 import { FinalCta } from "@/components/marketing/final-cta";
 import { MarketingShell } from "@/components/marketing/marketing-shell";
+import { features } from "@/data/features";
+import { flags } from "@/lib/flags";
+import { pageMeta } from "@/lib/meta";
+import { routes } from "@/lib/site";
 
-export const metadata: Metadata = {
+export const metadata: Metadata = pageMeta({
   title: "Platform",
   description:
     "Every tool feeds one score. Viralyz connects everything to a single Viral Score.",
-};
+  path: routes.platform,
+});
 
-const TOOLS = [
-  {
-    tag: "Score",
-    name: "Viral Score",
-    body: "Every post gets a score out of 100 across five areas: opening, visuals, pacing, words and timing. You see what is wrong and exactly how to fix it.",
-  },
-  {
-    tag: "Create",
-    name: "Hook Lab",
-    body: "Your first three seconds decide everything. Get ten opening lines for any idea, each scored against what has worked for your audience before.",
-  },
-  {
-    tag: "Create",
-    name: "Script Doctor",
-    body: "Paste your script and get feedback line by line. Weak opening, buried point, missing call to action. Accept a fix and watch your score move.",
-  },
-  {
-    tag: "Create",
-    name: "Thumbnail Studio",
-    body: "See your thumbnail at real feed size, sitting next to actual competitor thumbnails. If you cannot read it, neither can they. Fix it before you post.",
-  },
-  {
-    tag: "Create",
-    name: "Caption Studio",
-    body: "Captions and hashtags written for each platform, with a mix of big and niche tags so you get found. Includes two versions to test against each other.",
-  },
-  {
-    tag: "Intel",
-    name: "Trend Radar",
-    body: "What is rising in your niche right now, and honestly, what is fading. Posting into a dying trend is wasted work. We tell you before you waste it.",
-  },
-  {
-    tag: "Intel",
-    name: "Competitor Intel",
-    body: "We score your competitors' content too. See why their post worked, then create your own take on it. Your angle, not their copy.",
-  },
+const OVERVIEW = [
+  ...features.map((f) => ({
+    tag: "Feature",
+    name: f.name,
+    body: f.tagline,
+    href: `/platform/${f.slug}`,
+  })),
   {
     tag: "Publish",
     name: "Smart Calendar",
-    body: "Drag your posts into a calendar that already knows your audience's best hours. Every scheduled post shows its score, so you know what is going out.",
-  },
-  {
-    tag: "Publish",
-    name: "BioPage",
-    body: "A clean link-in-bio page with your content, links and email capture. Built in minutes, tracked properly, and it matches your brand.",
+    body: "Plan posts around your audience's best hours. Every scheduled post can show its score.",
+    href: routes.signup,
   },
   {
     tag: "Engage",
     name: "DM Automation",
-    body: "Someone comments a keyword on your post, they get your link by direct message. Set it up once and it works around the clock, within Instagram's rules.",
+    body: "Keyword comments get your link by DM, within platform rules.",
+    href: routes.signup,
   },
   {
     tag: "Earn",
     name: "Media Kit",
-    body: "Your verified profile, built from real platform data. Followers, engagement, score history and a suggested rate card. One link that gets you booked.",
-  },
-  {
-    tag: "Learn",
-    name: "Performance Tracking",
-    body: "After you post, we track what really happened and compare it to what we predicted. Our accuracy is shown to you honestly, and it improves over time.",
+    body: "Your profile, packages and score history in one link brands can trust.",
+    href: `${routes.forCreators}#media-kit`,
   },
 ] as const;
 
@@ -91,12 +59,17 @@ export default function PlatformPage() {
       <section style={{ paddingTop: 24 }}>
         <div className="wrap">
           <div className="tool-grid">
-            {TOOLS.map((tool) => (
-              <div className="tool" key={tool.name}>
+            {OVERVIEW.map((tool) => (
+              <Link
+                className="tool"
+                key={tool.name}
+                href={tool.href}
+                style={{ textDecoration: "none", color: "inherit" }}
+              >
                 <span className="t-tag">{tool.tag}</span>
                 <h3>{tool.name}</h3>
                 <p>{tool.body}</p>
-              </div>
+              </Link>
             ))}
           </div>
         </div>
@@ -113,52 +86,49 @@ export default function PlatformPage() {
             </p>
           </div>
           <div className="tool-grid">
-            {[
-              {
-                name: "TikTok",
-                body: "Pull short-form posts, hooks, and retention signals into your Viral Score history.",
-              },
-              {
-                name: "YouTube Shorts",
-                body: "Score shorts against the same five factors, then compare with your long-form habits.",
-              },
-              {
-                name: "Instagram Reels",
-                body: "Verify reach and engagement so brands see proof, not inflated screenshots.",
-              },
-              {
-                name: "X",
-                body: "Track clips and threads that travel. Keep your scoreboard honest across platforms.",
-              },
-            ].map((item) => (
-              <div className="tool" key={item.name}>
-                <span className="t-tag">Connect</span>
-                <h3>{item.name}</h3>
-                <p>{item.body}</p>
-              </div>
-            ))}
+            {["TikTok", "YouTube Shorts", "Instagram Reels", "X"].map(
+              (name) => (
+                <div className="tool" key={name}>
+                  <span className="t-tag">Connect</span>
+                  <h3>{name}</h3>
+                  <p>
+                    Pull posts and engagement into your Viral Score history from
+                    connected accounts.
+                  </p>
+                </div>
+              ),
+            )}
           </div>
         </div>
       </section>
 
-      <section className="band" id="api" style={{ marginTop: 24, paddingBottom: 24 }}>
+      <section
+        className="band"
+        id="api"
+        style={{ marginTop: 24, paddingBottom: 24 }}
+      >
         <div className="wrap">
           <div className="sec-head" style={{ marginBottom: 16 }}>
             <span className="eyebrow">API</span>
             <h2>Pull scores into your own tools.</h2>
-            <p>
-              Agencies and product teams can request scored results programmatically.
-              Public docs ship with the first partner cohort. Until then, talk to us
-              and we will share the early endpoints.
-            </p>
+            {flags.apiDocsLive ? (
+              <p>
+                Public docs are available for partner teams.{" "}
+                <Link href="/docs/api">Read the API docs</Link>.
+              </p>
+            ) : (
+              <p>
+                API access is in private preview —{" "}
+                <Link
+                  href={routes.contact}
+                  style={{ color: "var(--violet-deep)", fontWeight: 600 }}
+                >
+                  contact partnerships
+                </Link>
+                .
+              </p>
+            )}
           </div>
-          <p style={{ fontSize: 14.5, color: "var(--ink-2)", maxWidth: 640 }}>
-            Need access now?{" "}
-            <Link href="/contact" style={{ color: "var(--violet-deep)", fontWeight: 600 }}>
-              Contact partnerships
-            </Link>{" "}
-            with your use case. We reply within one working day.
-          </p>
         </div>
       </section>
 
@@ -166,7 +136,7 @@ export default function PlatformPage() {
         title="Try every tool free."
         subtitle="10 scores a month, no card needed. Upgrade when it pays for itself."
         cta="Start free"
-        href={getPublicAppUrl()}
+        href={routes.signup}
       />
     </MarketingShell>
   );

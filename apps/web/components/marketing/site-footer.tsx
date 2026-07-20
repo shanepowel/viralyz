@@ -1,18 +1,10 @@
 import Link from "next/link";
 import { APP_NAME } from "@repo/config";
-import { ImageSlot } from "@/components/marketing/image-slot";
-import { getMarketingFooterColumns } from "@/components/marketing/nav-data";
-
-const SOCIAL = [
-  { label: "Tk", href: "https://www.tiktok.com", name: "TikTok" },
-  { label: "Yt", href: "https://www.youtube.com", name: "YouTube" },
-  { label: "Ig", href: "https://www.instagram.com", name: "Instagram" },
-  { label: "X", href: "https://x.com", name: "X" },
-] as const;
+import { getFooterColumns } from "@/config/nav";
 
 export function SiteFooter() {
   const year = new Date().getFullYear();
-  const columns = getMarketingFooterColumns();
+  const columns = getFooterColumns();
 
   return (
     <footer className="site-foot">
@@ -27,11 +19,6 @@ export function SiteFooter() {
               Score your content before you post it. Build a record brands can
               trust.
             </p>
-            <div className="logostrip-row">
-              <ImageSlot id="foot-logo-1" shape="rect" label="Logo" />
-              <ImageSlot id="foot-logo-2" shape="rect" label="Logo" />
-              <ImageSlot id="foot-logo-3" shape="rect" label="Logo" />
-            </div>
           </div>
           {columns.map((col) => (
             <div className="foot-col" key={col.heading}>
@@ -58,19 +45,6 @@ export function SiteFooter() {
               · A Digiteq Holdings company · Windsor, UK
             </span>
           </span>
-          <div className="social">
-            {SOCIAL.map((s) => (
-              <a
-                key={s.label}
-                href={s.href}
-                target="_blank"
-                rel="noopener noreferrer"
-                aria-label={s.name}
-              >
-                {s.label}
-              </a>
-            ))}
-          </div>
         </div>
       </div>
     </footer>

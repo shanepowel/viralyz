@@ -2,18 +2,13 @@
 
 import Link from "next/link";
 import { useEffect, useId, useRef, useState } from "react";
+import { APP_NAME } from "@repo/config";
 import {
-  APP_NAME,
-  getPublicAppPath,
-  getPublicAppUrl,
-  getPublicLoginUrl,
-} from "@repo/config";
-import { ImageSlot } from "@/components/marketing/image-slot";
-import {
-  getMarketingNavGroups,
-  type NavGroup,
+  chromeLinks,
+  mainNav,
   type NavLink,
-} from "@/components/marketing/nav-data";
+  type NavSection,
+} from "@/config/nav";
 import { ThemeToggle } from "@/components/marketing/theme-toggle";
 
 function MegaItem({
@@ -25,10 +20,9 @@ function MegaItem({
 }) {
   const inner = (
     <>
-      <span className="ico">{link.ico}</span>
       <span className="txt">
-        <strong>{link.title}</strong>
-        <span>{link.desc}</span>
+        <strong>{link.label}</strong>
+        {link.desc ? <span>{link.desc}</span> : null}
       </span>
     </>
   );
@@ -47,16 +41,28 @@ function MegaItem({
 }
 
 function NavGroupMenu({
-  group,
+  section,
   open,
   onOpen,
   onClose,
 }: {
-  group: NavGroup;
+  section: NavSection;
   open: boolean;
   onOpen: () => void;
   onClose: () => void;
 }) {
+  if (!section.groups?.length) {
+    return (
+      <Link
+        href={section.href}
+        className="nav-trigger"
+        style={{ textDecoration: "none", display: "inline-flex" }}
+      >
+        {section.label}
+      </Link>
+    );
+  }
+
   return (
     <div
       className={`nav-item${open ? " is-open" : ""}`}
@@ -65,87 +71,49 @@ function NavGroupMenu({
       onFocusCapture={onOpen}
     >
       <Link
-        href={group.href}
+        href={section.href}
         className="nav-trigger"
         aria-expanded={open}
         aria-haspopup="true"
       >
-        {group.label}
+        {section.label}
         <span className="caret" aria-hidden />
       </Link>
-      <div className="mega" role="menu" aria-label={group.label}>
-        {group.columns.map((col) => (
+      <div className="mega" role="menu" aria-label={section.label}>
+        {section.groups.map((col) => (
           <div className="mega-col" key={col.heading}>
             <h5>{col.heading}</h5>
             {col.links.map((link) => (
-              <MegaItem key={link.title} link={link} onNavigate={onClose} />
+              <MegaItem key={link.label} link={link} onNavigate={onClose} />
             ))}
           </div>
         ))}
-        {group.feature ? (
-          group.feature.external ? (
-            <a
-              className="mega-feat"
-              href={group.feature.href}
-              onClick={onClose}
-            >
-              <ImageSlot
-                id={group.feature.slotId}
-                shape="rect"
-                label={group.feature.slotLabel}
-              />
-              <div className="txt">
-                <strong>{group.feature.title}</strong>
-                <span>{group.feature.desc}</span>
-              </div>
-            </a>
-          ) : (
-            <Link
-              className="mega-feat"
-              href={group.feature.href}
-              onClick={onClose}
-            >
-              <ImageSlot
-                id={group.feature.slotId}
-                shape="rect"
-                label={group.feature.slotLabel}
-              />
-              <div className="txt">
-                <strong>{group.feature.title}</strong>
-                <span>{group.feature.desc}</span>
-              </div>
-            </Link>
-          )
-        ) : null}
       </div>
     </div>
   );
 }
 
 export function SiteNav() {
-  const toggleId = useId();
+  const [openGroup, setOpenGroup] = useState<string | null>(null);
   const [mobileOpen, setMobileOpen] = useState(false);
-  const [openGroup, setOpenGroup] = useState<NavGroup["id"] | null>(null);
+  const toggleId = useId();
   const navRef = useRef<HTMLElement>(null);
-  const groups = getMarketingNavGroups();
-  const appUrl = getPublicAppUrl();
-  const loginUrl = getPublicLoginUrl();
 
-  const closeMobile = () => setMobileOpen(false);
   const closeMega = () => setOpenGroup(null);
+  const closeMobile = () => setMobileOpen(false);
 
   useEffect(() => {
-    const onKey = (e: KeyboardEvent) => {
+    function onKey(e: KeyboardEvent) {
       if (e.key === "Escape") {
         setOpenGroup(null);
         setMobileOpen(false);
       }
-    };
-    const onPointer = (e: MouseEvent) => {
-      if (!navRef.current?.contains(e.target as Node)) {
+    }
+    function onPointer(e: MouseEvent) {
+      if (navRef.current && !navRef.current.contains(e.target as Node)) {
         setOpenGroup(null);
       }
-    };
+    }
     window.addEventListener("keydown", onKey);
     window.addEventListener("mousedown", onPointer);
     return () => {
@@ -162,30 +130,23 @@ export function SiteNav() {
           {APP_NAME}
         </Link>
         <div className="nav-links">
-          {groups.map((group) => (
+          {mainNav.map((section) => (
             <NavGroupMenu
-              key={group.id}
-              group={group}
-              open={openGroup === group.id}
-              onOpen={() => setOpenGroup(group.id)}
+              key={section.label}
+              section={section}
+              open={openGroup === section.label}
+              onOpen={() => setOpenGroup(section.label)}
               onClose={closeMega}
             />
           ))}
-          <Link
-            href="/pricing"
-            className="nav-trigger"
-            style={{ textDecoration: "none", display: "inline-flex" }}
-          >
-            Pricing
-          </Link>
         </div>
 
         <div className="nav-actions">
           <ThemeToggle />
-          <a href={loginUrl} className="signin">
+          <a href={chromeLinks.signIn} className="signin">
             Sign in
           </a>
-          <a href={appUrl} className="btn btn-primary">
+          <a href={chromeLinks.startFree} className="btn btn-primary">
             Start free
           </a>
           <label className="hamburger" htmlFor={toggleId} aria-label="Menu">
@@ -202,66 +163,65 @@ export function SiteNav() {
         onChange={(e) => setMobileOpen(e.target.checked)}
       />
       <div className="mobile-panel">
-        {groups.map((group) => (
-          <details className="m-group" key={group.id}>
-            <summary>{group.label}</summary>
-            <div className="m-sub">
-              <Link href={group.href} onClick={closeMobile}>
-                Overview
-              </Link>
-              {group.columns.flatMap((col) =>
-                col.links.map((link) =>
-                  link.external ? (
-                    <a
-                      key={`${group.id}-${link.title}`}
-                      href={link.href}
-                      onClick={closeMobile}
-                    >
-                      {link.title}
-                    </a>
-                  ) : (
-                    <Link
-                      key={`${group.id}-${link.title}`}
-                      href={link.href}
-                      onClick={closeMobile}
-                    >
-                      {link.title}
-                    </Link>
+        {mainNav.map((section) =>
+          section.groups?.length ? (
+            <details className="m-group" key={section.label}>
+              <summary>{section.label}</summary>
+              <div className="m-sub">
+                <Link href={section.href} onClick={closeMobile}>
+                  Overview
+                </Link>
+                {section.groups.flatMap((col) =>
+                  col.links.map((link) =>
+                    link.external ? (
+                      <a
+                        key={`${section.label}-${link.label}`}
+                        href={link.href}
+                        onClick={closeMobile}
+                      >
+                        {link.label}
+                      </a>
+                    ) : (
+                      <Link
+                        key={`${section.label}-${link.label}`}
+                        href={link.href}
+                        onClick={closeMobile}
+                      >
+                        {link.label}
+                      </Link>
+                    ),
                   ),
-                ),
-              )}
-              {group.feature ? (
-                group.feature.external ? (
-                  <a href={group.feature.href} onClick={closeMobile}>
-                    {group.feature.title}
-                  </a>
-                ) : (
-                  <Link href={group.feature.href} onClick={closeMobile}>
-                    {group.feature.title}
-                  </Link>
-                )
-              ) : null}
-            </div>
-          </details>
-        ))}
-        <Link href="/pricing" className="m-plain" onClick={closeMobile}>
-          Pricing
-        </Link>
-        <Link href="/tools" className="m-plain" onClick={closeMobile}>
-          Free tools
-        </Link>
-        <Link href="/contact" className="m-plain" onClick={closeMobile}>
-          Contact
-        </Link>
+                )}
+              </div>
+            </details>
+          ) : (
+            <Link
+              key={section.label}
+              href={section.href}
+              className="m-plain"
+              onClick={closeMobile}
+            >
+              {section.label}
+            </Link>
+          ),
+        )}
         <div className="m-actions">
-          <a href={loginUrl} className="btn btn-ghost" onClick={closeMobile}>
+          <a
+            href={chromeLinks.signIn}
+            className="btn btn-ghost"
+            onClick={closeMobile}
+          >
             Sign in
           </a>
-          <a href={appUrl} className="btn btn-primary" onClick={closeMobile}>
+          <a
+            href={chromeLinks.startFree}
+            className="btn btn-primary"
+            onClick={closeMobile}
+          >
             Start free
           </a>
           <a
-            href={getPublicAppPath("/analyze")}
+            href={chromeLinks.scoreVideo}
             className="btn btn-ghost"
             onClick={closeMobile}
           >

@@ -2,13 +2,13 @@
 
 import Link from "next/link";
 import { useMemo, useState } from "react";
-import { getPublicAppUrl } from "@repo/config";
+import { routes } from "@/lib/site";
 
 export function EngagementCalculator() {
   const [followers, setFollowers] = useState("");
   const [likes, setLikes] = useState("");
   const [comments, setComments] = useState("");
-  const appUrl = getPublicAppUrl();
+  const appUrl = routes.signup;
 
   const result = useMemo(() => {
     const f = Number(followers);
