@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import Link from "next/link";
 import { getPublicAppUrl } from "@repo/config";
 import { FinalCta } from "@/components/marketing/final-cta";
 import { MarketingShell } from "@/components/marketing/marketing-shell";
@@ -98,6 +99,66 @@ export default function PlatformPage() {
               </div>
             ))}
           </div>
+        </div>
+      </section>
+
+      <section className="band" id="integrations" style={{ marginTop: 48 }}>
+        <div className="wrap">
+          <div className="sec-head" style={{ marginBottom: 28 }}>
+            <span className="eyebrow">Integrations</span>
+            <h2>TikTok, YouTube, Instagram, and X.</h2>
+            <p>
+              Connect the accounts you already post on. Scores and track records
+              stay tied to the real handle, not a self-reported spreadsheet.
+            </p>
+          </div>
+          <div className="tool-grid">
+            {[
+              {
+                name: "TikTok",
+                body: "Pull short-form posts, hooks, and retention signals into your Viral Score history.",
+              },
+              {
+                name: "YouTube Shorts",
+                body: "Score shorts against the same five factors, then compare with your long-form habits.",
+              },
+              {
+                name: "Instagram Reels",
+                body: "Verify reach and engagement so brands see proof, not inflated screenshots.",
+              },
+              {
+                name: "X",
+                body: "Track clips and threads that travel. Keep your scoreboard honest across platforms.",
+              },
+            ].map((item) => (
+              <div className="tool" key={item.name}>
+                <span className="t-tag">Connect</span>
+                <h3>{item.name}</h3>
+                <p>{item.body}</p>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      <section className="band" id="api" style={{ marginTop: 24, paddingBottom: 24 }}>
+        <div className="wrap">
+          <div className="sec-head" style={{ marginBottom: 16 }}>
+            <span className="eyebrow">API</span>
+            <h2>Pull scores into your own tools.</h2>
+            <p>
+              Agencies and product teams can request scored results programmatically.
+              Public docs ship with the first partner cohort. Until then, talk to us
+              and we will share the early endpoints.
+            </p>
+          </div>
+          <p style={{ fontSize: 14.5, color: "var(--ink-2)", maxWidth: 640 }}>
+            Need access now?{" "}
+            <Link href="/contact" style={{ color: "var(--violet-deep)", fontWeight: 600 }}>
+              Contact partnerships
+            </Link>{" "}
+            with your use case. We reply within one working day.
+          </p>
         </div>
       </section>
 

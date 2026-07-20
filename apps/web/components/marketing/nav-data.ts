@@ -77,7 +77,7 @@ export function getMarketingNavGroups(): NavGroup[] {
               external: true,
             },
             {
-              href: "/platform",
+              href: "/platform#integrations",
               ico: "Ap",
               title: "Integrations",
               desc: "TikTok, YouTube, Instagram, X",
@@ -221,7 +221,7 @@ export function getMarketingNavGroups(): NavGroup[] {
               desc: "Calculators and checkers, no signup",
             },
             {
-              href: "/contact",
+              href: "/contact#help",
               ico: "He",
               title: "Help center",
               desc: "Guides and how-tos",
@@ -232,7 +232,7 @@ export function getMarketingNavGroups(): NavGroup[] {
           heading: "Build",
           links: [
             {
-              href: "/platform",
+              href: "/platform#api",
               ico: "Ap",
               title: "API docs",
               desc: "Pull scores into your own tools",
@@ -279,6 +279,8 @@ export function getMarketingFooterColumns(): FooterColumn[] {
           external: true,
         },
         { href: "/platform", label: "Platform overview" },
+        { href: "/platform#integrations", label: "Integrations" },
+        { href: "/platform#api", label: "API" },
       ],
     },
     {
@@ -307,7 +309,7 @@ export function getMarketingFooterColumns(): FooterColumn[] {
         { href: "/blog", label: "Blog" },
         { href: "/tools", label: "Free tools" },
         { href: "/report", label: "Viral Score Report" },
-        { href: "/platform", label: "API docs" },
+        { href: "/platform#api", label: "API docs" },
         { href: "/contact", label: "Help center" },
       ],
     },

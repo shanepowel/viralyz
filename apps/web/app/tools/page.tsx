@@ -13,7 +13,7 @@ export const metadata: Metadata = {
 
 const TOOLS = [
   {
-    href: "/",
+    href: "/report",
     title: "Link scorer",
     body: "Paste any TikTok, Reel or YouTube link and get a Viral Score with one fix, instantly.",
   },
