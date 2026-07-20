@@ -67,14 +67,14 @@ export default function TrustPage() {
                 operated for Digiteq Holdings Limited. Details live in our{" "}
                 <Link
                   href={routes.privacy}
-                  className="text-accent underline-offset-4 hover:underline"
+                  className="text-accent underline underline-offset-4"
                 >
                   privacy policy
                 </Link>
                 . Questions:{" "}
                 <a
                   href={`mailto:${CONTACT.hello}`}
-                  className="text-accent underline-offset-4 hover:underline"
+                  className="text-accent underline underline-offset-4"
                 >
                   {CONTACT.hello}
                 </a>

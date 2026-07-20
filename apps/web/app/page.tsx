@@ -136,7 +136,7 @@ export default function HomePage() {
               />
               <ul className="space-y-3 text-sm text-ink-secondary">
                 <li>
-                  <Link href="/platform/hook-lab" className="text-accent hover:underline">
+                  <Link href="/platform/hook-lab" className="text-accent underline underline-offset-4">
                     Hook Lab
                   </Link>{" "}
                   — ten opening lines, each scored
@@ -144,7 +144,7 @@ export default function HomePage() {
                 <li>
                   <Link
                     href="/platform/thumbnail-studio"
-                    className="text-accent hover:underline"
+                    className="text-accent underline underline-offset-4"
                   >
                     Thumbnail Studio
                   </Link>{" "}
@@ -153,7 +153,7 @@ export default function HomePage() {
                 <li>
                   <Link
                     href="/platform/script-doctor"
-                    className="text-accent hover:underline"
+                    className="text-accent underline underline-offset-4"
                   >
                     Script Doctor
                   </Link>{" "}

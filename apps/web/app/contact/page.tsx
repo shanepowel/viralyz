@@ -55,7 +55,7 @@ export default function ContactPage() {
                       Email{" "}
                       <a
                         href="mailto:hello@viralyz.com"
-                        className="text-accent hover:underline"
+                        className="text-accent underline underline-offset-4"
                       >
                         hello@viralyz.com
                       </a>
@@ -70,7 +70,7 @@ export default function ContactPage() {
                       Email{" "}
                       <a
                         href="mailto:partnerships@viralyz.com"
-                        className="text-accent hover:underline"
+                        className="text-accent underline underline-offset-4"
                       >
                         partnerships@viralyz.com
                       </a>{" "}
@@ -83,7 +83,7 @@ export default function ContactPage() {
                   p: (
                     <>
                       Guides are coming. Until then, use this form or check{" "}
-                      <Link href={routes.pricing} className="text-accent hover:underline">
+                      <Link href={routes.pricing} className="text-accent underline underline-offset-4">
                         pricing FAQ
                       </Link>
                       .

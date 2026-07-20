@@ -92,14 +92,14 @@ export default function AboutPage() {
                 Contact:{" "}
                 <a
                   href={`mailto:${CONTACT.hello}`}
-                  className="text-accent underline-offset-4 hover:underline"
+                  className="text-accent underline underline-offset-4"
                 >
                   {CONTACT.hello}
                 </a>
                 {" · "}
                 <Link
                   href={routes.trust}
-                  className="text-accent underline-offset-4 hover:underline"
+                  className="text-accent underline underline-offset-4"
                 >
                   Trust &amp; data
                 </Link>

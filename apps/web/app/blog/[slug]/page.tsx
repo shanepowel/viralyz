@@ -129,7 +129,7 @@ export default async function BlogPostPage({
               {prev ? (
                 <Link
                   href={`/blog/${prev.slug}`}
-                  className="text-accent underline-offset-4 hover:underline"
+                  className="text-accent underline underline-offset-4"
                 >
                   ← {prev.title}
                 </Link>
@@ -139,7 +139,7 @@ export default async function BlogPostPage({
               {next ? (
                 <Link
                   href={`/blog/${next.slug}`}
-                  className="text-accent underline-offset-4 hover:underline"
+                  className="text-accent underline underline-offset-4"
                 >
                   {next.title} →
                 </Link>

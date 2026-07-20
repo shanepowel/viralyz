@@ -11,7 +11,7 @@ const button = cva(
         secondary:
           "bg-raised text-ink border border-line hover:border-line-strong shadow-sm",
         ghost: "text-ink-secondary hover:text-ink hover:bg-sunken",
-        link: "text-accent underline-offset-4 hover:underline p-0 h-auto",
+        link: "text-accent underline underline-offset-4 hover:text-accent-hover p-0 h-auto",
       },
       size: {
         sm: "h-9 px-3.5 text-sm rounded-sm",
