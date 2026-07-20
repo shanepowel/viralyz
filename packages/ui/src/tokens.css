@@ -1,0 +1,150 @@
+/**
+ * Signal design system — Viralyz brand tokens
+ * Product default is warm paper (matches marketing). Dark via [data-theme="dark"].
+ */
+
+:root,
+[data-theme="paper"],
+[data-theme="light"] {
+  /* Warm paper (marketing + product) */
+  --paper: #fafaf7;
+  --card: #ffffff;
+  --tint: #f1efea;
+  --ink: #1b1826;
+  --ink-2: #5b5768;
+  --ink-3: #928fa0;
+  --line: #e7e4dd;
+  --line-strong: #d6d2c8;
+  --violet: #6c4cf1;
+  --violet-deep: #5638d6;
+  --violet-soft: #efebff;
+
+  --bg-base: var(--paper);
+  --bg-surface: var(--card);
+  --bg-elevated: var(--card);
+  --bg-hover: var(--tint);
+  --border-subtle: var(--line);
+  --border-strong: var(--line-strong);
+
+  --text-primary: var(--ink);
+  --text-secondary: var(--ink-2);
+  --text-tertiary: var(--ink-3);
+
+  --accent: var(--violet);
+  --accent-hover: var(--violet-deep);
+  --accent-muted: var(--violet-soft);
+  --accent-foreground: #ffffff;
+
+  /* Score semantic scale (loud colour — only intentional chroma) */
+  --score-90: #0fa968;
+  --score-90-soft: #e3f6ed;
+  --score-70: #7ca426;
+  --score-70-soft: #f2f8e2;
+  --score-50: #d9950b;
+  --score-50-soft: #fcf3e1;
+  --score-30: #de4e4e;
+  --score-30-soft: #fbeaea;
+
+  --success: var(--score-90);
+  --warning: var(--score-50);
+  --danger: var(--score-30);
+
+  /* Typography */
+  --font-display: "Bricolage Grotesque", ui-sans-serif, sans-serif;
+  --font-body: "Inter", system-ui, ui-sans-serif, sans-serif;
+  --font-mono: "JetBrains Mono", ui-monospace, monospace;
+
+  /* Spacing (8pt grid) */
+  --s-1: 4px;
+  --s-2: 8px;
+  --s-3: 12px;
+  --s-4: 16px;
+  --s-6: 24px;
+  --s-8: 32px;
+  --s-12: 48px;
+  --s-16: 64px;
+  --s-24: 96px;
+
+  /* Radii */
+  --r-sm: 10px;
+  --r-md: 14px;
+  --r-lg: 20px;
+  --r-xl: 24px;
+  --r-full: 9999px;
+
+  /* Elevation */
+  --shadow-card: 0 1px 2px rgba(27, 24, 38, 0.05), 0 6px 20px rgba(27, 24, 38, 0.05);
+  --shadow-modal: 0 2px 4px rgba(27, 24, 38, 0.06), 0 16px 40px rgba(27, 24, 38, 0.1);
+  --glow-accent: 0 0 32px rgba(108, 76, 241, 0.18);
+
+  /* Motion */
+  --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
+  --dur-fast: 150ms;
+  --dur-med: 300ms;
+  --dur-slow: 600ms;
+}
+
+[data-theme="dark"] {
+  --bg-base: #0a0a0f;
+  --bg-surface: #12121a;
+  --bg-elevated: #1a1a26;
+  --bg-hover: #22222e;
+  --border-subtle: #26263a;
+  --border-strong: #3a3a52;
+
+  --text-primary: #f4f4f8;
+  --text-secondary: #a0a0b8;
+  --text-tertiary: #64647a;
+
+  --accent: #7c5cff;
+  --accent-hover: #937bff;
+  --accent-muted: rgba(124, 92, 255, 0.12);
+  --accent-foreground: #ffffff;
+
+  --score-90: #34d399;
+  --score-90-soft: rgba(52, 211, 153, 0.15);
+  --score-70: #a3e635;
+  --score-70-soft: rgba(163, 230, 53, 0.15);
+  --score-50: #fbbf24;
+  --score-50-soft: rgba(251, 191, 36, 0.15);
+  --score-30: #f87171;
+  --score-30-soft: rgba(248, 113, 113, 0.15);
+
+  --success: #34d399;
+  --warning: #fbbf24;
+  --danger: #f87171;
+
+  --font-display: "Bricolage Grotesque", "Clash Display", ui-sans-serif, sans-serif;
+  --font-body: "Inter", system-ui, ui-sans-serif, sans-serif;
+  --font-mono: "JetBrains Mono", ui-monospace, monospace;
+
+  --shadow-card: 0 1px 2px rgba(0, 0, 0, 0.4);
+  --shadow-modal: 0 24px 64px rgba(0, 0, 0, 0.6);
+  --glow-accent: 0 0 32px rgba(124, 92, 255, 0.25);
+}
+
+/* Score color helper — set --score-color from JS or utility class */
+.score-excellent {
+  --score-color: var(--score-90);
+  --score-color-alpha: color-mix(in srgb, var(--score-90) 25%, transparent);
+}
+.score-good {
+  --score-color: var(--score-70);
+  --score-color-alpha: color-mix(in srgb, var(--score-70) 25%, transparent);
+}
+.score-fair {
+  --score-color: var(--score-50);
+  --score-color-alpha: color-mix(in srgb, var(--score-50) 25%, transparent);
+}
+.score-poor {
+  --score-color: var(--score-30);
+  --score-color-alpha: color-mix(in srgb, var(--score-30) 20%, transparent);
+}
+
+.glow-score {
+  box-shadow: 0 0 48px var(--score-color-alpha);
+}
+
+.glow-accent:hover {
+  box-shadow: var(--glow-accent);
+}
