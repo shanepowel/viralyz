@@ -2,11 +2,21 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { LinkScorer } from "@/components/marketing/link-scorer";
 import { MarketingShell } from "@/components/marketing/marketing-shell";
+import { ScoreRing } from "@/components/score/ScoreRing";
+import { Breadcrumbs } from "@/components/ui/Breadcrumbs";
+import { Card } from "@/components/ui/Card";
+import { Container } from "@/components/ui/Container";
+import { EmptyState } from "@/components/ui/EmptyState";
+import { Eyebrow } from "@/components/ui/Eyebrow";
+import { Num } from "@/components/ui/Num";
+import { Section } from "@/components/ui/Section";
+import { SectionHeader } from "@/components/ui/SectionHeader";
 import {
   BLOG_CATEGORIES,
   formatPostDate,
   listPosts,
 } from "@/lib/blog";
+import { cn } from "@/lib/cn";
 import { pageMeta } from "@/lib/meta";
 import { routes } from "@/lib/site";
 
@@ -17,6 +27,12 @@ export const metadata: Metadata = pageMeta({
   path: routes.blog,
 });
 
+function scoreFromBadge(badge?: string | null): number | null {
+  if (!badge) return null;
+  const n = Number.parseInt(badge, 10);
+  return Number.isFinite(n) ? n : null;
+}
+
 export default async function BlogPage({
   searchParams,
 }: {
@@ -24,22 +40,44 @@ export default async function BlogPage({
 }) {
   const { category } = await searchParams;
   const posts = await listPosts({ category });
+  const categoryTitle =
+    BLOG_CATEGORIES.find((c) => c.slug === category)?.title ?? category;
 
   return (
     <MarketingShell>
-      <div className="wrap">
-        <div className="page-hero">
-          <span className="eyebrow">Blog</span>
-          <h1>What the scores are telling us.</h1>
-          <p>Teardowns of viral videos and honest pricing data.</p>
-        </div>
-      </div>
-      <section style={{ paddingTop: 24, paddingBottom: 80 }}>
-        <div className="wrap">
-          <div className="blog-filters" role="tablist" aria-label="Categories">
+      <Section className="pt-20 md:pt-28 pb-8">
+        <Container>
+          <Breadcrumbs
+            items={[
+              { label: "Home", href: routes.home },
+              { label: "Blog" },
+            ]}
+          />
+          <Eyebrow className="mt-6">Blog</Eyebrow>
+          <h1 className="mt-3 font-display text-4xl font-semibold tracking-tight md:text-5xl">
+            What the scores are telling us.
+          </h1>
+          <p className="mt-4 max-w-prose text-base leading-relaxed text-ink-secondary">
+            Teardowns of viral videos and honest pricing data.
+          </p>
+        </Container>
+      </Section>
+
+      <Section className="pt-0">
+        <Container>
+          <div
+            className="mb-8 flex flex-wrap gap-2"
+            role="tablist"
+            aria-label="Categories"
+          >
             <Link
               href="/blog"
-              className={`bchip${!category ? " active" : ""}`}
+              className={cn(
+                "rounded-sm px-3 py-2 text-sm transition-colors",
+                !category
+                  ? "bg-sunken font-medium text-ink"
+                  : "text-ink-secondary hover:bg-sunken hover:text-ink",
+              )}
             >
               All
             </Link>
@@ -47,61 +85,91 @@ export default async function BlogPage({
               <Link
                 key={c.slug}
                 href={`/blog?category=${c.slug}`}
-                className={`bchip${category === c.slug ? " active" : ""}`}
+                className={cn(
+                  "rounded-sm px-3 py-2 text-sm transition-colors",
+                  category === c.slug
+                    ? "bg-sunken font-medium text-ink"
+                    : "text-ink-secondary hover:bg-sunken hover:text-ink",
+                )}
               >
                 {c.title}
               </Link>
             ))}
           </div>
-          <div className="blog-grid">
-            {posts.map((post) => (
-              <Link
-                key={post._id}
-                href={`/blog/${post.slug}`}
-                className="bcard-post"
-              >
-                <div
-                  className="bcard-img"
-                  style={{ background: post.coverGradient }}
-                >
-                  {post.scoreBadge ? (
-                    <span className="bcard-score">{post.scoreBadge}</span>
-                  ) : null}
-                </div>
-                <div className="bcard-body">
-                  <span className="bcard-tag">{post.category.title}</span>
-                  <h3>{post.title}</h3>
-                  <p>{post.excerpt}</p>
-                  <span className="bcard-meta">
-                    {formatPostDate(post.publishedAt)} · {post.readMinutes} min
-                    read
-                  </span>
-                </div>
-              </Link>
-            ))}
-          </div>
+
+          {posts.length === 0 ? (
+            <EmptyState
+              heading={`Nothing in ${categoryTitle} yet.`}
+              body="We publish teardowns and playbooks as we score more content."
+              action={{ href: routes.blog, label: "View all posts" }}
+            />
+          ) : (
+            <div className="grid gap-5 sm:grid-cols-2">
+              {posts.map((post) => {
+                const score = scoreFromBadge(post.scoreBadge);
+                return (
+                  <Link key={post._id} href={`/blog/${post.slug}`}>
+                    <Card hoverable className="h-full overflow-hidden p-0">
+                      <div
+                        className="relative flex h-40 items-end justify-between p-4"
+                        style={{ background: post.coverGradient }}
+                      >
+                        {score != null ? (
+                          <ScoreRing
+                            value={score}
+                            size={48}
+                            animate={false}
+                            label={`Score ${score}`}
+                          />
+                        ) : post.scoreBadge ? (
+                          <span className="rounded-sm bg-black/35 px-2 py-1 font-mono text-sm text-white">
+                            {post.scoreBadge}
+                          </span>
+                        ) : (
+                          <span />
+                        )}
+                      </div>
+                      <div className="p-5">
+                        <p className="text-sm text-ink-tertiary">
+                          {post.category.title}
+                        </p>
+                        <h3 className="mt-1 text-lg font-semibold text-ink">
+                          {post.title}
+                        </h3>
+                        <p className="mt-2 text-sm leading-relaxed text-ink-secondary">
+                          {post.excerpt}
+                        </p>
+                        <p className="mt-3 text-sm text-ink-tertiary">
+                          {formatPostDate(post.publishedAt)} ·{" "}
+                          <Num>{post.readMinutes}</Num> min read
+                        </p>
+                      </div>
+                    </Card>
+                  </Link>
+                );
+              })}
+            </div>
+          )}
+
           {!process.env.NEXT_PUBLIC_SANITY_PROJECT_ID ? (
-            <p
-              style={{
-                textAlign: "center",
-                marginTop: 40,
-                fontSize: 13,
-                color: "var(--ink-3)",
-              }}
-            >
+            <p className="mt-10 text-center text-sm text-ink-tertiary">
               Showing launch brief posts. Connect Sanity (
-              <code>NEXT_PUBLIC_SANITY_PROJECT_ID</code>) to publish live.
+              <code className="font-mono">NEXT_PUBLIC_SANITY_PROJECT_ID</code>)
+              to publish live.
             </p>
           ) : null}
-          <div style={{ marginTop: 64 }}>
-            <div className="sec-head" style={{ marginBottom: 24 }}>
-              <span className="eyebrow">Try it</span>
-              <h2>Score a link from anything you just read.</h2>
+
+          <div className="mt-16">
+            <SectionHeader
+              eyebrow="Try it"
+              title="Score a link from anything you just read."
+            />
+            <div className="mt-6">
+              <LinkScorer />
             </div>
-            <LinkScorer />
           </div>
-        </div>
-      </section>
+        </Container>
+      </Section>
     </MarketingShell>
   );
 }

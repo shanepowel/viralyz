@@ -13,6 +13,8 @@ export const routes = {
   tools: "/tools",
   blog: "/blog",
   about: "/about",
+  trust: "/trust",
+  changelog: "/changelog",
   contact: "/contact",
   report: "/report",
   affiliates: "/affiliates",
@@ -22,6 +24,18 @@ export const routes = {
   /** Prefer /login on the product app; falls back to root until that page ships. */
   login: `${APP_URL}/login`,
   signup: APP_URL,
+} as const;
+
+export const CONTACT = {
+  hello: "hello@viralyz.com",
+  partnerships: "partnerships@viralyz.com",
+} as const;
+
+/** Digiteq Holdings Limited — public company details for trust surfaces. */
+export const COMPANY = {
+  legalName: "Digiteq Holdings Limited",
+  number: "16095214",
+  location: "Windsor, UK",
 } as const;
 
 /**

@@ -1,31 +1,11 @@
-import type { Metadata } from "next";
-import {
-  Manrope,
-  Sora,
-  JetBrains_Mono,
-} from "next/font/google";
+import type { Metadata, Viewport } from "next";
 import type { CSSProperties } from "react";
 import { APP_DESCRIPTION, APP_NAME, APP_TAGLINE } from "@repo/config";
+import { ThemeProvider } from "@/components/theme-provider";
+import { JsonLd } from "@/components/seo/JsonLd";
+import { display, mono, sans } from "@/app/fonts";
 import { SITE_URL } from "@/lib/site";
 import "./globals.css";
-
-const manrope = Manrope({
-  subsets: ["latin"],
-  variable: "--font-manrope",
-  weight: ["400", "500", "600", "700"],
-});
-
-const sora = Sora({
-  subsets: ["latin"],
-  variable: "--font-sora",
-  weight: ["500", "600", "700", "800"],
-});
-
-const jetbrains = JetBrains_Mono({
-  subsets: ["latin"],
-  variable: "--font-jetbrains",
-  weight: ["400", "500"],
-});
 
 export const metadata: Metadata = {
   metadataBase: new URL(SITE_URL),
@@ -34,6 +14,33 @@ export const metadata: Metadata = {
     template: `%s | ${APP_NAME}`,
   },
   description: APP_DESCRIPTION,
+  other: {
+    "color-scheme": "light dark",
+  },
+  alternates: {
+    types: {
+      "application/rss+xml": `${SITE_URL}/feed.xml`,
+    },
+  },
+};
+
+export const viewport: Viewport = {
+  themeColor: [
+    { media: "(prefers-color-scheme: light)", color: "#FBFAF7" },
+    { media: "(prefers-color-scheme: dark)", color: "#16181D" },
+  ],
+  colorScheme: "light dark",
+};
+
+const orgLd = {
+  "@context": "https://schema.org",
+  "@type": "Organization",
+  name: APP_NAME,
+  url: SITE_URL,
+  parentOrganization: {
+    "@type": "Organization",
+    name: "Digiteq Holdings Limited",
+  },
 };
 
 export default function RootLayout({
@@ -42,18 +49,25 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
+    <html
+      lang="en"
+      suppressHydrationWarning
+      className={`${display.variable} ${sans.variable} ${mono.variable}`}
+    >
       <body
-        className={`${manrope.variable} ${sora.variable} ${jetbrains.variable} antialiased`}
+        className="antialiased"
         style={
           {
-            ["--font-sans"]: "var(--font-manrope)",
-            ["--font-display"]: "var(--font-sora)",
-            ["--font-mono"]: "var(--font-jetbrains)",
+            ["--font-sans"]: "var(--font-sans)",
+            ["--font-display"]: "var(--font-display)",
+            ["--font-mono"]: "var(--font-mono)",
           } as CSSProperties
         }
       >
-        {children}
+        <ThemeProvider>
+          <JsonLd data={orgLd} />
+          {children}
+        </ThemeProvider>
       </body>
     </html>
   );

@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import { SITE_URL } from "@/lib/site";
 
-const DEFAULT_OG = `${SITE_URL}/og/default.png`;
+const DEFAULT_OG = `/og?title=${encodeURIComponent("Viralyz")}`;
 
 export function pageMeta({
   title,

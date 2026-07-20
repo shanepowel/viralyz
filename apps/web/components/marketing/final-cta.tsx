@@ -1,6 +1,7 @@
-import Link from "next/link";
+import { FinalCtaBand } from "@/components/marketing/final-cta-band";
 import { routes } from "@/lib/site";
 
+/** Back-compat wrapper used by existing pages. */
 export function FinalCta({
   title,
   subtitle,
@@ -12,18 +13,12 @@ export function FinalCta({
   cta?: string;
   href?: string;
 }) {
-  const appUrl = href ?? routes.signup;
   return (
-    <section className="final">
-      <div className="wrap">
-        <div className="final-card">
-          <h2>{title}</h2>
-          <p>{subtitle}</p>
-          <Link className="btn btn-white btn-lg" href={appUrl}>
-            {cta}
-          </Link>
-        </div>
-      </div>
-    </section>
+    <FinalCtaBand
+      title={title}
+      subtitle={subtitle}
+      cta={cta}
+      href={href ?? routes.signup}
+    />
   );
 }
