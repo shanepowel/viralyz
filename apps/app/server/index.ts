@@ -1,3 +1,4 @@
+import "dotenv/config";
 import express, { type Request, Response, NextFunction } from "express";
 import { registerRoutes } from "./routes";
 import { serveStatic } from "./static";
@@ -6,6 +7,10 @@ import { startScheduler } from "./scheduler";
 
 const app = express();
 const httpServer = createServer(app);
+
+process.on("unhandledRejection", (reason) => {
+  console.error("Unhandled promise rejection:", reason);
+});
 
 declare module "http" {
   interface IncomingMessage {

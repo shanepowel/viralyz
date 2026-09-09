@@ -3,7 +3,6 @@
  * to extract themes + amplifiers, computes qualified engagement totals and
  * velocity vs trailing 4-week average, then upserts the digest row.
  */
-import OpenAI from "openai";
 import { db } from "../db";
 import { and, eq, gte, lt, desc, sql } from "drizzle-orm";
 import {
@@ -14,11 +13,7 @@ import {
   type IntelCompetitorDigest,
 } from "@shared/schema";
 import { qualifyEngagers } from "./qualify";
-
-const openai = new OpenAI({
-  apiKey: process.env.AI_INTEGRATIONS_OPENAI_API_KEY,
-  baseURL: process.env.AI_INTEGRATIONS_OPENAI_BASE_URL,
-});
+import { openai } from "../lib/openai";
 
 export function isoWeekStart(d: Date = new Date()): Date {
   // Monday 00:00 UTC of the ISO week containing d.
@@ -44,7 +39,7 @@ async function synthesizeThemesAndAmplifiers(posts: IntelCompetitorPost[]): Prom
   amplifiers: Array<{ name: string; title?: string; reach: number }>;
 }> {
   if (posts.length === 0) return { themes: [], amplifiers: [] };
-  if (!process.env.AI_INTEGRATIONS_OPENAI_API_KEY) {
+  if (!(process.env.AI_INTEGRATIONS_OPENAI_API_KEY || process.env.OPENAI_API_KEY)) {
     return { themes: [], amplifiers: [] };
   }
   const lines = posts
