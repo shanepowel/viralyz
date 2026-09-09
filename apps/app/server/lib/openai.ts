@@ -19,7 +19,24 @@ function resolveOpenAIConfig() {
   return { apiKey, baseURL };
 }
 
-export const openai = new OpenAI(resolveOpenAIConfig());
+let client: OpenAI | undefined;
+
+function getClient(): OpenAI {
+  if (!client) {
+    client = new OpenAI(resolveOpenAIConfig());
+  }
+  return client;
+}
+
+// Lazy proxy: the OpenAI client is only constructed (and only throws if the
+// API key is missing) on first actual use, not at module import time. This
+// keeps a missing key from crashing server boot for routes that never touch
+// OpenAI.
+export const openai = new Proxy({} as OpenAI, {
+  get(_target, prop, receiver) {
+    return Reflect.get(getClient(), prop, receiver);
+  },
+});
 
 export const OPENAI_CHAT_MODEL =
   process.env.OPENAI_CHAT_MODEL || "gpt-4o";
