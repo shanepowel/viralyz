@@ -4,7 +4,7 @@ import { FinalCtaBand } from "@/components/marketing/final-cta-band";
 import { MarketingShell } from "@/components/marketing/marketing-shell";
 import { PageBuilder } from "@/components/page-builder/PageBuilder";
 import { HeroDemo } from "@/components/score/HeroDemo";
-import { buttonClasses } from "@/components/ui/Button";
+import { buttonClasses } from "@/components/ui/button-styles";
 import { Container } from "@/components/ui/Container";
 import { Eyebrow } from "@/components/ui/Eyebrow";
 import { Marquee } from "@/components/ui/Marquee";

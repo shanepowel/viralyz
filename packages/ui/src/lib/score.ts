@@ -13,15 +13,15 @@ export function scoreColor(score: number | null | undefined): string {
   const band = scoreBand(score);
   switch (band) {
     case "excellent":
-      return "#0FA968";
+      return "#1e9e5a";
     case "good":
-      return "#7CA426";
+      return "#7ca426";
     case "fair":
-      return "#D9950B";
+      return "#d9930d";
     case "poor":
-      return "#DE4E4E";
+      return "#dc4a3d";
     case "none":
-      return "#928FA0";
+      return "#5e646e";
     default: {
       const _exhaustive: never = band;
       return _exhaustive;

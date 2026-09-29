@@ -1,6 +1,6 @@
 import Link from "next/link";
 import { MarketingShell } from "@/components/marketing/marketing-shell";
-import { buttonClasses } from "@/components/ui/Button";
+import { buttonClasses } from "@/components/ui/button-styles";
 
 export default function NotFound() {
   return (

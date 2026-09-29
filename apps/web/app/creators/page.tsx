@@ -3,7 +3,7 @@ import type { Metadata } from "next";
 import { MarketingShell } from "@/components/marketing/marketing-shell";
 import { Badge } from "@/components/ui/Badge";
 import { Breadcrumbs } from "@/components/ui/Breadcrumbs";
-import { buttonClasses } from "@/components/ui/Button";
+import { buttonClasses } from "@/components/ui/button-styles";
 import { Card } from "@/components/ui/Card";
 import { Container } from "@/components/ui/Container";
 import { EmptyState } from "@/components/ui/EmptyState";

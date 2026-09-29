@@ -7,7 +7,7 @@ import { MarketingShell } from "@/components/marketing/marketing-shell";
 import { MuxVideo } from "@/components/media/MuxVideo";
 import { SanityImage } from "@/components/media/SanityImage";
 import { Breadcrumbs } from "@/components/ui/Breadcrumbs";
-import { buttonClasses } from "@/components/ui/Button";
+import { buttonClasses } from "@/components/ui/button-styles";
 import { Container } from "@/components/ui/Container";
 import { Eyebrow } from "@/components/ui/Eyebrow";
 import { Section } from "@/components/ui/Section";
