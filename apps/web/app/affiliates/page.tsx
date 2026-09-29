@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { MarketingShell } from "@/components/marketing/marketing-shell";
-import { buttonClasses } from "@/components/ui/Button";
+import { buttonClasses } from "@/components/ui/button-styles";
 import { Container } from "@/components/ui/Container";
 import { Eyebrow } from "@/components/ui/Eyebrow";
 import { Section } from "@/components/ui/Section";

@@ -1,60 +1,95 @@
 /**
- * Signal design system — Viralyz brand tokens
- * Product default is warm paper (matches marketing). Dark via [data-theme="dark"].
+ * Paper & Signal — shared Viralyz design tokens.
+ * Import this file once in each app. No raw hex in component code.
  */
 
-:root,
-[data-theme="paper"],
-[data-theme="light"] {
-  /* Warm paper (marketing + product) */
-  --paper: #fafaf7;
-  --card: #ffffff;
-  --tint: #f1efea;
-  --ink: #1b1826;
-  --ink-2: #5b5768;
-  --ink-3: #928fa0;
-  --line: #e7e4dd;
-  --line-strong: #d6d2c8;
-  --violet: #6c4cf1;
-  --violet-deep: #5638d6;
-  --violet-soft: #efebff;
+:root {
+  /* Surfaces & ink */
+  --bg: #fbfaf7;
+  --bg-raised: #ffffff;
+  --bg-sunken: #f3f1eb;
+  --ink: #1a1d23;
+  --ink-secondary: #4b5058;
+  --ink-tertiary: #5e646e; /* ≥4.5:1 on paper bg */
+  --line: #e7e4dc;
+  --line-strong: #d5d1c6;
 
-  --bg-base: var(--paper);
-  --bg-surface: var(--card);
-  --bg-elevated: var(--card);
-  --bg-hover: var(--tint);
-  --border-subtle: var(--line);
-  --border-strong: var(--line-strong);
-
-  --text-primary: var(--ink);
-  --text-secondary: var(--ink-2);
-  --text-tertiary: var(--ink-3);
-
-  --accent: var(--violet);
-  --accent-hover: var(--violet-deep);
-  --accent-muted: var(--violet-soft);
+  /* Brand accent — interactive emphasis only */
+  --accent: #4f46e5;
+  --accent-hover: #4338ca;
+  --accent-soft: #eef0fe;
   --accent-foreground: #ffffff;
 
-  /* Score semantic scale (loud colour — only intentional chroma) */
-  --score-90: #0fa968;
-  --score-90-soft: #e3f6ed;
+  /* Score ramp — semantic, never decorative */
+  --score-low: #dc4a3d;
+  --score-mid: #d9930d;
+  --score-high: #1e9e5a;
+  --score-low-soft: #fdedeb;
+  --score-mid-soft: #fcf3e1;
+  --score-high-soft: #e7f6ee;
+
+  /* Radii — exactly three public steps, plus product aliases */
+  --radius-sm: 6px;
+  --radius-md: 12px;
+  --radius-lg: 20px;
+
+  /* Shadows — warm-tinted */
+  --shadow-sm: 0 1px 2px rgb(26 29 35 / 0.06);
+  --shadow-md: 0 8px 24px -8px rgb(26 29 35 / 0.12);
+
+  /* Motion */
+  --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
+  --dur-fast: 150ms;
+  --dur-med: 250ms;
+  --dur-slow: 450ms;
+
+  /* Legacy marketing aliases */
+  --paper: var(--bg);
+  --card: var(--bg-raised);
+  --tint: var(--bg-sunken);
+  --violet: var(--accent);
+  --violet-deep: var(--accent-hover);
+  --violet-soft: var(--accent-soft);
+  --surface-3: var(--bg-sunken);
+  --score-good: var(--score-high);
+  --score-ok: var(--score-mid);
+  --score-bad: var(--score-low);
+  --s90: var(--score-high);
+  --s70: var(--score-mid);
+  --s50: var(--score-mid);
+  --s30: var(--score-low);
+  --r-sm: var(--radius-sm);
+  --r-md: var(--radius-md);
+  --r-lg: var(--radius-lg);
+  --ink-2: var(--ink-secondary);
+  --ink-3: var(--ink-tertiary);
+
+  /* Product-component aliases */
+  --bg-base: var(--bg);
+  --bg-surface: var(--bg-raised);
+  --bg-elevated: var(--bg-raised);
+  --bg-hover: var(--bg-sunken);
+  --border-subtle: var(--line);
+  --border-strong: var(--line-strong);
+  --text-primary: var(--ink);
+  --text-secondary: var(--ink-secondary);
+  --text-tertiary: var(--ink-tertiary);
+  --accent-muted: var(--accent-soft);
+  --score-90: var(--score-high);
   --score-70: #7ca426;
-  --score-70-soft: #f2f8e2;
-  --score-50: #d9950b;
-  --score-50-soft: #fcf3e1;
-  --score-30: #de4e4e;
-  --score-30-soft: #fbeaea;
-
-  --success: var(--score-90);
-  --warning: var(--score-50);
-  --danger: var(--score-30);
-
-  /* Typography */
-  --font-display: "Bricolage Grotesque", ui-sans-serif, sans-serif;
-  --font-body: "Inter", system-ui, ui-sans-serif, sans-serif;
-  --font-mono: "JetBrains Mono", ui-monospace, monospace;
-
-  /* Spacing (8pt grid) */
+  --score-50: var(--score-mid);
+  --score-30: var(--score-low);
+  --score-90-soft: var(--score-high-soft);
+  --score-70-soft: var(--score-mid-soft);
+  --score-50-soft: var(--score-mid-soft);
+  --score-30-soft: var(--score-low-soft);
+  --success: var(--score-high);
+  --warning: var(--score-mid);
+  --danger: var(--score-low);
+  --r-xl: 24px;
+  --r-full: 9999px;
+  --shadow-card: var(--shadow-md);
+  --glow-accent: 0 0 32px color-mix(in srgb, var(--accent) 22%, transparent);
   --s-1: 4px;
   --s-2: 8px;
   --s-3: 12px;
@@ -64,66 +99,41 @@
   --s-12: 48px;
   --s-16: 64px;
   --s-24: 96px;
-
-  /* Radii */
-  --r-sm: 10px;
-  --r-md: 14px;
-  --r-lg: 20px;
-  --r-xl: 24px;
-  --r-full: 9999px;
-
-  /* Elevation */
-  --shadow-card: 0 1px 2px rgba(27, 24, 38, 0.05), 0 6px 20px rgba(27, 24, 38, 0.05);
-  --shadow-modal: 0 2px 4px rgba(27, 24, 38, 0.06), 0 16px 40px rgba(27, 24, 38, 0.1);
-  --glow-accent: 0 0 32px rgba(108, 76, 241, 0.18);
-
-  /* Motion */
-  --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
-  --dur-fast: 150ms;
-  --dur-med: 300ms;
-  --dur-slow: 600ms;
 }
 
+.dark,
 [data-theme="dark"] {
-  --bg-base: #0a0a0f;
-  --bg-surface: #12121a;
-  --bg-elevated: #1a1a26;
-  --bg-hover: #22222e;
-  --border-subtle: #26263a;
-  --border-strong: #3a3a52;
-
-  --text-primary: #f4f4f8;
-  --text-secondary: #a0a0b8;
-  --text-tertiary: #64647a;
-
-  --accent: #7c5cff;
-  --accent-hover: #937bff;
-  --accent-muted: rgba(124, 92, 255, 0.12);
-  --accent-foreground: #ffffff;
-
-  --score-90: #34d399;
-  --score-90-soft: rgba(52, 211, 153, 0.15);
-  --score-70: #a3e635;
-  --score-70-soft: rgba(163, 230, 53, 0.15);
-  --score-50: #fbbf24;
-  --score-50-soft: rgba(251, 191, 36, 0.15);
-  --score-30: #f87171;
-  --score-30-soft: rgba(248, 113, 113, 0.15);
-
-  --success: #34d399;
-  --warning: #fbbf24;
-  --danger: #f87171;
-
-  --font-display: "Bricolage Grotesque", "Clash Display", ui-sans-serif, sans-serif;
-  --font-body: "Inter", system-ui, ui-sans-serif, sans-serif;
-  --font-mono: "JetBrains Mono", ui-monospace, monospace;
-
-  --shadow-card: 0 1px 2px rgba(0, 0, 0, 0.4);
-  --shadow-modal: 0 24px 64px rgba(0, 0, 0, 0.6);
-  --glow-accent: 0 0 32px rgba(124, 92, 255, 0.25);
+  --bg: #16181d;
+  --bg-raised: #1e2128;
+  --bg-sunken: #101216;
+  --ink: #f2f1ed;
+  --ink-secondary: #b8bcc4;
+  --ink-tertiary: #9aa0aa;
+  --line: #2a2e36;
+  --line-strong: #3a3f49;
+  --accent: #818cf8;
+  --accent-hover: #a5b0fc;
+  --accent-soft: #23263b;
+  --accent-foreground: #16181d;
+  --score-low-soft: #3a2220;
+  --score-mid-soft: #383016;
+  --score-high-soft: #17301f;
+  --shadow-sm: 0 1px 2px rgb(0 0 0 / 0.35);
+  --shadow-md: 0 8px 24px -8px rgb(0 0 0 / 0.5);
+  --score-70: #a3c44a;
 }
 
-/* Score color helper — set --score-color from JS or utility class */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
 .score-excellent {
   --score-color: var(--score-90);
   --score-color-alpha: color-mix(in srgb, var(--score-90) 25%, transparent);
@@ -143,8 +153,4 @@
 
 .glow-score {
   box-shadow: 0 0 48px var(--score-color-alpha);
-}
-
-.glow-accent:hover {
-  box-shadow: var(--glow-accent);
 }

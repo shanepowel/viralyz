@@ -8,7 +8,7 @@ import * as Accordion from "@radix-ui/react-accordion";
 import { Menu, X } from "lucide-react";
 import { APP_NAME } from "@repo/config";
 import { chromeLinks, mainNav, type NavLink } from "@/config/nav";
-import { buttonClasses } from "@/components/ui/Button";
+import { buttonClasses } from "@/components/ui/button-styles";
 import { ThemeToggle } from "@/components/chrome/ThemeToggle";
 import { useScrolled } from "@/hooks/use-scrolled";
 import { cn } from "@/lib/cn";

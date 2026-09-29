@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { buttonClasses } from "@/components/ui/Button";
+import { buttonClasses } from "@/components/ui/button-styles";
 import { cn } from "@/lib/cn";
 import { track } from "@/lib/analytics";
 import { routes } from "@/lib/site";

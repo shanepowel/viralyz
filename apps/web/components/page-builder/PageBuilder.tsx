@@ -5,7 +5,7 @@ import { PortableBody } from "@/components/media/PortableBody";
 import { SanityImage } from "@/components/media/SanityImage";
 import { HeroDemo } from "@/components/score/HeroDemo";
 import { JsonLd } from "@/components/seo/JsonLd";
-import { buttonClasses } from "@/components/ui/Button";
+import { buttonClasses } from "@/components/ui/button-styles";
 import { Card } from "@/components/ui/Card";
 import { Container } from "@/components/ui/Container";
 import { Eyebrow } from "@/components/ui/Eyebrow";

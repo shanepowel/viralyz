@@ -4,7 +4,7 @@ import { FinalCta } from "@/components/marketing/final-cta";
 import { MarketingShell } from "@/components/marketing/marketing-shell";
 import { SanityImage } from "@/components/media/SanityImage";
 import { MuxVideo } from "@/components/media/MuxVideo";
-import { buttonClasses } from "@/components/ui/Button";
+import { buttonClasses } from "@/components/ui/button-styles";
 import { Container } from "@/components/ui/Container";
 import { Eyebrow } from "@/components/ui/Eyebrow";
 import { Section } from "@/components/ui/Section";
