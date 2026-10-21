@@ -3,7 +3,7 @@ import { z } from "zod";
 import { fromError } from "zod-validation-error";
 import { db } from "./db";
 import { and, asc, desc, eq, inArray, sql } from "drizzle-orm";
-import { isAuthenticated } from "./replit_integrations/auth";
+import { isAuthenticated } from "./auth";
 import {
   missions,
   missionRuns,
