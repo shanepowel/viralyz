@@ -1,21 +1,16 @@
 import {
-  Activity,
   BookOpen,
-  Calculator,
-  Clapperboard,
-  Gauge,
-  ImageIcon,
+  ClipboardCheck,
   Info,
   LineChart,
-  Plug,
+  Newspaper,
+  Palette,
   Search,
-  Sparkles,
-  UserRound,
-  Wrench,
+  ShieldCheck,
+  Wand2,
   type LucideIcon,
 } from "lucide-react";
-import { routes, APP_URL } from "@/lib/site";
-import { flags } from "@/lib/flags";
+import { routes } from "@/lib/site";
 
 export type NavLink = {
   label: string;
@@ -33,115 +28,58 @@ export type NavSection = {
 
 export const mainNav: NavSection[] = [
   {
-    label: "Platform",
+    label: "Product",
     href: routes.platform,
     groups: [
       {
-        heading: "Score & fix",
+        heading: "Make",
         links: [
           {
-            label: "Viral Score",
-            desc: "Score out of 100 in 30 seconds",
-            href: "/platform/viral-score",
-            icon: Gauge,
-          },
-          {
-            label: "Hook Lab",
-            desc: "Ten opening lines, ranked",
-            href: "/platform/hook-lab",
-            icon: Sparkles,
-          },
-          {
-            label: "Script Doctor",
-            desc: "Line-by-line script feedback",
-            href: "/platform/script-doctor",
-            icon: Clapperboard,
-          },
-        ],
-      },
-      {
-        heading: "Grow",
-        links: [
-          {
-            label: "Thumbnail Studio",
-            desc: "Compare at real feed size",
-            href: "/platform/thumbnail-studio",
-            icon: ImageIcon,
-          },
-          {
-            label: "Performance Tracking",
-            desc: "Predicted vs actual, over time",
-            href: "/platform/performance-tracking",
-            icon: LineChart,
-          },
-          {
-            label: "Integrations",
-            desc: "TikTok, YouTube, Instagram, X",
-            href: `${routes.platform}#integrations`,
-            icon: Plug,
-          },
-        ],
-      },
-    ],
-  },
-  {
-    label: "For creators",
-    href: routes.forCreators,
-    groups: [
-      {
-        heading: "Get discovered",
-        links: [
-          {
-            label: "Verified profile",
-            desc: "Real numbers from connected accounts",
-            href: `${routes.forCreators}#profile`,
-            icon: UserRound,
-          },
-          {
-            label: "Media kit",
-            desc: "One link brands can trust",
-            href: `${routes.forCreators}#media-kit`,
-            icon: BookOpen,
-          },
-          {
-            label: "Rate calculator",
-            desc: "Suggested rates by niche",
-            href: "/tools/engagement-calculator",
-            icon: Calculator,
-          },
-        ],
-      },
-    ],
-  },
-  {
-    label: "For brands",
-    href: routes.forBrands,
-    groups: [
-      {
-        heading: "Find talent",
-        links: [
-          {
-            label: "Browse creators",
-            desc: "Filter by niche, score, platform",
-            href: routes.creators,
+            label: "Discover",
+            desc: "Long-running ads from official libraries",
+            href: "/platform/discover",
             icon: Search,
           },
           {
-            label: "How campaigns work",
-            desc: "Brief, book, and pay in one place",
-            href: `${routes.forBrands}#campaigns`,
-            icon: Activity,
+            label: "Brand kit",
+            desc: "Imported from your product page",
+            href: "/platform/brand-kit",
+            icon: Palette,
           },
           {
-            label: "Talk to sales",
-            desc: "Book a walkthrough for your team",
-            href: routes.contact,
-            icon: Info,
+            label: "Studio",
+            desc: "On-brand variants from a reference",
+            href: "/platform/studio",
+            icon: Wand2,
+          },
+        ],
+      },
+      {
+        heading: "Check & learn",
+        links: [
+          {
+            label: "Pre-flight checks",
+            desc: "Spec and claim checks before you spend",
+            href: "/platform/pre-flight",
+            icon: ClipboardCheck,
+          },
+          {
+            label: "Results & calibration",
+            desc: "Your real CTR against our checks",
+            href: "/platform/results",
+            icon: LineChart,
+          },
+          {
+            label: "How we measure",
+            desc: "What every number means, and when it's blank",
+            href: routes.trust,
+            icon: ShieldCheck,
           },
         ],
       },
     ],
   },
+  { label: "Pricing", href: routes.pricing },
   {
     label: "Resources",
     href: routes.blog,
@@ -151,47 +89,26 @@ export const mainNav: NavSection[] = [
         links: [
           {
             label: "Blog",
-            desc: "Teardowns and honest pricing data",
+            desc: "Notes on ad creative and measurement",
             href: routes.blog,
             icon: BookOpen,
           },
           {
-            label: "Free tools",
-            desc: "Calculators and checkers, no signup",
-            href: routes.tools,
-            icon: Wrench,
+            label: "Changelog",
+            desc: "What shipped, and when",
+            href: routes.changelog,
+            icon: Newspaper,
           },
           {
             label: "About Viralyz",
-            desc: "What we build and why",
+            desc: "Who builds it and why",
             href: routes.about,
             icon: Info,
           },
-          ...(flags.helpCenterLive
-            ? [
-                {
-                  label: "Help center",
-                  desc: "Guides and how-tos",
-                  href: "/help",
-                  icon: Info,
-                } satisfies NavLink,
-              ]
-            : []),
-          ...(flags.apiDocsLive
-            ? [
-                {
-                  label: "API docs",
-                  desc: "Pull scores into your tools",
-                  href: "/docs/api",
-                  icon: Plug,
-                } satisfies NavLink,
-              ]
-            : []),
         ],
       },
     ],
   },
-  { label: "Pricing", href: routes.pricing },
 ];
 
 export type FooterColumn = {
@@ -204,9 +121,7 @@ export const footerExtras: FooterColumn[] = [
     heading: "Company",
     links: [
       { label: "About", href: routes.about },
-      { label: "Trust & data", href: routes.trust },
-      { label: "Changelog", href: routes.changelog },
-      // Affiliates omitted until program terms are live (v3 4.3)
+      { label: "Pricing", href: routes.pricing },
       { label: "Contact", href: routes.contact },
       { label: "Privacy", href: routes.privacy },
       { label: "Terms", href: routes.terms },
@@ -232,5 +147,4 @@ export function getFooterColumns(): FooterColumn[] {
 export const chromeLinks = {
   signIn: routes.login,
   startFree: routes.signup,
-  scoreVideo: APP_URL,
 } as const;

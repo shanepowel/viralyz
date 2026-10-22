@@ -64,7 +64,7 @@ export default function ContactPage() {
                   ),
                 },
                 {
-                  h: "Partnerships & brands",
+                  h: "Partnerships",
                   p: (
                     <>
                       Email{" "}

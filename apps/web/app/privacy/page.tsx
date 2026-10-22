@@ -35,8 +35,9 @@ export default async function PrivacyPage() {
           <div className="prose-vz space-y-4">
             <p>
               Viralyz is operated by Digiteq Holdings Limited. We process
-              account data, connected platform metrics, and content you upload
-              to score.
+              account data, the brand and product details you import or enter,
+              references you save, the creatives you generate, and ad results
+              you import.
             </p>
             <p>
               You can export or delete your data from settings. Contact

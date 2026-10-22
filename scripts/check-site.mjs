@@ -17,6 +17,11 @@ const BANNED = [
   "Predictions right",
   "Video scoring",
   "Hook tester",
+  // Retired creator-product copy: the site sells the seller creative studio now.
+  "Viral Score",
+  "Browse creators",
+  "free scores a month",
+  "Score your video",
 ];
 
 const seen = new Set();

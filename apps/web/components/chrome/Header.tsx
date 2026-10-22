@@ -144,19 +144,6 @@ export function Header() {
                           </div>
                         ))}
                       </div>
-                      {section.label === "Platform" ? (
-                        <div className="mt-3 border-t border-line pt-3 px-2">
-                          <Link
-                            href="/platform/viral-score"
-                            className="inline-flex items-center gap-2 text-sm text-ink-secondary hover:text-ink"
-                          >
-                            <span className="rounded-full bg-accent-soft px-2 py-0.5 text-xs font-medium text-accent">
-                              New
-                            </span>
-                            Live score while recording
-                          </Link>
-                        </div>
-                      ) : null}
                     </div>
                   </NavigationMenu.Content>
                 </NavigationMenu.Item>

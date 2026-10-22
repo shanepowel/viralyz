@@ -14,10 +14,10 @@
   --line: #e7e4dc;
   --line-strong: #d5d1c6;
 
-  /* Brand accent — interactive emphasis only */
-  --accent: #4f46e5;
-  --accent-hover: #4338ca;
-  --accent-soft: #eef0fe;
+  /* Brand accent — interactive emphasis only. Matches the app's Signal violet. */
+  --accent: #6c4cf1;
+  --accent-hover: #5638d6;
+  --accent-soft: #f0ecfe;
   --accent-foreground: #ffffff;
 
   /* Score ramp — semantic, never decorative */
@@ -74,9 +74,9 @@
   --ink-tertiary: #9aa0aa;
   --line: #2a2e36;
   --line-strong: #3a3f49;
-  --accent: #818cf8;
-  --accent-hover: #a5b0fc;
-  --accent-soft: #23263b;
+  --accent: #a18bff;
+  --accent-hover: #c1b3ff;
+  --accent-soft: #261f45;
   --accent-foreground: #16181d;
   --score-low-soft: #3a2220;
   --score-mid-soft: #383016;

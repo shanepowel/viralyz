@@ -1,62 +1,31 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { stegaClean } from "@sanity/client/stega";
-import { FinalCta } from "@/components/marketing/final-cta";
+import { FinalCtaBand } from "@/components/marketing/final-cta-band";
 import { MarketingShell } from "@/components/marketing/marketing-shell";
-import { MuxVideo } from "@/components/media/MuxVideo";
-import { SanityImage } from "@/components/media/SanityImage";
+import { VariantMock } from "@/components/studio/VariantMock";
 import { Breadcrumbs } from "@/components/ui/Breadcrumbs";
 import { buttonClasses } from "@/components/ui/Button";
-import { Container } from "@/components/ui/Container";
 import { Eyebrow } from "@/components/ui/Eyebrow";
 import { Section } from "@/components/ui/Section";
-import { features as staticFeatures, getFeature } from "@/data/features";
+import { features, getFeature } from "@/data/features";
 import { pageMeta } from "@/lib/meta";
-import { routes } from "@/lib/site";
-import { cleanSlug, fetchSanity } from "@/sanity/lib/fetch";
-import { FEATURE_QUERY, FEATURE_SLUGS_QUERY } from "@/sanity/lib/queries";
+import { productFacts, routes } from "@/lib/site";
 
 type Params = Promise<{ feature: string }>;
 
-export async function generateStaticParams() {
-  const slugs = await fetchSanity<{ slug: string }[]>({
-    query: FEATURE_SLUGS_QUERY,
-    published: true,
-    stega: false,
-  });
-  if (slugs?.length) {
-    return slugs.map((s) => ({ feature: cleanSlug(s.slug) }));
-  }
-  return staticFeatures.map((f) => ({ feature: f.slug }));
+export function generateStaticParams() {
+  return features.map((f) => ({ feature: f.slug }));
 }
+
+export const dynamicParams = false;
 
 export async function generateMetadata({
   params,
 }: {
   params: Params;
 }): Promise<Metadata> {
-  const { feature } = await params;
-  const slug = stegaClean(feature);
-  const doc = await fetchSanity<{
-    name?: string;
-    tagline?: string;
-    seoTitle?: string;
-    seoDescription?: string;
-  }>({
-    query: FEATURE_QUERY,
-    params: { slug },
-    published: true,
-    stega: false,
-  });
-  if (doc) {
-    return pageMeta({
-      title: doc.seoTitle || doc.name || "Feature",
-      description: doc.seoDescription || doc.tagline || "",
-      path: `/platform/${slug}`,
-    });
-  }
-  const f = getFeature(slug);
+  const f = getFeature((await params).feature);
   if (!f) return {};
   return pageMeta({
     title: f.name,
@@ -66,121 +35,96 @@ export async function generateMetadata({
 }
 
 export default async function FeaturePage({ params }: { params: Params }) {
-  const { feature } = await params;
-  const slug = stegaClean(feature);
+  const f = getFeature((await params).feature);
+  if (!f) notFound();
 
-  const doc = await fetchSanity<{
-    name: string;
-    slug: string;
-    tagline?: string;
-    summary?: string;
-    bullets?: string[];
-    appHref?: string;
-    screenshot?: unknown;
-    demoPlaybackId?: string | null;
-  }>({
-    query: FEATURE_QUERY,
-    params: { slug },
-  });
-
-  if (!doc) {
-    const f = getFeature(slug);
-    if (!f) notFound();
-    return (
-      <MarketingShell>
-        <Section className="pt-20 md:pt-28">
-          <Container>
-            <Eyebrow>Platform</Eyebrow>
-            <h1 className="mt-3 font-display text-4xl font-semibold tracking-tight">
-              {f.name}
-            </h1>
-            <p className="mt-4 max-w-prose text-ink-secondary">{f.tagline}</p>
-            <p className="mt-6 max-w-prose text-ink-secondary">{f.description}</p>
-            <a href={f.appHref} className={buttonClasses({ variant: "primary" })}>
-              Try {f.name} free
-            </a>
-          </Container>
-        </Section>
-        <FinalCta title={`Try ${f.name} free`} subtitle="Ten free scores a month." />
-      </MarketingShell>
-    );
-  }
+  const prev = features.find((x) => x.step === f.step - 1);
+  const next = features.find((x) => x.step === f.step + 1);
 
   return (
     <MarketingShell>
-      <Section className="pt-20 md:pt-28">
-        <Container>
-          <Breadcrumbs
-            items={[
-              { label: "Home", href: routes.home },
-              { label: "Platform", href: routes.platform },
-              { label: doc.name },
-            ]}
-          />
-          <Eyebrow className="mt-6">Platform</Eyebrow>
-          <h1 className="mt-3 font-display text-4xl font-semibold tracking-tight md:text-5xl">
-            {doc.name}
-          </h1>
-          <p className="mt-4 max-w-prose text-base leading-relaxed text-ink-secondary">
-            {doc.tagline}
-          </p>
-
-          {doc.demoPlaybackId ? (
-            <div className="mt-10 overflow-hidden rounded-lg border border-line shadow-md">
-              <MuxVideo
-                playbackId={doc.demoPlaybackId}
-                title={doc.name}
-              />
-            </div>
-          ) : doc.screenshot ? (
-            <div className="mt-10 overflow-hidden rounded-lg border border-line shadow-md">
-              <SanityImage
-                value={doc.screenshot as never}
-                width={1400}
-                priority
-                sizes="100vw"
-              />
-            </div>
-          ) : null}
-
-          {doc.summary ? (
-            <p className="mt-8 max-w-prose text-ink-secondary leading-relaxed">
-              {doc.summary}
+      <Section className="pt-14 md:pt-20">
+        <Breadcrumbs
+          items={[
+            { label: "Home", href: routes.home },
+            { label: "Product", href: routes.platform },
+            { label: f.name },
+          ]}
+        />
+        <div className="mt-6 grid gap-12 lg:grid-cols-[1.1fr_0.9fr] lg:items-start">
+          <div>
+            <Eyebrow>
+              Step {f.step} of {features.length}
+            </Eyebrow>
+            <h1 className="mt-3 font-display text-4xl font-semibold tracking-tight text-ink md:text-5xl">
+              {f.name}
+            </h1>
+            <p className="mt-4 text-lg leading-snug text-ink-secondary">
+              {f.tagline}
             </p>
-          ) : null}
-
-          {doc.bullets?.length ? (
-            <ul className="mt-6 max-w-prose space-y-2 text-ink-secondary">
-              {doc.bullets.map((b) => (
-                <li key={b}>· {b}</li>
+            <p className="mt-6 max-w-prose leading-relaxed text-ink-secondary">
+              {f.description}
+            </p>
+            <ul className="mt-6 max-w-prose space-y-2">
+              {f.bullets.map((b) => (
+                <li key={b} className="flex gap-3 text-ink-secondary">
+                  <span
+                    className="mt-2 h-1.5 w-1.5 shrink-0 rounded-full bg-accent"
+                    aria-hidden
+                  />
+                  {b}
+                </li>
               ))}
             </ul>
-          ) : null}
-
-          {doc.appHref ? (
+            <div className="mt-8 max-w-prose rounded-md border border-line bg-sunken p-5">
+              <p className="text-sm font-semibold text-ink">
+                What it won&apos;t claim
+              </p>
+              <p className="mt-2 text-sm leading-relaxed text-ink-secondary">
+                {f.limits}
+              </p>
+            </div>
             <a
-              href={doc.appHref}
+              href={f.appHref}
               className={buttonClasses({ variant: "primary", size: "md" }) + " mt-8"}
             >
-              Try {doc.name} free
+              {f.appLabel}
             </a>
+          </div>
+          {f.slug === "studio" || f.slug === "pre-flight" ? (
+            <VariantMock />
           ) : null}
+        </div>
 
-          <p className="mt-10">
-            <Link
-              href={routes.platform}
-              className="text-sm text-accent underline underline-offset-4"
-            >
-              ← All platform tools
+        <nav
+          aria-label="Other steps"
+          className="mt-16 flex flex-wrap justify-between gap-4 border-t border-line pt-6 text-sm"
+        >
+          {prev ? (
+            <Link href={`/platform/${prev.slug}`} className="text-ink-secondary hover:text-accent">
+              ← Step {prev.step}: {prev.name}
             </Link>
-          </p>
-        </Container>
+          ) : (
+            <Link href={routes.platform} className="text-ink-secondary hover:text-accent">
+              ← All steps
+            </Link>
+          )}
+          {next ? (
+            <Link href={`/platform/${next.slug}`} className="text-ink-secondary hover:text-accent">
+              Step {next.step}: {next.name} →
+            </Link>
+          ) : (
+            <Link href={routes.trust} className="text-ink-secondary hover:text-accent">
+              How we measure →
+            </Link>
+          )}
+        </nav>
       </Section>
-      <FinalCta
-        title={`Try ${doc.name} free`}
-        subtitle="Ten free scores a month. No card required."
-        cta={`Open ${doc.name}`}
-        href={doc.appHref}
+      <FinalCtaBand
+        title={`Try ${f.name} on your own product`}
+        subtitle={`Start with ${productFacts.signupCredits} free credits. No card needed.`}
+        cta={f.appLabel}
+        href={f.appHref}
       />
     </MarketingShell>
   );

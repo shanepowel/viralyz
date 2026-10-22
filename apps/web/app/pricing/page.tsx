@@ -1,36 +1,52 @@
 import type { Metadata } from "next";
 import Link from "next/link";
+import { FinalCtaBand } from "@/components/marketing/final-cta-band";
 import { MarketingShell } from "@/components/marketing/marketing-shell";
 import { JsonLd } from "@/components/seo/JsonLd";
+import { buttonClasses } from "@/components/ui/Button";
+import { Eyebrow } from "@/components/ui/Eyebrow";
 import { Num } from "@/components/ui/Num";
-import { flags } from "@/lib/flags";
+import { Section } from "@/components/ui/Section";
 import { pageMeta } from "@/lib/meta";
-import { routes } from "@/lib/site";
+import { CONTACT, productFacts, routes } from "@/lib/site";
 
 export const metadata: Metadata = pageMeta({
   title: "Pricing",
-  description: "Simple plans for creators and brands. Start free.",
+  description: `Pay per variant with credits. Start with ${productFacts.signupCredits} free credits, no card needed.`,
   path: routes.pricing,
 });
 
+const FREE = [
+  "Discover: search official ad libraries and save your own references",
+  "Brand kit: import and confirm your product details",
+  "Results: import ad results and see calibration",
+] as const;
+
+const PAID = [
+  "Studio: each generated variant, including its copy and image",
+  "Regenerating a variant",
+] as const;
+
 const FAQ = [
   {
-    q: "Do brands pay to search creators?",
-    a: flags.paymentsLive
-      ? "Brands can browse profiles for free. A subscription unlocks the campaign manager and direct booking."
-      : "Brands can browse profiles for free. A subscription unlocks the campaign manager and, at launch, direct booking with escrow.",
+    q: "What does a credit buy?",
+    a: `One generated variant: headline, primary text, call to action and image, composed for the placement you chose, with its pre-flight checks. At current pricing that's ${productFacts.creditsPerVariant} credit per variant.`,
   },
   {
-    q: "How is a score calculated?",
-    a: "We analyze opening, visuals, pacing, words and timing against what performs in your niche, then combine them into a score out of 100.",
+    q: "What happens if a generation fails?",
+    a: "Credits are reserved when you start a run, and the credit for any variant that fails is refunded automatically. You only pay for variants you get.",
   },
   {
-    q: "Can I cancel anytime?",
-    a: "Yes. Plans are month to month with no lock-in. Your public profile stays live on the free tier.",
+    q: "How do I get more credits?",
+    a: `Paid credit packs aren't on sale yet. If you run out, email ${CONTACT.hello} and we'll sort it out while we finish billing.`,
   },
   {
-    q: "Do you support agencies managing multiple creators?",
-    a: "Yes, the Agency plan includes a shared dashboard for managing rosters and campaigns across clients.",
+    q: "Is signup open?",
+    a: "We're onboarding sellers in small groups while the product settles. If the app asks for an invite code, get in touch and we'll send one.",
+  },
+  {
+    q: "Do I need Meta or TikTok ad accounts?",
+    a: "Not to use Viralyz. Discover reads public ad libraries, and Results works from a CSV you export from Ads Manager.",
   },
 ] as const;
 
@@ -44,108 +60,103 @@ const faqLd = {
   })),
 };
 
-export default function Page() {
+export default function PricingPage() {
   return (
     <MarketingShell>
       <JsonLd data={faqLd} />
-      <div className="wrap">
-        <section className="page-hero" style={{ textAlign: "center" }}>
-          <span className="kicker" style={{ display: "block" }}>
-            Pricing
-          </span>
-          <h1 className="display">
-            Score for free. Pay when you are ready to grow.
+      <Section className="pt-14 md:pt-24">
+        <div className="mx-auto max-w-2xl text-center">
+          <Eyebrow>Pricing</Eyebrow>
+          <h1 className="mt-3 font-display text-4xl font-semibold tracking-tight text-ink md:text-5xl">
+            Pay for what you generate. Nothing else.
           </h1>
-          <p
-            className="sub"
-            style={{ marginLeft: "auto", marginRight: "auto" }}
-          >
-            No card required to start. Cancel anytime. Prices in GBP.
+          <p className="mt-4 text-base leading-relaxed text-ink-secondary">
+            Viralyz runs on credits. Finding references, setting up your brand
+            and measuring results are free. Generating variants uses credits.
           </p>
-        </section>
-
-        <div className="price-grid">
-          <div className="price-card">
-            <h3>Starter</h3>
-            <div className="price">
-              <Num>£0</Num>
-              <span>/mo</span>
-            </div>
-            <p className="desc">Try scoring before you commit.</p>
-            <ul>
-              <li>
-                <Num>10</Num> video scores a month
-              </li>
-              <li>Basic fix suggestions</li>
-              <li>Public creator profile</li>
-            </ul>
-            <Link href={routes.signup} className="btn btn-ghost">
-              Start free
-            </Link>
-          </div>
-          <div className="price-card feat">
-            <span className="plan-tag">Most popular</span>
-            <h3>Creator Pro</h3>
-            <div className="price">
-              <Num>£19</Num>
-              <span>/mo</span>
-            </div>
-            <p className="desc">
-              For creators posting weekly and chasing brand deals.
-            </p>
-            <ul>
-              <li>Unlimited video scores</li>
-              <li>Hook Lab &amp; Script Doctor</li>
-              <li>Media kit &amp; rate tools</li>
-              <li>Priority in brand search at launch</li>
-            </ul>
-            <Link href={routes.signup} className="btn btn-primary">
-              Start 14-day trial
-            </Link>
-          </div>
-          <div className="price-card">
-            <h3>Agency</h3>
-            <div className="price">
-              <Num>£79</Num>
-              <span>/mo</span>
-            </div>
-            <p className="desc">
-              Manage rosters and campaigns for multiple clients.
-            </p>
-            <ul>
-              <li>Everything in Creator Pro</li>
-              <li>
-                Up to <Num>25</Num> managed profiles
-              </li>
-              <li>Campaign manager &amp; team seats</li>
-              <li>Dedicated support</li>
-            </ul>
-            <Link href={routes.contact} className="btn btn-ghost">
-              Talk to sales
-            </Link>
-          </div>
         </div>
 
-        <section className="close" style={{ paddingTop: "56px" }} id="faq">
-          <h2
-            className="split-title"
-            style={{ textAlign: "center", marginBottom: 8, fontSize: 26 }}
-          >
+        <div className="mx-auto mt-12 grid max-w-4xl gap-6 md:grid-cols-[1.1fr_0.9fr]">
+          <div className="rounded-lg border-2 border-accent bg-raised p-6 shadow-md md:p-8">
+            <p className="text-sm font-medium text-accent">To start</p>
+            <p className="mt-3 flex items-baseline gap-2">
+              <span className="font-mono text-5xl font-semibold tracking-tight text-ink">
+                <Num>{productFacts.signupCredits}</Num>
+              </span>
+              <span className="text-ink-secondary">free credits</span>
+            </p>
+            <p className="mt-2 text-sm text-ink-secondary">
+              Enough for {productFacts.signupCredits / productFacts.creditsPerVariant}{" "}
+              variants at current pricing. No card needed.
+            </p>
+            <a
+              href={routes.signup}
+              className={buttonClasses({ variant: "primary", size: "lg" }) + " mt-6 w-full"}
+            >
+              Start free
+            </a>
+          </div>
+          <div className="space-y-4">
+            <div className="rounded-md border border-line bg-raised p-5 shadow-sm">
+              <p className="text-sm font-semibold text-ink">Always free</p>
+              <ul className="mt-3 space-y-2 text-sm text-ink-secondary">
+                {FREE.map((x) => (
+                  <li key={x}>{x}</li>
+                ))}
+              </ul>
+            </div>
+            <div className="rounded-md border border-line bg-raised p-5 shadow-sm">
+              <p className="text-sm font-semibold text-ink">
+                Uses credits ({productFacts.creditsPerVariant} per variant)
+              </p>
+              <ul className="mt-3 space-y-2 text-sm text-ink-secondary">
+                {PAID.map((x) => (
+                  <li key={x}>{x}</li>
+                ))}
+              </ul>
+            </div>
+          </div>
+        </div>
+      </Section>
+
+      <Section tone="sunken" id="faq">
+        <div className="mx-auto max-w-2xl">
+          <h2 className="font-display text-2xl font-semibold tracking-tight text-ink md:text-3xl">
             Questions
           </h2>
-          <div className="faq">
+          <div className="mt-6 divide-y divide-line border-y border-line">
             {FAQ.map((item, i) => (
-              <details key={item.q} open={i === 0}>
-                <summary>
+              <details key={item.q} open={i === 0} className="group py-4">
+                <summary className="flex cursor-pointer list-none items-center justify-between gap-4 font-medium text-ink">
                   {item.q}
-                  <span />
+                  <span
+                    className="text-ink-tertiary transition-transform group-open:rotate-45"
+                    aria-hidden
+                  >
+                    +
+                  </span>
                 </summary>
-                <p>{item.a}</p>
+                <p className="mt-3 text-sm leading-relaxed text-ink-secondary">
+                  {item.a}
+                </p>
               </details>
             ))}
           </div>
-        </section>
-      </div>
+          <p className="mt-6 text-sm text-ink-tertiary">
+            Something else?{" "}
+            <Link href={routes.contact} className="text-accent underline underline-offset-4">
+              Ask us
+            </Link>
+            .
+          </p>
+        </div>
+      </Section>
+
+      <FinalCtaBand
+        title="Make your first variants free"
+        subtitle={`${productFacts.signupCredits} credits on signup. Discover, Brand kit and Results stay free.`}
+        cta="Start free"
+      />
     </MarketingShell>
   );
 }
