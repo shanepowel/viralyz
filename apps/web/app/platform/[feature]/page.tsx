@@ -101,7 +101,7 @@ export default async function FeaturePage({ params }: { params: Params }) {
             </a>
           </Container>
         </Section>
-        <FinalCta title={`Try ${f.name} free`} subtitle="Ten free scores a month." />
+        <FinalCta title={`Try ${f.name} free`} subtitle="10 free credits on signup. No card required." />
       </MarketingShell>
     );
   }
@@ -178,7 +178,7 @@ export default async function FeaturePage({ params }: { params: Params }) {
       </Section>
       <FinalCta
         title={`Try ${doc.name} free`}
-        subtitle="Ten free scores a month. No card required."
+        subtitle="10 free credits on signup. No card required."
         cta={`Open ${doc.name}`}
         href={doc.appHref}
       />

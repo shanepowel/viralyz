@@ -15,14 +15,36 @@ const nextConfig = {
   async redirects() {
     const app = "https://app.viralyz.com";
     return [
+      // The creator marketplace (browse/hire creators, public creator profiles)
+      // no longer exists — the product is a single-sided seller tool now.
       {
         source: "/browse",
-        destination: "/creators",
+        destination: "/",
         permanent: true,
       },
       {
         source: "/browse/:path*",
-        destination: "/creators",
+        destination: "/",
+        permanent: true,
+      },
+      {
+        source: "/creators",
+        destination: "/",
+        permanent: true,
+      },
+      {
+        source: "/for-creators",
+        destination: "/for-brands",
+        permanent: true,
+      },
+      {
+        source: "/kit/:path*",
+        destination: "/",
+        permanent: true,
+      },
+      {
+        source: "/report",
+        destination: "/platform",
         permanent: true,
       },
       {
@@ -37,7 +59,7 @@ const nextConfig = {
       },
       {
         source: "/community",
-        destination: "/for-creators",
+        destination: "/for-brands",
         permanent: false,
       },
       {
@@ -45,74 +67,18 @@ const nextConfig = {
         destination: "/contact",
         permanent: false,
       },
-      {
-        source: "/dashboard",
-        destination: `${app}/`,
-        permanent: false,
-      },
-      {
-        source: "/dashboard/settings",
-        destination: `${app}/settings`,
-        permanent: false,
-      },
-      {
-        source: "/dashboard/tools/score-engine",
-        destination: `${app}/analyze`,
-        permanent: false,
-      },
-      {
-        source: "/dashboard/tools/hook-lab",
-        destination: `${app}/hook-lab`,
-        permanent: false,
-      },
-      {
-        source: "/dashboard/tools/script-doctor",
-        destination: `${app}/caption-studio`,
-        permanent: false,
-      },
-      {
-        source: "/dashboard/tools/caption-studio",
-        destination: `${app}/caption-studio`,
-        permanent: false,
-      },
-      {
-        source: "/dashboard/tools/thumbnail-studio",
-        destination: `${app}/thumbnails`,
-        permanent: false,
-      },
-      {
-        source: "/dashboard/tools/idea-generator",
-        destination: `${app}/ideas`,
-        permanent: false,
-      },
-      {
-        source: "/dashboard/tools/trend-radar",
-        destination: `${app}/trends`,
-        permanent: false,
-      },
-      {
-        source: "/dashboard/tools/competitor-intel",
-        destination: `${app}/competitors`,
-        permanent: false,
-      },
-      {
-        source: "/dashboard/tools/auto-dm",
-        destination: `${app}/messages`,
-        permanent: false,
-      },
-      {
-        source: "/dashboard/tools/biopage",
-        destination: `${app}/settings`,
-        permanent: false,
-      },
-      {
-        source: "/dashboard/tools/:slug",
-        destination: `${app}/`,
-        permanent: false,
-      },
+      // Everything under the old /dashboard (and its per-tool deep links) maps
+      // to a product that was rebuilt from scratch — none of those app routes
+      // exist anymore. Every old deep link goes to the new app's entry point
+      // rather than a guessed one-to-one mapping that would just be wrong.
       {
         source: "/dashboard/:path*",
-        destination: `${app}/:path*`,
+        destination: `${app}/discover`,
+        permanent: false,
+      },
+      {
+        source: "/dashboard",
+        destination: `${app}/discover`,
         permanent: false,
       },
     ];

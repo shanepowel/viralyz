@@ -8,7 +8,7 @@ export default function NotFound() {
       <div className="mx-auto flex min-h-[60vh] max-w-container flex-col items-start justify-center px-6 py-20">
         <p className="font-mono text-sm text-ink-tertiary">404</p>
         <h1 className="mt-2 font-display text-4xl font-semibold tracking-tight text-ink">
-          That page doesn&apos;t score.
+          That page doesn&apos;t pre-flight.
         </h1>
         <p className="mt-3 max-w-prose text-ink-secondary">
           The link is broken or the page has moved. Try one of these instead.
@@ -18,10 +18,10 @@ export default function NotFound() {
             Back to home
           </Link>
           <Link
-            href="/creators"
+            href="/platform"
             className={buttonClasses({ variant: "secondary" })}
           >
-            Browse creators
+            See the platform
           </Link>
         </div>
       </div>

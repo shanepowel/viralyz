@@ -25,7 +25,7 @@ export default function ToolsPage() {
           <h1>Useful on their own. Free forever.</h1>
           <p>
             No account needed for any of these. If you like them, the full
-            platform gives you 10 free scores a month.
+            platform gives you 10 free credits on signup.
           </p>
         </div>
       </div>
@@ -52,12 +52,12 @@ export default function ToolsPage() {
           </div>
           <EngagementCalculator />
           <p style={{ marginTop: 16, fontSize: 13.5, color: "var(--ink-3)" }}>
-            Want the full suite?{" "}
+            Want the full product?{" "}
             <Link
               href={routes.signup}
               style={{ color: "var(--violet-deep)", fontWeight: 600 }}
             >
-              Start scoring free
+              Start free
             </Link>
             .
           </p>
@@ -65,8 +65,8 @@ export default function ToolsPage() {
       </section>
 
       <FinalCta
-        title="The tools are free. The score is the magic."
-        subtitle="Ten free scores a month. See what these calculators cannot show you."
+        title="The tools are free. Pre-flight is the magic."
+        subtitle="10 free credits on signup. See what these calculators cannot show you."
         cta="Start free"
         href={routes.signup}
       />

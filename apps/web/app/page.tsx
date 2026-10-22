@@ -16,9 +16,9 @@ import { fetchSanity } from "@/sanity/lib/fetch";
 import { PAGE_QUERY } from "@/sanity/lib/queries";
 
 export const metadata: Metadata = pageMeta({
-  title: "Know how your content will do",
+  title: "Generate ad creative, pre-flight it before you spend",
   description:
-    "Score every video out of 100, see the fixes worth the most points, and build a track record brands can trust.",
+    "Discover what's working in your category, confirm your brand once, and generate on-brand ad variants that are checked before you ever see them.",
   path: routes.home,
 });
 
@@ -46,24 +46,26 @@ export default async function HomePage() {
             <div>
               <Eyebrow>Viralyz</Eyebrow>
               <h1 className="mt-3 font-display text-5xl font-semibold tracking-tight leading-[1.05] md:text-6xl">
-                Know how your content will do. Before you post it.
+                Generate ad creative. Pre-flight it before you spend.
               </h1>
               <p className="mt-4 max-w-prose text-base leading-relaxed text-ink-secondary md:text-lg">
-                Score every video out of 100, see the fixes worth the most
-                points, and build a track record brands can trust.
+                Discover real running ads in your category, confirm your
+                brand once, and generate on-brand variants that are checked
+                for contrast, safe zone, and policy — before you ever see
+                them.
               </p>
               <div className="mt-8 flex flex-wrap gap-3">
                 <a
                   href={routes.signup}
                   className={buttonClasses({ variant: "primary", size: "lg" })}
                 >
-                  Score your video, free
+                  Start free with 10 credits
                 </a>
                 <Link
-                  href={routes.creators}
+                  href={routes.platform}
                   className={buttonClasses({ variant: "link", size: "lg" })}
                 >
-                  Browse creators
+                  See how it works
                 </Link>
               </div>
             </div>
@@ -87,9 +89,9 @@ export default async function HomePage() {
         </Container>
       </Section>
       <FinalCtaBand
-        title="Score your next video"
-        subtitle="Ten free scores a month. No card required."
-        cta="Score your video, free"
+        title="Generate your first ad variant"
+        subtitle="10 free credits on signup. No card required."
+        cta="Start free with 10 credits"
       />
     </MarketingShell>
   );

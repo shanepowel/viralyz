@@ -12,7 +12,7 @@ import { COMPANY, CONTACT, routes } from "@/lib/site";
 export const metadata: Metadata = pageMeta({
   title: "About",
   description:
-    "Creators deserve to know, not guess. Viralyz is a Digiteq company building the scored creator network.",
+    "Sellers deserve to know, not guess. Viralyz is a Digiteq company building ad creative that's checked before you spend.",
   path: routes.about,
 });
 
@@ -29,11 +29,11 @@ export default function AboutPage() {
           />
           <Eyebrow className="mt-6">About</Eyebrow>
           <h1 className="mt-3 font-display text-4xl font-semibold tracking-tight md:text-5xl">
-            Creators deserve to know, not guess.
+            Sellers deserve to know, not guess.
           </h1>
           <p className="mt-4 max-w-prose text-base leading-relaxed text-ink-secondary">
-            Viralyz exists because posting content should not feel like a
-            lottery ticket.
+            Viralyz exists because spending ad budget on creative that gets
+            rejected or ignored should not feel like a lottery ticket.
           </p>
         </Container>
       </Section>
@@ -42,32 +42,30 @@ export default function AboutPage() {
         <Container>
           <div className="max-w-2xl space-y-5 text-base leading-relaxed text-ink-secondary">
             <p>
-              Millions of people make content every day. Most of them post it
-              and hope. A video that took two days to make can fail because of a
-              weak first three seconds, a thumbnail nobody can read, or a
-              posting time when the audience was asleep. These problems are
-              fixable. Creators just could not see them.
+              Sellers run ad creative every day on money they cannot get back.
+              A variant that took real spend to test can fail because of poor
+              contrast, text in the wrong safe zone, a policy issue the
+              platform flags, or a hook that just does not land. These
+              problems are fixable before a single dollar is spent — most
+              sellers just have no way to check for them ahead of time.
             </p>
             <p>
               <span className="font-semibold text-ink">
-                Viralyz makes them visible.
+                Viralyz checks them first.
               </span>{" "}
-              We score content before it goes live, explain what is wrong in
-              plain language, and show what each fix is worth. Then we track
-              what really happened against the prediction, and publish our
-              accuracy on your profile when we have enough data.
+              Discover what is already working in your category, confirm
+              your brand once, and generate variants that run through
+              automated pre-flight checks before you ever see them. Then
+              import your real spend data and we show you what pre-flight
+              actually predicted — once there is enough of it to say so
+              honestly.
             </p>
             <p>
-              Over time, those scores become something bigger: a track record. A
-              creator with a year of verified scores has proof that no follower
-              count can match. That is why brands are coming too. They would
-              rather hire proof than promises.
-            </p>
-            <p>
-              We believe in a few simple things. Show your accuracy, never hide
-              it. Help creators make their own version of what works, never
-              copies. And follow the platform rules, because a banned account
-              helps nobody.
+              We believe in a few simple things. Show a headline number only
+              once enough checks actually scored it, never a guess dressed up
+              as a measurement. Label every generated variant as AI-generated,
+              no exceptions. And never show a calibration number until there
+              is real matched spend data behind it.
             </p>
           </div>
 
@@ -111,15 +109,15 @@ export default function AboutPage() {
             {[
               {
                 title: "Honest numbers",
-                body: "We will publish our prediction accuracy on every profile once we have enough measured data. If we are wrong, you will see it.",
+                body: "A headline pre-flight number never appears until at least 4 checks actually scored it. Below that, we say so instead of guessing.",
               },
               {
-                title: "Your work, your data",
-                body: "Export or delete everything, any time. Brands only ever see what you choose to share.",
+                title: "Your brand, your data",
+                body: "Export or delete your brand assets and generated creative, any time.",
               },
               {
-                title: "Platform-safe",
-                body: "Automation stays inside the rules. A banned account helps nobody.",
+                title: "No invented accuracy",
+                body: "Calibration against real performance only shows once you have 20+ matched ads — not before.",
               },
             ].map((v) => (
               <div key={v.title}>
@@ -134,8 +132,8 @@ export default function AboutPage() {
       </Section>
 
       <FinalCta
-        title="See your score"
-        subtitle="Ten free scores a month. No card required."
+        title="Generate your first variant"
+        subtitle="10 free credits on signup. No card required."
         cta="Start free"
         href={routes.signup}
       />

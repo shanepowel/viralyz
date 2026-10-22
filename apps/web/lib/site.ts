@@ -6,22 +6,18 @@ export const SITE_URL = "https://www.viralyz.com";
 export const routes = {
   home: "/",
   platform: "/platform",
-  forCreators: "/for-creators",
   forBrands: "/for-brands",
   pricing: "/pricing",
-  creators: "/creators",
   tools: "/tools",
   blog: "/blog",
   about: "/about",
   trust: "/trust",
   changelog: "/changelog",
   contact: "/contact",
-  report: "/report",
   affiliates: "/affiliates",
   privacy: "/privacy",
   terms: "/terms",
   cookies: "/cookies",
-  /** Prefer /login on the product app; falls back to root until that page ships. */
   login: `${APP_URL}/login`,
   signup: APP_URL,
 } as const;
@@ -43,16 +39,15 @@ export const COMPANY = {
  * and the consuming component must render its fallback (or nothing).
  */
 export const stats = {
-  verifiedCreators: null as number | null,
-  videosScored: null as number | null,
-  predictionAccuracy: null as string | null,
-  avgScoreTime: "<30s",
+  activeSellers: null as number | null,
+  variantsGenerated: null as number | null,
+  calibrationRho: null as string | null,
 } as const;
 
-/** Product-truth stats band for the homepage (not usage claims). */
+/** Product-truth stats band for the homepage (structural facts, not usage claims). */
 export const productStats = [
-  { value: "100", label: "Point score on every video" },
-  { value: "5", label: "Areas analyzed per post" },
-  { value: "<30s", label: "To your first score" },
-  { value: "10", label: "Free scores a month" },
+  { value: "4", label: "Ad placements supported" },
+  { value: "9", label: "Automated checks before you spend" },
+  { value: "10", label: "Free credits on signup" },
+  { value: "20", label: "Matched ads to unlock calibration" },
 ] as const;

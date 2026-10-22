@@ -1,23 +1,44 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import { EarlyAccess } from "@/components/marketing/early-access";
 import { FinalCta } from "@/components/marketing/final-cta";
 import { MarketingShell } from "@/components/marketing/marketing-shell";
-import { DemoBadge } from "@/components/marketing/demo-badge";
-import { creators, creatorInitials, formatFollowers } from "@/data/creators";
-import { formatGBP } from "@/lib/currency";
-import { flags } from "@/lib/flags";
 import { pageMeta } from "@/lib/meta";
-import { routes } from "@/lib/site";
+import { productStats, routes } from "@/lib/site";
 
 export const metadata: Metadata = pageMeta({
-  title: "For brands",
+  title: "For sellers",
   description:
-    "Hire creators who can prove it. Verified track records and score gates before content goes live.",
+    "Discover what's working, confirm your brand once, generate on-brand ad variants, and know they'll pass before you spend a penny on them.",
   path: routes.forBrands,
 });
 
-const sample = creators[0]!;
+const STEPS = [
+  {
+    n: "01",
+    title: "Discover",
+    body: "Browse real running ads in your category, pulled from Meta's and TikTok's own ad libraries. Pick a reference angle before you generate anything.",
+  },
+  {
+    n: "02",
+    title: "Brand",
+    body: "Paste your store URL — we pull your colors, logo, and products automatically. Confirm it once; every variant after that reuses it.",
+  },
+  {
+    n: "03",
+    title: "Studio",
+    body: "Pick a placement and an angle — offer, problem, proof, or demo — and generate on-brand variants against your reference.",
+  },
+  {
+    n: "04",
+    title: "Pre-flight",
+    body: "Every variant is checked for contrast, safe zone, aspect ratio, character limits, and policy issues before you ever see it.",
+  },
+  {
+    n: "05",
+    title: "Results",
+    body: "Import your ad spend export and see which pre-flight checks actually predicted performance — once you have enough matched ads to say so honestly.",
+  },
+] as const;
 
 export default function ForBrandsPage() {
   return (
@@ -25,126 +46,64 @@ export default function ForBrandsPage() {
       <div className="wrap">
         <div className="page-hero">
           <p className="crumb">
-            <Link href="/">Home</Link> / For brands
+            <Link href="/">Home</Link> / For sellers
           </p>
-          <span className="eyebrow">For brands</span>
-          <h1>Hire creators who can prove it.</h1>
+          <span className="eyebrow">For sellers</span>
+          <h1>Ad creative that&apos;s checked before you spend.</h1>
           <p>
-            Follower counts do not tell you if a campaign will work. On Viralyz,
-            every creator has a track record from connected accounts, and you
-            can see how content scores before it goes live.
+            Viralyz is built for sellers running paid ads on Meta and TikTok —
+            not a creator marketplace. Discover what&apos;s working, confirm
+            your brand once, and generate variants that are pre-flighted before
+            they ever reach you.
           </p>
           <div className="hero-actions" style={{ marginTop: 28 }}>
-            <Link href={routes.creators} className="btn btn-primary">
-              Browse creators
-            </Link>
-            <Link href="#campaigns" className="btn btn-ghost">
-              How campaigns work
+            <a href={routes.signup} className="btn btn-primary">
+              Start free with 10 credits
+            </a>
+            <Link href="#how-it-works" className="btn btn-ghost">
+              See how it works
             </Link>
           </div>
-          <p className="fine">Founding creator roster now onboarding.</p>
         </div>
       </div>
 
       <section style={{ paddingTop: 24 }}>
         <div className="wrap">
-          <div className="kit" style={{ maxWidth: 420, marginBottom: 48 }}>
-            <div className="kit-top">
-              <div className="kit-ava" style={{ background: sample.face }}>
-                {creatorInitials(sample)}
-              </div>
-              <div>
-                <div className="kit-name">
-                  {sample.name}{" "}
-                  {!flags.marketplaceLive ? (
-                    <DemoBadge label="Example" />
-                  ) : null}
-                </div>
-                <div className="kit-verified">Example profile</div>
-              </div>
-            </div>
-            <div className="kit-grid">
-              <div className="kit-cell">
-                <div className="kv">{formatFollowers(sample.followers)}</div>
-                <div className="kl">Followers</div>
-              </div>
-              <div className="kit-cell">
-                <div className="kv">{sample.engagementPct}%</div>
-                <div className="kl">Engagement</div>
-              </div>
-              <div className="kit-cell">
-                <div className="kv">{sample.score}</div>
-                <div className="kl">Viral Score</div>
-              </div>
-              <div className="kit-cell">
-                <div className="kv">{formatGBP(sample.suggestedRateGbp)}</div>
-                <div className="kl">Suggested rate</div>
-              </div>
-            </div>
-          </div>
-
           <div className="stats" aria-label="Product truths">
-            <div className="stat">
-              <div className="num">100</div>
-              <div className="label">Point score per video</div>
-            </div>
-            <div className="stat">
-              <div className="num">5</div>
-              <div className="label">Areas analyzed</div>
-            </div>
-            <div className="stat">
-              <div className="num">&lt;30s</div>
-              <div className="label">To a first score</div>
-            </div>
-            <div className="stat">
-              <div className="num">10%</div>
-              <div className="label">Brand fee at launch</div>
-            </div>
+            {productStats.map((s) => (
+              <div className="stat" key={s.label}>
+                <div className="num">{s.value}</div>
+                <div className="label">{s.label}</div>
+              </div>
+            ))}
           </div>
         </div>
       </section>
 
-      <section className="band" id="campaigns">
+      <section className="band" id="how-it-works">
         <div className="wrap">
           <div className="sec-head" style={{ marginBottom: 28 }}>
-            <span className="eyebrow">Campaigns</span>
-            <h2>How campaigns will work</h2>
+            <span className="eyebrow">How it works</span>
+            <h2>Five steps, in order.</h2>
             <p>
-              Brief, book, and pay in one place when payments go live. Until
-              then, talk to us for early-access campaigns with founding
-              creators.
+              Each step feeds the next — you can&apos;t generate without a
+              confirmed brand, and you can&apos;t see a calibration number
+              until there&apos;s enough real data to back it.
             </p>
           </div>
           <div className="tool-grid">
-            <div className="tool">
-              <span className="t-tag">01</span>
-              <h3>Brief</h3>
-              <p>
-                Set niche, score floor, and deliverables. Creators see the brief
-                before they accept.
-              </p>
-            </div>
-            <div className="tool">
-              <span className="t-tag">02</span>
-              <h3>Book</h3>
-              <p>
-                Fixed package prices. Creators keep 100% of the listed price;
-                brands pay a 10% platform fee on top.
-              </p>
-            </div>
-            <div className="tool">
-              <span className="t-tag">03</span>
-              <h3>Approve</h3>
-              <p>
-                At launch, escrow holds payment until you approve the
-                deliverable. Score gates optional before content goes live.
-              </p>
-            </div>
+            {STEPS.map((s) => (
+              <div className="tool" key={s.n}>
+                <span className="t-tag">{s.n}</span>
+                <h3>{s.title}</h3>
+                <p>{s.body}</p>
+              </div>
+            ))}
           </div>
           <div style={{ marginTop: 28 }}>
-            <Link href={routes.creators} className="btn btn-primary">
-              Browse creators
-            </Link>{" "}
+            <a href={routes.signup} className="btn btn-primary">
+              Start free with 10 credits
+            </a>{" "}
             <Link href={routes.contact} className="btn btn-ghost">
               Talk to sales
             </Link>
@@ -152,13 +111,11 @@ export default function ForBrandsPage() {
         </div>
       </section>
 
-      <EarlyAccess />
-
       <FinalCta
-        title="Ready to hire on proof?"
-        subtitle="Apply for early access or browse example creator profiles."
-        cta="Talk to sales"
-        href={routes.contact}
+        title="Ready to generate your first variant?"
+        subtitle="10 free credits on signup. No card required."
+        cta="Start free with 10 credits"
+        href={routes.signup}
       />
     </MarketingShell>
   );

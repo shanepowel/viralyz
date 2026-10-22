@@ -3,8 +3,8 @@ import Link from "next/link";
 import { EngagementCalculator } from "@/components/marketing/engagement-calculator";
 import { FinalCta } from "@/components/marketing/final-cta";
 import { MarketingShell } from "@/components/marketing/marketing-shell";
-import { LinkScorer } from "@/components/marketing/link-scorer";
 import { pageMeta } from "@/lib/meta";
+import { routes } from "@/lib/site";
 
 export const metadata: Metadata = pageMeta({
   title: "Engagement rate calculator",
@@ -33,19 +33,14 @@ export default function EngagementCalculatorPage() {
       <section style={{ paddingTop: 8, paddingBottom: 48 }}>
         <div className="wrap">
           <EngagementCalculator />
-          <div style={{ marginTop: 48 }}>
-            <h2 style={{ fontSize: 22, marginBottom: 12 }}>
-              Score a full video next
-            </h2>
-            <LinkScorer />
-          </div>
         </div>
       </section>
 
       <FinalCta
-        title="Engagement is one number. Score is the whole picture."
-        subtitle="Ten free scores a month."
+        title="Pre-flight your next ad before you spend"
+        subtitle="10 free credits on signup."
         cta="Start free"
+        href={routes.signup}
       />
     </MarketingShell>
   );

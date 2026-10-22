@@ -32,19 +32,21 @@ export default function TrustPage() {
             How we handle your data
           </h1>
           <p className="mt-4 max-w-prose text-base leading-relaxed text-ink-secondary">
-            Short version: official APIs only, you can export or delete anytime,
-            and we say where data lives.
+            Short version: public ad-library data and your own uploads only,
+            you can export or delete anytime, and we say where data lives.
           </p>
 
           <div className="mt-12 max-w-2xl space-y-10">
             <div>
               <h2 className="font-display text-2xl font-semibold tracking-tight">
-                Official platform APIs only
+                Public ad libraries, your own store and exports
               </h2>
               <p className="mt-3 text-ink-secondary leading-relaxed">
-                Viralyz connects through official TikTok, Instagram, YouTube and
-                X APIs. We do not scrape private content, ask for passwords, or
-                automate posting outside what each platform allows.
+                Discover reads from Meta&apos;s and TikTok&apos;s own public
+                ad libraries — no scraping, no account access. Brand import
+                reads only the store URL you give us, through a fetch layer
+                that refuses to touch internal or private addresses. Results
+                reads only the Ads Manager export file you upload yourself.
               </p>
             </div>
             <div>
@@ -52,10 +54,9 @@ export default function TrustPage() {
                 Export and delete anytime
               </h2>
               <p className="mt-3 text-ink-secondary leading-relaxed">
-                Your media kits, scores and connected accounts stay under your
-                control. You can export your data or delete your account from
-                settings. When you disconnect a platform, we stop pulling new
-                data from that account.
+                Your brand, generated creative, and performance imports stay
+                under your control. You can export your data or delete your
+                account from settings.
               </p>
             </div>
             <div>
