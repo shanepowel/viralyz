@@ -14,107 +14,45 @@ const nextConfig = {
   },
   async redirects() {
     const app = "https://app.viralyz.com";
+    // The creator-scoring and creator-marketplace pages were retired when the
+    // product became a seller creative studio. Each old URL goes to the
+    // closest page that exists now, so inbound links keep working.
+    const retired = [
+      ["/for-creators", "/"],
+      ["/for-creators/:path*", "/"],
+      ["/creators", "/"],
+      ["/creators/:path*", "/"],
+      ["/browse", "/"],
+      ["/browse/:path*", "/"],
+      ["/kit/:path*", "/"],
+      ["/report", "/"],
+      ["/affiliates", "/contact"],
+      ["/tools", "/platform"],
+      ["/tools/:path*", "/platform"],
+      ["/for-brands", "/platform"],
+      ["/brands", "/platform"],
+      ["/platform/viral-score", "/platform/pre-flight"],
+      ["/platform/thumbnail-studio", "/platform/pre-flight"],
+      ["/platform/hook-lab", "/platform/studio"],
+      ["/platform/script-doctor", "/platform/studio"],
+      ["/platform/performance-tracking", "/platform/results"],
+      ["/blog/kitchen-video-12-million-views", "/blog"],
+      ["/blog/creator-pricing-2026", "/blog"],
+      ["/blog/three-fixes-that-move-scores", "/blog"],
+      ["/blog/packages-on-media-kits", "/blog"],
+    ].map(([source, destination]) => ({
+      source,
+      destination,
+      permanent: true,
+    }));
+
     return [
-      {
-        source: "/browse",
-        destination: "/creators",
-        permanent: true,
-      },
-      {
-        source: "/browse/:path*",
-        destination: "/creators",
-        permanent: true,
-      },
-      {
-        source: "/brands",
-        destination: "/for-brands",
-        permanent: true,
-      },
-      {
-        source: "/academy",
-        destination: "/blog",
-        permanent: false,
-      },
-      {
-        source: "/community",
-        destination: "/for-creators",
-        permanent: false,
-      },
-      {
-        source: "/help",
-        destination: "/contact",
-        permanent: false,
-      },
-      {
-        source: "/dashboard",
-        destination: `${app}/`,
-        permanent: false,
-      },
-      {
-        source: "/dashboard/settings",
-        destination: `${app}/settings`,
-        permanent: false,
-      },
-      {
-        source: "/dashboard/tools/score-engine",
-        destination: `${app}/analyze`,
-        permanent: false,
-      },
-      {
-        source: "/dashboard/tools/hook-lab",
-        destination: `${app}/hook-lab`,
-        permanent: false,
-      },
-      {
-        source: "/dashboard/tools/script-doctor",
-        destination: `${app}/caption-studio`,
-        permanent: false,
-      },
-      {
-        source: "/dashboard/tools/caption-studio",
-        destination: `${app}/caption-studio`,
-        permanent: false,
-      },
-      {
-        source: "/dashboard/tools/thumbnail-studio",
-        destination: `${app}/thumbnails`,
-        permanent: false,
-      },
-      {
-        source: "/dashboard/tools/idea-generator",
-        destination: `${app}/ideas`,
-        permanent: false,
-      },
-      {
-        source: "/dashboard/tools/trend-radar",
-        destination: `${app}/trends`,
-        permanent: false,
-      },
-      {
-        source: "/dashboard/tools/competitor-intel",
-        destination: `${app}/competitors`,
-        permanent: false,
-      },
-      {
-        source: "/dashboard/tools/auto-dm",
-        destination: `${app}/messages`,
-        permanent: false,
-      },
-      {
-        source: "/dashboard/tools/biopage",
-        destination: `${app}/settings`,
-        permanent: false,
-      },
-      {
-        source: "/dashboard/tools/:slug",
-        destination: `${app}/`,
-        permanent: false,
-      },
-      {
-        source: "/dashboard/:path*",
-        destination: `${app}/:path*`,
-        permanent: false,
-      },
+      ...retired,
+      { source: "/academy", destination: "/blog", permanent: false },
+      { source: "/community", destination: "/", permanent: false },
+      { source: "/help", destination: "/contact", permanent: false },
+      { source: "/dashboard", destination: app, permanent: false },
+      { source: "/dashboard/:path*", destination: app, permanent: false },
     ];
   },
 };

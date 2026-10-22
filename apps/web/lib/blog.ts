@@ -22,88 +22,68 @@ export type BlogPost = BlogPostCard & {
   seoDescription?: string | null;
 };
 
-/** Placeholder posts matching the marketing mock until Sanity is connected. */
+/** Built-in posts, shown until Sanity has published posts of its own. */
 export const PLACEHOLDER_POSTS: BlogPost[] = [
   {
     _id: "placeholder-1",
-    title: "Why that 40 second kitchen video hit 12 million views",
-    slug: "kitchen-video-12-million-views",
+    title: "Viralyz is now a creative studio for online sellers",
+    slug: "viralyz-seller-creative-studio",
     excerpt:
-      "We ran the score. The opening did almost all of the work. Here is the breakdown.",
-    publishedAt: "2026-07-08T09:00:00.000Z",
-    scoreBadge: "94",
+      "Find ads that keep running, make on-brand variants for your product, check them before you spend, and learn from your own results.",
+    publishedAt: "2026-10-22T09:00:00.000Z",
+    scoreBadge: null,
     coverGradient: "linear-gradient(135deg,#6C4CF1,#3D2A9E)",
-    category: { title: "Teardowns", slug: "teardowns" },
-    readMinutes: 5,
-    author: { name: "Viralyz", role: "Editorial" },
-    bodyHtml: [
-      "Most viral food clips do not win on recipes. They win on the first three seconds.",
-      "We scored the kitchen video that crossed 12 million views. Opening landed at 19 out of 20. Visuals and pacing were strong, but the hook carried almost the entire lift.",
-      "The first line stated the outcome before the method. That pattern shows up again and again in our scored set for food creators.",
-    ],
-    seoTitle: "Kitchen video teardown: how a 40s clip hit 12M views",
-    seoDescription:
-      "A Viral Score teardown of a 40 second kitchen video that reached 12 million views.",
-  },
-  {
-    _id: "placeholder-2",
-    title: "What creators actually charge in 2026, by niche and platform",
-    slug: "creator-pricing-2026",
-    excerpt:
-      "Real numbers from verified media kits. No guesswork, no inflated rate cards.",
-    publishedAt: "2026-07-01T09:00:00.000Z",
-    scoreBadge: "£",
-    coverGradient: "linear-gradient(135deg,#F2994A,#EB5757)",
-    category: { title: "Pricing", slug: "pricing" },
-    readMinutes: 7,
-    author: { name: "Viralyz", role: "Editorial" },
-    bodyHtml: [
-      "Rate cards online are often fantasy. Verified kits tell a quieter story.",
-      "Across niches, mid-tier TikTok packages cluster lower than Instagram Reels with usage rights. UGC delivered as files, not posts, prices differently again.",
-      "When packages ship on Viralyz, this guide will update from real bookings, not surveys alone.",
-    ],
-  },
-  {
-    _id: "placeholder-3",
-    title: "The three fixes that move scores most, ranked by real results",
-    slug: "three-fixes-that-move-scores",
-    excerpt:
-      "We looked at every fix applied this year. These three earned their points.",
-    publishedAt: "2026-06-24T09:00:00.000Z",
-    scoreBadge: "+12",
-    coverGradient: "linear-gradient(135deg,#27AE60,#145A32)",
-    category: { title: "Playbooks", slug: "playbooks" },
-    readMinutes: 6,
-    author: { name: "Viralyz", role: "Editorial" },
-    bodyHtml: [
-      "Not every suggestion moves the needle. Three do, consistently.",
-      "Rewrite the opening line. Cut the still shot that bleeds past four seconds. Put the payoff earlier than you think you should.",
-      "Those three show the largest average score lift after re-score in our early data.",
-    ],
-  },
-  {
-    _id: "placeholder-4",
-    title: "Packages are here: sell fixed price offers from your media kit",
-    slug: "packages-on-media-kits",
-    excerpt:
-      "List an offer, get paid safely, keep 100%. Here is how it works.",
-    publishedAt: "2026-06-17T09:00:00.000Z",
-    scoreBadge: "▲",
-    coverGradient: "linear-gradient(135deg,#56CCF2,#2F80ED)",
     category: { title: "Product news", slug: "product-news" },
     readMinutes: 3,
     author: { name: "Viralyz", role: "Product" },
     bodyHtml: [
-      "Creators can list up to three fixed offers on their media kit: price, delivery time, and what the brand gets.",
-      "Brands pay upfront. Funds sit with Viralyz until delivery and approval. Creators keep 100%. Buyers pay a 10% fee on top.",
-      "This is marketplace revenue without waiting for full campaigns.",
+      "Viralyz started as a scoring tool for creators. We've rebuilt it around one job: helping online sellers make better ad creative, faster, without pretending to know more than we do.",
+      "The product is a loop with five stages. Discover finds ads that advertisers have kept paying for, from the Meta Ad Library (EU and UK) and TikTok's Commercial Content Library. Brand kit imports your product page so every variant starts from facts you've confirmed. Studio writes copy for your product from a reference's structure and generates the image. Pre-flight checks each variant against the placement's published specs. Results imports what really happened and tells you how far to trust the checks.",
+      "The creator pages, media kits and creator tools have been retired. Their old links now point to the closest page on the new site.",
+    ],
+    seoTitle: "Viralyz is now a creative studio for online sellers",
+    seoDescription:
+      "Viralyz has been rebuilt as an ad creative studio for online sellers: Discover, Brand kit, Studio, Pre-flight checks and Results.",
+  },
+  {
+    _id: "placeholder-2",
+    title: "Days running is a signal, not proof",
+    slug: "days-running-is-a-signal",
+    excerpt:
+      "Why we show how long an ad has run instead of calling it a winner, and what that number can and can't tell you.",
+    publishedAt: "2026-10-22T09:00:00.000Z",
+    scoreBadge: null,
+    coverGradient: "linear-gradient(135deg,#F2994A,#EB5757)",
+    category: { title: "Playbooks", slug: "playbooks" },
+    readMinutes: 4,
+    author: { name: "Viralyz", role: "Editorial" },
+    bodyHtml: [
+      "Official ad libraries don't publish sales, spend per ad or click-through rate for commercial ads. What they do publish is when an ad started running and whether it's still live.",
+      "An advertiser who keeps paying for the same ad for weeks is usually seeing a return on it. That makes days running a useful filter. It isn't proof: big brands sometimes leave ads running out of inertia, and a short-lived ad may simply have been a test.",
+      "So Discover shows the numbers we can measure, days running and how many variants the advertiser made, and never labels an ad a winner. Use them to choose which structures to borrow, then let your own results decide.",
+    ],
+  },
+  {
+    _id: "placeholder-3",
+    title: "Why your pre-flight score is sometimes blank",
+    slug: "why-pre-flight-score-is-blank",
+    excerpt:
+      "A score built on two checks looks just as precise as one built on ten. We'd rather show nothing.",
+    publishedAt: "2026-10-22T09:00:00.000Z",
+    scoreBadge: null,
+    coverGradient: "linear-gradient(135deg,#27AE60,#145A32)",
+    category: { title: "Playbooks", slug: "playbooks" },
+    readMinutes: 3,
+    author: { name: "Viralyz", role: "Product" },
+    bodyHtml: [
+      "Each variant is checked for text contrast, text area, safe-zone overlap, aspect ratio, copy length and restricted claims. Some checks can't always run: if there's no text layer, there's no contrast to measure.",
+      "The headline score is the share of checks that passed, and it only appears once at least four checks have actually run. Below that, a single pass or fail would swing the number wildly, so we leave it blank and show the individual checks instead.",
+      "The AI-assessed hook-clarity note is shown separately and never counts toward the score. It will only be folded in if your own results show it tracks real click-through rate.",
     ],
   },
 ];
 
 export const BLOG_CATEGORIES: BlogCategory[] = [
-  { title: "Teardowns", slug: "teardowns" },
-  { title: "Pricing", slug: "pricing" },
   { title: "Playbooks", slug: "playbooks" },
   { title: "Product news", slug: "product-news" },
 ];

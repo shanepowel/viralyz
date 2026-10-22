@@ -12,7 +12,7 @@ import { COMPANY, CONTACT, routes } from "@/lib/site";
 export const metadata: Metadata = pageMeta({
   title: "About",
   description:
-    "Creators deserve to know, not guess. Viralyz is a Digiteq company building the scored creator network.",
+    "Viralyz helps online sellers make better ad creative without guessing. A Digiteq company.",
   path: routes.about,
 });
 
@@ -29,10 +29,10 @@ export default function AboutPage() {
           />
           <Eyebrow className="mt-6">About</Eyebrow>
           <h1 className="mt-3 font-display text-4xl font-semibold tracking-tight md:text-5xl">
-            Creators deserve to know, not guess.
+            Sellers deserve better than guessing.
           </h1>
           <p className="mt-4 max-w-prose text-base leading-relaxed text-ink-secondary">
-            Viralyz exists because posting content should not feel like a
+            Viralyz exists because launching an ad shouldn&apos;t feel like a
             lottery ticket.
           </p>
         </Container>
@@ -42,32 +42,28 @@ export default function AboutPage() {
         <Container>
           <div className="max-w-2xl space-y-5 text-base leading-relaxed text-ink-secondary">
             <p>
-              Millions of people make content every day. Most of them post it
-              and hope. A video that took two days to make can fail because of a
-              weak first three seconds, a thumbnail nobody can read, or a
-              posting time when the audience was asleep. These problems are
-              fixable. Creators just could not see them.
+              Most small sellers make ads the same way: look at what
+              competitors run, make something similar, launch it, and hope.
+              When it doesn&apos;t work, it&apos;s hard to tell whether the
+              idea was wrong or the execution was. Text nobody could read, a
+              headline hidden under the reply bar, a claim the platform quietly
+              limited.
             </p>
             <p>
               <span className="font-semibold text-ink">
-                Viralyz makes them visible.
+                Viralyz makes that process deliberate.
               </span>{" "}
-              We score content before it goes live, explain what is wrong in
-              plain language, and show what each fix is worth. Then we track
-              what really happened against the prediction, and publish our
-              accuracy on your profile when we have enough data.
+              Start from ads advertisers have kept paying for. Borrow their
+              structure, never their assets. Generate variants from your own
+              confirmed brand details. Check each one against the
+              platform&apos;s published specs before you spend. Then import
+              what happened and see how well the checks predicted it.
             </p>
             <p>
-              Over time, those scores become something bigger: a track record. A
-              creator with a year of verified scores has proof that no follower
-              count can match. That is why brands are coming too. They would
-              rather hire proof than promises.
-            </p>
-            <p>
-              We believe in a few simple things. Show your accuracy, never hide
-              it. Help creators make their own version of what works, never
-              copies. And follow the platform rules, because a banned account
-              helps nobody.
+              We hold ourselves to one rule: no claim without a measurement. If
+              we can&apos;t measure something, the number stays blank and we
+              tell you why. A tool that&apos;s honest about what it doesn&apos;t
+              know is more useful than one that&apos;s confidently wrong.
             </p>
           </div>
 
@@ -110,16 +106,16 @@ export default function AboutPage() {
           <div className="mt-12 grid gap-6 md:grid-cols-3">
             {[
               {
-                title: "Honest numbers",
-                body: "We will publish our prediction accuracy on every profile once we have enough measured data. If we are wrong, you will see it.",
+                title: "No claim without a measurement",
+                body: "Scores stay blank until there is enough data behind them, and every check shows its evidence.",
               },
               {
-                title: "Your work, your data",
-                body: "Export or delete everything, any time. Brands only ever see what you choose to share.",
+                title: "Official sources",
+                body: "References come from official ad libraries or from you. We don't scrape ad platforms.",
               },
               {
-                title: "Platform-safe",
-                body: "Automation stays inside the rules. A banned account helps nobody.",
+                title: "Your brand, not someone else's",
+                body: "Studio borrows structure from references. It never copies their images, logos or wording.",
               },
             ].map((v) => (
               <div key={v.title}>
@@ -134,8 +130,8 @@ export default function AboutPage() {
       </Section>
 
       <FinalCta
-        title="See your score"
-        subtitle="Ten free scores a month. No card required."
+        title="Make your next ad from one that works"
+        subtitle="Start with 10 free credits. No card needed."
         cta="Start free"
         href={routes.signup}
       />

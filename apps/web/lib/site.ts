@@ -22,22 +22,15 @@ export const appRoutes = {
 export const routes = {
   home: "/",
   platform: "/platform",
-  forCreators: "/for-creators",
-  forBrands: "/for-brands",
   pricing: "/pricing",
-  creators: "/creators",
-  tools: "/tools",
   blog: "/blog",
   about: "/about",
   trust: "/trust",
   changelog: "/changelog",
   contact: "/contact",
-  report: "/report",
-  affiliates: "/affiliates",
   privacy: "/privacy",
   terms: "/terms",
   cookies: "/cookies",
-  /** Prefer /login on the product app; falls back to root until that page ships. */
   login: appRoutes.login,
   signup: appRoutes.home,
 } as const;
@@ -55,20 +48,26 @@ export const COMPANY = {
 } as const;
 
 /**
- * Honest, sustainable claims only. Anything we cannot evidence is null
- * and the consuming component must render its fallback (or nothing).
+ * Product facts the copy leans on, mirrored from the app (shanepowel/viralyzapp).
+ * Change them here when the app changes, never in page copy.
  */
-export const stats = {
-  verifiedCreators: null as number | null,
-  videosScored: null as number | null,
-  predictionAccuracy: null as string | null,
-  avgScoreTime: "<30s",
+export const productFacts = {
+  /** Credits granted on signup (`users.ts` opening balance). */
+  signupCredits: 10,
+  /** Default `CREDIT_PRICE_PER_VARIANT`; a deployment can raise it. */
+  creditsPerVariant: 1,
+  /** Pre-flight headline stays blank until this many checks are scored (`aggregate.ts`). */
+  minScoredChecks: 4,
+  /** Calibration needs this many matched ads (`calibration.ts`)… */
+  calibrationMinAds: 20,
+  /** …each with at least this many impressions. */
+  calibrationMinImpressions: 1000,
 } as const;
 
-/** Product-truth stats band for the homepage (not usage claims). */
+/** Product-truth band for the homepage: what the product does, not usage claims. */
 export const productStats = [
-  { value: "100", label: "Point score on every video" },
-  { value: "5", label: "Areas analyzed per post" },
-  { value: "<30s", label: "To your first score" },
-  { value: "10", label: "Free scores a month" },
+  { value: "2", label: "Official ad libraries searched (Meta EU/UK, TikTok)" },
+  { value: "4", label: "Placements checked: feed 1:1, feed 4:5, Stories, TikTok" },
+  { value: "10", label: "Pre-flight checks on every variant" },
+  { value: "10", label: "Free credits when you sign up" },
 ] as const;

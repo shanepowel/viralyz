@@ -41,7 +41,7 @@ export async function GET(req: NextRequest) {
             display: "flex",
             alignItems: "center",
             gap: 12,
-            color: "#4F46E5",
+            color: "#6C4CF1",
             fontSize: 28,
             fontFamily: "sans-serif",
             fontWeight: 600,

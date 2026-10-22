@@ -20,7 +20,7 @@ export function Footer() {
   return (
     <footer className="border-t border-line bg-bg">
       <div className="mx-auto max-w-container px-4 py-14 md:px-6">
-        <div className="grid gap-10 lg:grid-cols-[1.2fr_repeat(4,1fr)]">
+        <div className="grid gap-10 lg:grid-cols-[1.4fr_repeat(3,1fr)]">
           <div>
             <Link href="/" className="inline-flex items-center gap-2">
               <span
@@ -34,8 +34,8 @@ export function Footer() {
               </span>
             </Link>
             <p className="mt-3 max-w-xs text-sm text-ink-secondary leading-relaxed">
-              Score your content before you post it. Build a record brands can
-              trust.
+              Ad creatives built from ads that are already working, checked
+              before you spend and measured against your own results.
             </p>
             <form action={action} className="mt-5 flex gap-2">
               <label className="sr-only" htmlFor="footer-email">

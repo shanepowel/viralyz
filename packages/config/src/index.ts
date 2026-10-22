@@ -262,11 +262,11 @@ export const PLANS: PlanDefinition[] = [
 ];
 
 export const APP_NAME = "Viralyz";
-export const APP_TAGLINE = "See if content will work before you spend a penny on it.";
+export const APP_TAGLINE = "Ad creatives built from ads that are already working.";
 export const APP_DESCRIPTION =
-  "Viralyz gives every video a score out of 100 and tells you exactly what to fix. Post better content, build a track record brands can trust, and get hired for it.";
+  "Viralyz is a creative studio for online sellers. Find long-running ads in official ad libraries, turn their structure into on-brand variants for your product, check every variant before you spend, and calibrate against your own results.";
 export const APP_POSITIONING =
-  "Creatify makes it. Collabstr sells it. Viralyz is how you know it will work.";
+  "Find what runs. Make yours. Check it before you spend. Learn from what happened.";
 
 /** Production product host. Marketing CTAs always land here unless overridden. */
 export const PUBLIC_APP_ORIGIN = "https://app.viralyz.com";

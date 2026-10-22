@@ -202,7 +202,7 @@ export default async function BlogPostPage({
               </p>
               <p className="mt-1 text-sm text-ink-secondary">
                 {post.author?.bio ??
-                  "Editorial notes from scoring real creator content."}
+                  "Notes on ad creative and measurement from the Viralyz team."}
               </p>
             </div>
 
@@ -218,9 +218,9 @@ export default async function BlogPostPage({
         </Container>
       </Section>
       <FinalCtaBand
-        title="Score your next video"
-        subtitle="Ten free scores a month. No card required."
-        cta="Score your video, free"
+        title="Make your next ad from one that works"
+        subtitle="Start with 10 free credits. One credit makes one variant."
+        cta="Start free"
       />
     </MarketingShell>
   );

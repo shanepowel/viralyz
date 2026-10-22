@@ -24,7 +24,7 @@ import { listPosts, BLOG_CATEGORIES, formatPostDate } from "@/lib/blog";
 export const metadata: Metadata = pageMeta({
   title: "Blog",
   description:
-    "Teardowns of viral videos, honest pricing data, and lessons from scored posts.",
+    "Notes on ad creative, measurement and what we ship, for online sellers.",
   path: routes.blog,
 });
 
@@ -107,10 +107,10 @@ export default async function BlogPage({
           />
           <Eyebrow className="mt-6">Blog</Eyebrow>
           <h1 className="mt-3 font-display text-4xl font-semibold tracking-tight md:text-5xl">
-            What the scores are telling us.
+            Make the next ad better than the last.
           </h1>
           <p className="mt-4 max-w-prose text-base leading-relaxed text-ink-secondary">
-            Teardowns of viral videos and honest pricing data.
+            Notes on ad creative, measurement and what we ship.
           </p>
         </Container>
       </Section>
@@ -198,7 +198,7 @@ export default async function BlogPage({
           {grid.length === 0 ? (
             <EmptyState
               heading={`Nothing in ${categoryTitle} yet.`}
-              body="We publish teardowns and playbooks as we score more content."
+              body="New playbooks and product notes will appear here."
               action={{ href: routes.blog, label: "View all posts" }}
             />
           ) : (
