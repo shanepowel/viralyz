@@ -38,8 +38,6 @@ type Feature = {
   demoPlaybackId?: string | null;
 };
 
-const GROUPS = ["Plan", "Ship"] as const;
-
 export default async function PlatformPage() {
   const remote = await fetchSanity<Feature[]>({
     query: FEATURES_QUERY,
@@ -59,12 +57,19 @@ export default async function PlatformPage() {
           appHref: f.appHref,
         }));
 
-  const byGroup = GROUPS.map((g) => ({
-    group: g,
-    items: list.filter((f) => f.group === g),
-  })).filter((g) => g.items.length > 0);
-
-  const groupsPresent = byGroup.map((g) => g.group);
+  // Group by whatever `group` values are actually present, in order of
+  // first appearance — not a hardcoded allowlist. The Studio schema's
+  // feature documents can use a different group taxonomy than our own
+  // static fallback; filtering against a fixed list silently dropped
+  // every live feature whose group didn't happen to match it.
+  const groupsPresent: string[] = [];
+  for (const f of list) {
+    const g = f.group?.trim();
+    if (g && !groupsPresent.includes(g)) groupsPresent.push(g);
+  }
+  const byGroup = groupsPresent
+    .map((g) => ({ group: g, items: list.filter((f) => f.group === g) }))
+    .filter((g) => g.items.length > 0);
 
   return (
     <MarketingShell>
