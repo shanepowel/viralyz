@@ -262,11 +262,11 @@ export const PLANS: PlanDefinition[] = [
 ];
 
 export const APP_NAME = "Viralyz";
-export const APP_TAGLINE = "See if content will work before you spend a penny on it.";
+export const APP_TAGLINE = "See if your ad creative will work before you spend a penny on it.";
 export const APP_DESCRIPTION =
-  "Viralyz gives every video a score out of 100 and tells you exactly what to fix. Post better content, build a track record brands can trust, and get hired for it.";
+  "Viralyz discovers what's working in your category, generates on-brand ad variants, and pre-flights them for contrast, safe zone, and policy issues before you ever spend on them.";
 export const APP_POSITIONING =
-  "Creatify makes it. Collabstr sells it. Viralyz is how you know it will work.";
+  "Other tools generate the image. Viralyz checks it before you spend on it.";
 
 /** Production product host. Marketing CTAs always land here unless overridden. */
 export const PUBLIC_APP_ORIGIN = "https://app.viralyz.com";

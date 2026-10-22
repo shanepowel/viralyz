@@ -1,20 +1,16 @@
 import {
-  Activity,
+  BarChart3,
   BookOpen,
-  Calculator,
-  Clapperboard,
-  Gauge,
-  ImageIcon,
+  Compass,
   Info,
-  LineChart,
+  Palette,
   Plug,
-  Search,
+  ShieldCheck,
   Sparkles,
-  UserRound,
   Wrench,
   type LucideIcon,
 } from "lucide-react";
-import { routes, APP_URL } from "@/lib/site";
+import { routes } from "@/lib/site";
 import { flags } from "@/lib/flags";
 
 export type NavLink = {
@@ -37,100 +33,59 @@ export const mainNav: NavSection[] = [
     href: routes.platform,
     groups: [
       {
-        heading: "Score & fix",
+        heading: "Plan",
         links: [
           {
-            label: "Viral Score",
-            desc: "Score out of 100 in 30 seconds",
-            href: "/platform/viral-score",
-            icon: Gauge,
+            label: "Discover",
+            desc: "Real running ads in your category",
+            href: "/platform/discover",
+            icon: Compass,
           },
           {
-            label: "Hook Lab",
-            desc: "Ten opening lines, ranked",
-            href: "/platform/hook-lab",
+            label: "Brand",
+            desc: "Colors, logo, and voice — set once",
+            href: "/platform/brand",
+            icon: Palette,
+          },
+        ],
+      },
+      {
+        heading: "Generate & ship",
+        links: [
+          {
+            label: "Studio",
+            desc: "On-brand variants against a reference angle",
+            href: "/platform/studio",
             icon: Sparkles,
           },
           {
-            label: "Script Doctor",
-            desc: "Line-by-line script feedback",
-            href: "/platform/script-doctor",
-            icon: Clapperboard,
-          },
-        ],
-      },
-      {
-        heading: "Grow",
-        links: [
-          {
-            label: "Thumbnail Studio",
-            desc: "Compare at real feed size",
-            href: "/platform/thumbnail-studio",
-            icon: ImageIcon,
+            label: "Pre-flight",
+            desc: "Caught before you spend, not after",
+            href: "/platform/pre-flight",
+            icon: ShieldCheck,
           },
           {
-            label: "Performance Tracking",
-            desc: "Predicted vs actual, over time",
-            href: "/platform/performance-tracking",
-            icon: LineChart,
-          },
-          {
-            label: "Integrations",
-            desc: "TikTok, YouTube, Instagram, X",
-            href: `${routes.platform}#integrations`,
-            icon: Plug,
+            label: "Results",
+            desc: "Real spend data vs pre-flight predictions",
+            href: "/platform/results",
+            icon: BarChart3,
           },
         ],
       },
     ],
   },
   {
-    label: "For creators",
-    href: routes.forCreators,
-    groups: [
-      {
-        heading: "Get discovered",
-        links: [
-          {
-            label: "Verified profile",
-            desc: "Real numbers from connected accounts",
-            href: `${routes.forCreators}#profile`,
-            icon: UserRound,
-          },
-          {
-            label: "Media kit",
-            desc: "One link brands can trust",
-            href: `${routes.forCreators}#media-kit`,
-            icon: BookOpen,
-          },
-          {
-            label: "Rate calculator",
-            desc: "Suggested rates by niche",
-            href: "/tools/engagement-calculator",
-            icon: Calculator,
-          },
-        ],
-      },
-    ],
-  },
-  {
-    label: "For brands",
+    label: "For sellers",
     href: routes.forBrands,
     groups: [
       {
-        heading: "Find talent",
+        heading: "How it works",
         links: [
           {
-            label: "Browse creators",
-            desc: "Filter by niche, score, platform",
-            href: routes.creators,
-            icon: Search,
-          },
-          {
-            label: "How campaigns work",
-            desc: "Brief, book, and pay in one place",
-            href: `${routes.forBrands}#campaigns`,
-            icon: Activity,
+            label: "The five-step loop",
+            desc: "Discover, Brand, Studio, Pre-flight, Results",
+            href: `${routes.forBrands}#how-it-works`,
+            icon: Compass,
           },
           {
             label: "Talk to sales",
@@ -151,7 +106,7 @@ export const mainNav: NavSection[] = [
         links: [
           {
             label: "Blog",
-            desc: "Teardowns and honest pricing data",
+            desc: "Teardowns and honest performance data",
             href: routes.blog,
             icon: BookOpen,
           },
@@ -181,7 +136,7 @@ export const mainNav: NavSection[] = [
             ? [
                 {
                   label: "API docs",
-                  desc: "Pull scores into your tools",
+                  desc: "Pull results into your own tools",
                   href: "/docs/api",
                   icon: Plug,
                 } satisfies NavLink,
@@ -232,5 +187,4 @@ export function getFooterColumns(): FooterColumn[] {
 export const chromeLinks = {
   signIn: routes.login,
   startFree: routes.signup,
-  scoreVideo: APP_URL,
 } as const;

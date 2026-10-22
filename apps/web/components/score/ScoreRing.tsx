@@ -63,7 +63,7 @@ export function ScoreRing({
       height={size}
       viewBox={`0 0 ${size} ${size}`}
       role="img"
-      aria-label={label ?? `Viral Score ${value} out of 100`}
+      aria-label={label ?? `Score ${value} out of 100`}
     >
       <circle
         cx={size / 2}

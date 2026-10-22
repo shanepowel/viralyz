@@ -3,8 +3,8 @@ import Link from "next/link";
 import { FinalCta } from "@/components/marketing/final-cta";
 import { MarketingShell } from "@/components/marketing/marketing-shell";
 import { ThumbnailChecker } from "@/app/tools/thumbnail-checker/Checker";
-import { LinkScorer } from "@/components/marketing/link-scorer";
 import { pageMeta } from "@/lib/meta";
+import { routes } from "@/lib/site";
 
 export const metadata: Metadata = pageMeta({
   title: "Thumbnail checker",
@@ -33,19 +33,14 @@ export default function ThumbnailCheckerPage() {
       <section style={{ paddingTop: 8, paddingBottom: 48 }}>
         <div className="wrap">
           <ThumbnailChecker />
-          <div style={{ marginTop: 48 }}>
-            <h2 style={{ fontSize: 22, marginBottom: 12 }}>
-              Score a full video next
-            </h2>
-            <LinkScorer />
-          </div>
         </div>
       </section>
 
       <FinalCta
-        title="Readable thumbnails are only one factor."
-        subtitle="Score the whole post free on Viralyz."
+        title="Readability is only one pre-flight check."
+        subtitle="Generate and pre-flight your first ad variant free."
         cta="Start free"
+        href={routes.signup}
       />
     </MarketingShell>
   );

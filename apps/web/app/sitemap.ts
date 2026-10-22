@@ -10,10 +10,8 @@ export default function sitemap(): MetadataRoute.Sitemap {
   const statics = [
     routes.home,
     routes.platform,
-    routes.forCreators,
     routes.forBrands,
     routes.pricing,
-    routes.creators,
     routes.tools,
     routes.blog,
     routes.about,
@@ -21,7 +19,6 @@ export default function sitemap(): MetadataRoute.Sitemap {
     routes.changelog,
     routes.contact,
     routes.affiliates,
-    routes.report,
     routes.privacy,
     routes.terms,
     routes.cookies,

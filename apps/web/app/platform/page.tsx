@@ -21,7 +21,7 @@ import { PlatformRail } from "@/components/marketing/platform-rail";
 export const metadata: Metadata = pageMeta({
   title: "Platform",
   description:
-    "Every tool feeds one score — Viral Score, Hook Lab, Script Doctor, and more.",
+    "Discover what's working, confirm your brand, generate variants, pre-flight them, and see what the data says. Five steps, one product.",
   path: routes.platform,
 });
 
@@ -38,15 +38,7 @@ type Feature = {
   demoPlaybackId?: string | null;
 };
 
-const GROUPS = [
-  "Score",
-  "Create",
-  "Intel",
-  "Publish",
-  "Engage",
-  "Earn",
-  "Learn",
-] as const;
+const GROUPS = ["Plan", "Ship"] as const;
 
 export default async function PlatformPage() {
   const remote = await fetchSanity<Feature[]>({
@@ -60,7 +52,7 @@ export default async function PlatformPage() {
           _id: f.slug,
           name: f.name,
           slug: f.slug,
-          group: i < 2 ? "Score" : i < 4 ? "Create" : "Intel",
+          group: i < 2 ? "Plan" : "Ship",
           tagline: f.tagline,
           summary: f.description,
           bullets: f.bullets,
@@ -80,17 +72,17 @@ export default async function PlatformPage() {
         <Container>
           <Eyebrow>Platform</Eyebrow>
           <h1 className="mt-3 font-display text-4xl font-semibold tracking-tight md:text-5xl">
-            Every tool feeds one score.
+            Five steps. One pre-flighted output.
           </h1>
           <p className="mt-4 max-w-prose text-base leading-relaxed text-ink-secondary">
-            Score, fix, and track in one place. Screenshots and demos below
-            show the real product — not stock photos.
+            Discover, Brand, Studio, Pre-flight, Results. Screenshots and
+            demos below show the real product — not stock photos.
           </p>
           {list[0]?.demoPlaybackId ? (
             <div className="mt-10 overflow-hidden rounded-lg border border-line shadow-md">
               <MuxVideo
                 playbackId={list[0].demoPlaybackId}
-                title="Scoring flow"
+                title="Discover to Studio"
                 autoplayLoop
               />
             </div>
@@ -208,8 +200,8 @@ export default async function PlatformPage() {
               <section id="integrations">
                 <SectionHeader
                   eyebrow="Integrations"
-                  title="Connect the platforms you already post on."
-                  lede="Official APIs only. TikTok, Instagram, YouTube and X."
+                  title="Sourced from where the ads actually run."
+                  lede="Meta and TikTok's own ad libraries for Discover. Meta and TikTok Ads Manager exports for Results."
                 />
               </section>
 
@@ -217,7 +209,7 @@ export default async function PlatformPage() {
                 <section id="api">
                   <SectionHeader
                     eyebrow="API"
-                    title="Pull scores into your own tools."
+                    title="Pull results into your own tools."
                   />
                 </section>
               ) : null}
@@ -227,8 +219,8 @@ export default async function PlatformPage() {
       </Section>
 
       <FinalCta
-        title="Start scoring free"
-        subtitle="Ten free scores a month. No card required."
+        title="Start generating free"
+        subtitle="10 free credits on signup. No card required."
       />
     </MarketingShell>
   );

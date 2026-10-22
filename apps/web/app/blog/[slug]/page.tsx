@@ -218,9 +218,9 @@ export default async function BlogPostPage({
         </Container>
       </Section>
       <FinalCtaBand
-        title="Score your next video"
-        subtitle="Ten free scores a month. No card required."
-        cta="Score your video, free"
+        title="Generate your next ad variant"
+        subtitle="10 free credits on signup. No card required."
+        cta="Start free"
       />
     </MarketingShell>
   );

@@ -13,16 +13,6 @@ export function Skeleton({ className }: { className?: string }) {
   return <Block className={className} />;
 }
 
-export function CreatorCardSkeleton() {
-  return (
-    <div className="rounded-md border border-line bg-raised p-4 shadow-sm">
-      <Block className="mb-4 h-36 w-full rounded-md" />
-      <Block className="mb-2 h-4 w-2/3" />
-      <Block className="h-3 w-1/2" />
-    </div>
-  );
-}
-
 export function BlogCardSkeleton() {
   return (
     <div className="rounded-md border border-line bg-raised p-4 shadow-sm">
@@ -34,5 +24,4 @@ export function BlogCardSkeleton() {
   );
 }
 
-Skeleton.CreatorCard = CreatorCardSkeleton;
 Skeleton.BlogCard = BlogCardSkeleton;

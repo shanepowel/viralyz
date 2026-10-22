@@ -1,9 +1,9 @@
 const ITEMS = [
-  "Hook scored: 52 → 74",
-  "Thumbnail readable at feed size ✓",
-  "Five areas scored in under 30s",
-  "Caption rewrite ready",
-  "Rescore after each fix",
+  "Contrast check ✓",
+  "Safe zone ✓",
+  "Character limits ✓",
+  "Policy check ✓",
+  "Hook strength assessed",
 ];
 
 export function Marquee() {

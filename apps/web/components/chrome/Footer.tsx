@@ -34,8 +34,8 @@ export function Footer() {
               </span>
             </Link>
             <p className="mt-3 max-w-xs text-sm text-ink-secondary leading-relaxed">
-              Score your content before you post it. Build a record brands can
-              trust.
+              Generate ad creative and pre-flight it before you spend a
+              penny on it.
             </p>
             <form action={action} className="mt-5 flex gap-2">
               <label className="sr-only" htmlFor="footer-email">
