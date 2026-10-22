@@ -10,7 +10,8 @@
     "lint": "eslint --max-warnings 0",
     "check-types": "next typegen && tsc --noEmit",
     "check:site": "node ../../scripts/check-site.mjs",
-    "check:content": "node ../../scripts/content-lint.mjs"
+    "check:content": "node ../../scripts/content-lint.mjs",
+    "check:routes": "node ../../scripts/check-app-routes.mjs"
   },
   "dependencies": {
     "@mux/mux-player-react": "^3.13.0",
