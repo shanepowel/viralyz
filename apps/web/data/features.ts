@@ -1,4 +1,4 @@
-import { APP_URL } from "@/lib/site";
+import { appRoutes } from "@/lib/site";
 
 export type Feature = {
   slug: string;
@@ -9,6 +9,10 @@ export type Feature = {
   appHref: string;
 };
 
+// The app pages these features linked to (/analyze, /hook-lab,
+// /caption-studio, /thumbnails, /trends) were removed in the Seller
+// Creative Studio rebuild and now redirect to Discover, so link there
+// directly.
 export const features: Feature[] = [
   {
     slug: "viral-score",
@@ -21,7 +25,7 @@ export const features: Feature[] = [
       "Five factor breakdown with a fix for each weak area",
       "Rescore after each fix and watch the number move",
     ],
-    appHref: `${APP_URL}/analyze`,
+    appHref: appRoutes.discover,
   },
   {
     slug: "hook-lab",
@@ -34,7 +38,7 @@ export const features: Feature[] = [
       "Plain-language notes on why each line works or fails",
       "Pick one, paste it into Script Doctor, and keep scoring",
     ],
-    appHref: `${APP_URL}/hook-lab`,
+    appHref: appRoutes.discover,
   },
   {
     slug: "script-doctor",
@@ -47,7 +51,7 @@ export const features: Feature[] = [
       "Teleprompter mode for recording",
       "Captions and hashtags as part of the same rewrite pass",
     ],
-    appHref: `${APP_URL}/caption-studio`,
+    appHref: appRoutes.discover,
   },
   {
     slug: "thumbnail-studio",
@@ -60,7 +64,7 @@ export const features: Feature[] = [
       "Side-by-side comparison against typical tiles",
       "Clear readability checks before you publish",
     ],
-    appHref: `${APP_URL}/thumbnails`,
+    appHref: appRoutes.discover,
   },
   {
     slug: "performance-tracking",
@@ -73,7 +77,7 @@ export const features: Feature[] = [
       "Accuracy published on your profile when we have enough data",
       "Niche trend context so you post into rising formats, not fading ones",
     ],
-    appHref: `${APP_URL}/trends`,
+    appHref: appRoutes.discover,
   },
 ];
 

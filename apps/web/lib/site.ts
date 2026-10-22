@@ -3,6 +3,22 @@
 export const APP_URL = "https://app.viralyz.com";
 export const SITE_URL = "https://www.viralyz.com";
 
+/**
+ * Every product-app page the marketing site may link to. Keep in step with
+ * the app's navigation (shanepowel/viralyzapp `AppShell.tsx`);
+ * `pnpm check:routes` fails on any app link that isn't listed here.
+ */
+export const appRoutes = {
+  home: APP_URL,
+  login: `${APP_URL}/login`,
+  discover: `${APP_URL}/discover`,
+  brand: `${APP_URL}/brand`,
+  studio: `${APP_URL}/studio`,
+  creatives: `${APP_URL}/creatives`,
+  results: `${APP_URL}/results`,
+  account: `${APP_URL}/account`,
+} as const;
+
 export const routes = {
   home: "/",
   platform: "/platform",
@@ -22,8 +38,8 @@ export const routes = {
   terms: "/terms",
   cookies: "/cookies",
   /** Prefer /login on the product app; falls back to root until that page ships. */
-  login: `${APP_URL}/login`,
-  signup: APP_URL,
+  login: appRoutes.login,
+  signup: appRoutes.home,
 } as const;
 
 export const CONTACT = {
