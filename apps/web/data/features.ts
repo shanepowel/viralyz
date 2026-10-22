@@ -1,4 +1,4 @@
-import { APP_URL } from "@/lib/site";
+import { appRoutes } from "@/lib/site";
 
 export type Feature = {
   slug: string;
@@ -21,7 +21,7 @@ export const features: Feature[] = [
       "Filter by category and days running to spot what's actually working",
       "Pick a reference angle to carry straight into Studio",
     ],
-    appHref: `${APP_URL}/discover`,
+    appHref: appRoutes.discover,
   },
   {
     slug: "brand",
@@ -34,7 +34,7 @@ export const features: Feature[] = [
       "One confirmed brand reused across every generated variant",
       "No generation runs until your brand is confirmed",
     ],
-    appHref: `${APP_URL}/brand`,
+    appHref: appRoutes.brand,
   },
   {
     slug: "studio",
@@ -47,7 +47,7 @@ export const features: Feature[] = [
       "Four angle types: offer, problem, proof, demo",
       "Every variant is AI-generated and labeled as such — no exceptions",
     ],
-    appHref: `${APP_URL}/studio`,
+    appHref: appRoutes.studio,
   },
   {
     slug: "pre-flight",
@@ -60,7 +60,7 @@ export const features: Feature[] = [
       "Policy rules for health and personal-attribute claims",
       "A headline number only appears once enough checks actually scored — never a guess",
     ],
-    appHref: `${APP_URL}/studio`,
+    appHref: appRoutes.studio,
   },
   {
     slug: "results",
@@ -73,7 +73,7 @@ export const features: Feature[] = [
       "Calibration (a Spearman correlation) appears only past 20 matched ads",
       "Below that threshold we say so plainly instead of showing a number",
     ],
-    appHref: `${APP_URL}/results`,
+    appHref: appRoutes.results,
   },
 ];
 
