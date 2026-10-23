@@ -1,12 +1,6 @@
 import { Num } from "@/components/ui/Num";
 import { cn } from "@/lib/cn";
 
-function tone(value: number) {
-  if (value >= 75) return "var(--score-high)";
-  if (value >= 50) return "var(--score-mid)";
-  return "var(--score-low)";
-}
-
 export function FactorBar({
   label,
   value,
@@ -18,11 +12,11 @@ export function FactorBar({
 }) {
   return (
     <div className={cn("flex items-center gap-3 text-sm", className)}>
-      <span className="w-20 shrink-0 text-ink-secondary">{label}</span>
-      <div className="h-2 flex-1 rounded-full bg-sunken overflow-hidden">
+      <span className="w-20 shrink-0 text-muted">{label}</span>
+      <div className="h-2 flex-1 rounded-full bg-panel overflow-hidden">
         <div
-          className="h-full rounded-full transition-[width] duration-[var(--dur-med)] ease-out"
-          style={{ width: `${value}%`, background: tone(value) }}
+          className="h-full rounded-full bg-ink"
+          style={{ width: `${value}%` }}
         />
       </div>
       <Num className="w-8 text-right text-ink">{value}</Num>
@@ -41,8 +35,7 @@ export function ScoreDelta({
   return (
     <span
       className={cn(
-        "font-mono tabular-nums text-sm font-medium",
-        up ? "text-score-high" : "text-score-low",
+        "tabular text-sm font-medium text-ink",
         className,
       )}
       aria-label={`${up ? "up" : "down"} ${Math.abs(delta)} points`}

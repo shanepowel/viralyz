@@ -12,10 +12,10 @@ export async function GET(req: NextRequest) {
 
   const ringColor =
     hasScore && score! >= 75
-      ? "#1E9E5A"
+      ? "#0B7A45"
       : hasScore && score! >= 50
-        ? "#D9930D"
-        : "#DC4A3D";
+        ? "#8A5A00"
+        : "#C2253A";
 
   const size = 120;
   const r = (size - 10) / 2;
@@ -31,9 +31,9 @@ export async function GET(req: NextRequest) {
           display: "flex",
           flexDirection: "column",
           justifyContent: "space-between",
-          background: "#FBFAF7",
+          background: "#FFFFFF",
           padding: 64,
-          fontFamily: "Georgia, serif",
+          fontFamily: "sans-serif",
         }}
       >
         <div
@@ -41,7 +41,7 @@ export async function GET(req: NextRequest) {
             display: "flex",
             alignItems: "center",
             gap: 12,
-            color: "#4F46E5",
+            color: "#0A0A0A",
             fontSize: 28,
             fontFamily: "sans-serif",
             fontWeight: 600,
@@ -55,7 +55,7 @@ export async function GET(req: NextRequest) {
               flex: 1,
               fontSize: title.length > 60 ? 42 : 54,
               fontWeight: 700,
-              color: "#1A1D23",
+              color: "#0A0A0A",
               lineHeight: 1.15,
               letterSpacing: "-0.02em",
             }}
@@ -70,7 +70,7 @@ export async function GET(req: NextRequest) {
                   cy={size / 2}
                   r={r}
                   fill="none"
-                  stroke="#E7E4DC"
+                  stroke="#E7E7E4"
                   strokeWidth="8"
                 />
                 <circle
@@ -95,8 +95,8 @@ export async function GET(req: NextRequest) {
                   justifyContent: "center",
                   fontSize: 36,
                   fontWeight: 700,
-                  fontFamily: "monospace",
-                  color: "#1A1D23",
+                  fontFamily: "sans-serif",
+                  color: "#0A0A0A",
                 }}
               >
                 {score}

@@ -7,9 +7,9 @@ const badge = cva(
   {
     variants: {
       variant: {
-        neutral: "bg-sunken text-ink-secondary",
-        accent: "bg-accent-soft text-accent",
-        demo: "bg-accent-soft text-accent",
+        neutral: "bg-panel text-muted",
+        accent: "bg-panel text-ink",
+        demo: "bg-panel text-ink",
         score: "",
       },
     },
@@ -17,10 +17,9 @@ const badge = cva(
   },
 );
 
-function scoreTone(value: number) {
-  if (value >= 75) return "bg-score-high-soft text-score-high";
-  if (value >= 50) return "bg-score-mid-soft text-score-mid";
-  return "bg-score-low-soft text-score-low";
+/** Scores are not check results, so they stay neutral; use CheckChip for verdicts. */
+function scoreTone() {
+  return "border border-line text-muted";
 }
 
 type Props = React.HTMLAttributes<HTMLSpanElement> &
@@ -39,7 +38,7 @@ export function Badge({
 }: Props) {
   if (variant === "score" && typeof score === "number") {
     return (
-      <span className={cn(badge({ variant }), scoreTone(score), className)} {...props}>
+      <span className={cn(badge({ variant }), scoreTone(), className)} {...props}>
         <Num>{score}</Num>
         {label ? <span>{label}</span> : null}
       </span>

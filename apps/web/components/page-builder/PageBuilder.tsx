@@ -3,7 +3,7 @@ import { FinalCtaBand } from "@/components/marketing/final-cta-band";
 import { MuxVideo } from "@/components/media/MuxVideo";
 import { PortableBody } from "@/components/media/PortableBody";
 import { SanityImage } from "@/components/media/SanityImage";
-import { HeroDemo } from "@/components/score/HeroDemo";
+import { PreflightDemoCompact } from "@/components/studio/PreflightDemo";
 import { JsonLd } from "@/components/seo/JsonLd";
 import { buttonClasses } from "@/components/ui/Button";
 import { Card } from "@/components/ui/Card";
@@ -55,11 +55,11 @@ function HeroBlock({ block }: { block: Block }) {
         <div className="grid items-center gap-10 lg:grid-cols-2">
           <div>
             {block.eyebrow ? <Eyebrow>{String(block.eyebrow)}</Eyebrow> : null}
-            <h1 className="mt-3 font-display text-5xl font-semibold tracking-tight leading-[1.05] md:text-6xl">
+            <h1 className="mt-4 font-display text-[clamp(42px,6vw,72px)]">
               {String(block.heading ?? "")}
             </h1>
             {block.lede ? (
-              <p className="mt-4 max-w-prose text-base leading-relaxed text-ink-secondary md:text-lg">
+              <p className="mt-4 max-w-prose text-base leading-relaxed text-muted md:text-lg">
                 {String(block.lede)}
               </p>
             ) : null}
@@ -77,20 +77,25 @@ function HeroBlock({ block }: { block: Block }) {
           </div>
           <div>
             {mediaKind === "scoreDemo" ? (
-              <HeroDemo />
+              <>
+                <PreflightDemoCompact />
+                <p className="mb-0 mt-3 text-xs text-muted">
+                  Product UI shown with a fictional brand.
+                </p>
+              </>
             ) : mediaKind === "video" && block.videoPlaybackId ? (
               <MuxVideo
                 playbackId={String(block.videoPlaybackId)}
                 title={String(block.heading ?? "Demo")}
                 autoplayLoop
-                className="overflow-hidden rounded-lg"
+                className="overflow-hidden rounded-card"
               />
             ) : mediaKind === "image" ? (
               <SanityImage
                 value={block.image as never}
                 width={960}
                 priority
-                className="overflow-hidden rounded-lg shadow-md"
+                className="overflow-hidden rounded-card shadow-float"
                 sizes="(max-width: 1024px) 100vw, 50vw"
               />
             ) : null}
@@ -104,7 +109,7 @@ function HeroBlock({ block }: { block: Block }) {
 function SplitMediaBlock({ block }: { block: Block }) {
   const side = block.mediaSide === "left" ? "left" : "right";
   const media = (
-    <div className="overflow-hidden rounded-lg border border-line bg-raised shadow-sm">
+    <div className="overflow-hidden rounded-card border border-line bg-card">
       {block.mediaKind === "video" && block.videoPlaybackId ? (
         <MuxVideo
           playbackId={String(block.videoPlaybackId)}
@@ -132,10 +137,10 @@ function SplitMediaBlock({ block }: { block: Block }) {
         </div>
       ) : null}
       {Array.isArray(block.bullets) && block.bullets.length ? (
-        <ul className="mt-4 space-y-2 text-ink-secondary">
+        <ul className="mt-4 space-y-2 text-muted">
           {(block.bullets as string[]).map((b) => (
             <li key={b} className="flex gap-2">
-              <span className="text-accent" aria-hidden>
+              <span className="text-ink" aria-hidden>
                 ·
               </span>
               <span>{b}</span>
@@ -207,13 +212,13 @@ export function PageBuilder({ blocks }: { blocks?: Block[] | null }) {
                           <h3 className="text-lg font-semibold text-ink">
                             {item.title}
                           </h3>
-                          <p className="mt-2 text-sm leading-relaxed text-ink-secondary">
+                          <p className="mt-2 text-sm leading-relaxed text-muted">
                             {item.body}
                           </p>
                           {item.href ? (
                             <Link
                               href={item.href}
-                              className="mt-4 inline-block text-sm text-accent underline underline-offset-4"
+                              className="mt-4 inline-block text-sm text-ink underline underline-offset-4"
                             >
                               Learn more
                             </Link>
@@ -236,11 +241,11 @@ export function PageBuilder({ blocks }: { blocks?: Block[] | null }) {
                     <MuxVideo
                       playbackId={String(block.videoPlaybackId)}
                       title={String(block.heading ?? "Showcase")}
-                      className="overflow-hidden rounded-lg"
+                      className="overflow-hidden rounded-card"
                     />
                   ) : null}
                   {block.caption ? (
-                    <p className="mt-3 text-sm text-ink-tertiary">
+                    <p className="mt-3 text-sm text-muted">
                       {String(block.caption)}
                     </p>
                   ) : null}
@@ -255,10 +260,10 @@ export function PageBuilder({ blocks }: { blocks?: Block[] | null }) {
                     {((block.items as { value?: string; label?: string }[]) ?? []).map(
                       (item) => (
                         <div key={`${item.value}-${item.label}`}>
-                          <p className="font-mono text-3xl font-semibold tracking-tight text-ink">
+                          <p className="tabular text-3xl font-semibold tracking-tight text-ink">
                             <Num>{item.value}</Num>
                           </p>
-                          <p className="mt-1 text-sm text-ink-secondary">
+                          <p className="mt-1 text-sm text-muted">
                             {item.label}
                           </p>
                         </div>
@@ -299,12 +304,12 @@ export function PageBuilder({ blocks }: { blocks?: Block[] | null }) {
                     {faqs.map((f) => (
                       <details
                         key={f.question}
-                        className="rounded-md border border-line bg-raised px-4 py-3 shadow-sm"
+                        className="rounded-2xl bg-panel px-[22px] py-1"
                       >
-                        <summary className="cursor-pointer font-medium text-ink">
+                        <summary className="cursor-pointer py-4 font-semibold text-ink">
                           {f.question}
                         </summary>
-                        <div className="mt-3">
+                        <div className="mb-4">
                           <PortableBody value={f.answer} />
                         </div>
                       </details>
@@ -357,7 +362,7 @@ export function PageBuilder({ blocks }: { blocks?: Block[] | null }) {
                         key={i}
                         value={img as never}
                         width={600}
-                        className="overflow-hidden rounded-md"
+                        className="overflow-hidden rounded-inner"
                       />
                     ))}
                   </div>

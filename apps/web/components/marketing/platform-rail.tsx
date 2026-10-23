@@ -36,10 +36,10 @@ export function PlatformRail({ groups }: { groups: string[] }) {
             key={g}
             href={`#group-${g.toLowerCase()}`}
             className={cn(
-              "shrink-0 rounded-sm px-3 py-2 text-sm transition-colors",
+              "shrink-0 rounded-inner px-3 py-2 text-sm transition-colors",
               active === g
-                ? "bg-sunken font-medium text-ink"
-                : "text-ink-secondary hover:bg-sunken hover:text-ink",
+                ? "bg-panel font-medium text-ink"
+                : "text-muted hover:bg-panel hover:text-ink",
             )}
           >
             {g}
@@ -47,7 +47,7 @@ export function PlatformRail({ groups }: { groups: string[] }) {
         ))}
         <a
           href="#integrations"
-          className="shrink-0 rounded-sm px-3 py-2 text-sm text-ink-secondary hover:bg-sunken hover:text-ink"
+          className="shrink-0 rounded-inner px-3 py-2 text-sm text-muted hover:bg-panel hover:text-ink"
         >
           Integrations
         </a>

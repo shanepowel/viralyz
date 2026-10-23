@@ -13,12 +13,12 @@ function Callout({
 }) {
   const styles =
     tone === "warning"
-      ? "border-score-mid bg-score-mid-soft"
+      ? "border-warn bg-warn-bg"
       : tone === "fix"
-        ? "border-score-high bg-score-high-soft"
-        : "border-line bg-sunken";
+        ? "border-pass bg-pass-bg"
+        : "border-line bg-panel";
   return (
-    <aside className={cn("my-6 rounded-md border px-4 py-3 text-sm", styles)}>
+    <aside className={cn("my-6 rounded-inner border px-4 py-3 text-sm", styles)}>
       {children}
     </aside>
   );
@@ -35,7 +35,7 @@ const components: PortableTextComponents = {
       const playbackId = value?.playbackId as string | undefined;
       if (!playbackId) return null;
       return (
-        <div className="my-8 overflow-hidden rounded-lg">
+        <div className="my-8 overflow-hidden rounded-card">
           <MuxVideo playbackId={playbackId} title="Embedded video" />
         </div>
       );
@@ -44,7 +44,7 @@ const components: PortableTextComponents = {
       const items = (value?.items ?? []) as { factor?: string; score?: number }[];
       if (!items.length) return null;
       return (
-        <div className="my-8 space-y-3 rounded-md border border-line bg-raised p-5 shadow-sm">
+        <div className="my-8 space-y-3 rounded-inner border border-line bg-card p-5">
           {items.map((item, i) =>
             item.factor && typeof item.score === "number" ? (
               <FactorBar key={`${item.factor}-${i}`} label={item.factor} value={item.score} />
@@ -66,7 +66,7 @@ const components: PortableTextComponents = {
       return (
         <a
           href={href}
-          className="text-accent underline underline-offset-4"
+          className="text-ink underline underline-offset-4"
           {...(external
             ? { target: "_blank", rel: "noopener noreferrer" }
             : {})}

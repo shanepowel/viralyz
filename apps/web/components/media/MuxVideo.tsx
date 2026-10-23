@@ -30,7 +30,7 @@ export function MuxVideo({
       className={className}
       poster={`https://image.mux.com/${playbackId}/thumbnail.webp?time=1`}
       loading="viewport"
-      accentColor="var(--accent)"
+      accentColor="var(--vz-ink)"
       {...(loop
         ? {
             autoPlay: "muted" as const,

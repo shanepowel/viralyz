@@ -1,52 +1,56 @@
 @import "tailwindcss";
 @import "../styles/tokens.css";
 
-@theme {
-  --font-sans: var(--font-sans), "Inter", system-ui, sans-serif;
-  --font-display: var(--font-display), "Bricolage Grotesque", system-ui, sans-serif;
-  --font-mono: var(--font-mono), "JetBrains Mono", ui-monospace, monospace;
+@theme inline {
+  --font-sans: var(--font-archivo), system-ui, sans-serif;
 
-  --color-bg: var(--bg);
-  --color-raised: var(--bg-raised);
-  --color-sunken: var(--bg-sunken);
-  --color-ink: var(--ink);
-  --color-ink-secondary: var(--ink-secondary);
-  --color-ink-tertiary: var(--ink-tertiary);
-  --color-line: var(--line);
-  --color-line-strong: var(--line-strong);
-  --color-accent: var(--accent);
-  --color-accent-hover: var(--accent-hover);
-  --color-accent-soft: var(--accent-soft);
-  --color-accent-foreground: var(--accent-foreground);
-  --color-score-low: var(--score-low);
-  --color-score-mid: var(--score-mid);
-  --color-score-high: var(--score-high);
-  --color-score-low-soft: var(--score-low-soft);
-  --color-score-mid-soft: var(--score-mid-soft);
-  --color-score-high-soft: var(--score-high-soft);
+  --color-bg: var(--vz-bg);
+  --color-panel: var(--vz-panel);
+  --color-card: var(--vz-card);
+  --color-line: var(--vz-line);
+  --color-ink: var(--vz-ink);
+  --color-muted: var(--vz-muted);
+  --color-btn: var(--vz-btn);
+  --color-btn-ink: var(--vz-btn-ink);
+  --color-inv: var(--vz-inv);
+  --color-inv-ink: var(--vz-inv-ink);
+  --color-inv-muted: var(--vz-inv-muted);
+  --color-inv-line: var(--vz-inv-line);
+  --color-inv-raised: var(--vz-inv-raised);
+  --color-scrim: var(--vz-scrim);
+  --color-pass: var(--vz-pass);
+  --color-pass-bg: var(--vz-pass-bg);
+  --color-warn: var(--vz-warn);
+  --color-warn-bg: var(--vz-warn-bg);
+  --color-fail: var(--vz-fail);
+  --color-fail-bg: var(--vz-fail-bg);
 
-  --radius-sm: var(--radius-sm);
-  --radius-md: var(--radius-md);
-  --radius-lg: var(--radius-lg);
+  --radius-inner: var(--vz-radius-inner);
+  --radius-card: var(--vz-radius-card);
+  --radius-panel: var(--vz-radius-panel);
 
-  --shadow-sm: var(--shadow-sm);
-  --shadow-md: var(--shadow-md);
+  --shadow-float: var(--vz-shadow-float);
 
-  --max-width-container: 72rem;
+  --container-site: 1280px;
+  --container-wide: 1360px;
+}
 
-  /* Shadcn-compat aliases for leftover dashboard stubs */
-  --color-background: var(--bg);
-  --color-foreground: var(--ink);
-  --color-card: var(--bg-raised);
-  --color-card-foreground: var(--ink);
-  --color-primary: var(--accent);
-  --color-primary-foreground: var(--accent-foreground);
-  --color-secondary: var(--bg-sunken);
-  --color-secondary-foreground: var(--ink);
-  --color-muted: var(--bg-sunken);
-  --color-muted-foreground: var(--ink-secondary);
-  --color-border: var(--line);
-  --color-ring: var(--accent);
+/* Wide display type: 125% width, 600 weight, tight tracking. */
+@utility font-display {
+  font-stretch: 125%;
+  font-weight: 600;
+  letter-spacing: -0.03em;
+  line-height: 1.02;
+}
+
+@utility tabular {
+  font-variant-numeric: tabular-nums;
+}
+
+/* Dot-grid texture, used behind product-UI showcases. */
+@utility dots {
+  background-image: radial-gradient(var(--vz-dot) 1px, transparent 1.2px);
+  background-size: 14px 14px;
 }
 
 * {
@@ -55,7 +59,6 @@
 
 html {
   scroll-behavior: smooth;
-  color-scheme: light dark;
 }
 
 html,
@@ -66,19 +69,36 @@ body {
 
 body {
   margin: 0;
-  background: var(--bg);
-  color: var(--ink);
-  font-family: var(--font-sans);
+  background: var(--vz-bg);
+  color: var(--vz-ink);
+  font-family: var(--font-archivo), system-ui, sans-serif;
+  font-stretch: 108%;
+  font-size: 17px;
+  line-height: 1.55;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
 
-/* Keep link reset in @layer base so utility classes (e.g. text-white) win. */
+/* Keep link reset in @layer base so utility classes win. */
 @layer base {
   a {
     color: inherit;
     text-decoration: none;
   }
+
+  input::placeholder,
+  textarea::placeholder {
+    color: var(--vz-muted);
+  }
+
+  :focus-visible {
+    outline: 2px solid var(--vz-ink);
+    outline-offset: 2px;
+  }
+}
+
+[id] {
+  scroll-margin-top: 88px;
 }
 
 .sr-only {
@@ -107,7 +127,7 @@ body {
 }
 
 .prose-vz {
-  color: var(--ink-secondary);
+  color: var(--vz-muted);
   line-height: 1.7;
   max-width: 42rem;
 }
@@ -115,8 +135,11 @@ body {
 .prose-vz h2,
 .prose-vz h3,
 .prose-vz h4 {
-  color: var(--ink);
-  font-family: var(--font-display);
+  color: var(--vz-ink);
+  font-stretch: 125%;
+  font-weight: 600;
+  letter-spacing: -0.02em;
+  line-height: 1.15;
   margin-top: 1.75em;
   margin-bottom: 0.5em;
 }
@@ -126,7 +149,7 @@ body {
 }
 
 .prose-vz a {
-  color: var(--accent);
+  color: var(--vz-ink);
   text-decoration: underline;
   text-underline-offset: 3px;
 }
@@ -140,21 +163,50 @@ body {
   margin-bottom: 0.35em;
 }
 
-.vz-marquee-track {
-  animation: vz-marquee 28s linear infinite;
+/* Motion: state changes only, and only when the user hasn't asked for less. */
+@media (prefers-reduced-motion: no-preference) {
+  .vz-chip-in {
+    animation: vz-chip-in var(--vz-dur-fast) var(--vz-ease-out) both;
+  }
+
+  .vz-tick path {
+    stroke-dasharray: 16;
+    stroke-dashoffset: 16;
+    animation: vz-tick var(--vz-dur-tick) var(--vz-ease-out) var(--vz-dur-fast) forwards;
+  }
+
+  .vz-shimmer {
+    background-image: linear-gradient(
+      100deg,
+      transparent 20%,
+      var(--vz-line) 50%,
+      transparent 80%
+    );
+    background-size: 200% 100%;
+    animation: vz-shimmer 1.4s linear infinite;
+  }
 }
 
-@keyframes vz-marquee {
+@keyframes vz-chip-in {
   from {
-    transform: translateX(0);
+    opacity: 0;
   }
   to {
-    transform: translateX(-50%);
+    opacity: 1;
   }
 }
 
-@media (prefers-reduced-motion: reduce) {
-  .vz-marquee-track {
-    animation: none;
+@keyframes vz-tick {
+  to {
+    stroke-dashoffset: 0;
+  }
+}
+
+@keyframes vz-shimmer {
+  from {
+    background-position: 100% 0;
+  }
+  to {
+    background-position: -100% 0;
   }
 }

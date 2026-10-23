@@ -17,6 +17,11 @@ import { routes } from "@/lib/site";
 import { fetchSanity } from "@/sanity/lib/fetch";
 import { FEATURES_QUERY } from "@/sanity/lib/queries";
 import { PlatformRail } from "@/components/marketing/platform-rail";
+import { StepPills } from "@/components/marketing/step-pills";
+import {
+  FeatureShowcase,
+  showcaseCaption,
+} from "@/components/studio/FeatureShowcase";
 
 export const metadata: Metadata = pageMeta({
   title: "Platform",
@@ -73,41 +78,36 @@ export default async function PlatformPage() {
 
   return (
     <MarketingShell>
-      <Section className="pt-20 md:pt-28 pb-8">
-        <Container>
-          <Eyebrow>Platform</Eyebrow>
-          <h1 className="mt-3 font-display text-4xl font-semibold tracking-tight md:text-5xl">
-            Five steps. One pre-flighted output.
-          </h1>
-          <p className="mt-4 max-w-prose text-base leading-relaxed text-ink-secondary">
-            Discover, Brand, Studio, Pre-flight, Results. Screenshots and
-            demos below show the real product — not stock photos.
-          </p>
-          {list[0]?.demoPlaybackId ? (
-            <div className="mt-10 overflow-hidden rounded-lg border border-line shadow-md">
-              <MuxVideo
-                playbackId={list[0].demoPlaybackId}
-                title="Discover to Studio"
-                autoplayLoop
-              />
-            </div>
-          ) : list[0]?.screenshot ? (
-            <div className="mt-10 overflow-hidden rounded-lg border border-line shadow-md">
-              <SanityImage
-                value={list[0].screenshot as never}
-                width={1400}
-                height={800}
-                priority
-                sizes="100vw"
-              />
-            </div>
-          ) : (
-            <div className="mt-10 flex min-h-56 items-center justify-center rounded-lg border border-line bg-sunken text-sm text-ink-tertiary">
-              Product screenshots ship with each live feature in Studio.
-            </div>
-          )}
-        </Container>
-      </Section>
+      <Container className="flex flex-col items-center gap-[22px] pb-12 pt-[clamp(48px,7vw,88px)] text-center">
+        <Eyebrow>Platform</Eyebrow>
+        <h1 className="m-0 max-w-[1000px] font-display text-[clamp(42px,6.2vw,80px)]">
+          Five steps. One pre-flighted output.
+        </h1>
+        <p className="m-0 max-w-[600px] text-[19px] text-muted">
+          Discover, Brand, Studio, Pre-flight, Results. Screenshots and demos
+          below show the real product, not stock photos.
+        </p>
+        <StepPills current="" />
+        {list[0]?.demoPlaybackId ? (
+          <div className="mt-6 w-full overflow-hidden rounded-card border border-line shadow-float">
+            <MuxVideo
+              playbackId={list[0].demoPlaybackId}
+              title="Discover to Studio"
+              autoplayLoop
+            />
+          </div>
+        ) : list[0]?.screenshot ? (
+          <div className="mt-6 w-full overflow-hidden rounded-card border border-line shadow-float">
+            <SanityImage
+              value={list[0].screenshot as never}
+              width={1400}
+              height={800}
+              priority
+              sizes="100vw"
+            />
+          </div>
+        ) : null}
+      </Container>
 
       <Section className="pt-0">
         <Container>
@@ -116,12 +116,16 @@ export default async function PlatformPage() {
             <div className="space-y-20">
               {byGroup.map(({ group, items }) => (
                 <section key={group} id={`group-${group.toLowerCase()}`}>
-                  <SectionHeader eyebrow={group} title={`${group} tools`} />
+                  <SectionHeader
+                    eyebrow={group}
+                    title={`${group} tools`}
+                    align="left"
+                  />
                   <div className="space-y-16">
                     {items.map((f, i) => {
                       const mediaLeft = i % 2 === 1;
                       const media = (
-                        <div className="overflow-hidden rounded-lg border border-line bg-raised shadow-sm">
+                        <div className="overflow-hidden rounded-card border border-line bg-card">
                           {f.demoPlaybackId ? (
                             <MuxVideo
                               playbackId={f.demoPlaybackId}
@@ -135,9 +139,14 @@ export default async function PlatformPage() {
                               sizes="(max-width: 1024px) 100vw, 50vw"
                             />
                           ) : (
-                            <div className="flex aspect-video items-center justify-center bg-sunken text-sm text-ink-tertiary">
-                              Screenshot coming soon
-                            </div>
+                            <figure className="m-0">
+                              <div className="dots flex min-h-72 items-center justify-center bg-panel p-6 [&_.shadow-float]:shadow-none">
+                                <FeatureShowcase slug={f.slug} />
+                              </div>
+                              <figcaption className="border-t border-line px-4 py-2 text-xs text-muted">
+                                {showcaseCaption(f.slug)}
+                              </figcaption>
+                            </figure>
                           )}
                         </div>
                       );
@@ -146,21 +155,21 @@ export default async function PlatformPage() {
                           <h3 className="text-lg font-semibold text-ink">
                             <Link
                               href={`/platform/${f.slug}`}
-                              className="hover:text-accent"
+                              className="hover:text-muted"
                             >
                               {f.name}
                             </Link>
                           </h3>
-                          <p className="mt-2 text-ink-secondary leading-relaxed">
+                          <p className="mt-2 text-muted leading-relaxed">
                             {f.tagline}
                           </p>
                           {f.summary ? (
-                            <p className="mt-3 text-sm text-ink-secondary leading-relaxed">
+                            <p className="mt-3 text-sm text-muted leading-relaxed">
                               {f.summary}
                             </p>
                           ) : null}
                           {f.bullets?.length ? (
-                            <ul className="mt-4 space-y-2 text-sm text-ink-secondary">
+                            <ul className="mt-4 space-y-2 text-sm text-muted">
                               {f.bullets.map((b) => (
                                 <li key={b}>· {b}</li>
                               ))}
@@ -206,6 +215,7 @@ export default async function PlatformPage() {
                 <SectionHeader
                   eyebrow="Integrations"
                   title="Sourced from where the ads actually run."
+                  align="left"
                   lede="Meta and TikTok's own ad libraries for Discover. Meta and TikTok Ads Manager exports for Results."
                 />
               </section>
@@ -215,6 +225,7 @@ export default async function PlatformPage() {
                   <SectionHeader
                     eyebrow="API"
                     title="Pull results into your own tools."
+                    align="left"
                   />
                 </section>
               ) : null}

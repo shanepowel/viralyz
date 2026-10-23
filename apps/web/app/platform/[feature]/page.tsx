@@ -1,23 +1,47 @@
 import type { Metadata } from "next";
-import Link from "next/link";
 import { notFound } from "next/navigation";
 import { stegaClean } from "@sanity/client/stega";
-import { FinalCta } from "@/components/marketing/final-cta";
+import { FinalCtaBand } from "@/components/marketing/final-cta-band";
 import { MarketingShell } from "@/components/marketing/marketing-shell";
+import { StepPills } from "@/components/marketing/step-pills";
 import { MuxVideo } from "@/components/media/MuxVideo";
 import { SanityImage } from "@/components/media/SanityImage";
-import { Breadcrumbs } from "@/components/ui/Breadcrumbs";
-import { buttonClasses } from "@/components/ui/Button";
+import {
+  FeatureShowcase,
+  showcaseCaption,
+} from "@/components/studio/FeatureShowcase";
+import {
+  PREFLIGHT_LIMITS,
+  PreflightChecksGrid,
+} from "@/components/studio/PreflightChecks";
+import { ButtonLink } from "@/components/ui/Button";
 import { Container } from "@/components/ui/Container";
-import { Eyebrow } from "@/components/ui/Eyebrow";
-import { Section } from "@/components/ui/Section";
+import { DotPanel } from "@/components/ui/DotPanel";
+import { SectionHeader } from "@/components/ui/SectionHeader";
 import { features as staticFeatures, getFeature } from "@/data/features";
 import { pageMeta } from "@/lib/meta";
-import { routes } from "@/lib/site";
+import { productFacts, routes } from "@/lib/site";
 import { cleanSlug, fetchSanity } from "@/sanity/lib/fetch";
 import { FEATURE_QUERY, FEATURE_SLUGS_QUERY } from "@/sanity/lib/queries";
 
 type Params = Promise<{ feature: string }>;
+
+type FeatureDoc = {
+  name: string;
+  slug: string;
+  tagline?: string;
+  summary?: string;
+  bullets?: string[];
+  appHref?: string;
+  screenshot?: unknown;
+  demoPlaybackId?: string | null;
+};
+
+/** Page-specific copy from the Studio design; other steps use their feature copy. */
+const PREFLIGHT_HERO = {
+  title: "Every variant checked before it gets a penny",
+  lede: "Six checks run the moment a variant is generated. You see what passed, what will cost you reach, and the one-click fix, before you open Ads Manager.",
+};
 
 export async function generateStaticParams() {
   const slugs = await fetchSanity<{ slug: string }[]>({
@@ -69,118 +93,151 @@ export default async function FeaturePage({ params }: { params: Params }) {
   const { feature } = await params;
   const slug = stegaClean(feature);
 
-  const doc = await fetchSanity<{
-    name: string;
-    slug: string;
-    tagline?: string;
-    summary?: string;
-    bullets?: string[];
-    appHref?: string;
-    screenshot?: unknown;
-    demoPlaybackId?: string | null;
-  }>({
+  const doc = await fetchSanity<FeatureDoc>({
     query: FEATURE_QUERY,
     params: { slug },
   });
 
-  if (!doc) {
-    const f = getFeature(slug);
-    if (!f) notFound();
-    return (
-      <MarketingShell>
-        <Section className="pt-20 md:pt-28">
-          <Container>
-            <Eyebrow>Platform</Eyebrow>
-            <h1 className="mt-3 font-display text-4xl font-semibold tracking-tight">
-              {f.name}
-            </h1>
-            <p className="mt-4 max-w-prose text-ink-secondary">{f.tagline}</p>
-            <p className="mt-6 max-w-prose text-ink-secondary">{f.description}</p>
-            <a href={f.appHref} className={buttonClasses({ variant: "primary" })}>
-              Try {f.name} free
-            </a>
-          </Container>
-        </Section>
-        <FinalCta title={`Try ${f.name} free`} subtitle="10 free credits on signup. No card required." />
-      </MarketingShell>
-    );
-  }
+  const fallback = getFeature(slug);
+  if (!doc && !fallback) notFound();
+
+  const f: FeatureDoc = doc ?? {
+    name: fallback!.name,
+    slug: fallback!.slug,
+    tagline: fallback!.tagline,
+    summary: fallback!.description,
+    bullets: fallback!.bullets,
+    appHref: fallback!.appHref,
+  };
+
+  const isPreflight = slug === "pre-flight";
+  const order = staticFeatures.findIndex((s) => s.slug === slug);
+  const next = order >= 0 ? staticFeatures[order + 1] : undefined;
+  const appHref = f.appHref || routes.signup;
+
+  const hasMedia = Boolean(f.demoPlaybackId || f.screenshot);
 
   return (
     <MarketingShell>
-      <Section className="pt-20 md:pt-28">
-        <Container>
-          <Breadcrumbs
-            items={[
-              { label: "Home", href: routes.home },
-              { label: "Platform", href: routes.platform },
-              { label: doc.name },
-            ]}
-          />
-          <Eyebrow className="mt-6">Platform</Eyebrow>
-          <h1 className="mt-3 font-display text-4xl font-semibold tracking-tight md:text-5xl">
-            {doc.name}
-          </h1>
-          <p className="mt-4 max-w-prose text-base leading-relaxed text-ink-secondary">
-            {doc.tagline}
-          </p>
+      {/* Step pills + hero */}
+      <Container className="flex flex-col items-center gap-[22px] pb-12 pt-[clamp(40px,6vw,72px)] text-center">
+        <StepPills current={slug} />
+        <h1 className="m-0 max-w-[1000px] font-display text-[clamp(42px,6.2vw,80px)]">
+          {isPreflight ? PREFLIGHT_HERO.title : f.tagline || f.name}
+        </h1>
+        <p className="m-0 max-w-[600px] text-[19px] text-muted">
+          {isPreflight ? PREFLIGHT_HERO.lede : f.summary}
+        </p>
+        <div className="flex flex-wrap justify-center gap-2.5">
+          <ButtonLink href={appHref} size="lg">
+            {isPreflight ? "Run pre-flight free" : `Try ${f.name} free`}
+          </ButtonLink>
+          <ButtonLink
+            href={isPreflight ? "#checks" : "#details"}
+            size="lg"
+            variant="secondary"
+          >
+            {isPreflight ? "See the six checks" : "What you get"}
+          </ButtonLink>
+        </div>
+      </Container>
 
-          {doc.demoPlaybackId ? (
-            <div className="mt-10 overflow-hidden rounded-lg border border-line shadow-md">
-              <MuxVideo
-                playbackId={doc.demoPlaybackId}
-                title={doc.name}
-              />
+      {/* Product showcase */}
+      <Container className="pb-6">
+        <DotPanel>
+          {f.demoPlaybackId ? (
+            <div className="overflow-hidden rounded-card border border-line shadow-float">
+              <MuxVideo playbackId={f.demoPlaybackId} title={f.name} />
             </div>
-          ) : doc.screenshot ? (
-            <div className="mt-10 overflow-hidden rounded-lg border border-line shadow-md">
+          ) : f.screenshot ? (
+            <div className="overflow-hidden rounded-card border border-line shadow-float">
               <SanityImage
-                value={doc.screenshot as never}
+                value={f.screenshot as never}
                 width={1400}
                 priority
                 sizes="100vw"
               />
             </div>
-          ) : null}
+          ) : (
+            <FeatureShowcase slug={slug} />
+          )}
+        </DotPanel>
+        {hasMedia ? null : (
+          <p className="mb-0 mt-3 text-center text-xs text-muted">
+            {showcaseCaption(slug)}
+          </p>
+        )}
+      </Container>
 
-          {doc.summary ? (
-            <p className="mt-8 max-w-prose text-ink-secondary leading-relaxed">
-              {doc.summary}
+      {isPreflight ? (
+        <>
+          <Container
+            id="checks"
+            className="flex flex-col items-center gap-9 py-24"
+          >
+            <SectionHeader
+              eyebrow="The six checks"
+              title="Five rules and one honest estimate"
+              className="mb-0"
+            />
+            <PreflightChecksGrid />
+            <p className="m-0 text-xs text-muted">
+              Illustrations use fictional brands.
             </p>
-          ) : null}
+          </Container>
 
-          {doc.bullets?.length ? (
-            <ul className="mt-6 max-w-prose space-y-2 text-ink-secondary">
-              {doc.bullets.map((b) => (
-                <li key={b}>· {b}</li>
+          <Container className="flex flex-col items-center gap-9 pb-24">
+            <h2 className="m-0 text-center font-display text-[clamp(30px,4vw,48px)]">
+              What pre-flight can’t tell you
+            </h2>
+            <ul className="m-0 grid w-full list-none grid-cols-[repeat(auto-fit,minmax(min(260px,100%),1fr))] gap-3 p-0">
+              {PREFLIGHT_LIMITS.map((item) => (
+                <li
+                  key={item.title}
+                  className="flex flex-col gap-2 rounded-card bg-panel p-6"
+                >
+                  <strong className="font-semibold">{item.title}</strong>
+                  <span className="text-[15px] text-muted">{item.body}</span>
+                </li>
               ))}
             </ul>
-          ) : null}
-
-          {doc.appHref ? (
-            <a
-              href={doc.appHref}
-              className={buttonClasses({ variant: "primary", size: "md" }) + " mt-8"}
-            >
-              Try {doc.name} free
-            </a>
-          ) : null}
-
-          <p className="mt-10">
-            <Link
-              href={routes.platform}
-              className="text-sm text-accent underline underline-offset-4"
-            >
-              ← All platform tools
-            </Link>
-          </p>
+          </Container>
+        </>
+      ) : f.bullets?.length ? (
+        <Container
+          id="details"
+          className="flex flex-col items-center gap-9 py-24"
+        >
+          <SectionHeader
+            eyebrow={f.name}
+            title="What you get"
+            className="mb-0"
+          />
+          <ul className="m-0 grid w-full list-none grid-cols-[repeat(auto-fit,minmax(min(260px,100%),1fr))] gap-3 p-0">
+            {f.bullets.map((b) => (
+              <li key={b} className="rounded-card bg-panel p-6 text-[15px]">
+                {b}
+              </li>
+            ))}
+          </ul>
         </Container>
-      </Section>
-      <FinalCta
-        title={`Try ${doc.name} free`}
-        subtitle="10 free credits on signup. No card required."
-        cta={`Open ${doc.name}`}
-        href={doc.appHref}
+      ) : (
+        <div id="details" className="py-12" />
+      )}
+
+      <FinalCtaBand
+        title={
+          isPreflight
+            ? "Check your next variant before it costs you"
+            : `Try ${f.name} free`
+        }
+        subtitle={`${productFacts.freeCredits} free credits on signup. No card required.`}
+        href={isPreflight ? routes.signup : appHref}
+        secondary={
+          next
+            ? { href: `/platform/${next.slug}`, label: `Next: ${next.name} →` }
+            : { href: routes.platform, label: "All platform steps" }
+        }
       />
     </MarketingShell>
   );

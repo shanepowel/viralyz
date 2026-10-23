@@ -5,13 +5,17 @@ import { routes } from "@/lib/site";
 export function FinalCta({
   title,
   subtitle,
-  cta = "Start free",
+  cta = "Get started free",
   href,
+  secondary,
+  tone,
 }: {
   title: string;
-  subtitle: string;
+  subtitle?: string;
   cta?: string;
   href?: string;
+  secondary?: { href: string; label: string };
+  tone?: "inverse" | "panel";
 }) {
   return (
     <FinalCtaBand
@@ -19,6 +23,8 @@ export function FinalCta({
       subtitle={subtitle}
       cta={cta}
       href={href ?? routes.signup}
+      secondary={secondary}
+      tone={tone}
     />
   );
 }

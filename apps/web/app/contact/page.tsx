@@ -31,7 +31,7 @@ export default function ContactPage() {
           <h1 className="mt-2 font-display text-4xl md:text-5xl font-semibold tracking-tight text-ink">
             Talk to a human.
           </h1>
-          <p className="mt-4 max-w-prose text-ink-secondary leading-relaxed">
+          <p className="mt-4 max-w-prose text-muted leading-relaxed">
             Questions, ideas, press, partnerships or problems. We read
             everything and reply within one working day.
           </p>
@@ -55,7 +55,7 @@ export default function ContactPage() {
                       Email{" "}
                       <a
                         href="mailto:hello@viralyz.com"
-                        className="text-accent underline underline-offset-4"
+                        className="text-ink underline underline-offset-4"
                       >
                         hello@viralyz.com
                       </a>
@@ -70,7 +70,7 @@ export default function ContactPage() {
                       Email{" "}
                       <a
                         href="mailto:partnerships@viralyz.com"
-                        className="text-accent underline underline-offset-4"
+                        className="text-ink underline underline-offset-4"
                       >
                         partnerships@viralyz.com
                       </a>{" "}
@@ -83,7 +83,7 @@ export default function ContactPage() {
                   p: (
                     <>
                       Guides are coming. Until then, use this form or check{" "}
-                      <Link href={routes.pricing} className="text-accent underline underline-offset-4">
+                      <Link href={routes.pricing} className="text-ink underline underline-offset-4">
                         pricing FAQ
                       </Link>
                       .
@@ -91,9 +91,9 @@ export default function ContactPage() {
                   ),
                 },
               ].map((item) => (
-                <Card key={item.h} className="p-5 bg-sunken border-transparent shadow-none">
+                <Card key={item.h} className="p-5 bg-panel border-transparent shadow-none">
                   <h3 className="text-base font-semibold text-ink">{item.h}</h3>
-                  <p className="mt-1 text-sm text-ink-secondary">{item.p}</p>
+                  <p className="mt-1 text-sm text-muted">{item.p}</p>
                 </Card>
               ))}
             </div>

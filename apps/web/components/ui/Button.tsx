@@ -1,35 +1,61 @@
+import Link from "next/link";
 import { cva, type VariantProps } from "class-variance-authority";
 import { cn } from "@/lib/cn";
 
+/** Pill button. Every size keeps a 44px+ touch target. */
 const button = cva(
-  "inline-flex items-center justify-center gap-2 font-medium transition-colors duration-[var(--dur-fast)] ease-out focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2 focus-visible:ring-offset-bg disabled:pointer-events-none disabled:opacity-50",
+  "inline-flex items-center justify-center gap-2 rounded-full font-medium whitespace-nowrap transition-[opacity,background-color,border-color] duration-[var(--vz-dur-fast)] ease-out focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ink disabled:pointer-events-none disabled:opacity-50",
   {
     variants: {
       variant: {
-        primary:
-          "bg-accent text-white hover:bg-accent-hover shadow-sm",
+        primary: "bg-btn text-btn-ink font-semibold hover:opacity-85",
         secondary:
-          "bg-raised text-ink border border-line hover:border-line-strong shadow-sm",
-        ghost: "text-ink-secondary hover:text-ink hover:bg-sunken",
-        link: "text-accent underline underline-offset-4 hover:text-accent-hover p-0 h-auto",
+          "border border-line bg-bg text-ink hover:border-muted",
+        inverse:
+          "bg-inv-ink text-inv font-semibold hover:opacity-90 focus-visible:outline-inv-ink",
+        "inverse-secondary":
+          "border border-inv-line text-inv-ink hover:border-inv-muted focus-visible:outline-inv-ink",
+        ghost: "text-muted hover:bg-panel hover:text-ink",
+        link: "h-auto min-h-0 p-0 text-ink underline underline-offset-4 hover:text-muted",
       },
       size: {
-        sm: "h-9 px-3.5 text-sm rounded-sm",
-        md: "h-11 px-5 text-sm rounded-sm",
-        lg: "h-12 px-6 text-base rounded-md",
+        sm: "min-h-11 px-4 text-[15px]",
+        md: "min-h-11 px-5 text-[15px]",
+        lg: "min-h-13 px-[26px] text-base",
       },
     },
+    compoundVariants: [{ variant: "link", class: "min-h-0 px-0" }],
     defaultVariants: { variant: "primary", size: "md" },
   },
 );
 
-type Props = React.ButtonHTMLAttributes<HTMLButtonElement> &
-  VariantProps<typeof button>;
+type ButtonVariants = VariantProps<typeof button>;
 
-export function Button({ className, variant, size, ...props }: Props) {
+type ButtonProps = React.ButtonHTMLAttributes<HTMLButtonElement> &
+  ButtonVariants;
+
+export function Button({ className, variant, size, ...props }: ButtonProps) {
   return (
     <button className={cn(button({ variant, size }), className)} {...props} />
   );
+}
+
+type ButtonLinkProps = React.AnchorHTMLAttributes<HTMLAnchorElement> &
+  ButtonVariants & { href: string };
+
+/** The same pill rendered as a link. Internal paths use next/link. */
+export function ButtonLink({
+  className,
+  variant,
+  size,
+  href,
+  ...props
+}: ButtonLinkProps) {
+  const classes = cn(button({ variant, size }), className);
+  if (href.startsWith("/") && !href.startsWith("//")) {
+    return <Link href={href} className={classes} {...props} />;
+  }
+  return <a href={href} className={classes} {...props} />;
 }
 
 export const buttonClasses = button;

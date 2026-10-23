@@ -12,16 +12,18 @@ export default function GlobalError({
         style={{
           margin: 0,
           fontFamily: "system-ui, sans-serif",
-          background: "#FBFAF7",
-          color: "#1A1D23",
+          background: "#FFFFFF",
+          color: "#0A0A0A",
           padding: 48,
+          // Global errors render outside the root layout, so tokens.css
+          // isn't loaded: these are the Studio light-theme values.
         }}
       >
-        <p style={{ fontFamily: "monospace", fontSize: 14, opacity: 0.6 }}>
+        <p style={{ fontVariantNumeric: "tabular-nums", fontSize: 14, color: "#5E6166" }}>
           500
         </p>
         <h1 style={{ fontSize: 32, marginTop: 8 }}>Something went wrong.</h1>
-        <p style={{ marginTop: 12, opacity: 0.7 }}>
+        <p style={{ marginTop: 12, color: "#5E6166" }}>
           Reload the page or email hello@viralyz.com.
         </p>
         <button
@@ -29,11 +31,13 @@ export default function GlobalError({
           onClick={reset}
           style={{
             marginTop: 24,
-            padding: "10px 18px",
-            background: "#4F46E5",
-            color: "#fff",
+            minHeight: 44,
+            padding: "0 22px",
+            background: "#0A0A0A",
+            color: "#FFFFFF",
             border: 0,
-            borderRadius: 6,
+            borderRadius: 999,
+            fontWeight: 600,
             cursor: "pointer",
           }}
         >

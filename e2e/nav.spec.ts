@@ -1,22 +1,34 @@
 import { test, expect } from "@playwright/test";
 
-test("desktop mega menu keyboard open/close", async ({ page }) => {
+test("main nav has five links and marks the current page", async ({ page }) => {
   await page.setViewportSize({ width: 1280, height: 800 });
-  await page.goto("/");
+  await page.goto("/pricing");
 
-  const platform = page.getByRole("button", { name: "Platform" });
-  await platform.focus();
-  await page.keyboard.press("Enter");
-  await expect(page.getByRole("link", { name: /Viral Score/i })).toBeVisible();
-  await page.keyboard.press("Escape");
-  await expect(page.getByRole("link", { name: /Viral Score/i })).toBeHidden();
+  const nav = page.getByRole("navigation", { name: "Main" });
+  for (const name of ["Platform", "For sellers", "Pricing", "Trust", "Free tools"]) {
+    await expect(nav.getByRole("link", { name, exact: true })).toBeVisible();
+  }
+  await expect(nav.getByRole("link", { name: "Pricing", exact: true })).toHaveAttribute(
+    "aria-current",
+    "page",
+  );
 });
 
-test("mobile nav opens and traps focus", async ({ page }) => {
+test("mobile nav wraps without horizontal scroll", async ({ page }) => {
   await page.setViewportSize({ width: 390, height: 844 });
   await page.goto("/");
-  await page.getByLabel("Open menu").click();
-  await expect(page.getByRole("dialog")).toBeVisible();
-  await page.keyboard.press("Escape");
-  await expect(page.getByRole("dialog")).toBeHidden();
+  const nav = page.getByRole("navigation", { name: "Main" });
+  await expect(nav.getByRole("link", { name: "Free tools", exact: true })).toBeVisible();
+  const overflow = await page.evaluate(
+    () => document.documentElement.scrollWidth > window.innerWidth,
+  );
+  expect(overflow).toBe(false);
+});
+
+test("theme choice persists across reloads", async ({ page }) => {
+  await page.goto("/");
+  await page.getByRole("radio", { name: "Dark theme" }).click();
+  await expect(page.locator("html")).toHaveAttribute("data-theme", "dark");
+  await page.reload();
+  await expect(page.locator("html")).toHaveAttribute("data-theme", "dark");
 });

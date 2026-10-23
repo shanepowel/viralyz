@@ -50,7 +50,7 @@ export function LegalTemplate({
           {title}
         </h1>
         {lastUpdated ? (
-          <p className="mt-3 text-sm text-ink-tertiary">
+          <p className="mt-3 text-sm text-muted">
             Last updated {lastUpdated}
           </p>
         ) : null}
@@ -61,7 +61,7 @@ export function LegalTemplate({
               aria-label="On this page"
               className="hidden lg:sticky lg:top-24 lg:block lg:self-start"
             >
-              <p className="text-xs font-medium uppercase tracking-wide text-ink-tertiary">
+              <p className="text-xs font-medium uppercase tracking-wide text-muted">
                 On this page
               </p>
               <ul className="mt-3 space-y-2">
@@ -69,7 +69,7 @@ export function LegalTemplate({
                   <li key={h.id}>
                     <a
                       href={`#${h.id}`}
-                      className="text-sm text-ink-secondary hover:text-ink"
+                      className="text-sm text-muted hover:text-ink"
                     >
                       {h.text}
                     </a>
@@ -83,11 +83,11 @@ export function LegalTemplate({
 
           <div>
             {body ? <PortableBody value={body} /> : fallback}
-            <p className="mt-10 text-sm text-ink-secondary">
+            <p className="mt-10 text-sm text-muted">
               Questions:{" "}
               <a
                 href={`mailto:${CONTACT.hello}`}
-                className="text-accent underline underline-offset-4"
+                className="text-ink underline underline-offset-4"
               >
                 {CONTACT.hello}
               </a>

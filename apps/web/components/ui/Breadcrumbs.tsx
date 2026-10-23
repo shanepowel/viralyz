@@ -22,7 +22,7 @@ export function Breadcrumbs({ items }: { items: Crumb[] }) {
     <>
       <JsonLd data={data} />
       <nav aria-label="Breadcrumb" className="mb-4">
-        <ol className="flex flex-wrap items-center gap-1.5 text-sm text-ink-tertiary">
+        <ol className="flex flex-wrap items-center gap-1.5 text-sm text-muted">
           {items.map((item, i) => (
             <li key={`${item.label}-${i}`} className="flex items-center gap-1.5">
               {i > 0 ? <span aria-hidden>/</span> : null}
@@ -31,7 +31,7 @@ export function Breadcrumbs({ items }: { items: Crumb[] }) {
                   {item.label}
                 </Link>
               ) : (
-                <span className="text-ink-secondary">{item.label}</span>
+                <span className="text-muted">{item.label}</span>
               )}
             </li>
           ))}

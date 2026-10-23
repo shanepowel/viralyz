@@ -7,7 +7,10 @@ export function Container({
 }: React.HTMLAttributes<HTMLDivElement>) {
   return (
     <div
-      className={cn("mx-auto w-full max-w-container px-4 md:px-6", className)}
+      className={cn(
+        "mx-auto w-full max-w-site px-[clamp(16px,4vw,40px)]",
+        className,
+      )}
       {...props}
     >
       {children}

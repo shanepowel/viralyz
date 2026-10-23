@@ -31,7 +31,7 @@ export default function TrustPage() {
           <h1 className="mt-3 font-display text-4xl font-semibold tracking-tight md:text-5xl">
             How we handle your data
           </h1>
-          <p className="mt-4 max-w-prose text-base leading-relaxed text-ink-secondary">
+          <p className="mt-4 max-w-prose text-base leading-relaxed text-muted">
             Short version: public ad-library data and your own uploads only,
             you can export or delete anytime, and we say where data lives.
           </p>
@@ -41,7 +41,7 @@ export default function TrustPage() {
               <h2 className="font-display text-2xl font-semibold tracking-tight">
                 Public ad libraries, your own store and exports
               </h2>
-              <p className="mt-3 text-ink-secondary leading-relaxed">
+              <p className="mt-3 text-muted leading-relaxed">
                 Discover reads from Meta&apos;s and TikTok&apos;s own public
                 ad libraries — no scraping, no account access. Brand import
                 reads only the store URL you give us, through a fetch layer
@@ -53,7 +53,7 @@ export default function TrustPage() {
               <h2 className="font-display text-2xl font-semibold tracking-tight">
                 Export and delete anytime
               </h2>
-              <p className="mt-3 text-ink-secondary leading-relaxed">
+              <p className="mt-3 text-muted leading-relaxed">
                 Your brand, generated creative, and performance imports stay
                 under your control. You can export your data or delete your
                 account from settings.
@@ -63,19 +63,19 @@ export default function TrustPage() {
               <h2 className="font-display text-2xl font-semibold tracking-tight">
                 Where data is hosted
               </h2>
-              <p className="mt-3 text-ink-secondary leading-relaxed">
+              <p className="mt-3 text-muted leading-relaxed">
                 Application data is hosted in the EU / UK on infrastructure
                 operated for Digiteq Holdings Limited. Details live in our{" "}
                 <Link
                   href={routes.privacy}
-                  className="text-accent underline underline-offset-4"
+                  className="text-ink underline underline-offset-4"
                 >
                   privacy policy
                 </Link>
                 . Questions:{" "}
                 <a
                   href={`mailto:${CONTACT.hello}`}
-                  className="text-accent underline underline-offset-4"
+                  className="text-ink underline underline-offset-4"
                 >
                   {CONTACT.hello}
                 </a>

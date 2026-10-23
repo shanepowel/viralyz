@@ -109,7 +109,7 @@ export default async function BlogPage({
           <h1 className="mt-3 font-display text-4xl font-semibold tracking-tight md:text-5xl">
             What the scores are telling us.
           </h1>
-          <p className="mt-4 max-w-prose text-base leading-relaxed text-ink-secondary">
+          <p className="mt-4 max-w-prose text-base leading-relaxed text-muted">
             Teardowns of viral videos and honest pricing data.
           </p>
         </Container>
@@ -121,7 +121,7 @@ export default async function BlogPage({
             <Link href={`/blog/${featured.slug}`} className="mb-12 block">
               <Card hoverable className="overflow-hidden p-0">
                 <div className="grid lg:grid-cols-[1.2fr_0.8fr]">
-                  <div className="relative min-h-56 bg-sunken">
+                  <div className="relative min-h-56 bg-panel">
                     {featured.coverImage ? (
                       <SanityImage
                         value={featured.coverImage as never}
@@ -132,10 +132,10 @@ export default async function BlogPage({
                         sizes="(max-width: 1024px) 100vw, 60vw"
                       />
                     ) : (
-                      <div className="flex h-full min-h-56 items-center justify-center bg-accent-soft" />
+                      <div className="flex h-full min-h-56 items-center justify-center bg-panel" />
                     )}
                     {typeof featured.score === "number" ? (
-                      <div className="absolute bottom-3 right-3 rounded-full bg-raised/90 p-1 shadow-sm">
+                      <div className="absolute bottom-3 right-3 rounded-full bg-card/90 p-1">
                         <ScoreRing
                           value={featured.score}
                           size={56}
@@ -145,16 +145,16 @@ export default async function BlogPage({
                     ) : null}
                   </div>
                   <div className="flex flex-col justify-center p-6 md:p-8">
-                    <p className="text-sm text-ink-tertiary">
+                    <p className="text-sm text-muted">
                       {featured.category?.title ?? "Post"}
                     </p>
                     <h2 className="mt-2 font-display text-2xl font-semibold tracking-tight md:text-3xl">
                       {featured.title}
                     </h2>
-                    <p className="mt-3 text-ink-secondary leading-relaxed">
+                    <p className="mt-3 text-muted leading-relaxed">
                       {featured.excerpt}
                     </p>
-                    <p className="mt-4 text-sm text-ink-tertiary">
+                    <p className="mt-4 text-sm text-muted">
                       {featured.author?.name ? `${featured.author.name} · ` : ""}
                       {formatPostDate(featured.publishedAt)}
                       {featured.readingTime
@@ -171,10 +171,10 @@ export default async function BlogPage({
             <Link
               href="/blog"
               className={cn(
-                "rounded-sm px-3 py-2 text-sm transition-colors",
+                "rounded-inner px-3 py-2 text-sm transition-colors",
                 !category
-                  ? "bg-sunken font-medium text-ink"
-                  : "text-ink-secondary hover:bg-sunken hover:text-ink",
+                  ? "bg-panel font-medium text-ink"
+                  : "text-muted hover:bg-panel hover:text-ink",
               )}
             >
               All
@@ -184,10 +184,10 @@ export default async function BlogPage({
                 key={c.slug}
                 href={`/blog?category=${c.slug}`}
                 className={cn(
-                  "rounded-sm px-3 py-2 text-sm transition-colors",
+                  "rounded-inner px-3 py-2 text-sm transition-colors",
                   category === c.slug
-                    ? "bg-sunken font-medium text-ink"
-                    : "text-ink-secondary hover:bg-sunken hover:text-ink",
+                    ? "bg-panel font-medium text-ink"
+                    : "text-muted hover:bg-panel hover:text-ink",
                 )}
               >
                 {c.title}
@@ -206,18 +206,18 @@ export default async function BlogPage({
               {grid.map((post) => (
                 <Link key={post._id} href={`/blog/${post.slug}`}>
                   <Card hoverable className="h-full overflow-hidden p-0">
-                    <div className="relative aspect-video overflow-hidden bg-sunken">
+                    <div className="relative aspect-video overflow-hidden bg-panel">
                       {post.coverImage ? (
                         <SanityImage
                           value={post.coverImage as never}
                           width={800}
                           height={450}
-                          className="transition-transform duration-[var(--dur-med)] ease-out motion-safe:group-hover:scale-105 [&_img]:h-full [&_img]:object-cover"
+                          className="transition-transform duration-[var(--vz-dur-med)] ease-out motion-safe:group-hover:scale-105 [&_img]:h-full [&_img]:object-cover"
                           sizes="(max-width: 768px) 100vw, 33vw"
                         />
                       ) : null}
                       {typeof post.score === "number" ? (
-                        <div className="absolute bottom-2 right-2 rounded-full bg-raised/90 p-0.5 shadow-sm">
+                        <div className="absolute bottom-2 right-2 rounded-full bg-card/90 p-0.5">
                           <ScoreRing
                             value={post.score}
                             size={40}
@@ -227,16 +227,16 @@ export default async function BlogPage({
                       ) : null}
                     </div>
                     <div className="p-5">
-                      <p className="text-sm text-ink-tertiary">
+                      <p className="text-sm text-muted">
                         {post.category?.title}
                       </p>
                       <h3 className="mt-1 text-lg font-semibold text-ink line-clamp-2">
                         {post.title}
                       </h3>
-                      <p className="mt-2 line-clamp-2 text-sm leading-relaxed text-ink-secondary">
+                      <p className="mt-2 line-clamp-2 text-sm leading-relaxed text-muted">
                         {post.excerpt}
                       </p>
-                      <p className="mt-3 text-sm text-ink-tertiary">
+                      <p className="mt-3 text-sm text-muted">
                         {formatPostDate(post.publishedAt)}
                         {post.readingTime ? (
                           <>
@@ -257,7 +257,7 @@ export default async function BlogPage({
               {page > 1 ? (
                 <Link
                   href={`/blog?${category ? `category=${category}&` : ""}page=${page - 1}`}
-                  className="text-sm text-accent underline underline-offset-4"
+                  className="text-sm text-ink underline underline-offset-4"
                 >
                   Previous
                 </Link>
@@ -265,7 +265,7 @@ export default async function BlogPage({
               {start + PAGE_SIZE < total ? (
                 <Link
                   href={`/blog?${category ? `category=${category}&` : ""}page=${page + 1}`}
-                  className="text-sm text-accent underline underline-offset-4"
+                  className="text-sm text-ink underline underline-offset-4"
                 >
                   Next
                 </Link>

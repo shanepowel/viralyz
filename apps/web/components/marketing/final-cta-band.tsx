@@ -1,48 +1,68 @@
 "use client";
 
-import Link from "next/link";
-import { buttonClasses } from "@/components/ui/Button";
+import { ButtonLink } from "@/components/ui/Button";
 import { cn } from "@/lib/cn";
 import { track } from "@/lib/analytics";
 import { routes } from "@/lib/site";
 
+/**
+ * Closing call to action. Inverse (black) by default — a page's one inverse
+ * panel. Use tone="panel" on a page whose inverse moment is elsewhere.
+ */
 export function FinalCtaBand({
   title,
   subtitle,
-  cta = "Start free",
+  cta = "Get started free",
   href = routes.signup,
   secondary,
+  tone = "inverse",
 }: {
   title: string;
-  subtitle: string;
+  subtitle?: string;
   cta?: string;
   href?: string;
   secondary?: { href: string; label: string };
+  tone?: "inverse" | "panel";
 }) {
+  const inverse = tone === "inverse";
   return (
-    <section className="bg-sunken py-16 md:py-24">
-      <div className="mx-auto max-w-container px-4 text-center md:px-6">
-        <h2 className="font-display text-2xl md:text-3xl font-semibold tracking-tight text-ink">
+    <section className="px-[clamp(12px,2vw,24px)] pb-6">
+      <div
+        className={cn(
+          "mx-auto flex max-w-wide flex-col items-center gap-5 rounded-panel px-[clamp(20px,5vw,72px)] py-[clamp(48px,7vw,96px)] text-center",
+          inverse ? "bg-inv text-inv-ink" : "bg-panel text-ink",
+        )}
+      >
+        <h2 className="m-0 max-w-[860px] font-display text-[clamp(34px,4.6vw,56px)]">
           {title}
         </h2>
-        <p className="mx-auto mt-3 max-w-prose text-base text-ink-secondary leading-relaxed">
-          {subtitle}
-        </p>
-        <div className="mt-8 flex flex-wrap items-center justify-center gap-3">
-          <a
+        {subtitle ? (
+          <p
+            className={cn(
+              "m-0 max-w-[600px]",
+              inverse ? "text-inv-muted" : "text-muted",
+            )}
+          >
+            {subtitle}
+          </p>
+        ) : null}
+        <div className="flex flex-wrap justify-center gap-2.5">
+          <ButtonLink
             href={href}
-            className={cn(buttonClasses({ variant: "primary", size: "lg" }))}
+            size="lg"
+            variant={inverse ? "inverse" : "primary"}
             onClick={() => track("cta_start_free", { location: "section" })}
           >
             {cta}
-          </a>
+          </ButtonLink>
           {secondary ? (
-            <Link
+            <ButtonLink
               href={secondary.href}
-              className={buttonClasses({ variant: "secondary", size: "lg" })}
+              size="lg"
+              variant={inverse ? "inverse-secondary" : "secondary"}
             >
               {secondary.label}
-            </Link>
+            </ButtonLink>
           ) : null}
         </div>
       </div>

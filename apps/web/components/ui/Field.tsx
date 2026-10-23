@@ -8,7 +8,7 @@ export function Input({
   return (
     <input
       className={cn(
-        "h-11 w-full rounded-sm border border-line bg-raised px-3.5 text-sm text-ink placeholder:text-ink-tertiary shadow-sm transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2 focus-visible:ring-offset-bg disabled:opacity-50",
+        "h-11 w-full rounded-inner border border-line bg-card px-3.5 text-sm text-ink placeholder:text-muted transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ink focus-visible:ring-offset-2 focus-visible:ring-offset-bg disabled:opacity-50",
         className,
       )}
       {...props}
@@ -23,7 +23,7 @@ export function Textarea({
   return (
     <textarea
       className={cn(
-        "min-h-28 w-full rounded-sm border border-line bg-raised px-3.5 py-2.5 text-sm text-ink placeholder:text-ink-tertiary shadow-sm transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2 focus-visible:ring-offset-bg disabled:opacity-50",
+        "min-h-28 w-full rounded-inner border border-line bg-card px-3.5 py-2.5 text-sm text-ink placeholder:text-muted transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ink focus-visible:ring-offset-2 focus-visible:ring-offset-bg disabled:opacity-50",
         className,
       )}
       {...props}
@@ -68,7 +68,7 @@ export function Field({
     <div className="space-y-1.5">
       <Label htmlFor={id}>{label}</Label>
       {description ? (
-        <p id={descId} className="text-sm text-ink-tertiary">
+        <p id={descId} className="text-sm text-muted">
           {description}
         </p>
       ) : null}
@@ -80,7 +80,7 @@ export function Field({
           })
         : children}
       {error ? (
-        <p id={errId} className="text-sm text-score-low" role="alert">
+        <p id={errId} className="text-sm text-fail" role="alert">
           {error}
         </p>
       ) : null}
