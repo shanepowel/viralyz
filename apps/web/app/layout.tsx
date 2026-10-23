@@ -1,12 +1,11 @@
 import type { Metadata, Viewport } from "next";
-import type { CSSProperties } from "react";
 import { draftMode } from "next/headers";
 import { VisualEditing } from "next-sanity/visual-editing";
 import { APP_DESCRIPTION, APP_NAME, APP_TAGLINE } from "@repo/config";
 import { ThemeProvider } from "@/components/theme-provider";
 import { JsonLd } from "@/components/seo/JsonLd";
 import { SanityLive } from "@/sanity/lib/live";
-import { display, mono, sans } from "@/app/fonts";
+import { archivo } from "@/app/fonts";
 import { SITE_URL } from "@/lib/site";
 import "./globals.css";
 
@@ -29,8 +28,8 @@ export const metadata: Metadata = {
 
 export const viewport: Viewport = {
   themeColor: [
-    { media: "(prefers-color-scheme: light)", color: "#FBFAF7" },
-    { media: "(prefers-color-scheme: dark)", color: "#16181D" },
+    { media: "(prefers-color-scheme: light)", color: "#FFFFFF" },
+    { media: "(prefers-color-scheme: dark)", color: "#0A0A0B" },
   ],
   colorScheme: "light dark",
 };
@@ -57,18 +56,9 @@ export default async function RootLayout({
     <html
       lang="en"
       suppressHydrationWarning
-      className={`${display.variable} ${sans.variable} ${mono.variable}`}
+      className={archivo.variable}
     >
-      <body
-        className="antialiased"
-        style={
-          {
-            ["--font-sans"]: "var(--font-sans)",
-            ["--font-display"]: "var(--font-display)",
-            ["--font-mono"]: "var(--font-mono)",
-          } as CSSProperties
-        }
-      >
+      <body className="antialiased">
         <ThemeProvider>
           <JsonLd data={orgLd} />
           {children}

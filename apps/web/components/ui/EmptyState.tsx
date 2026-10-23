@@ -16,12 +16,12 @@ export function EmptyState({
   return (
     <div
       className={cn(
-        "rounded-md border border-line bg-raised p-8 text-center shadow-sm",
+        "rounded-inner border border-line bg-card p-8 text-center",
         className,
       )}
     >
       <h3 className="text-lg font-semibold text-ink">{heading}</h3>
-      <p className="mt-2 text-sm text-ink-secondary leading-relaxed max-w-md mx-auto">
+      <p className="mt-2 text-sm text-muted leading-relaxed max-w-md mx-auto">
         {body}
       </p>
       {action ? (

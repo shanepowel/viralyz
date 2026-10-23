@@ -48,14 +48,14 @@ export function ThumbnailChecker() {
                   height: s.h,
                   objectFit: "cover",
                   borderRadius: 8,
-                  border: "1px solid var(--line)",
+                  border: "1px solid var(--vz-line)",
                 }}
               />
               <figcaption
                 style={{
                   marginTop: 6,
                   fontSize: 12,
-                  color: "var(--ink-3)",
+                  color: "var(--vz-muted)",
                 }}
               >
                 {s.label} · {s.w}×{s.h}
@@ -64,7 +64,7 @@ export function ThumbnailChecker() {
           ))}
         </div>
       ) : null}
-      <p style={{ marginTop: 16, fontSize: 14, color: "var(--ink-2)" }}>
+      <p style={{ marginTop: 16, fontSize: 14, color: "var(--vz-muted)" }}>
         If you cannot read it at these sizes, neither can anyone else.
       </p>
     </div>

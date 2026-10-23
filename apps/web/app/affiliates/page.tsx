@@ -24,7 +24,7 @@ export default function AffiliatesPage() {
           <h1 className="mt-3 font-display text-4xl font-semibold tracking-tight md:text-5xl">
             Affiliate program launching soon
           </h1>
-          <p className="mt-4 max-w-prose text-base leading-relaxed text-ink-secondary">
+          <p className="mt-4 max-w-prose text-base leading-relaxed text-muted">
             We are defining commission terms before we open applications. Email
             us if you want on the list — no vague promises in the meantime.
           </p>

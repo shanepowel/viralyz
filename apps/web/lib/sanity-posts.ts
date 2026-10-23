@@ -66,7 +66,7 @@ export async function fetchPostsFromSanity(): Promise<BlogPost[]> {
     ...r,
     coverGradient: r.coverGradient
       ? `center / cover url(${r.coverGradient})`
-      : "linear-gradient(135deg,#6C4CF1,#3D2A9E)",
+      : "var(--vz-panel)",
     readMinutes: 5,
     bodyHtml: [],
   }));
@@ -114,7 +114,7 @@ export async function fetchPostBySlugFromSanity(
     scoreBadge: row.scoreBadge,
     coverGradient: row.coverGradient
       ? `center / cover url(${row.coverGradient})`
-      : "linear-gradient(135deg,#6C4CF1,#3D2A9E)",
+      : "var(--vz-panel)",
     category: row.category,
     readMinutes: Math.max(
       3,

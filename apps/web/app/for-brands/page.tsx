@@ -100,10 +100,10 @@ export default function ForBrandsPage() {
               </div>
             ))}
           </div>
-          <div style={{ marginTop: 28 }}>
+          <div className="hero-actions" style={{ marginTop: 28 }}>
             <a href={routes.signup} className="btn btn-primary">
               Start free with 10 credits
-            </a>{" "}
+            </a>
             <Link href={routes.contact} className="btn btn-ghost">
               Talk to sales
             </Link>

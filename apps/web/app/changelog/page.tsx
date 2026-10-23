@@ -33,7 +33,7 @@ export default async function ChangelogPage() {
           <h1 className="mt-3 font-display text-4xl font-semibold tracking-tight md:text-5xl">
             Changelog
           </h1>
-          <p className="mt-4 max-w-prose text-base leading-relaxed text-ink-secondary">
+          <p className="mt-4 max-w-prose text-base leading-relaxed text-muted">
             Dated notes from shipping. Same source as our product-news posts.
           </p>
 
@@ -49,21 +49,21 @@ export default async function ChangelogPage() {
                 {posts.map((post) => (
                   <li key={post._id} className="relative">
                     <span
-                      className="absolute -left-[1.65rem] top-1.5 h-2.5 w-2.5 rounded-full bg-accent"
+                      className="absolute -left-[1.65rem] top-1.5 h-2.5 w-2.5 rounded-full bg-btn"
                       aria-hidden
                     />
-                    <p className="text-sm text-ink-tertiary">
+                    <p className="text-sm text-muted">
                       {formatPostDate(post.publishedAt)}
                     </p>
                     <h2 className="mt-1 text-lg font-semibold text-ink">
                       <Link
                         href={`/blog/${post.slug}`}
-                        className="hover:text-accent"
+                        className="hover:text-muted"
                       >
                         {post.title}
                       </Link>
                     </h2>
-                    <p className="mt-2 text-sm leading-relaxed text-ink-secondary">
+                    <p className="mt-2 text-sm leading-relaxed text-muted">
                       {post.excerpt}
                     </p>
                   </li>

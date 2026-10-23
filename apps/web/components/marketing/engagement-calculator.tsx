@@ -15,17 +15,9 @@ export function EngagementCalculator() {
     const l = Number(likes) || 0;
     const c = Number(comments) || 0;
     if (!f || f < 1) {
-      return { pct: "0.0%", label: "Enter your numbers above", color: "var(--ink)" };
+      return { pct: "0.0%", label: "Enter your numbers above" };
     }
     const r = ((l + c) / f) * 100;
-    const color =
-      r >= 6
-        ? "var(--s90)"
-        : r >= 3
-          ? "var(--s70)"
-          : r >= 1
-            ? "var(--s50)"
-            : "var(--s30)";
     const label =
       r >= 6
         ? "Excellent. Well above average."
@@ -34,7 +26,7 @@ export function EngagementCalculator() {
           : r >= 1
             ? "Typical. Most accounts sit here."
             : "Below average. Worth investigating.";
-    return { pct: `${r.toFixed(1)}%`, label, color };
+    return { pct: `${r.toFixed(1)}%`, label };
   }, [followers, likes, comments]);
 
   return (
@@ -68,7 +60,7 @@ export function EngagementCalculator() {
       />
       <div className="calc-out">
         <div>
-          <div className="co-num" style={{ color: result.color }}>
+          <div className="co-num">
             {result.pct}
           </div>
           <div className="co-lab">{result.label}</div>

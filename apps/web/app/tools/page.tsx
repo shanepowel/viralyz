@@ -51,11 +51,11 @@ export default function ToolsPage() {
             <h2>Engagement rate calculator</h2>
           </div>
           <EngagementCalculator />
-          <p style={{ marginTop: 16, fontSize: 13.5, color: "var(--ink-3)" }}>
+          <p style={{ marginTop: 16, fontSize: 13.5, color: "var(--vz-muted)" }}>
             Want the full product?{" "}
             <Link
               href={routes.signup}
-              style={{ color: "var(--violet-deep)", fontWeight: 600 }}
+              style={{ color: "var(--vz-ink)", fontWeight: 600 }}
             >
               Start free
             </Link>

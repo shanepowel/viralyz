@@ -8,7 +8,7 @@ export function Num({
   className?: string;
 }) {
   return (
-    <span className={cn("font-mono tabular-nums tracking-tight", className)}>
+    <span className={cn("tabular tabular-nums tracking-tight", className)}>
       {children}
     </span>
   );

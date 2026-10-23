@@ -158,10 +158,10 @@ export default async function BlogPostPage({
               <h1 className="mt-3 font-display text-4xl font-semibold tracking-tight md:text-5xl">
                 {post.title}
               </h1>
-              <p className="mt-4 text-base leading-relaxed text-ink-secondary">
+              <p className="mt-4 text-base leading-relaxed text-muted">
                 {post.excerpt}
               </p>
-              <p className="mt-3 text-sm text-ink-tertiary">
+              <p className="mt-3 text-sm text-muted">
                 {formatPostDate(post.publishedAt)}
                 {post.readingTime ? (
                   <>
@@ -174,7 +174,7 @@ export default async function BlogPostPage({
             </div>
 
             {post.coverImage ? (
-              <div className="mt-10 overflow-hidden rounded-lg">
+              <div className="mt-10 overflow-hidden rounded-card">
                 <SanityImage
                   value={post.coverImage as never}
                   width={1600}
@@ -196,11 +196,11 @@ export default async function BlogPostPage({
               <PortableBody value={post.body} />
             </div>
 
-            <div className="mt-12 max-w-prose rounded-md border border-line bg-raised p-5 shadow-sm">
+            <div className="mt-12 max-w-prose rounded-inner border border-line bg-card p-5">
               <p className="text-sm font-medium text-ink">
                 {post.author?.name ?? "Viralyz Team"}
               </p>
-              <p className="mt-1 text-sm text-ink-secondary">
+              <p className="mt-1 text-sm text-muted">
                 {post.author?.bio ??
                   "Editorial notes from scoring real creator content."}
               </p>
@@ -209,7 +209,7 @@ export default async function BlogPostPage({
             <p className="mt-10">
               <Link
                 href={routes.blog}
-                className="text-sm text-accent underline underline-offset-4"
+                className="text-sm text-ink underline underline-offset-4"
               >
                 ← All posts
               </Link>

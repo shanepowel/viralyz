@@ -17,7 +17,7 @@ export function Section({
       id={id}
       className={cn(
         "py-16 md:py-24",
-        tone === "sunken" && "bg-sunken",
+        tone === "sunken" && "bg-panel",
         className,
       )}
       {...props}

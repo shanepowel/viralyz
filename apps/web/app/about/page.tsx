@@ -31,7 +31,7 @@ export default function AboutPage() {
           <h1 className="mt-3 font-display text-4xl font-semibold tracking-tight md:text-5xl">
             Sellers deserve to know, not guess.
           </h1>
-          <p className="mt-4 max-w-prose text-base leading-relaxed text-ink-secondary">
+          <p className="mt-4 max-w-prose text-base leading-relaxed text-muted">
             Viralyz exists because spending ad budget on creative that gets
             rejected or ignored should not feel like a lottery ticket.
           </p>
@@ -40,7 +40,7 @@ export default function AboutPage() {
 
       <Section tone="default" className="pt-0">
         <Container>
-          <div className="max-w-2xl space-y-5 text-base leading-relaxed text-ink-secondary">
+          <div className="max-w-2xl space-y-5 text-base leading-relaxed text-muted">
             <p>
               Sellers run ad creative every day on money they cannot get back.
               A variant that took real spend to test can fail because of poor
@@ -69,9 +69,9 @@ export default function AboutPage() {
             </p>
           </div>
 
-          <div className="mt-12 rounded-md border border-line bg-raised p-6 shadow-sm md:flex md:gap-5">
+          <div className="mt-12 rounded-inner border border-line bg-card p-6 md:flex md:gap-5">
             <div
-              className="mb-4 flex h-12 w-12 shrink-0 items-center justify-center rounded-md bg-accent-soft font-display text-lg font-semibold text-accent md:mb-0"
+              className="mb-4 flex h-12 w-12 shrink-0 items-center justify-center rounded-inner bg-panel font-display text-lg font-semibold text-ink md:mb-0"
               aria-hidden
             >
               D
@@ -80,24 +80,24 @@ export default function AboutPage() {
               <h2 className="text-lg font-semibold text-ink">
                 Viralyz is a Digiteq company
               </h2>
-              <p className="mt-2 text-sm leading-relaxed text-ink-secondary">
+              <p className="mt-2 text-sm leading-relaxed text-muted">
                 {COMPANY.legalName} (company number {COMPANY.number}) is a UK
                 company that builds and grows digital products. Viralyz is built
                 and operated by Digiteq from {COMPANY.location}. Sister products
                 include BMKRS, FreelanceNearMe, Konduit and three18media.
               </p>
-              <p className="mt-3 text-sm text-ink-secondary">
+              <p className="mt-3 text-sm text-muted">
                 Contact:{" "}
                 <a
                   href={`mailto:${CONTACT.hello}`}
-                  className="text-accent underline underline-offset-4"
+                  className="text-ink underline underline-offset-4"
                 >
                   {CONTACT.hello}
                 </a>
                 {" · "}
                 <Link
                   href={routes.trust}
-                  className="text-accent underline underline-offset-4"
+                  className="text-ink underline underline-offset-4"
                 >
                   Trust &amp; data
                 </Link>
@@ -122,7 +122,7 @@ export default function AboutPage() {
             ].map((v) => (
               <div key={v.title}>
                 <h3 className="text-lg font-semibold text-ink">{v.title}</h3>
-                <p className="mt-2 text-sm leading-relaxed text-ink-secondary">
+                <p className="mt-2 text-sm leading-relaxed text-muted">
                   {v.body}
                 </p>
               </div>

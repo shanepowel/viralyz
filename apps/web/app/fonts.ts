@@ -1,25 +1,9 @@
-import {
-  Bricolage_Grotesque,
-  Inter,
-  JetBrains_Mono,
-} from "next/font/google";
+import { Archivo } from "next/font/google";
 
-export const display = Bricolage_Grotesque({
+/** Archivo, variable with a width axis — the only family on the site. */
+export const archivo = Archivo({
   subsets: ["latin"],
-  variable: "--font-display",
+  axes: ["wdth"],
+  variable: "--font-archivo",
   display: "swap",
-  weight: ["500", "600", "700"],
-});
-
-export const sans = Inter({
-  subsets: ["latin"],
-  variable: "--font-sans",
-  display: "swap",
-});
-
-export const mono = JetBrains_Mono({
-  subsets: ["latin"],
-  variable: "--font-mono",
-  display: "swap",
-  weight: ["400", "500", "600"],
 });

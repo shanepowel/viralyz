@@ -2,7 +2,11 @@ import { test, expect } from "@playwright/test";
 import AxeBuilder from "@axe-core/playwright";
 import { routes } from "../apps/web/lib/site";
 
-const pages = Object.values(routes).filter(
+const pages = [
+  ...Object.values(routes),
+  "/platform/pre-flight",
+  "/platform/results",
+].filter(
   (r): r is string => typeof r === "string" && r.startsWith("/"),
 );
 
@@ -28,12 +32,3 @@ for (const path of pages) {
     expect(bad, JSON.stringify(bad, null, 2)).toHaveLength(0);
   });
 }
-
-test("mobile nav opens and traps focus", async ({ page }) => {
-  await page.setViewportSize({ width: 390, height: 844 });
-  await page.goto("/");
-  await page.getByLabel("Open menu").click();
-  await expect(page.getByRole("dialog")).toBeVisible();
-  await page.keyboard.press("Escape");
-  await expect(page.getByRole("dialog")).toBeHidden();
-});

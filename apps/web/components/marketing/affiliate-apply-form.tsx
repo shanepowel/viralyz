@@ -47,7 +47,7 @@ export function AffiliateApplyForm() {
         <p className="fine">
           You earn 30% of paid plan revenue for 12 months on every signup that
           converts. Payouts open once Stripe Connect is live.{" "}
-          <a href={appUrl} style={{ color: "var(--violet-deep)" }}>
+          <a href={appUrl} style={{ color: "var(--vz-ink)" }}>
             Open the app
           </a>{" "}
           to keep scoring.

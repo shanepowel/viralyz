@@ -2,7 +2,7 @@ import Image from "next/image";
 import { urlFor } from "@/sanity/lib/image";
 import { cn } from "@/lib/cn";
 
-type SanityImageValue = {
+export type SanityImageValue = {
   asset?: {
     _id?: string;
     url?: string;
@@ -55,7 +55,7 @@ export function SanityImage({
         blurDataURL={value.asset.metadata?.lqip}
       />
       {value.caption ? (
-        <figcaption className="mt-2 text-sm text-ink-tertiary">
+        <figcaption className="mt-2 text-sm text-muted">
           {value.caption}
         </figcaption>
       ) : null}

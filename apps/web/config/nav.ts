@@ -1,152 +1,18 @@
-import {
-  BarChart3,
-  BookOpen,
-  Compass,
-  Info,
-  Palette,
-  Plug,
-  ShieldCheck,
-  Sparkles,
-  Wrench,
-  type LucideIcon,
-} from "lucide-react";
 import { routes } from "@/lib/site";
-import { flags } from "@/lib/flags";
+import { features } from "@/data/features";
 
 export type NavLink = {
   label: string;
-  desc?: string;
   href: string;
-  external?: boolean;
-  icon?: LucideIcon;
-};
-export type NavGroup = { heading: string; links: NavLink[] };
-export type NavSection = {
-  label: string;
-  href: string;
-  groups?: NavGroup[];
 };
 
-export const mainNav: NavSection[] = [
-  {
-    label: "Platform",
-    href: routes.platform,
-    groups: [
-      {
-        heading: "Plan",
-        links: [
-          {
-            label: "Discover",
-            desc: "Real running ads in your category",
-            href: "/platform/discover",
-            icon: Compass,
-          },
-          {
-            label: "Brand",
-            desc: "Colors, logo, and voice — set once",
-            href: "/platform/brand",
-            icon: Palette,
-          },
-        ],
-      },
-      {
-        heading: "Generate & ship",
-        links: [
-          {
-            label: "Studio",
-            desc: "On-brand variants against a reference angle",
-            href: "/platform/studio",
-            icon: Sparkles,
-          },
-          {
-            label: "Pre-flight",
-            desc: "Caught before you spend, not after",
-            href: "/platform/pre-flight",
-            icon: ShieldCheck,
-          },
-          {
-            label: "Results",
-            desc: "Real spend data vs pre-flight predictions",
-            href: "/platform/results",
-            icon: BarChart3,
-          },
-        ],
-      },
-    ],
-  },
-  {
-    label: "For sellers",
-    href: routes.forBrands,
-    groups: [
-      {
-        heading: "How it works",
-        links: [
-          {
-            label: "The five-step loop",
-            desc: "Discover, Brand, Studio, Pre-flight, Results",
-            href: `${routes.forBrands}#how-it-works`,
-            icon: Compass,
-          },
-          {
-            label: "Talk to sales",
-            desc: "Book a walkthrough for your team",
-            href: routes.contact,
-            icon: Info,
-          },
-        ],
-      },
-    ],
-  },
-  {
-    label: "Resources",
-    href: routes.blog,
-    groups: [
-      {
-        heading: "Learn",
-        links: [
-          {
-            label: "Blog",
-            desc: "Teardowns and honest performance data",
-            href: routes.blog,
-            icon: BookOpen,
-          },
-          {
-            label: "Free tools",
-            desc: "Calculators and checkers, no signup",
-            href: routes.tools,
-            icon: Wrench,
-          },
-          {
-            label: "About Viralyz",
-            desc: "What we build and why",
-            href: routes.about,
-            icon: Info,
-          },
-          ...(flags.helpCenterLive
-            ? [
-                {
-                  label: "Help center",
-                  desc: "Guides and how-tos",
-                  href: "/help",
-                  icon: Info,
-                } satisfies NavLink,
-              ]
-            : []),
-          ...(flags.apiDocsLive
-            ? [
-                {
-                  label: "API docs",
-                  desc: "Pull results into your own tools",
-                  href: "/docs/api",
-                  icon: Plug,
-                } satisfies NavLink,
-              ]
-            : []),
-        ],
-      },
-    ],
-  },
+/** The five links in the centre of the site nav. */
+export const mainNav: NavLink[] = [
+  { label: "Platform", href: routes.platform },
+  { label: "For sellers", href: routes.forBrands },
   { label: "Pricing", href: routes.pricing },
+  { label: "Trust", href: routes.trust },
+  { label: "Free tools", href: routes.tools },
 ];
 
 export type FooterColumn = {
@@ -154,35 +20,36 @@ export type FooterColumn = {
   links: NavLink[];
 };
 
-export const footerExtras: FooterColumn[] = [
+export const footerColumns: FooterColumn[] = [
+  {
+    heading: "Platform",
+    links: [
+      { label: "Overview", href: routes.platform },
+      ...features.map((f) => ({ label: f.name, href: `/platform/${f.slug}` })),
+    ],
+  },
   {
     heading: "Company",
     links: [
       { label: "About", href: routes.about },
-      { label: "Trust & data", href: routes.trust },
+      { label: "For sellers", href: routes.forBrands },
+      { label: "Trust", href: routes.trust },
+      { label: "Blog", href: routes.blog },
+      { label: "Free tools", href: routes.tools },
+      { label: "Pricing", href: routes.pricing },
       { label: "Changelog", href: routes.changelog },
-      // Affiliates omitted until program terms are live (v3 4.3)
       { label: "Contact", href: routes.contact },
-      { label: "Privacy", href: routes.privacy },
+    ],
+  },
+  {
+    heading: "Legal",
+    links: [
       { label: "Terms", href: routes.terms },
+      { label: "Privacy", href: routes.privacy },
       { label: "Cookies", href: routes.cookies },
     ],
   },
 ];
-
-export function getFooterColumns(): FooterColumn[] {
-  const fromNav: FooterColumn[] = mainNav
-    .filter((s) => s.groups?.length)
-    .map((section) => ({
-      heading: section.label,
-      links: [
-        { label: `${section.label} overview`, href: section.href },
-        ...(section.groups?.flatMap((g) => g.links) ?? []),
-      ],
-    }));
-
-  return [...fromNav, ...footerExtras];
-}
 
 export const chromeLinks = {
   signIn: routes.login,

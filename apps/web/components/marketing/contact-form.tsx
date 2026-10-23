@@ -28,9 +28,9 @@ export function ContactForm() {
 
   if (state.ok) {
     return (
-      <div className="rounded-md border border-line bg-raised p-8 shadow-sm">
+      <div className="rounded-inner border border-line bg-card p-8">
         <h3 className="text-lg font-semibold text-ink">Message sent</h3>
-        <p className="mt-2 text-sm text-ink-secondary">
+        <p className="mt-2 text-sm text-muted">
           {state.message ?? "We reply within one working day."}
         </p>
       </div>
