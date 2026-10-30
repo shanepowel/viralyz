@@ -89,7 +89,7 @@ export default async function HomePage() {
           </span>
           for Meta and TikTok ads
         </Eyebrow>
-        <h1 className="m-0 max-w-[1100px] font-display text-[clamp(42px,6.4vw,84px)]">
+        <h1 className="m-0 max-w-[1100px] font-display text-[clamp(42px,6.4vw,84px)] text-balance">
           Make the ad. Check it.
           <br />
           Then spend on it.

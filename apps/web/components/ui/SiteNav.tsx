@@ -13,7 +13,7 @@ function isActive(pathname: string, href: string) {
   return pathname === href || pathname.startsWith(`${href}/`);
 }
 
-/** Sticky white bar: logo, five links, "Log in" and "Get started". Wraps on mobile. */
+/** Sticky white bar: logo, five links, "Log in" and "Get started". On phones the links sit in one scrolling row. */
 export function SiteNav() {
   const pathname = usePathname() ?? "/";
 
@@ -30,7 +30,7 @@ export function SiteNav() {
         className="mx-auto flex max-w-site flex-wrap items-center justify-between gap-x-3 gap-y-1 px-[clamp(16px,4vw,40px)] py-3"
       >
         <Logo />
-        <ul className="order-3 m-0 flex w-full list-none flex-wrap gap-x-7 gap-y-0.5 p-0 text-[15px] md:order-none md:w-auto">
+        <ul className="order-3 -mx-[clamp(16px,4vw,40px)] my-0 flex w-[calc(100%+2*clamp(16px,4vw,40px))] list-none flex-nowrap gap-x-6 overflow-x-auto px-[clamp(16px,4vw,40px)] py-0 text-[15px] whitespace-nowrap [scrollbar-width:none] md:order-none md:mx-0 md:w-auto md:gap-x-7 md:overflow-visible md:px-0 [&::-webkit-scrollbar]:hidden">
           {mainNav.map((link) => {
             const active = isActive(pathname, link.href);
             return (
