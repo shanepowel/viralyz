@@ -3,7 +3,7 @@ import { cn } from "@/lib/cn";
 import { Num } from "@/components/ui/Num";
 
 const badge = cva(
-  "inline-flex items-center gap-1 rounded-full px-2 py-0.5 text-xs font-medium",
+  "inline-flex items-center gap-1 rounded-inner px-2 py-0.5 text-xs font-medium",
   {
     variants: {
       variant: {

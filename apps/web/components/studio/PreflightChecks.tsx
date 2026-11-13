@@ -64,7 +64,7 @@ export function PreflightChecksGrid() {
         >
           <div className="absolute inset-x-0 top-0 h-[14%] border-b-[1.5px] border-dashed border-warn bg-warn-bg" />
           <div className="absolute inset-x-0 bottom-0 h-[20%] border-t-[1.5px] border-dashed border-warn bg-warn-bg" />
-          <div className="absolute inset-x-[20%] bottom-[7%] h-[9%] rounded-full bg-ink" />
+          <div className="absolute inset-x-[20%] bottom-[7%] h-[9%] rounded-inner bg-ink" />
         </div>
       </Tile>
       <Tile

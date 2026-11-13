@@ -15,7 +15,7 @@ export function StepPills({ current }: { current: string }) {
                 href={`/platform/${f.slug}`}
                 aria-current={active ? "page" : undefined}
                 className={cn(
-                  "inline-flex min-h-11 items-center rounded-full px-3.5",
+                  "inline-flex min-h-11 items-center rounded-inner px-3.5",
                   active
                     ? "bg-ink font-semibold text-bg hover:text-bg"
                     : "text-muted hover:text-ink",

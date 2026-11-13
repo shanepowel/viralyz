@@ -89,7 +89,7 @@ export function PreflightPanel({
                   </div>
                   <span className="text-sm text-ink">{c.detail}</span>
                   {c.fix ? (
-                    <span className="inline-flex min-h-10 w-fit items-center rounded-full bg-btn px-4 text-[13px] font-semibold text-btn-ink">
+                    <span className="inline-flex min-h-10 w-fit items-center rounded-inner bg-btn px-4 text-[13px] font-semibold text-btn-ink">
                       {c.fix}
                     </span>
                   ) : null}

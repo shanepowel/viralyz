@@ -2,13 +2,19 @@
 @import "../styles/tokens.css";
 
 @theme inline {
-  --font-sans: var(--font-archivo), system-ui, sans-serif;
+  --font-sans: var(--font-sans-vz), system-ui, sans-serif;
+  --font-mono: var(--font-mono-vz), ui-monospace, monospace;
 
   --color-bg: var(--vz-bg);
   --color-panel: var(--vz-panel);
   --color-card: var(--vz-card);
   --color-line: var(--vz-line);
   --color-ink: var(--vz-ink);
+  --color-ink-2: var(--vz-ink-2);
+  --color-rule: var(--vz-rule);
+  --color-mark: var(--vz-mark);
+  --color-mark-bg: var(--vz-mark-bg);
+  --color-guide: var(--vz-guide);
   --color-muted: var(--vz-muted);
   --color-btn: var(--vz-btn);
   --color-btn-ink: var(--vz-btn-ink);
@@ -35,22 +41,49 @@
   --container-wide: 1360px;
 }
 
-/* Wide display type: 125% width, 600 weight, tight tracking. */
+/* Headline type: Schibsted Grotesk at 800, tight, set solid. */
 @utility font-display {
-  font-stretch: 125%;
-  font-weight: 600;
-  letter-spacing: -0.03em;
-  line-height: 1.02;
+  font-weight: 800;
+  letter-spacing: -0.035em;
+  line-height: 1;
 }
 
 @utility tabular {
   font-variant-numeric: tabular-nums;
 }
 
-/* Dot-grid texture, used behind product-UI showcases. */
+/* Small mono caps for labels and anything that names a measurement. */
+@utility kicker {
+  font-family: var(--font-mono-vz), ui-monospace, monospace;
+  font-size: 11px;
+  font-weight: 500;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--vz-muted);
+}
+
+/* A margin note in the proofreader's red. */
+@utility margin-note {
+  font-family: var(--font-mono-vz), ui-monospace, monospace;
+  font-style: italic;
+  font-weight: 500;
+  font-size: 12.5px;
+  line-height: 1.45;
+  color: var(--vz-mark);
+}
+
+/* Fine diagonal hatch: "not yet" (locked, empty, waiting for data). */
+@utility hatch {
+  background-image: repeating-linear-gradient(
+    135deg,
+    color-mix(in srgb, var(--vz-ink) 18%, transparent) 0 1px,
+    transparent 1px 7px
+  );
+}
+
+/* Retired: the dot-grid texture. Kept as a no-op so older markup stays valid. */
 @utility dots {
-  background-image: radial-gradient(var(--vz-dot) 1px, transparent 1.2px);
-  background-size: 14px 14px;
+  background-image: none;
 }
 
 * {
@@ -71,10 +104,9 @@ body {
   margin: 0;
   background: var(--vz-bg);
   color: var(--vz-ink);
-  font-family: var(--font-archivo), system-ui, sans-serif;
-  font-stretch: 108%;
+  font-family: var(--font-sans-vz), system-ui, sans-serif;
   font-size: 17px;
-  line-height: 1.55;
+  line-height: 1.5;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
@@ -92,7 +124,7 @@ body {
   }
 
   :focus-visible {
-    outline: 2px solid var(--vz-ink);
+    outline: 2px solid var(--vz-guide);
     outline-offset: 2px;
   }
 }
@@ -136,9 +168,8 @@ body {
 .prose-vz h3,
 .prose-vz h4 {
   color: var(--vz-ink);
-  font-stretch: 125%;
-  font-weight: 600;
-  letter-spacing: -0.02em;
+  font-weight: 800;
+  letter-spacing: -0.03em;
   line-height: 1.15;
   margin-top: 1.75em;
   margin-bottom: 0.5em;
@@ -179,7 +210,7 @@ body {
     background-image: linear-gradient(
       100deg,
       transparent 20%,
-      var(--vz-line) 50%,
+      color-mix(in srgb, var(--vz-guide) 22%, transparent) 50%,
       transparent 80%
     );
     background-size: 200% 100%;

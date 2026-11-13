@@ -1,7 +1,7 @@
 import Link from "next/link";
 import { cn } from "@/lib/cn";
 
-/** Wordmark: a ticked circle and "viralyz" in the wide display cut. */
+/** A proof box with the green tick that means "cleared", and the wordmark at 800. */
 export function Logo({ className }: { className?: string }) {
   return (
     <Link
@@ -12,21 +12,14 @@ export function Logo({ className }: { className?: string }) {
       )}
     >
       <span
-        className="inline-flex h-[22px] w-[22px] items-center justify-center rounded-full bg-ink"
+        className="inline-flex h-[20px] w-[20px] items-center justify-center border-[1.5px] border-ink"
         aria-hidden="true"
       >
         <svg width="12" height="12" viewBox="0 0 14 14">
-          <path
-            d="M2.5 7.5l3 3 6-7"
-            fill="none"
-            stroke="var(--vz-bg)"
-            strokeWidth="2.4"
-            strokeLinecap="round"
-            strokeLinejoin="round"
-          />
+          <path d="M2 7.5l3.2 3.2L12 3.5" fill="none" stroke="var(--vz-pass)" strokeWidth="2.4" strokeLinecap="square" />
         </svg>
       </span>
-      <span className="font-display text-[22px]">viralyz</span>
+      <span className="font-display text-[20px]">viralyz</span>
     </Link>
   );
 }

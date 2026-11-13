@@ -23,7 +23,7 @@ export function ThemeToggle({ className }: { className?: string }) {
       role="radiogroup"
       aria-label="Colour theme"
       className={cn(
-        "inline-flex items-center gap-0.5 rounded-full border border-line p-0.5",
+        "inline-flex items-center gap-0.5 rounded-inner border border-line p-0.5",
         className,
       )}
     >
@@ -39,7 +39,7 @@ export function ThemeToggle({ className }: { className?: string }) {
             aria-label={opt.label}
             onClick={() => setTheme(opt.value)}
             className={cn(
-              "inline-flex h-11 w-11 items-center justify-center rounded-full transition-colors",
+              "inline-flex h-11 w-11 items-center justify-center rounded-inner transition-colors",
               checked ? "bg-panel text-ink" : "text-muted hover:text-ink",
             )}
           >

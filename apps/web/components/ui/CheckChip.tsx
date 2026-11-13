@@ -9,20 +9,20 @@ export type CheckState =
   | "running";
 
 const STYLES: Record<CheckState, string> = {
-  pass: "bg-pass-bg text-pass",
-  warn: "bg-warn-bg text-warn",
-  fail: "bg-fail-bg text-fail",
+  pass: "text-pass",
+  warn: "text-mark",
+  fail: "text-mark",
   // AI-assessed values are always neutral grey.
-  estimate: "border border-line text-muted",
-  locked: "border border-dashed border-line text-muted",
-  running: "vz-shimmer border border-line text-muted",
+  estimate: "text-muted",
+  locked: "text-muted",
+  running: "text-guide",
 };
 
 /** Default word for each state, so colour never carries the meaning alone. */
 const WORDS: Record<CheckState, string> = {
-  pass: "Passed",
-  warn: "Warning",
-  fail: "Failed",
+  pass: "Cleared",
+  warn: "To fix",
+  fail: "Blocked",
   estimate: "estimate",
   locked: "Locked",
   running: "Checking",
@@ -79,12 +79,12 @@ export function CheckChip({
   return (
     <span
       className={cn(
-        "vz-chip-in inline-flex shrink-0 items-center gap-1 whitespace-nowrap rounded-full font-semibold tabular",
-        size === "xs" && "px-2 py-0.5 text-[11px]",
-        size === "sm" && "px-[9px] py-[3px] text-xs",
-        size === "md" && "px-2.5 py-1 text-[13px]",
+        "vz-chip-in inline-flex shrink-0 items-center gap-1 whitespace-nowrap font-mono font-medium uppercase tracking-[0.06em]",
+        size === "xs" && "text-[10px]",
+        size === "sm" && "text-[11px]",
+        size === "md" && "text-[12px]",
         surface === "card" && (state === "pass" || state === "warn" || state === "fail")
-          ? cn("bg-card", state === "pass" ? "text-pass" : state === "warn" ? "text-warn" : "text-fail")
+          ? (state === "pass" ? "text-pass" : "text-mark")
           : STYLES[state],
         className,
       )}
@@ -93,7 +93,7 @@ export function CheckChip({
       {state === "estimate" ? (
         <>
           {value != null ? <span>{value}</span> : null}
-          {value != null ? <span aria-hidden="true">·</span> : null}
+          {value != null ? <span aria-hidden="true">/</span> : null}
           <span>{label ?? "estimate"}</span>
         </>
       ) : (

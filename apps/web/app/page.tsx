@@ -84,7 +84,7 @@ export default async function HomePage() {
       {/* Hero */}
       <Container className="flex flex-col items-center gap-[22px] pb-10 pt-[clamp(48px,7vw,88px)] text-center">
         <Eyebrow className="gap-2 py-1.5 pl-2 pr-3.5 text-sm">
-          <span className="inline-flex items-center gap-1 rounded-full bg-pass-bg px-2 py-0.5 text-xs font-semibold text-pass">
+          <span className="inline-flex items-center gap-1 rounded-inner bg-pass-bg px-2 py-0.5 text-xs font-semibold text-pass">
             <span aria-hidden="true">✓</span> Pre-flight
           </span>
           for Meta and TikTok ads
@@ -186,7 +186,7 @@ export default async function HomePage() {
           {placements.map((p) => (
             <li
               key={p}
-              className="rounded-full border border-line px-[18px] py-2.5 text-[15px]"
+              className="rounded-inner border border-line px-[18px] py-2.5 text-[15px]"
             >
               {p}
             </li>
@@ -259,7 +259,7 @@ export default async function HomePage() {
                   key={days}
                   className={`relative aspect-[4/5] flex-1 rounded-[10px] ${bg}`}
                 >
-                  <span className="absolute bottom-2 left-2 rounded-full bg-white px-2 py-[3px] text-[10px] font-semibold text-black tabular">
+                  <span className="absolute bottom-2 left-2 rounded-inner bg-white px-2 py-[3px] text-[10px] font-semibold text-black tabular">
                     {days} days live
                   </span>
                 </div>

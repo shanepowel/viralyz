@@ -34,7 +34,7 @@ export function FeatureShowcase({ slug }: { slug: string }) {
                 className={`relative aspect-[4/5] rounded-[18px] ${ad.bg}`}
                 aria-hidden="true"
               >
-                <span className="absolute bottom-3 left-3 rounded-full bg-white px-2.5 py-1 text-xs font-semibold text-black tabular">
+                <span className="absolute bottom-3 left-3 rounded-inner bg-white px-2.5 py-1 text-xs font-semibold text-black tabular">
                   {ad.days} days live
                 </span>
               </div>

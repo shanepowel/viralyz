@@ -5,7 +5,7 @@ import { APP_DESCRIPTION, APP_NAME, APP_TAGLINE } from "@repo/config";
 import { ThemeProvider } from "@/components/theme-provider";
 import { JsonLd } from "@/components/seo/JsonLd";
 import { SanityLive } from "@/sanity/lib/live";
-import { archivo } from "@/app/fonts";
+import { mono, sans } from "@/app/fonts";
 import { SITE_URL } from "@/lib/site";
 import "./globals.css";
 
@@ -56,7 +56,7 @@ export default async function RootLayout({
     <html
       lang="en"
       suppressHydrationWarning
-      className={archivo.variable}
+      className={`${sans.variable} ${mono.variable}`}
     >
       <body className="antialiased">
         <ThemeProvider>

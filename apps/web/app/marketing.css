@@ -23,10 +23,9 @@
   margin: 0;
   max-width: 960px;
   font-size: clamp(42px, 6.2vw, 80px);
-  font-stretch: 125%;
-  font-weight: 600;
-  letter-spacing: -0.03em;
-  line-height: 1.02;
+  font-weight: 800;
+  letter-spacing: -0.035em;
+  line-height: 1;
 }
 .page-hero > p:not(.crumb) {
   margin: 0;
@@ -56,11 +55,12 @@
 .eyebrow {
   display: inline-flex;
   align-items: center;
-  padding: 5px 12px;
-  border-radius: 999px;
-  background: var(--vz-panel);
-  color: var(--vz-ink);
-  font-size: 13px;
+  font-family: var(--font-mono-vz), ui-monospace, monospace;
+  font-size: 11px;
+  font-weight: 500;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--vz-muted);
 }
 .sec-head {
   display: flex;
@@ -73,10 +73,9 @@
   margin: 0;
   max-width: 820px;
   font-size: clamp(34px, 4.6vw, 56px);
-  font-stretch: 125%;
-  font-weight: 600;
-  letter-spacing: -0.03em;
-  line-height: 1.02;
+  font-weight: 800;
+  letter-spacing: -0.035em;
+  line-height: 1;
 }
 .sec-head p {
   margin: 0;
@@ -93,7 +92,7 @@
   min-height: 44px;
   padding: 0 22px;
   border: 1px solid transparent;
-  border-radius: 999px;
+  border-radius: var(--vz-radius-pill);
   font: inherit;
   font-size: 15px;
   font-weight: 600;
@@ -143,10 +142,9 @@
 }
 .stat .num {
   font-size: clamp(34px, 4vw, 48px);
-  font-stretch: 125%;
-  font-weight: 600;
-  letter-spacing: -0.03em;
-  line-height: 1.02;
+  font-weight: 800;
+  letter-spacing: -0.035em;
+  line-height: 1;
   font-variant-numeric: tabular-nums;
 }
 .stat .label {
@@ -238,10 +236,9 @@
 }
 .co-num {
   font-size: 40px;
-  font-stretch: 125%;
-  font-weight: 600;
-  letter-spacing: -0.03em;
-  line-height: 1.02;
+  font-weight: 800;
+  letter-spacing: -0.035em;
+  line-height: 1;
   font-variant-numeric: tabular-nums;
 }
 .co-lab {
@@ -322,7 +319,7 @@
   position: absolute;
   inset: 0;
   background: var(--vz-line);
-  border-radius: 999px;
+  border-radius: var(--vz-radius-pill);
   cursor: pointer;
   transition: background var(--vz-dur-fast);
 }

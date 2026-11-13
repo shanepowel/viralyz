@@ -135,7 +135,7 @@ export default async function BlogPage({
                       <div className="flex h-full min-h-56 items-center justify-center bg-panel" />
                     )}
                     {typeof featured.score === "number" ? (
-                      <div className="absolute bottom-3 right-3 rounded-full bg-card/90 p-1">
+                      <div className="absolute bottom-3 right-3 rounded-inner bg-card/90 p-1">
                         <ScoreRing
                           value={featured.score}
                           size={56}
@@ -217,7 +217,7 @@ export default async function BlogPage({
                         />
                       ) : null}
                       {typeof post.score === "number" ? (
-                        <div className="absolute bottom-2 right-2 rounded-full bg-card/90 p-0.5">
+                        <div className="absolute bottom-2 right-2 rounded-inner bg-card/90 p-0.5">
                           <ScoreRing
                             value={post.score}
                             size={40}
