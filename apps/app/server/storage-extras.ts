@@ -4,6 +4,8 @@ import {
   brandVoiceProfiles,
   thumbnails,
   contentAnalyses,
+  analysisHistory,
+  sharedLinks,
   hookGenerations,
   captionDrafts,
   contentIdeas,
@@ -233,6 +235,21 @@ export async function setAnalysisStatus(
     .where(and(eq(contentAnalyses.id, id), eq(contentAnalyses.userId, userId)))
     .returning();
   return row;
+}
+
+export async function deleteOwnAnalysis(id: string, userId: string): Promise<boolean> {
+  const [owned] = await db
+    .select({ id: contentAnalyses.id })
+    .from(contentAnalyses)
+    .where(and(eq(contentAnalyses.id, id), eq(contentAnalyses.userId, userId)));
+  if (!owned) return false;
+
+  await db.transaction(async (tx) => {
+    await tx.delete(analysisHistory).where(eq(analysisHistory.contentId, id));
+    await tx.delete(sharedLinks).where(eq(sharedLinks.analysisId, id));
+    await tx.delete(contentAnalyses).where(and(eq(contentAnalyses.id, id), eq(contentAnalyses.userId, userId)));
+  });
+  return true;
 }
 
 export async function getBoardItems(

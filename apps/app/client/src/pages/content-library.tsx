@@ -190,7 +190,7 @@ export default function ContentLibrary() {
 
   const deleteMutation = useMutation({
     mutationFn: async (id: string) => {
-      const res = await fetch(`/api/admin/content/${id}`, { method: "DELETE", credentials: "include" });
+      const res = await fetch(`/api/analyses/${id}`, { method: "DELETE", credentials: "include" });
       if (!res.ok) throw new Error("Delete failed");
     },
     onSuccess: () => {

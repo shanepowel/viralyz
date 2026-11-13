@@ -32,6 +32,7 @@ import {
   recordAnalysisActuals,
   setAnalysisStatus,
   getBoardItems,
+  deleteOwnAnalysis,
   BOARD_STATUSES,
   globalSearch,
   setOnboarding,
@@ -262,64 +263,20 @@ export async function registerRoutes(
     }
   });
 
-  // Admin Routes
-  app.get("/api/admin/stats", isAuthenticated, isAdmin, async (req, res) => {
-    try {
-      const stats = await storage.getAdminStats();
-      res.json(stats);
-    } catch (error) {
-      res.status(500).json({ error: "Failed to fetch admin stats" });
-    }
-  });
+  // Account administration lives on the seller app. These routes used to list
+  // and delete every user's content, which is a second admin journey.
+  const accountAdminMoved = (_req: Request, res: Response) => {
+    res.status(410).json({
+      error: "Account admin has moved to https://app.viralyz.com/admin",
+    });
+  };
 
-  app.get("/api/admin/users", isAuthenticated, isAdmin, async (req, res) => {
-    try {
-      const users = await storage.getAllUsers();
-      res.json(users);
-    } catch (error) {
-      res.status(500).json({ error: "Failed to fetch users" });
-    }
-  });
-
-  app.patch("/api/admin/users/:id/role", isAuthenticated, isAdmin, async (req, res) => {
-    try {
-      const { role } = req.body;
-      if (!['user', 'admin'].includes(role)) {
-        return res.status(400).json({ error: "Invalid role" });
-      }
-      await storage.updateUserRole(req.params.id, role);
-      res.json({ success: true });
-    } catch (error) {
-      res.status(500).json({ error: "Failed to update user role" });
-    }
-  });
-
-  app.delete("/api/admin/users/:id", isAuthenticated, isAdmin, async (req, res) => {
-    try {
-      await storage.deleteUser(req.params.id);
-      res.json({ success: true });
-    } catch (error) {
-      res.status(500).json({ error: "Failed to delete user" });
-    }
-  });
-
-  app.get("/api/admin/content", isAuthenticated, isAdmin, async (req, res) => {
-    try {
-      const content = await storage.getAllContent(100);
-      res.json(content);
-    } catch (error) {
-      res.status(500).json({ error: "Failed to fetch content" });
-    }
-  });
-
-  app.delete("/api/admin/content/:id", isAuthenticated, isAdmin, async (req, res) => {
-    try {
-      await storage.deleteContent(req.params.id);
-      res.json({ success: true });
-    } catch (error) {
-      res.status(500).json({ error: "Failed to delete content" });
-    }
-  });
+  app.get("/api/admin/stats", isAuthenticated, isAdmin, accountAdminMoved);
+  app.get("/api/admin/users", isAuthenticated, isAdmin, accountAdminMoved);
+  app.patch("/api/admin/users/:id/role", isAuthenticated, isAdmin, accountAdminMoved);
+  app.delete("/api/admin/users/:id", isAuthenticated, isAdmin, accountAdminMoved);
+  app.get("/api/admin/content", isAuthenticated, isAdmin, accountAdminMoved);
+  app.delete("/api/admin/content/:id", isAuthenticated, isAdmin, accountAdminMoved);
 
   // VIRALYZ 2.0 - Analysis Routes
   app.post("/api/analyze", isAuthenticated, async (req, res) => {
@@ -365,6 +322,19 @@ export async function registerRoutes(
       res.json(analyses);
     } catch (error) {
       res.status(500).json({ error: "Failed to fetch recent analyses" });
+    }
+  });
+
+  app.delete("/api/analyses/:id", isAuthenticated, async (req, res) => {
+    try {
+      const userId = (req.user as any).claims?.sub || (req.user as any).id;
+      const deleted = await deleteOwnAnalysis(req.params.id, userId);
+      if (!deleted) {
+        return res.status(404).json({ error: "Analysis not found" });
+      }
+      res.json({ success: true });
+    } catch (error) {
+      res.status(500).json({ error: "Failed to delete analysis" });
     }
   });
 
