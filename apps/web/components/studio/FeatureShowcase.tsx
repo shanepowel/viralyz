@@ -45,7 +45,7 @@ export function FeatureShowcase({ slug }: { slug: string }) {
       );
     case "brand":
       return (
-        <div className="mx-auto flex w-full max-w-[420px] flex-col gap-4 rounded-card border border-line bg-card p-[22px] shadow-float">
+        <div className="mx-auto flex w-full max-w-[420px] flex-col gap-4 border border-rule bg-card p-[22px]">
           <div className="flex items-center justify-between border-b border-line pb-3">
             <strong className="font-semibold">Brand</strong>
             <span className="text-[13px] text-muted">halden.co</span>
@@ -93,7 +93,7 @@ export function FeatureShowcase({ slug }: { slug: string }) {
           matched={calibration.matched}
           threshold={productFacts.calibrationThreshold}
           value={calibration.rho}
-          className="mx-auto w-full max-w-[520px] shadow-float"
+          className="mx-auto w-full max-w-[520px]"
         />
       );
     default:

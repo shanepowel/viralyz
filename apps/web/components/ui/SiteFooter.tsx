@@ -18,11 +18,12 @@ export function SiteFooter() {
   const [state, action, pending] = useActionState(submitNewsletter, initial);
 
   return (
-    <footer className="mx-auto flex max-w-site flex-col gap-10 px-[clamp(16px,4vw,40px)] pb-10 pt-14">
+    <footer className="mx-auto flex max-w-site flex-col gap-10 border-t border-rule px-[clamp(16px,4vw,40px)] pb-10 pt-12">
       <div className="grid grid-cols-[repeat(auto-fit,minmax(160px,1fr))] gap-8 text-[15px]">
         <div className="flex flex-col gap-2 sm:col-span-2 lg:col-span-1">
           <Logo className="self-start" />
-          <p className="m-0 text-muted">Make it. Check it. Then spend.</p>
+          <p className="m-0 text-muted">Make it. Mark it up. Then spend.</p>
+          <p className="kicker m-0 mt-3">Product notes by email</p>
           <form action={action} className="mt-3 flex flex-wrap gap-2">
             <label className="sr-only" htmlFor="footer-email">
               Email
@@ -52,7 +53,7 @@ export function SiteFooter() {
               ? "You are on the list."
               : state.errors?.email
                 ? state.errors.email[0]
-                : null}
+                : (state.message ?? null)}
           </p>
         </div>
         {footerColumns.map((col) => (

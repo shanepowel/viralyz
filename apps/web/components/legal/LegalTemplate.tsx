@@ -1,9 +1,8 @@
 import { PortableBody } from "@/components/media/PortableBody";
-import { Breadcrumbs } from "@/components/ui/Breadcrumbs";
 import { Container } from "@/components/ui/Container";
-import { Eyebrow } from "@/components/ui/Eyebrow";
-import { Section } from "@/components/ui/Section";
-import { CONTACT, routes } from "@/lib/site";
+import { SectionHeader } from "@/components/ui/SectionHeader";
+import type { LegalSection } from "@/data/legal";
+import { CONTACT } from "@/lib/site";
 
 type Heading = { id: string; text: string };
 
@@ -23,78 +22,88 @@ function extractHeadings(body: unknown): Heading[] {
     .filter((h) => h.text);
 }
 
+function slug(text: string, i: number) {
+  return `s-${i + 1}-${text.toLowerCase().replace(/[^a-z0-9]+/g, "-").slice(0, 40)}`;
+}
+
+/**
+ * Legal layout: contents in the left margin, numbered sections on the
+ * right. Sanity content wins when it exists; otherwise the drafted
+ * `sections` are shown, and `fallback` only when there is neither.
+ */
 export function LegalTemplate({
   title,
   lastUpdated,
   body,
+  sections,
   fallback,
 }: {
   title: string;
   lastUpdated?: string | null;
   body?: unknown;
+  sections?: LegalSection[];
   fallback?: React.ReactNode;
 }) {
-  const headings = extractHeadings(body);
+  const useSections = !body && sections && sections.length > 0;
+  const headings: Heading[] = useSections
+    ? sections.map((s, i) => ({ id: slug(s.heading, i), text: s.heading }))
+    : extractHeadings(body);
 
   return (
-    <Section className="pt-20 md:pt-28">
-      <Container>
-        <Breadcrumbs
-          items={[
-            { label: "Home", href: routes.home },
-            { label: title },
-          ]}
-        />
-        <Eyebrow className="mt-6">Legal</Eyebrow>
-        <h1 className="mt-3 font-display text-4xl font-semibold tracking-tight md:text-5xl">
-          {title}
-        </h1>
-        {lastUpdated ? (
-          <p className="mt-3 text-sm text-muted">
-            Last updated {lastUpdated}
-          </p>
-        ) : null}
+    <Container className="pb-20 pt-[clamp(40px,6vw,80px)]">
+      <SectionHeader
+        as="h1"
+        eyebrow="Legal"
+        title={title}
+        lede={lastUpdated ? `Last updated ${lastUpdated}.` : undefined}
+      />
+      <div className="grid grid-cols-1 gap-x-8 gap-y-8 border-t border-rule pt-6 md:grid-cols-[200px_1fr]">
+        {headings.length ? (
+          <nav aria-label="On this page" className="hidden md:sticky md:top-24 md:block md:self-start">
+            <p className="kicker m-0">On this page</p>
+            <ol className="m-0 mt-3 list-none p-0">
+              {headings.map((h, i) => (
+                <li key={h.id} className="border-t border-line">
+                  <a href={`#${h.id}`} className="flex gap-2 py-1.5 text-[14px] text-ink-2 hover:text-ink">
+                    <span className="font-mono text-[12px] text-muted">{i + 1}</span>
+                    {h.text}
+                  </a>
+                </li>
+              ))}
+            </ol>
+          </nav>
+        ) : (
+          <div className="hidden md:block" />
+        )}
 
-        <div className="mt-10 grid gap-10 lg:grid-cols-[220px_1fr]">
-          {headings.length ? (
-            <nav
-              aria-label="On this page"
-              className="hidden lg:sticky lg:top-24 lg:block lg:self-start"
-            >
-              <p className="text-xs font-medium uppercase tracking-wide text-muted">
-                On this page
-              </p>
-              <ul className="mt-3 space-y-2">
-                {headings.map((h) => (
-                  <li key={h.id}>
-                    <a
-                      href={`#${h.id}`}
-                      className="text-sm text-muted hover:text-ink"
-                    >
-                      {h.text}
-                    </a>
-                  </li>
+        <div className="min-w-0 max-w-[720px]">
+          {body ? (
+            <PortableBody value={body} />
+          ) : useSections ? (
+            sections.map((s, i) => (
+              <section key={s.heading} id={slug(s.heading, i)} className="border-b border-line pb-6 pt-6 first:pt-0">
+                <h2 className="m-0 font-display text-[26px]">
+                  <span className="mr-3 font-mono text-[13px] font-normal tracking-normal text-muted">{i + 1}</span>
+                  {s.heading}
+                </h2>
+                {s.body.map((p) => (
+                  <p key={p.slice(0, 32)} className="m-0 mt-3 text-ink-2">
+                    {p}
+                  </p>
                 ))}
-              </ul>
-            </nav>
+              </section>
+            ))
           ) : (
-            <div className="hidden lg:block" />
+            fallback
           )}
-
-          <div>
-            {body ? <PortableBody value={body} /> : fallback}
-            <p className="mt-10 text-sm text-muted">
-              Questions:{" "}
-              <a
-                href={`mailto:${CONTACT.hello}`}
-                className="text-ink underline underline-offset-4"
-              >
-                {CONTACT.hello}
-              </a>
-            </p>
-          </div>
+          <p className="m-0 mt-8 text-[15px] text-ink-2">
+            Questions:{" "}
+            <a href={`mailto:${CONTACT.hello}`} className="font-semibold text-ink underline underline-offset-4">
+              {CONTACT.hello}
+            </a>
+          </p>
         </div>
-      </Container>
-    </Section>
+      </div>
+    </Container>
   );
 }

@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { MarketingShell } from "@/components/marketing/marketing-shell";
 import { LegalTemplate } from "@/components/legal/LegalTemplate";
+import { LEGAL_UPDATED, termsSections } from "@/data/legal";
 import { pageMeta } from "@/lib/meta";
 import { routes } from "@/lib/site";
 import { fetchSanity } from "@/sanity/lib/fetch";
@@ -28,16 +29,9 @@ export default async function TermsPage() {
     <MarketingShell>
       <LegalTemplate
         title={doc?.title ?? "Terms of service"}
-        lastUpdated={doc?.lastUpdated}
+        lastUpdated={doc?.lastUpdated ?? LEGAL_UPDATED}
         body={doc?.body}
-        fallback={
-          <div className="prose-vz space-y-4">
-            <p>
-              By using Viralyz you agree to these terms. The service is provided
-              as-is while we grow the product.
-            </p>
-          </div>
-        }
+        sections={termsSections}
       />
     </MarketingShell>
   );

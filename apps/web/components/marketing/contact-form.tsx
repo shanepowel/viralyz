@@ -28,9 +28,9 @@ export function ContactForm() {
 
   if (state.ok) {
     return (
-      <div className="rounded-inner border border-line bg-card p-8">
-        <h3 className="text-lg font-semibold text-ink">Message sent</h3>
-        <p className="mt-2 text-sm text-muted">
+      <div className="border-y border-rule py-6" role="status">
+        <p className="kicker m-0 text-pass">Message sent</p>
+        <p className="m-0 mt-2 text-ink-2">
           {state.message ?? "We reply within one working day."}
         </p>
       </div>
@@ -63,6 +63,11 @@ export function ContactForm() {
         className="hidden"
         aria-hidden
       />
+      {state.message && !state.ok ? (
+        <p role="alert" className="margin-note m-0">
+          {state.message}
+        </p>
+      ) : null}
       <SubmitButton />
     </form>
   );

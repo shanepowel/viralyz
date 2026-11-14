@@ -1,15 +1,8 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { MarketingShell } from "@/components/marketing/marketing-shell";
-import { SanityImage } from "@/components/media/SanityImage";
-import { ScoreRing } from "@/components/score/ScoreRing";
-import { Breadcrumbs } from "@/components/ui/Breadcrumbs";
-import { Card } from "@/components/ui/Card";
 import { Container } from "@/components/ui/Container";
-import { EmptyState } from "@/components/ui/EmptyState";
-import { Eyebrow } from "@/components/ui/Eyebrow";
-import { Num } from "@/components/ui/Num";
-import { Section } from "@/components/ui/Section";
+import { SectionHeader } from "@/components/ui/SectionHeader";
 import { cn } from "@/lib/cn";
 import { pageMeta } from "@/lib/meta";
 import { routes } from "@/lib/site";
@@ -22,9 +15,9 @@ import {
 import { listPosts, BLOG_CATEGORIES, formatPostDate } from "@/lib/blog";
 
 export const metadata: Metadata = pageMeta({
-  title: "Blog",
+  title: "Notes",
   description:
-    "Teardowns of viral videos, honest pricing data, and lessons from scored posts.",
+    "Ad creative that survives spend: checks, teardowns and what the data says.",
   path: routes.blog,
 });
 
@@ -36,7 +29,6 @@ type PostCard = {
   slug: string;
   excerpt: string;
   publishedAt: string;
-  score?: number | null;
   featured?: boolean | null;
   category?: { title?: string; slug?: string } | null;
   author?: { name?: string; avatar?: unknown } | null;
@@ -69,11 +61,12 @@ export default async function BlogPage({
     }),
   ]);
 
-  // Fallback to placeholder data until Sanity is seeded
+  // The notes that ship with the site stand in whenever Sanity has nothing
+  // published (an empty dataset) or cannot be reached.
   let list = posts ?? [];
   let total = count ?? 0;
   let cats = categories ?? [];
-  if (!posts) {
+  if (!posts || (posts.length === 0 && !category && page === 1)) {
     const placeholders = await listPosts({ category });
     list = placeholders.map((p) => ({
       _id: p._id,
@@ -81,7 +74,6 @@ export default async function BlogPage({
       slug: p.slug,
       excerpt: p.excerpt,
       publishedAt: p.publishedAt,
-      score: p.scoreBadge ? Number.parseInt(p.scoreBadge, 10) || null : null,
       category: p.category,
       readingTime: p.readMinutes,
       coverImage: null,
@@ -90,190 +82,99 @@ export default async function BlogPage({
     cats = BLOG_CATEGORIES;
   }
 
-  const featured = !category && page === 1 ? list.find((p) => p.featured) ?? list[0] : null;
-  const grid = featured ? list.filter((p) => p._id !== featured._id) : list;
-  const categoryTitle =
-    cats.find((c) => c.slug === category)?.title ?? category;
+  const categoryTitle = cats.find((c) => c.slug === category)?.title;
+  const tab = (on: boolean) =>
+    cn(
+      "inline-flex min-h-11 items-center border-b-2 px-0.5 text-[15px]",
+      on ? "border-ink font-semibold text-ink" : "border-transparent text-muted hover:text-ink",
+    );
 
   return (
     <MarketingShell>
-      <Section className="pt-20 md:pt-28 pb-8">
-        <Container>
-          <Breadcrumbs
-            items={[
-              { label: "Home", href: routes.home },
-              { label: "Blog" },
-            ]}
-          />
-          <Eyebrow className="mt-6">Blog</Eyebrow>
-          <h1 className="mt-3 font-display text-4xl font-semibold tracking-tight md:text-5xl">
-            What the scores are telling us.
-          </h1>
-          <p className="mt-4 max-w-prose text-base leading-relaxed text-muted">
-            Teardowns of viral videos and honest pricing data.
-          </p>
-        </Container>
-      </Section>
+      <Container className="pb-20 pt-[clamp(40px,6vw,80px)]">
+        <SectionHeader
+          as="h1"
+          eyebrow="Notes"
+          title="Ad creative that survives spend"
+          lede="Checks, teardowns and what the data says. Written for people who pay for their own ads."
+        />
 
-      <Section className="pt-0">
-        <Container>
-          {featured ? (
-            <Link href={`/blog/${featured.slug}`} className="mb-12 block">
-              <Card hoverable className="overflow-hidden p-0">
-                <div className="grid lg:grid-cols-[1.2fr_0.8fr]">
-                  <div className="relative min-h-56 bg-panel">
-                    {featured.coverImage ? (
-                      <SanityImage
-                        value={featured.coverImage as never}
-                        width={1200}
-                        height={675}
-                        priority
-                        className="h-full [&_img]:h-full [&_img]:object-cover"
-                        sizes="(max-width: 1024px) 100vw, 60vw"
-                      />
-                    ) : (
-                      <div className="flex h-full min-h-56 items-center justify-center bg-panel" />
-                    )}
-                    {typeof featured.score === "number" ? (
-                      <div className="absolute bottom-3 right-3 rounded-inner bg-card/90 p-1">
-                        <ScoreRing
-                          value={featured.score}
-                          size={56}
-                          animate={false}
-                        />
-                      </div>
+        <nav aria-label="Categories" className="flex flex-wrap gap-x-6 border-b border-rule">
+          <Link href="/blog" aria-current={!category ? "page" : undefined} className={tab(!category)}>
+            All
+          </Link>
+          {cats.map((c) => (
+            <Link
+              key={c.slug}
+              href={`/blog?category=${c.slug}`}
+              aria-current={category === c.slug ? "page" : undefined}
+              className={tab(category === c.slug)}
+            >
+              {c.title}
+            </Link>
+          ))}
+        </nav>
+
+        {list.length === 0 ? (
+          <div className="grid grid-cols-1 gap-x-8 gap-y-2 border-b border-line py-10 md:grid-cols-[200px_1fr]">
+            <p className="kicker m-0 pt-1.5">Nothing here yet</p>
+            <div>
+              <p className="m-0 font-display text-[26px]">
+                {categoryTitle ? `No notes in ${categoryTitle} yet.` : "No notes yet."}
+              </p>
+              <Link href="/blog" className="mt-3 inline-block font-semibold underline underline-offset-4">
+                See all notes
+              </Link>
+            </div>
+          </div>
+        ) : (
+          <ol className="m-0 list-none p-0">
+            {list.map((post) => (
+              <li key={post._id} className="border-b border-line">
+                <Link
+                  href={`/blog/${post.slug}`}
+                  className="group grid grid-cols-1 gap-x-8 gap-y-2 py-7 md:grid-cols-[200px_1fr]"
+                >
+                  <p className="m-0 pt-1.5 font-mono text-[12px] text-muted">
+                    {formatPostDate(post.publishedAt)}
+                    {post.category?.title ? <span className="block uppercase tracking-[0.06em]">{post.category.title}</span> : null}
+                  </p>
+                  <div className="max-w-[760px]">
+                    <h2 className="m-0 font-display text-[clamp(24px,3vw,34px)] text-balance group-hover:underline group-hover:underline-offset-4">
+                      {post.title}
+                    </h2>
+                    <p className="m-0 mt-2.5 text-ink-2">{post.excerpt}</p>
+                    {post.readingTime ? (
+                      <p className="m-0 mt-2 font-mono text-[12px] text-muted">{post.readingTime} min read</p>
                     ) : null}
                   </div>
-                  <div className="flex flex-col justify-center p-6 md:p-8">
-                    <p className="text-sm text-muted">
-                      {featured.category?.title ?? "Post"}
-                    </p>
-                    <h2 className="mt-2 font-display text-2xl font-semibold tracking-tight md:text-3xl">
-                      {featured.title}
-                    </h2>
-                    <p className="mt-3 text-muted leading-relaxed">
-                      {featured.excerpt}
-                    </p>
-                    <p className="mt-4 text-sm text-muted">
-                      {featured.author?.name ? `${featured.author.name} · ` : ""}
-                      {formatPostDate(featured.publishedAt)}
-                      {featured.readingTime
-                        ? ` · ${featured.readingTime} min`
-                        : ""}
-                    </p>
-                  </div>
-                </div>
-              </Card>
-            </Link>
-          ) : null}
-
-          <div className="mb-8 flex flex-wrap gap-2" aria-label="Categories">
-            <Link
-              href="/blog"
-              className={cn(
-                "rounded-inner px-3 py-2 text-sm transition-colors",
-                !category
-                  ? "bg-panel font-medium text-ink"
-                  : "text-muted hover:bg-panel hover:text-ink",
-              )}
-            >
-              All
-            </Link>
-            {cats.map((c) => (
-              <Link
-                key={c.slug}
-                href={`/blog?category=${c.slug}`}
-                className={cn(
-                  "rounded-inner px-3 py-2 text-sm transition-colors",
-                  category === c.slug
-                    ? "bg-panel font-medium text-ink"
-                    : "text-muted hover:bg-panel hover:text-ink",
-                )}
-              >
-                {c.title}
-              </Link>
+                </Link>
+              </li>
             ))}
+          </ol>
+        )}
+
+        {total > PAGE_SIZE ? (
+          <div className="mt-8 flex gap-6">
+            {page > 1 ? (
+              <Link
+                href={`/blog?${category ? `category=${category}&` : ""}page=${page - 1}`}
+                className="font-semibold underline underline-offset-4"
+              >
+                Newer
+              </Link>
+            ) : null}
+            {start + PAGE_SIZE < total ? (
+              <Link
+                href={`/blog?${category ? `category=${category}&` : ""}page=${page + 1}`}
+                className="font-semibold underline underline-offset-4"
+              >
+                Older
+              </Link>
+            ) : null}
           </div>
-
-          {grid.length === 0 ? (
-            <EmptyState
-              heading={`Nothing in ${categoryTitle} yet.`}
-              body="We publish teardowns and playbooks as we score more content."
-              action={{ href: routes.blog, label: "View all posts" }}
-            />
-          ) : (
-            <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
-              {grid.map((post) => (
-                <Link key={post._id} href={`/blog/${post.slug}`}>
-                  <Card hoverable className="h-full overflow-hidden p-0">
-                    <div className="relative aspect-video overflow-hidden bg-panel">
-                      {post.coverImage ? (
-                        <SanityImage
-                          value={post.coverImage as never}
-                          width={800}
-                          height={450}
-                          className="transition-transform duration-[var(--vz-dur-med)] ease-out motion-safe:group-hover:scale-105 [&_img]:h-full [&_img]:object-cover"
-                          sizes="(max-width: 768px) 100vw, 33vw"
-                        />
-                      ) : null}
-                      {typeof post.score === "number" ? (
-                        <div className="absolute bottom-2 right-2 rounded-inner bg-card/90 p-0.5">
-                          <ScoreRing
-                            value={post.score}
-                            size={40}
-                            animate={false}
-                          />
-                        </div>
-                      ) : null}
-                    </div>
-                    <div className="p-5">
-                      <p className="text-sm text-muted">
-                        {post.category?.title}
-                      </p>
-                      <h3 className="mt-1 text-lg font-semibold text-ink line-clamp-2">
-                        {post.title}
-                      </h3>
-                      <p className="mt-2 line-clamp-2 text-sm leading-relaxed text-muted">
-                        {post.excerpt}
-                      </p>
-                      <p className="mt-3 text-sm text-muted">
-                        {formatPostDate(post.publishedAt)}
-                        {post.readingTime ? (
-                          <>
-                            {" "}
-                            · <Num>{post.readingTime}</Num> min
-                          </>
-                        ) : null}
-                      </p>
-                    </div>
-                  </Card>
-                </Link>
-              ))}
-            </div>
-          )}
-
-          {total > PAGE_SIZE ? (
-            <div className="mt-10 flex justify-center gap-3">
-              {page > 1 ? (
-                <Link
-                  href={`/blog?${category ? `category=${category}&` : ""}page=${page - 1}`}
-                  className="text-sm text-ink underline underline-offset-4"
-                >
-                  Previous
-                </Link>
-              ) : null}
-              {start + PAGE_SIZE < total ? (
-                <Link
-                  href={`/blog?${category ? `category=${category}&` : ""}page=${page + 1}`}
-                  className="text-sm text-ink underline underline-offset-4"
-                >
-                  Next
-                </Link>
-              ) : null}
-            </div>
-          ) : null}
-        </Container>
-      </Section>
+        ) : null}
+      </Container>
     </MarketingShell>
   );
 }

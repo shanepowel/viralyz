@@ -1,30 +1,31 @@
-import Link from "next/link";
 import { MarketingShell } from "@/components/marketing/marketing-shell";
-import { buttonClasses } from "@/components/ui/Button";
+import { ButtonLink } from "@/components/ui/Button";
+import { Container } from "@/components/ui/Container";
+import { routes } from "@/lib/site";
+
+export const metadata = { title: "Page not found" };
 
 export default function NotFound() {
   return (
     <MarketingShell>
-      <div className="mx-auto flex min-h-[60vh] max-w-container flex-col items-start justify-center px-6 py-20">
-        <p className="tabular text-sm text-muted">404</p>
-        <h1 className="mt-2 font-display text-4xl font-semibold tracking-tight text-ink">
-          That page doesn&apos;t pre-flight.
+      <Container className="flex min-h-[60vh] flex-col justify-center py-20">
+        <p className="kicker m-0">Error 404</p>
+        <h1 className="m-0 mt-3 max-w-[820px] font-display text-[clamp(40px,6vw,72px)]">
+          There is no page at this address.
         </h1>
-        <p className="mt-3 max-w-prose text-muted">
-          The link is broken or the page has moved. Try one of these instead.
+        <p className="m-0 mt-4 max-w-[560px] text-[19px] text-ink-2">
+          The link may be old, or the address may have a typo. These are the pages people usually want.
         </p>
-        <div className="mt-6 flex gap-3">
-          <Link href="/" className={buttonClasses({ variant: "primary" })}>
-            Back to home
-          </Link>
-          <Link
-            href="/platform"
-            className={buttonClasses({ variant: "secondary" })}
-          >
-            See the platform
-          </Link>
+        <div className="mt-8 flex flex-wrap gap-2.5">
+          <ButtonLink href={routes.platform}>How it works</ButtonLink>
+          <ButtonLink href={routes.pricing} variant="secondary">
+            Pricing
+          </ButtonLink>
+          <ButtonLink href={routes.signup} variant="secondary">
+            Start free
+          </ButtonLink>
         </div>
-      </div>
+      </Container>
     </MarketingShell>
   );
 }

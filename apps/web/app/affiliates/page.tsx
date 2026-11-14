@@ -10,7 +10,7 @@ import { routes } from "@/lib/site";
 
 export const metadata: Metadata = pageMeta({
   title: "Affiliates",
-  description: "Affiliate program launching soon — leave your email.",
+  description: "Affiliate programme launching soon. Leave your email.",
   path: routes.affiliates,
   robots: { index: false, follow: false },
 });
@@ -26,7 +26,7 @@ export default function AffiliatesPage() {
           </h1>
           <p className="mt-4 max-w-prose text-base leading-relaxed text-muted">
             We are defining commission terms before we open applications. Email
-            us if you want on the list — no vague promises in the meantime.
+            us if you want on the list. No vague promises in the meantime.
           </p>
           <Link
             href={routes.contact}

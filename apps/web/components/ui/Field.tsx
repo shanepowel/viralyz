@@ -8,7 +8,7 @@ export function Input({
   return (
     <input
       className={cn(
-        "h-11 w-full rounded-inner border border-line bg-card px-3.5 text-sm text-ink placeholder:text-muted transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ink focus-visible:ring-offset-2 focus-visible:ring-offset-bg disabled:opacity-50",
+        "h-11 w-full rounded-inner border border-rule bg-card px-3.5 text-sm text-ink placeholder:text-muted transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-guide focus-visible:ring-offset-2 focus-visible:ring-offset-bg disabled:opacity-50",
         className,
       )}
       {...props}
@@ -23,7 +23,7 @@ export function Textarea({
   return (
     <textarea
       className={cn(
-        "min-h-28 w-full rounded-inner border border-line bg-card px-3.5 py-2.5 text-sm text-ink placeholder:text-muted transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ink focus-visible:ring-offset-2 focus-visible:ring-offset-bg disabled:opacity-50",
+        "min-h-28 w-full rounded-inner border border-rule bg-card px-3.5 py-2.5 text-sm text-ink placeholder:text-muted transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-guide focus-visible:ring-offset-2 focus-visible:ring-offset-bg disabled:opacity-50",
         className,
       )}
       {...props}

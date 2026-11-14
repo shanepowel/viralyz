@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { MarketingShell } from "@/components/marketing/marketing-shell";
 import { LegalTemplate } from "@/components/legal/LegalTemplate";
+import { LEGAL_UPDATED, privacySections } from "@/data/legal";
 import { pageMeta } from "@/lib/meta";
 import { routes } from "@/lib/site";
 import { fetchSanity } from "@/sanity/lib/fetch";
@@ -29,21 +30,9 @@ export default async function PrivacyPage() {
     <MarketingShell>
       <LegalTemplate
         title={doc?.title ?? "Privacy policy"}
-        lastUpdated={doc?.lastUpdated}
+        lastUpdated={doc?.lastUpdated ?? LEGAL_UPDATED}
         body={doc?.body}
-        fallback={
-          <div className="prose-vz space-y-4">
-            <p>
-              Viralyz is operated by Digiteq Holdings Limited. We process
-              account data, connected platform metrics, and content you upload
-              to score.
-            </p>
-            <p>
-              You can export or delete your data from settings. Contact
-              hello@viralyz.com for privacy requests.
-            </p>
-          </div>
-        }
+        sections={privacySections}
       />
     </MarketingShell>
   );

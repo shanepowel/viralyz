@@ -9,7 +9,7 @@ export function PlatformRail({ groups }: { groups: string[] }) {
   useEffect(() => {
     const observers: IntersectionObserver[] = [];
     for (const g of groups) {
-      const el = document.getElementById(`group-${g.toLowerCase()}`);
+      const el = document.getElementById(`group-${g.toLowerCase().replace(/\s+/g, "-")}`);
       if (!el) continue;
       const io = new IntersectionObserver(
         ([e]) => {
@@ -34,12 +34,12 @@ export function PlatformRail({ groups }: { groups: string[] }) {
         {groups.map((g) => (
           <a
             key={g}
-            href={`#group-${g.toLowerCase()}`}
+            href={`#group-${g.toLowerCase().replace(/\s+/g, "-")}`}
             className={cn(
-              "shrink-0 rounded-inner px-3 py-2 text-sm transition-colors",
+              "shrink-0 border-l-2 px-3 py-2 text-sm",
               active === g
-                ? "bg-panel font-medium text-ink"
-                : "text-muted hover:bg-panel hover:text-ink",
+                ? "border-ink font-semibold text-ink"
+                : "border-line text-muted hover:text-ink",
             )}
           >
             {g}
@@ -47,7 +47,7 @@ export function PlatformRail({ groups }: { groups: string[] }) {
         ))}
         <a
           href="#integrations"
-          className="shrink-0 rounded-inner px-3 py-2 text-sm text-muted hover:bg-panel hover:text-ink"
+          className="shrink-0 border-l-2 border-line px-3 py-2 text-sm text-muted hover:text-ink"
         >
           Integrations
         </a>

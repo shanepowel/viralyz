@@ -108,15 +108,15 @@ export default function Page() {
           ) : (
             <PricingCard
               name="More credits"
-              price="—"
+              price="On request"
               meta="Packs aren’t on sale yet"
               description="Self-serve credit packs aren’t live yet. Tell us what you need and we’ll set you up."
-              cta={{ label: "Talk to sales", href: routes.contact }}
+              cta={{ label: "Ask for more credits", href: routes.contact }}
             />
           )}
         </div>
         {vatNote ? (
-          <p className="mb-0 mt-4 text-center text-[13px] text-muted">
+          <p className="mb-0 mt-4 font-mono text-[12px] text-muted">
             Prices in GBP, {vatNote}.
           </p>
         ) : null}
@@ -133,7 +133,7 @@ export default function Page() {
               No hidden multipliers by placement.
             </p>
           </div>
-          <dl className="m-0 min-w-0 flex-[1_1_520px] rounded-card border border-line bg-card px-[22px] py-2">
+          <dl className="m-0 min-w-0 flex-[1_1_520px] border border-rule bg-card px-[22px] py-2">
             {creditCosts.map((row, i) => (
               <div
                 key={row.action}
@@ -155,7 +155,7 @@ export default function Page() {
       </Container>
 
       <Container className="max-w-[860px] pb-24" id="faq">
-        <h2 className="m-0 mb-7 text-center font-display text-[clamp(30px,4vw,48px)]">
+        <h2 className="m-0 mb-7 border-t border-rule pt-4 font-display text-[clamp(30px,4vw,48px)]">
           Questions
         </h2>
         <FAQ items={FAQ_ITEMS} />

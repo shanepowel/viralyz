@@ -25,7 +25,7 @@ export function PricingCard({
   return (
     <div
       className={cn(
-        "flex flex-col gap-5 rounded-3xl p-7",
+        "flex flex-col gap-5 p-7",
         highlight
           ? "bg-inv text-inv-ink"
           : "border border-line bg-card text-ink",

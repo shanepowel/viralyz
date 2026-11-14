@@ -29,8 +29,9 @@ function writeConsent(v: Consent) {
   }
 }
 
-function loadConsented(_c: Consent) {
+function loadConsented(consent: Consent) {
   // Inject analytics / marketing tags only after matching consent.
+  void consent;
 }
 
 export function CookieBanner() {

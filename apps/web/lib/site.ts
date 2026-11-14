@@ -24,7 +24,7 @@ export const appRoutes = {
 export const routes = {
   home: "/",
   platform: "/platform",
-  forBrands: "/for-brands",
+  forBrands: "/for-sellers",
   pricing: "/pricing",
   tools: "/tools",
   blog: "/blog",
@@ -65,7 +65,7 @@ export const stats = {
 /** Product-truth stats band for the homepage (structural facts, not usage claims). */
 export const productStats = [
   { value: "4", label: "Ad placements supported" },
-  { value: "9", label: "Automated checks before you spend" },
+  { value: "6", label: "Checks on every ad: five rules and one estimate" },
   { value: "10", label: "Free credits on signup" },
   { value: "20", label: "Matched ads to unlock calibration" },
 ] as const;

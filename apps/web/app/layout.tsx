@@ -39,6 +39,7 @@ const orgLd = {
   "@type": "Organization",
   name: APP_NAME,
   url: SITE_URL,
+  email: "hello@viralyz.com",
   parentOrganization: {
     "@type": "Organization",
     name: "Digiteq Holdings Limited",

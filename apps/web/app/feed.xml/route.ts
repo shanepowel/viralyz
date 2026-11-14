@@ -1,4 +1,3 @@
-import type { MetadataRoute } from "next";
 import { PLACEHOLDER_POSTS } from "@/lib/blog";
 import { SITE_URL } from "@/lib/site";
 

@@ -8,10 +8,10 @@ export function InversePanel({
   ...props
 }: React.HTMLAttributes<HTMLElement> & { as?: "div" | "section" }) {
   return (
-    <div className="px-[clamp(12px,2vw,24px)] pb-6">
+    <div className="bg-inv">
       <Tag
         className={cn(
-          "mx-auto max-w-wide rounded-panel bg-inv px-[clamp(20px,5vw,72px)] py-[clamp(48px,7vw,88px)] text-inv-ink",
+          "mx-auto max-w-site px-[clamp(16px,4vw,40px)] py-[clamp(48px,7vw,88px)] text-inv-ink",
           className,
         )}
         {...props}

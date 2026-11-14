@@ -44,7 +44,7 @@ export function PreflightPanel({
   return (
     <div
       className={cn(
-        "flex flex-wrap gap-[18px] rounded-card border border-line bg-card shadow-float",
+        "flex flex-wrap gap-[18px] border border-rule bg-card",
         sm ? "p-[18px]" : "p-[22px]",
         className,
       )}

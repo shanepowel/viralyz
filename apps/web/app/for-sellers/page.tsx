@@ -21,12 +21,12 @@ const STEPS = [
   {
     n: "02",
     title: "Brand",
-    body: "Paste your store URL — we pull your colors, logo, and products automatically. Confirm it once; every variant after that reuses it.",
+    body: "Paste your shop link and we pull your colours, logo and products automatically. Confirm it once; every ad after that reuses it.",
   },
   {
     n: "03",
     title: "Studio",
-    body: "Pick a placement and an angle — offer, problem, proof, or demo — and generate on-brand variants against your reference.",
+    body: "Pick placements and angles (offer, problem, proof or demo) and make on-brand ads against your reference.",
   },
   {
     n: "04",
@@ -36,7 +36,7 @@ const STEPS = [
   {
     n: "05",
     title: "Results",
-    body: "Import your ad spend export and see which pre-flight checks actually predicted performance — once you have enough matched ads to say so honestly.",
+    body: "Import your ad spend export and see which pre-flight checks actually predicted performance, once you have enough matched ads to say so honestly.",
   },
 ] as const;
 
@@ -51,7 +51,7 @@ export default function ForBrandsPage() {
           <span className="eyebrow">For sellers</span>
           <h1>Ad creative that&apos;s checked before you spend.</h1>
           <p>
-            Viralyz is built for sellers running paid ads on Meta and TikTok —
+            Viralyz is built for sellers running paid ads on Meta and TikTok:
             not a creator marketplace. Discover what&apos;s working, confirm
             your brand once, and generate variants that are pre-flighted before
             they ever reach you.
@@ -86,7 +86,7 @@ export default function ForBrandsPage() {
             <span className="eyebrow">How it works</span>
             <h2>Five steps, in order.</h2>
             <p>
-              Each step feeds the next — you can&apos;t generate without a
+              Each step feeds the next. You can&apos;t generate without a
               confirmed brand, and you can&apos;t see a calibration number
               until there&apos;s enough real data to back it.
             </p>

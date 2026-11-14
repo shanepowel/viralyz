@@ -26,27 +26,29 @@ export function FinalCtaBand({
 }) {
   const inverse = tone === "inverse";
   return (
-    <section className="px-[clamp(12px,2vw,24px)] pb-6">
+    <section className={inverse ? "bg-inv" : "border-t border-rule"}>
       <div
         className={cn(
-          "mx-auto flex max-w-wide flex-col items-center gap-5 rounded-panel px-[clamp(20px,5vw,72px)] py-[clamp(48px,7vw,96px)] text-center",
-          inverse ? "bg-inv text-inv-ink" : "bg-panel text-ink",
+          "mx-auto grid max-w-site grid-cols-1 items-end gap-x-8 gap-y-6 px-[clamp(16px,4vw,40px)] py-[clamp(48px,7vw,88px)] lg:grid-cols-[1fr_auto]",
+          inverse ? "text-inv-ink" : "text-ink",
         )}
       >
-        <h2 className="m-0 max-w-[860px] font-display text-[clamp(34px,4.6vw,56px)]">
+        <div>
+        <h2 className="m-0 max-w-[860px] font-display text-[clamp(34px,5vw,64px)] text-balance">
           {title}
         </h2>
         {subtitle ? (
           <p
             className={cn(
-              "m-0 max-w-[600px]",
-              inverse ? "text-inv-muted" : "text-muted",
+              "m-0 mt-4 max-w-[600px]",
+              inverse ? "text-inv-muted" : "text-ink-2",
             )}
           >
             {subtitle}
           </p>
         ) : null}
-        <div className="flex flex-wrap justify-center gap-2.5">
+        </div>
+        <div className="flex flex-wrap gap-2.5">
           <ButtonLink
             href={href}
             size="lg"

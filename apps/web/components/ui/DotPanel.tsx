@@ -1,6 +1,6 @@
 import { cn } from "@/lib/cn";
 
-/** Bordered, panel-coloured container with the dot-grid texture, for product showcases. */
+/** A white sheet with an ink frame, for product showcases. */
 export function DotPanel({
   className,
   children,
@@ -9,7 +9,7 @@ export function DotPanel({
   return (
     <div
       className={cn(
-        "dots rounded-panel border border-line bg-panel p-[clamp(24px,5vw,64px)]",
+        "border border-rule bg-card p-[clamp(20px,4vw,48px)]",
         className,
       )}
       {...props}

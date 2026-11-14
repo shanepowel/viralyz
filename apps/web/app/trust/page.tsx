@@ -43,7 +43,7 @@ export default function TrustPage() {
               </h2>
               <p className="mt-3 text-muted leading-relaxed">
                 Discover reads from Meta&apos;s and TikTok&apos;s own public
-                ad libraries — no scraping, no account access. Brand import
+                ad libraries, with no scraping and no account access. Brand import
                 reads only the store URL you give us, through a fetch layer
                 that refuses to touch internal or private addresses. Results
                 reads only the Ads Manager export file you upload yourself.
@@ -87,7 +87,7 @@ export default function TrustPage() {
       </Section>
       <FinalCtaBand
         title="Questions about security?"
-        subtitle="Email us — we answer data and partnership questions on the same inbox."
+        subtitle="Email us. We answer data and partnership questions on the same inbox."
         cta="Email hello@"
         href={`mailto:${CONTACT.hello}`}
         secondary={{ href: routes.privacy, label: "Read privacy policy" }}

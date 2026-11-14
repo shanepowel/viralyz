@@ -34,14 +34,19 @@ const nextConfig = {
       },
       {
         source: "/for-creators",
-        destination: "/for-brands",
+        destination: "/for-sellers",
         permanent: true,
       },
-      {
-        source: "/kit/:path*",
-        destination: "/",
-        permanent: true,
-      },
+      { source: "/for-brands", destination: "/for-sellers", permanent: true },
+      // Retired creator-era posts and tools.
+      ...[
+        "kitchen-video-12-million-views",
+        "creator-pricing-2026",
+        "three-fixes-that-move-scores",
+        "packages-on-media-kits",
+      ].map((slug) => ({ source: `/blog/${slug}`, destination: "/blog", permanent: true })),
+      { source: "/tools/engagement-calculator", destination: "/tools/safe-zone-checker", permanent: true },
+      { source: "/tools/thumbnail-checker", destination: "/tools/ad-readability-checker", permanent: true },
       {
         source: "/report",
         destination: "/platform",
@@ -49,7 +54,7 @@ const nextConfig = {
       },
       {
         source: "/brands",
-        destination: "/for-brands",
+        destination: "/for-sellers",
         permanent: true,
       },
       {
@@ -59,7 +64,7 @@ const nextConfig = {
       },
       {
         source: "/community",
-        destination: "/for-brands",
+        destination: "/for-sellers",
         permanent: false,
       },
       {
@@ -73,12 +78,12 @@ const nextConfig = {
       // rather than a guessed one-to-one mapping that would just be wrong.
       {
         source: "/dashboard/:path*",
-        destination: `${app}/discover`,
+        destination: `${app}/studio`,
         permanent: false,
       },
       {
         source: "/dashboard",
-        destination: `${app}/discover`,
+        destination: `${app}/studio`,
         permanent: false,
       },
     ];

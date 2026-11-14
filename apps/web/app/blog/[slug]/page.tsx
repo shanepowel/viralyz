@@ -6,7 +6,6 @@ import { FinalCtaBand } from "@/components/marketing/final-cta-band";
 import { MarketingShell } from "@/components/marketing/marketing-shell";
 import { PortableBody } from "@/components/media/PortableBody";
 import { SanityImage } from "@/components/media/SanityImage";
-import { ScoreRing } from "@/components/score/ScoreRing";
 import { JsonLd } from "@/components/seo/JsonLd";
 import { Breadcrumbs } from "@/components/ui/Breadcrumbs";
 import { Container } from "@/components/ui/Container";
@@ -103,24 +102,58 @@ export default async function BlogPostPage({
   if (!post) {
     const fallback = await getPostBySlug(slug);
     if (!fallback) notFound();
-    // Legacy placeholder render path
+    // A note that ships with the site (no Sanity document for this slug).
     return (
       <MarketingShell>
-        <Section className="pt-20 md:pt-28">
-          <Container>
-            <article className="max-w-2xl">
-              <Eyebrow>{fallback.category.title}</Eyebrow>
-              <h1 className="mt-3 font-display text-4xl font-semibold tracking-tight">
-                {fallback.title}
-              </h1>
-              <div className="prose-vz mt-8">
-                {fallback.bodyHtml.map((p) => (
-                  <p key={p.slice(0, 24)}>{p}</p>
+        <JsonLd
+          data={{
+            "@context": "https://schema.org",
+            "@type": "BlogPosting",
+            headline: fallback.title,
+            description: fallback.excerpt,
+            datePublished: fallback.publishedAt,
+            author: { "@type": "Organization", name: "Viralyz" },
+            mainEntityOfPage: `${SITE_URL}/blog/${fallback.slug}`,
+          }}
+        />
+        <Container className="pb-20 pt-[clamp(40px,6vw,80px)]">
+          <article>
+            <p className="m-0 mb-4 font-mono text-[12px] text-muted">
+              <Link href={routes.blog} className="underline underline-offset-4 hover:text-ink">
+                Notes
+              </Link>{" "}
+              / {fallback.category.title}
+            </p>
+            <h1 className="m-0 max-w-[900px] font-display text-[clamp(34px,5vw,60px)] text-balance">
+              {fallback.title}
+            </h1>
+            <p className="m-0 mt-5 max-w-[680px] text-[19px] text-ink-2">{fallback.excerpt}</p>
+            <div className="mt-8 grid grid-cols-1 gap-x-8 gap-y-4 border-t border-rule pt-6 md:grid-cols-[200px_1fr]">
+              <p className="m-0 font-mono text-[12px] text-muted">
+                {formatPostDate(fallback.publishedAt)}
+                <span className="block">{fallback.readMinutes} min read</span>
+                <span className="block">{fallback.author?.name ?? "Viralyz"}</span>
+              </p>
+              <div className="max-w-[680px] text-[18px] leading-[1.6]">
+                {fallback.bodyHtml.map((p, i) => (
+                  <p key={p.slice(0, 24)} className={i === 0 ? "m-0" : "m-0 mt-5"}>
+                    {p}
+                  </p>
                 ))}
+                <p className="m-0 mt-10 border-t border-line pt-4 text-[15px]">
+                  <Link href={routes.blog} className="font-semibold underline underline-offset-4">
+                    All notes
+                  </Link>
+                </p>
               </div>
-            </article>
-          </Container>
-        </Section>
+            </div>
+          </article>
+        </Container>
+        <FinalCtaBand
+          title="Check your next ad before it costs you."
+          subtitle="10 free credits. One credit makes and checks one ad."
+          cta="Start free"
+        />
       </MarketingShell>
     );
   }
@@ -186,12 +219,6 @@ export default async function BlogPostPage({
               </div>
             ) : null}
 
-            {typeof post.score === "number" ? (
-              <div className="mt-8">
-                <ScoreRing value={post.score} size={96} />
-              </div>
-            ) : null}
-
             <div className="mt-10 max-w-prose">
               <PortableBody value={post.body} />
             </div>
@@ -202,7 +229,7 @@ export default async function BlogPostPage({
               </p>
               <p className="mt-1 text-sm text-muted">
                 {post.author?.bio ??
-                  "Editorial notes from scoring real creator content."}
+                  "Notes from building and checking ad creative."}
               </p>
             </div>
 
@@ -211,14 +238,14 @@ export default async function BlogPostPage({
                 href={routes.blog}
                 className="text-sm text-ink underline underline-offset-4"
               >
-                ← All posts
+                All notes
               </Link>
             </p>
           </article>
         </Container>
       </Section>
       <FinalCtaBand
-        title="Generate your next ad variant"
+        title="Check your next ad before it costs you."
         subtitle="10 free credits on signup. No card required."
         cta="Start free"
       />

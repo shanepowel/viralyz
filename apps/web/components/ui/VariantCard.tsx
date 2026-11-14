@@ -43,7 +43,7 @@ export function VariantCard({
     <figure className={cn("m-0 flex flex-col gap-2.5", className)}>
       <div
         className={cn(
-          "@container relative overflow-hidden rounded-[18px]",
+          "@container relative overflow-hidden border border-rule",
           ASPECT[ratio],
           generating && "vz-shimmer bg-panel",
         )}
@@ -61,8 +61,8 @@ export function VariantCard({
         )}
       </div>
       <figcaption className="flex flex-wrap items-center justify-between gap-x-2 gap-y-1.5 text-[13px]">
-        <span className="text-muted">
-          {placement} · {ratio}
+        <span className="font-mono text-[11px] uppercase tracking-[0.06em] text-muted">
+          {placement} {ratio}
         </span>
         {check && !generating ? (
           <CheckChip

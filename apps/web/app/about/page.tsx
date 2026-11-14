@@ -46,7 +46,7 @@ export default function AboutPage() {
               A variant that took real spend to test can fail because of poor
               contrast, text in the wrong safe zone, a policy issue the
               platform flags, or a hook that just does not land. These
-              problems are fixable before a single dollar is spent — most
+              problems are fixable before a single penny is spent. Most
               sellers just have no way to check for them ahead of time.
             </p>
             <p>
@@ -57,7 +57,7 @@ export default function AboutPage() {
               your brand once, and generate variants that run through
               automated pre-flight checks before you ever see them. Then
               import your real spend data and we show you what pre-flight
-              actually predicted — once there is enough of it to say so
+              actually predicted, once there is enough of it to say so
               honestly.
             </p>
             <p>
@@ -117,7 +117,7 @@ export default function AboutPage() {
               },
               {
                 title: "No invented accuracy",
-                body: "Calibration against real performance only shows once you have 20+ matched ads — not before.",
+                body: "Calibration against real performance only shows once you have 20 or more matched ads. Not before.",
               },
             ].map((v) => (
               <div key={v.title}>

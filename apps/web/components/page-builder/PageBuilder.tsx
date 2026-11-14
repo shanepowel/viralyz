@@ -95,7 +95,7 @@ function HeroBlock({ block }: { block: Block }) {
                 value={block.image as never}
                 width={960}
                 priority
-                className="overflow-hidden rounded-card shadow-float"
+                className="overflow-hidden rounded-card"
                 sizes="(max-width: 1024px) 100vw, 50vw"
               />
             ) : null}
@@ -109,7 +109,7 @@ function HeroBlock({ block }: { block: Block }) {
 function SplitMediaBlock({ block }: { block: Block }) {
   const side = block.mediaSide === "left" ? "left" : "right";
   const media = (
-    <div className="overflow-hidden rounded-card border border-line bg-card">
+    <div className="overflow-hidden border border-rule bg-card">
       {block.mediaKind === "video" && block.videoPlaybackId ? (
         <MuxVideo
           playbackId={String(block.videoPlaybackId)}

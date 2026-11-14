@@ -1,16 +1,18 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import { EngagementCalculator } from "@/components/marketing/engagement-calculator";
 import { FinalCta } from "@/components/marketing/final-cta";
 import { MarketingShell } from "@/components/marketing/marketing-shell";
+import { Container } from "@/components/ui/Container";
+import { SectionHeader } from "@/components/ui/SectionHeader";
+import { SafeZoneChecker } from "@/components/tools/SafeZoneChecker";
 import { liveTools } from "@/data/tools";
 import { pageMeta } from "@/lib/meta";
-import { routes } from "@/lib/site";
+import { productFacts, routes } from "@/lib/site";
 
 export const metadata: Metadata = pageMeta({
   title: "Free tools",
   description:
-    "Engagement rate calculator, thumbnail checker, and more. Useful on their own. Free forever. No signup.",
+    "A safe-zone checker and an ad readability checker. They run in your browser, with no account and nothing uploaded.",
   path: routes.tools,
 });
 
@@ -19,55 +21,35 @@ export default function ToolsPage() {
 
   return (
     <MarketingShell>
-      <div className="wrap">
-        <div className="page-hero">
-          <span className="eyebrow">Free tools</span>
-          <h1>Useful on their own. Free forever.</h1>
-          <p>
-            No account needed for any of these. If you like them, the full
-            platform gives you 10 free credits on signup.
-          </p>
-        </div>
-      </div>
-
-      <section style={{ paddingTop: 24 }}>
-        <div className="wrap">
-          <div className="tools-grid">
-            {tools.map((t) => (
-              <Link
-                key={t.slug}
-                href={`/tools/${t.slug}`}
-                className="tcard"
-              >
-                <h3>{t.name}</h3>
-                <p>{t.description}</p>
-                <span className="t-free">Free · No signup</span>
+      <Container className="pb-20 pt-[clamp(40px,6vw,80px)]">
+        <SectionHeader
+          as="h1"
+          eyebrow="Free tools"
+          title="Two checks you can run right now"
+          lede="No account. Your image stays in your browser and is never uploaded."
+        />
+        <ul className="m-0 grid list-none grid-cols-1 gap-x-8 border-t border-rule p-0 sm:grid-cols-2">
+          {tools.map((t, i) => (
+            <li key={t.slug} className="border-b border-line">
+              <Link href={`/tools/${t.slug}`} className="group block py-6">
+                <p className="kicker m-0">Tool {i + 1} / free</p>
+                <h2 className="m-0 mt-2 font-display text-[30px] group-hover:underline group-hover:underline-offset-4">
+                  {t.name}
+                </h2>
+                <p className="m-0 mt-2 max-w-[480px] text-ink-2">{t.description}</p>
               </Link>
-            ))}
-          </div>
+            </li>
+          ))}
+        </ul>
 
-          <div className="sec-head" style={{ marginTop: 72, marginBottom: 32 }}>
-            <span className="eyebrow">Try one now</span>
-            <h2>Engagement rate calculator</h2>
-          </div>
-          <EngagementCalculator />
-          <p style={{ marginTop: 16, fontSize: 13.5, color: "var(--vz-muted)" }}>
-            Want the full product?{" "}
-            <Link
-              href={routes.signup}
-              style={{ color: "var(--vz-ink)", fontWeight: 600 }}
-            >
-              Start free
-            </Link>
-            .
-          </p>
-        </div>
-      </section>
+        <SectionHeader className="mt-20" eyebrow="Try one now" title="Safe-zone checker" />
+        <SafeZoneChecker />
+      </Container>
 
       <FinalCta
-        title="The tools are free. Pre-flight is the magic."
-        subtitle="10 free credits on signup. See what these calculators cannot show you."
-        cta="Start free"
+        title="These check one thing. Pre-flight checks the lot."
+        subtitle={`${productFacts.freeCredits} free credits. Every ad you make is measured against five rules before you spend on it.`}
+        cta="Check a full ad free"
         href={routes.signup}
       />
     </MarketingShell>

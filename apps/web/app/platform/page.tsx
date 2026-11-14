@@ -55,7 +55,7 @@ export default async function PlatformPage() {
           _id: f.slug,
           name: f.name,
           slug: f.slug,
-          group: i < 2 ? "Plan" : "Ship",
+          group: i < 2 ? "Prepare" : i < 4 ? "Make and check" : "Learn",
           tagline: f.tagline,
           summary: f.description,
           bullets: f.bullets,
@@ -78,18 +78,17 @@ export default async function PlatformPage() {
 
   return (
     <MarketingShell>
-      <Container className="flex flex-col items-center gap-[22px] pb-12 pt-[clamp(48px,7vw,88px)] text-center">
+      <Container className="flex flex-col items-start gap-[22px] pb-12 pt-[clamp(48px,7vw,88px)]">
         <Eyebrow>Platform</Eyebrow>
         <h1 className="m-0 max-w-[1000px] font-display text-[clamp(42px,6.2vw,80px)]">
-          Five steps. One pre-flighted output.
+          Five steps, and every ad is checked before you see it.
         </h1>
         <p className="m-0 max-w-[600px] text-[19px] text-muted">
-          Discover, Brand, Studio, Pre-flight, Results. Screenshots and demos
-          below show the real product, not stock photos.
+          Discover, Brand, Studio, Pre-flight, Results. What you see below is the product, drawn with fictional brands.
         </p>
         <StepPills current="" />
         {list[0]?.demoPlaybackId ? (
-          <div className="mt-6 w-full overflow-hidden rounded-card border border-line shadow-float">
+          <div className="mt-6 w-full overflow-hidden border border-rule">
             <MuxVideo
               playbackId={list[0].demoPlaybackId}
               title="Discover to Studio"
@@ -97,7 +96,7 @@ export default async function PlatformPage() {
             />
           </div>
         ) : list[0]?.screenshot ? (
-          <div className="mt-6 w-full overflow-hidden rounded-card border border-line shadow-float">
+          <div className="mt-6 w-full overflow-hidden border border-rule">
             <SanityImage
               value={list[0].screenshot as never}
               width={1400}
@@ -115,17 +114,17 @@ export default async function PlatformPage() {
             <PlatformRail groups={groupsPresent} />
             <div className="space-y-20">
               {byGroup.map(({ group, items }) => (
-                <section key={group} id={`group-${group.toLowerCase()}`}>
+                <section key={group} id={`group-${group.toLowerCase().replace(/\s+/g, "-")}`}>
                   <SectionHeader
-                    eyebrow={group}
-                    title={`${group} tools`}
+                    eyebrow="Platform"
+                    title={group}
                     align="left"
                   />
                   <div className="space-y-16">
                     {items.map((f, i) => {
                       const mediaLeft = i % 2 === 1;
                       const media = (
-                        <div className="overflow-hidden rounded-card border border-line bg-card">
+                        <div className="overflow-hidden border border-rule bg-card">
                           {f.demoPlaybackId ? (
                             <MuxVideo
                               playbackId={f.demoPlaybackId}

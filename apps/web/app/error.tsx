@@ -22,7 +22,7 @@ export default function Error({
         Something went wrong on our side.
       </h1>
       <p className="mt-3 max-w-prose text-muted">
-        Reload the page — if it keeps happening, tell us at hello@viralyz.com.
+        Reload the page. If it keeps happening, tell us at hello@viralyz.com.
       </p>
       <div className="mt-6 flex gap-3">
         <button

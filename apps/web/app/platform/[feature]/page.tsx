@@ -120,7 +120,7 @@ export default async function FeaturePage({ params }: { params: Params }) {
   return (
     <MarketingShell>
       {/* Step pills + hero */}
-      <Container className="flex flex-col items-center gap-[22px] pb-12 pt-[clamp(40px,6vw,72px)] text-center">
+      <Container className="flex flex-col items-start gap-[22px] pb-12 pt-[clamp(40px,6vw,72px)]">
         <StepPills current={slug} />
         <h1 className="m-0 max-w-[1000px] font-display text-[clamp(42px,6.2vw,80px)]">
           {isPreflight ? PREFLIGHT_HERO.title : f.tagline || f.name}
@@ -128,7 +128,7 @@ export default async function FeaturePage({ params }: { params: Params }) {
         <p className="m-0 max-w-[600px] text-[19px] text-muted">
           {isPreflight ? PREFLIGHT_HERO.lede : f.summary}
         </p>
-        <div className="flex flex-wrap justify-center gap-2.5">
+        <div className="flex flex-wrap gap-2.5">
           <ButtonLink href={appHref} size="lg">
             {isPreflight ? "Run pre-flight free" : `Try ${f.name} free`}
           </ButtonLink>
@@ -146,11 +146,11 @@ export default async function FeaturePage({ params }: { params: Params }) {
       <Container className="pb-6">
         <DotPanel>
           {f.demoPlaybackId ? (
-            <div className="overflow-hidden rounded-card border border-line shadow-float">
+            <div className="overflow-hidden border border-rule">
               <MuxVideo playbackId={f.demoPlaybackId} title={f.name} />
             </div>
           ) : f.screenshot ? (
-            <div className="overflow-hidden rounded-card border border-line shadow-float">
+            <div className="overflow-hidden border border-rule">
               <SanityImage
                 value={f.screenshot as never}
                 width={1400}
@@ -163,7 +163,7 @@ export default async function FeaturePage({ params }: { params: Params }) {
           )}
         </DotPanel>
         {hasMedia ? null : (
-          <p className="mb-0 mt-3 text-center text-xs text-muted">
+          <p className="mb-0 mt-3 font-mono text-[11px] text-muted">
             {showcaseCaption(slug)}
           </p>
         )}
@@ -173,7 +173,7 @@ export default async function FeaturePage({ params }: { params: Params }) {
         <>
           <Container
             id="checks"
-            className="flex flex-col items-center gap-9 py-24"
+            className="flex flex-col items-stretch gap-9 py-24"
           >
             <SectionHeader
               eyebrow="The six checks"
@@ -186,15 +186,15 @@ export default async function FeaturePage({ params }: { params: Params }) {
             </p>
           </Container>
 
-          <Container className="flex flex-col items-center gap-9 pb-24">
-            <h2 className="m-0 text-center font-display text-[clamp(30px,4vw,48px)]">
+          <Container className="flex flex-col items-stretch gap-9 pb-24">
+            <h2 className="m-0 font-display text-[clamp(30px,4vw,48px)]">
               What pre-flight can’t tell you
             </h2>
             <ul className="m-0 grid w-full list-none grid-cols-[repeat(auto-fit,minmax(min(260px,100%),1fr))] gap-3 p-0">
               {PREFLIGHT_LIMITS.map((item) => (
                 <li
                   key={item.title}
-                  className="flex flex-col gap-2 rounded-card bg-panel p-6"
+                  className="flex flex-col gap-1.5 border-t border-rule py-4"
                 >
                   <strong className="font-semibold">{item.title}</strong>
                   <span className="text-[15px] text-muted">{item.body}</span>
@@ -206,7 +206,7 @@ export default async function FeaturePage({ params }: { params: Params }) {
       ) : f.bullets?.length ? (
         <Container
           id="details"
-          className="flex flex-col items-center gap-9 py-24"
+          className="flex flex-col items-stretch gap-9 py-24"
         >
           <SectionHeader
             eyebrow={f.name}
@@ -215,7 +215,7 @@ export default async function FeaturePage({ params }: { params: Params }) {
           />
           <ul className="m-0 grid w-full list-none grid-cols-[repeat(auto-fit,minmax(min(260px,100%),1fr))] gap-3 p-0">
             {f.bullets.map((b) => (
-              <li key={b} className="rounded-card bg-panel p-6 text-[15px]">
+              <li key={b} className="border-t border-rule py-4 text-[15px]">
                 {b}
               </li>
             ))}
