@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import Image from "next/image";
 import Link from "next/link";
 import { FinalCta } from "@/components/marketing/final-cta";
 import { MarketingShell } from "@/components/marketing/marketing-shell";
@@ -22,6 +23,11 @@ import {
   FeatureShowcase,
   showcaseCaption,
 } from "@/components/studio/FeatureShowcase";
+
+/** Real screens from the app, shown until Sanity supplies a screenshot or video. */
+const LOCAL_SHOTS: Record<string, { src: string; alt: string } | undefined> = Object.fromEntries(
+  staticFeatures.map((f) => [f.slug, f.screenshot]),
+);
 
 export const metadata: Metadata = pageMeta({
   title: "Platform",
@@ -137,9 +143,23 @@ export default async function PlatformPage() {
                               width={900}
                               sizes="(max-width: 1024px) 100vw, 50vw"
                             />
+                          ) : LOCAL_SHOTS[f.slug] ? (
+                            <figure className="m-0">
+                              <Image
+                                src={LOCAL_SHOTS[f.slug]!.src}
+                                alt={LOCAL_SHOTS[f.slug]!.alt}
+                                width={1600}
+                                height={1000}
+                                sizes="(max-width: 1024px) 100vw, 50vw"
+                                className="block h-auto w-full"
+                              />
+                              <figcaption className="border-t border-line px-4 py-2 font-mono text-[11px] text-muted">
+                                The app, with sample data and a fictional brand.
+                              </figcaption>
+                            </figure>
                           ) : (
                             <figure className="m-0">
-                              <div className="dots flex min-h-72 items-center justify-center bg-panel p-6 [&_.shadow-float]:shadow-none">
+                              <div className="flex min-h-72 items-center justify-center bg-panel p-6">
                                 <FeatureShowcase slug={f.slug} />
                               </div>
                               <figcaption className="border-t border-line px-4 py-2 text-xs text-muted">

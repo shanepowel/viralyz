@@ -7,6 +7,8 @@ export type Feature = {
   description: string;
   bullets: string[];
   appHref: string;
+  /** A real screen from the app with sample data, used until Sanity supplies one. */
+  screenshot: { src: string; alt: string };
 };
 
 export const features: Feature[] = [
@@ -22,6 +24,10 @@ export const features: Feature[] = [
       "Pick a reference angle to carry straight into Studio",
     ],
     appHref: appRoutes.discover,
+    screenshot: {
+      src: "/platform/discover.png",
+      alt: "Discover in the Viralyz app: six sample reference ads, each labelled with how it opens",
+    },
   },
   {
     slug: "brand",
@@ -35,6 +41,10 @@ export const features: Feature[] = [
       "No generation runs until your brand is confirmed",
     ],
     appHref: appRoutes.brand,
+    screenshot: {
+      src: "/platform/brand.png",
+      alt: "Brand in the Viralyz app: brand name, colours and voice on the left, the brand sheet on the right",
+    },
   },
   {
     slug: "studio",
@@ -48,6 +58,10 @@ export const features: Feature[] = [
       "Every ad is AI-generated and labelled as such, with no exceptions",
     ],
     appHref: appRoutes.studio,
+    screenshot: {
+      src: "/platform/studio.png",
+      alt: "Studio in the Viralyz app: a contact sheet of nine ads, three angles by three placements, each with its verdict",
+    },
   },
   {
     slug: "pre-flight",
@@ -61,6 +75,10 @@ export const features: Feature[] = [
       "A headline number only appears once enough checks have actually scored. Never a guess",
     ],
     appHref: appRoutes.studio,
+    screenshot: {
+      src: "/platform/pre-flight.png",
+      alt: "The review desk in the Viralyz app: a story ad with a headline boxed and numbered in red, and the checks listed beside it",
+    },
   },
   {
     slug: "results",
@@ -74,6 +92,10 @@ export const features: Feature[] = [
       "Below that threshold we say so plainly instead of showing a number",
     ],
     appHref: appRoutes.results,
+    screenshot: {
+      src: "/platform/results.png",
+      alt: "Results in the Viralyz app: the import panel and a meter showing how many matched ads are needed before a trend is shown",
+    },
   },
 ];
 

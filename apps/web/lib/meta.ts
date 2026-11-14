@@ -1,13 +1,12 @@
 import type { Metadata } from "next";
 import { SITE_URL } from "@/lib/site";
 
-const DEFAULT_OG = `/og?title=${encodeURIComponent("Viralyz")}`;
 
 export function pageMeta({
   title,
   description,
   path,
-  ogImage = DEFAULT_OG,
+  ogImage,
   robots,
   article,
 }: {
@@ -19,6 +18,8 @@ export function pageMeta({
   article?: { publishedTime?: string };
 }): Metadata {
   const url = `${SITE_URL}${path}`;
+  // Each page gets a share image carrying its own title.
+  const og = ogImage ?? `/og?title=${encodeURIComponent(title)}`;
   return {
     title,
     description,
@@ -30,7 +31,7 @@ export function pageMeta({
       url,
       siteName: "Viralyz",
       type: article ? "article" : "website",
-      images: [{ url: ogImage, width: 1200, height: 630 }],
+      images: [{ url: og, width: 1200, height: 630 }],
       ...(article?.publishedTime
         ? { publishedTime: article.publishedTime }
         : {}),
@@ -39,7 +40,7 @@ export function pageMeta({
       card: "summary_large_image",
       title,
       description,
-      images: [ogImage],
+      images: [og],
     },
   };
 }

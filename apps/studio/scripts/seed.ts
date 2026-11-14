@@ -1,440 +1,222 @@
+/**
+ * Seeds the Sanity project with the content the site already ships in code:
+ * settings, the three notes with their covers, the five platform features
+ * with their screenshots, and the legal pages.
+ *
+ *   pnpm --filter studio seed:dry   builds every document and prints a summary, writes nothing
+ *   pnpm --filter studio seed       writes to Sanity (needs SANITY_API_WRITE_TOKEN)
+ *
+ * Reads variables from the environment, or from .env.seed / .env.local / .env
+ * in the repo root or apps/studio. Safe to run again: every document has a
+ * fixed id and is replaced, never duplicated. It deletes nothing.
+ */
+import { createHash } from "node:crypto";
+import { existsSync, readFileSync } from "node:fs";
+import path from "node:path";
+import { fileURLToPath } from "node:url";
 import { createClient } from "@sanity/client";
+import { features } from "../../web/data/features";
+import { LEGAL_UPDATED, privacySections, termsSections, type LegalSection } from "../../web/data/legal";
+import { BLOG_CATEGORIES, PLACEHOLDER_POSTS } from "../../web/lib/blog";
+import { COMPANY, CONTACT } from "../../web/lib/site";
 
-const projectId = process.env.SANITY_STUDIO_PROJECT_ID || "jnxqbr4r";
-const dataset = process.env.SANITY_STUDIO_DATASET || "production";
-const token =
-  process.env.SANITY_API_WRITE_TOKEN || process.env.SANITY_AUTH_TOKEN;
+const DRY = process.argv.includes("--dry");
+const STUDIO = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
+const ROOT = path.resolve(STUDIO, "../..");
+const WEB_PUBLIC = path.resolve(ROOT, "apps/web/public");
 
-if (!token) {
-  console.error("SANITY_API_WRITE_TOKEN is required to seed");
+function loadEnvFiles() {
+  for (const dir of [STUDIO, ROOT]) {
+    for (const name of [".env.seed", ".env.local", ".env"]) {
+      const file = path.join(dir, name);
+      if (!existsSync(file)) continue;
+      for (const line of readFileSync(file, "utf8").split(/\r?\n/)) {
+        const m = line.match(/^\s*(?:export\s+)?([A-Z0-9_]+)\s*=\s*(.*)\s*$/);
+        if (!m || process.env[m[1]!] !== undefined) continue;
+        process.env[m[1]!] = m[2]!.replace(/^(['"])(.*)\1$/, "$2");
+      }
+    }
+  }
+}
+loadEnvFiles();
+
+const env = (...names: string[]) => names.map((n) => process.env[n]?.trim()).find(Boolean);
+const projectId = env("SANITY_STUDIO_PROJECT_ID", "NEXT_PUBLIC_SANITY_PROJECT_ID", "SANITY_API_PROJECT_ID");
+const dataset = env("SANITY_STUDIO_DATASET", "NEXT_PUBLIC_SANITY_DATASET", "SANITY_API_DATASET") ?? "production";
+const token = env("SANITY_API_WRITE_TOKEN", "SANITY_AUTH_TOKEN");
+
+if (!DRY && (!projectId || !token)) {
+  console.error(
+    [
+      "Cannot seed: missing " + [!projectId && "the Sanity project id", !token && "SANITY_API_WRITE_TOKEN"].filter(Boolean).join(" and ") + ".",
+      "Pull them from Vercel into a file this script reads, then run it again:",
+      "  npx vercel env pull .env.seed --environment=production",
+      "  pnpm --filter studio seed",
+    ].join("\n"),
+  );
   process.exit(1);
 }
 
-const client = createClient({
-  projectId,
-  dataset,
-  apiVersion: "2026-02-01",
-  token,
-  useCdn: false,
-});
+const client = DRY
+  ? null
+  : createClient({ projectId: projectId!, dataset, apiVersion: "2026-02-01", token, useCdn: false });
 
-function blocks(text: string) {
-  return text.split(/\n\n+/).map((para, i) => ({
-    _type: "block" as const,
-    _key: `b${i}`,
-    style: "normal",
-    markDefs: [],
-    children: [{ _type: "span", _key: `s${i}`, text: para, marks: [] }],
-  }));
-}
+type Doc = Record<string, unknown> & { _id: string; _type: string };
+const docs: Doc[] = [];
+const uploads: string[] = [];
 
-async function uploadSolidCover(filename: string, color: string) {
-  // Minimal valid 8x8 PNG (precomputed) + we'll just use SVG as image
-  const svg = `<svg xmlns="http://www.w3.org/2000/svg" width="1600" height="900">
-    <defs><linearGradient id="g" x1="0" y1="0" x2="1" y2="1">
-      <stop offset="0%" stop-color="${color}"/>
-      <stop offset="100%" stop-color="#1A1D23"/>
-    </linearGradient></defs>
-    <rect width="1600" height="900" fill="url(#g)"/>
-    <text x="80" y="820" fill="white" font-family="sans-serif" font-size="48" opacity="0.7">Viralyz</text>
-  </svg>`;
-  const asset = await client.assets.upload(
-    "image",
-    Buffer.from(svg),
-    { filename, contentType: "image/svg+xml" },
-  );
+const key = (seed: string) => createHash("sha1").update(seed).digest("hex").slice(0, 12);
+
+function block(text: string, style: "normal" | "h2" = "normal") {
+  const k = key(style + text);
   return {
-    _type: "image" as const,
-    asset: { _type: "reference" as const, _ref: asset._id },
-    alt: "Editorial cover image",
+    _type: "block" as const,
+    _key: k,
+    style,
+    markDefs: [],
+    children: [{ _type: "span" as const, _key: `${k}s`, text, marks: [] }],
   };
 }
 
-async function upsert(doc: Record<string, unknown> & { _id: string; _type: string }) {
-  await client.createOrReplace(doc);
-  console.log("upserted", doc._type, doc._id);
+const legalBody = (sections: LegalSection[]) =>
+  sections.flatMap((s) => [block(s.heading, "h2"), ...s.body.map((p) => block(p))]);
+
+/** Uploads a file from apps/web/public and returns an image field. The same bytes are never stored twice. */
+async function image(publicPath: string, alt: string) {
+  const file = path.join(WEB_PUBLIC, publicPath);
+  if (!existsSync(file)) throw new Error(`Missing image: ${file}`);
+  uploads.push(publicPath);
+  if (!client) return { _type: "image" as const, asset: { _type: "reference" as const, _ref: `image-dry-${key(publicPath)}` }, alt };
+  const asset = await client.assets.upload("image", readFileSync(file), {
+    filename: path.basename(publicPath),
+    contentType: "image/png",
+  });
+  return { _type: "image" as const, asset: { _type: "reference" as const, _ref: asset._id }, alt };
 }
 
-async function main() {
-  await upsert({
+const slug = (current: string) => ({ _type: "slug" as const, current });
+const ref = (_ref: string) => ({ _type: "reference" as const, _ref });
+
+/** Platform groups, in the order the product is used. Matches the site's fallback. */
+const GROUPS = ["Prepare", "Prepare", "Make and check", "Make and check", "Learn"];
+
+async function build() {
+  docs.push({
     _id: "siteSettings",
     _type: "siteSettings",
     siteName: "Viralyz",
-    missionLine:
-      "Score your content before you post it. Build a record brands can trust.",
-    companyNumber: "16095214",
-    companyLocation: "Windsor, UK",
-    parentCompany: "Digiteq Holdings Limited",
-    helloEmail: "hello@viralyz.com",
-    partnershipsEmail: "partnerships@viralyz.com",
+    missionLine: "Make the ad. Mark it up. Then spend on it.",
+    companyNumber: COMPANY.number,
+    companyLocation: COMPANY.location,
+    parentCompany: COMPANY.legalName,
+    helloEmail: CONTACT.hello,
+    partnershipsEmail: CONTACT.partnerships,
+    defaultOgImage: await image("og-default.png", "Viralyz: make the ad, mark it up, then spend on it"),
   });
 
-  await upsert({
-    _id: "author-viralyz-team",
+  docs.push({
+    _id: "author-viralyz",
     _type: "author",
-    name: "Viralyz Team",
-    role: "Editorial",
-    bio: "Notes from scoring real creator content.",
+    name: "Viralyz",
+    role: "Product",
+    bio: "Notes from building and checking ad creative.",
   });
 
-  const cats = [
-    { id: "category-teardowns", title: "Teardowns", slug: "teardowns", accentTone: "score" },
-    { id: "category-pricing", title: "Pricing", slug: "pricing", accentTone: "neutral" },
-    { id: "category-playbooks", title: "Playbooks", slug: "playbooks", accentTone: "neutral" },
-    { id: "category-product-news", title: "Product news", slug: "product-news", accentTone: "neutral" },
-  ];
-  for (const c of cats) {
-    await upsert({
-      _id: c.id,
-      _type: "category",
-      title: c.title,
-      slug: { _type: "slug", current: c.slug },
-      accentTone: c.accentTone,
+  for (const c of BLOG_CATEGORIES) {
+    docs.push({ _id: `category-${c.slug}`, _type: "category", title: c.title, slug: slug(c.slug), accentTone: "neutral" });
+  }
+
+  for (const [i, post] of PLACEHOLDER_POSTS.entries()) {
+    docs.push({
+      _id: `post-${post.slug}`,
+      _type: "post",
+      title: post.title,
+      slug: slug(post.slug),
+      excerpt: post.excerpt,
+      category: ref(`category-${post.category.slug}`),
+      author: ref("author-viralyz"),
+      publishedAt: post.publishedAt,
+      featured: i === 0,
+      ...(post.cover ? { coverImage: await image(post.cover.src.replace(/^\//, ""), post.cover.alt) } : {}),
+      body: post.bodyHtml.map((p) => block(p)),
+      ...(post.seoTitle ? { seoTitle: post.seoTitle } : {}),
+      ...(post.seoDescription ? { seoDescription: post.seoDescription } : {}),
     });
   }
 
-  const cover1 = await uploadSolidCover("kitchen-cover.svg", "#6C4CF1");
-  const cover2 = await uploadSolidCover("pricing-cover.svg", "#F2994A");
-  const cover3 = await uploadSolidCover("fixes-cover.svg", "#27AE60");
-  const cover4 = await uploadSolidCover("packages-cover.svg", "#2F80ED");
-
-  await upsert({
-    _id: "post-kitchen-video",
-    _type: "post",
-    title: "Why that 40 second kitchen video hit 12 million views",
-    slug: { _type: "slug", current: "kitchen-video-12-million-views" },
-    excerpt:
-      "We ran the score. The opening did almost all of the work. Here is the breakdown.",
-    category: { _type: "reference", _ref: "category-teardowns" },
-    author: { _type: "reference", _ref: "author-viralyz-team" },
-    publishedAt: "2026-07-08T09:00:00.000Z",
-    featured: true,
-    coverImage: cover1,
-    score: 94,
-    body: [
-      ...blocks(
-        "Most viral food clips do not win on recipes. They win on the first three seconds.\n\nWe scored the kitchen video that crossed 12 million views. Opening landed at 19 out of 20. Visuals and pacing were strong, but the hook carried almost the entire lift.",
-      ),
-      {
-        _type: "scoreBreakdown",
-        _key: "sb1",
-        items: [
-          { _key: "i1", factor: "Hook", score: 95 },
-          { _key: "i2", factor: "Visuals", score: 88 },
-          { _key: "i3", factor: "Pacing", score: 90 },
-          { _key: "i4", factor: "Words", score: 86 },
-        ],
-      },
-      ...blocks(
-        "The first line stated the outcome before the method. That pattern shows up again and again in our scored set for food creators.",
-      ),
-    ],
-    seoTitle: "Kitchen video teardown: how a 40s clip hit 12M views",
-    seoDescription:
-      "A Viral Score teardown of a 40 second kitchen video that reached 12 million views.",
-  });
-
-  await upsert({
-    _id: "post-creator-pricing",
-    _type: "post",
-    title: "What creators actually charge in 2026, by niche and platform",
-    slug: { _type: "slug", current: "creator-pricing-2026" },
-    excerpt:
-      "Real numbers from verified media kits. No guesswork, no inflated rate cards.",
-    category: { _type: "reference", _ref: "category-pricing" },
-    author: { _type: "reference", _ref: "author-viralyz-team" },
-    publishedAt: "2026-07-01T09:00:00.000Z",
-    coverImage: cover2,
-    body: blocks(
-      "Rate cards online are often fantasy. Verified kits tell a quieter story.\n\nAcross niches, mid-tier TikTok packages cluster lower than Instagram Reels with usage rights. UGC delivered as files, not posts, prices differently again.\n\nWhen packages ship on Viralyz, this guide will update from real bookings, not surveys alone.",
-    ),
-  });
-
-  await upsert({
-    _id: "post-three-fixes",
-    _type: "post",
-    title: "The three fixes that move scores most, ranked by real results",
-    slug: { _type: "slug", current: "three-fixes-that-move-scores" },
-    excerpt:
-      "We looked at every fix applied this year. These three earned their points.",
-    category: { _type: "reference", _ref: "category-playbooks" },
-    author: { _type: "reference", _ref: "author-viralyz-team" },
-    publishedAt: "2026-06-24T09:00:00.000Z",
-    coverImage: cover3,
-    body: blocks(
-      "Not every suggestion moves the needle. Three do, consistently.\n\nRewrite the opening line. Cut the still shot that bleeds past four seconds. Put the payoff earlier than you think you should.\n\nThose three show the largest average score lift after re-score in our early data.",
-    ),
-  });
-
-  await upsert({
-    _id: "post-packages",
-    _type: "post",
-    title: "Packages are here: sell fixed price offers from your media kit",
-    slug: { _type: "slug", current: "packages-on-media-kits" },
-    excerpt:
-      "List an offer, get paid safely, keep 100%. Here is how it works.",
-    category: { _type: "reference", _ref: "category-product-news" },
-    author: { _type: "reference", _ref: "author-viralyz-team" },
-    publishedAt: "2026-06-17T09:00:00.000Z",
-    coverImage: cover4,
-    body: blocks(
-      "Creators can list up to three fixed offers on their media kit: price, delivery time, and what the brand gets.\n\nBrands pay upfront. Funds sit with Viralyz until delivery and approval. Creators keep 100%. Buyers pay a 10% fee on top.\n\nThis is marketplace revenue without waiting for full campaigns.",
-    ),
-  });
-
-  const features = [
-    {
-      id: "feature-viral-score",
-      slug: "viral-score",
-      name: "Viral Score",
-      group: "Score",
-      icon: "gauge",
-      order: 1,
-      tagline: "Know how your content will do. Before you post it.",
-      summary:
-        "Every post gets a score out of 100 across five areas: opening, visuals, pacing, words and timing.",
-      bullets: [
-        "Score in under 30 seconds from a file or a link",
-        "Five factor breakdown with a fix for each weak area",
-        "Rescore after each fix and watch the number move",
-      ],
-      appHref: "https://app.viralyz.com/analyze",
-      live: true,
-    },
-    {
-      id: "feature-hook-lab",
-      slug: "hook-lab",
-      name: "Hook Lab",
-      group: "Create",
-      icon: "sparkles",
-      order: 2,
-      tagline: "Ten opening lines for any idea, ranked.",
-      summary:
-        "Your first three seconds decide everything. Hook Lab gives you ten opening lines for any idea.",
-      bullets: [
-        "Ten ranked openings per idea",
-        "Plain-language notes on why each line works or fails",
-        "Pick one, paste it into Script Doctor, and keep scoring",
-      ],
-      appHref: "https://app.viralyz.com/hook-lab",
-      live: true,
-    },
-    {
-      id: "feature-script-doctor",
-      slug: "script-doctor",
-      name: "Script Doctor",
-      group: "Create",
-      icon: "clapperboard",
-      order: 3,
-      tagline: "Line-by-line script feedback, with a teleprompter built in.",
-      summary:
-        "Paste your script and get feedback line by line: weak opening, buried point, missing call to action.",
-      bullets: [
-        "Line-by-line notes with suggested rewrites",
-        "Teleprompter mode for recording",
-        "Captions and hashtags as part of the same rewrite pass",
-      ],
-      appHref: "https://app.viralyz.com/caption-studio",
-      live: true,
-    },
-    {
-      id: "feature-thumbnail-studio",
-      slug: "thumbnail-studio",
-      name: "Thumbnail Studio",
-      group: "Publish",
-      icon: "image",
-      order: 4,
-      tagline: "See your thumbnail at real feed size.",
-      summary:
-        "See your thumbnail at real feed size, sitting next to typical competitor tiles.",
-      bullets: [
-        "Feed-size previews for YouTube, TikTok, and Instagram",
-        "Side-by-side comparison against typical tiles",
-        "Clear readability checks before you publish",
-      ],
-      appHref: "https://app.viralyz.com/thumbnails",
-      live: true,
-    },
-    {
-      id: "feature-performance-tracking",
-      slug: "performance-tracking",
-      name: "Performance Tracking",
-      group: "Intel",
-      icon: "line-chart",
-      order: 5,
-      tagline: "Predicted versus actual, over time.",
-      summary:
-        "After you post, we track what really happened against the prediction, and publish our accuracy on your profile.",
-      bullets: [
-        "Predicted score versus real outcomes",
-        "Accuracy published on your profile when we have enough data",
-        "Niche trend context so you post into rising formats",
-      ],
-      appHref: "https://app.viralyz.com/trends",
-      live: true,
-    },
-  ];
-
-  for (const f of features) {
-    const shot = await uploadSolidCover(`${f.slug}-shot.svg`, "#4F46E5");
-    await upsert({
-      _id: f.id,
+  for (const [i, f] of features.entries()) {
+    docs.push({
+      _id: `feature-${f.slug}`,
       _type: "feature",
       name: f.name,
-      slug: { _type: "slug", current: f.slug },
-      group: f.group,
+      slug: slug(f.slug),
+      group: GROUPS[i] ?? "Learn",
       tagline: f.tagline,
-      summary: f.summary,
-      icon: f.icon,
+      summary: f.description,
       bullets: f.bullets,
       appHref: f.appHref,
-      order: f.order,
-      live: f.live,
-      screenshot: { ...shot, alt: `${f.name} product screenshot placeholder` },
+      order: i + 1,
+      live: true,
+      screenshot: await image(f.screenshot.src.replace(/^\//, ""), f.screenshot.alt),
     });
   }
 
-  await upsert({
-    _id: "cta-start-free",
-    _type: "ctaBand",
-    heading: "Score your next video",
-    body: "Ten free scores a month. No card required.",
-    primaryLabel: "Score your video, free",
-    primaryHref: "https://app.viralyz.com",
-    secondaryLabel: "Browse creators",
-    secondaryHref: "/creators",
-  });
-
-  const faqs = [
+  // "13 November 2026" in the code; Sanity's date field wants ISO.
+  const lastUpdated = new Date(`${LEGAL_UPDATED} UTC`).toISOString().slice(0, 10);
+  docs.push(
+    { _id: "legal-privacy", _type: "legalPage", title: "Privacy policy", slug: slug("privacy"), lastUpdated, body: legalBody(privacySections) },
+    { _id: "legal-terms", _type: "legalPage", title: "Terms of service", slug: slug("terms"), lastUpdated, body: legalBody(termsSections) },
     {
-      id: "faq-brands-pay",
-      q: "Do brands pay to search creators?",
-      a: "Brands can browse profiles for free. A subscription unlocks the campaign manager and, at launch, direct booking with escrow.",
-      audience: "general",
-    },
-    {
-      id: "faq-score-calc",
-      q: "How is a score calculated?",
-      a: "We analyze opening, visuals, pacing, words and timing against what performs in your niche, then combine them into a score out of 100.",
-      audience: "general",
-    },
-    {
-      id: "faq-cancel",
-      q: "Can I cancel anytime?",
-      a: "Yes. Plans are month to month with no lock-in. Your public profile stays live on the free tier.",
-      audience: "creator",
-    },
-  ];
-  for (const f of faqs) {
-    await upsert({
-      _id: f.id,
-      _type: "faqItem",
-      question: f.q,
-      answer: blocks(f.a),
-      audience: f.audience,
-    });
-  }
-
-  for (const legal of [
-    {
-      id: "legal-privacy",
-      title: "Privacy policy",
-      slug: "privacy",
-      body: "Viralyz is operated by Digiteq Holdings Limited. We process account data, connected platform metrics, and content you upload to score.\n\nYou can export or delete your data from settings. Contact hello@viralyz.com for privacy requests.",
-    },
-    {
-      id: "legal-terms",
-      title: "Terms of service",
-      slug: "terms",
-      body: "By using Viralyz you agree to these terms. The service is provided as-is while we grow the product.\n\nDo not misuse platform APIs or attempt to scrape other users' private data.",
-    },
-    {
-      id: "legal-cookies",
-      title: "Cookies",
-      slug: "cookies",
-      body: "We use Plausible Analytics, which is cookieless. Essential cookies keep you signed in on the product app.\n\nIf we ever add optional marketing pixels, they load only after you opt in.",
-    },
-  ]) {
-    await upsert({
-      _id: legal.id,
+      _id: "legal-cookies",
       _type: "legalPage",
-      title: legal.title,
-      slug: { _type: "slug", current: legal.slug },
-      lastUpdated: "2026-07-01",
-      body: blocks(legal.body),
-    });
+      title: "Cookies",
+      slug: slug("cookies"),
+      lastUpdated,
+      body: legalBody([
+        {
+          heading: "What we use",
+          body: [
+            "This website uses privacy-friendly analytics that set no cookies and do not track you across sites.",
+            "The Viralyz app sets essential cookies only: one keeps you signed in, and one remembers your theme. They are needed for the app to work, so they do not ask for consent.",
+          ],
+        },
+        {
+          heading: "Your choices",
+          body: [
+            "If we add anything that sets optional cookies, this site asks first, and you can change your answer at any time from the cookie settings.",
+            `Questions about cookies or tracking: ${CONTACT.hello}.`,
+          ],
+        },
+      ]),
+    },
+  );
+}
+
+async function main() {
+  await build();
+  const byType = docs.reduce<Record<string, number>>((m, d) => ({ ...m, [d._type]: (m[d._type] ?? 0) + 1 }), {});
+  const summary = Object.entries(byType).map(([t, n]) => `${n} ${t}`).join(", ");
+
+  if (DRY) {
+    if (process.argv.includes("--json")) {
+      console.log(JSON.stringify(docs));
+      return;
+    }
+    console.log(`Dry run. Would write ${docs.length} documents (${summary}) and upload ${uploads.length} images:`);
+    for (const u of uploads) console.log(`  ${u}`);
+    console.log("Nothing was written.");
+    return;
   }
 
-  await upsert({
-    _id: "homePage",
-    _type: "page",
-    title: "Home",
-    slug: { _type: "slug", current: "home" },
-    pageBuilder: [
-      {
-        _type: "hero",
-        _key: "hero",
-        eyebrow: "Viralyz",
-        heading: "Know how your content will do. Before you post it.",
-        lede: "Score every video out of 100, see the fixes worth the most points, and build a track record brands can trust.",
-        primaryCta: {
-          label: "Score your video, free",
-          href: "https://app.viralyz.com",
-        },
-        secondaryCta: { label: "Browse creators", href: "/creators" },
-        mediaKind: "scoreDemo",
-      },
-      {
-        _type: "statsBand",
-        _key: "stats",
-        items: [
-          { _key: "s1", value: "100", label: "Point score on every video" },
-          { _key: "s2", value: "5", label: "Areas analyzed per post" },
-          { _key: "s3", value: "<30s", label: "To your first score" },
-          { _key: "s4", value: "10", label: "Free scores a month" },
-        ],
-      },
-      {
-        _type: "ctaSection",
-        _key: "cta",
-        band: { _type: "reference", _ref: "cta-start-free" },
-      },
-    ],
-  });
-
-  await upsert({
-    _id: "aboutPage",
-    _type: "page",
-    title: "About",
-    slug: { _type: "slug", current: "about" },
-    pageBuilder: [
-      {
-        _type: "hero",
-        _key: "h",
-        eyebrow: "About",
-        heading: "Creators deserve to know, not guess.",
-        lede: "Viralyz exists because posting content should not feel like a lottery ticket.",
-        mediaKind: "none",
-      },
-      {
-        _type: "richText",
-        _key: "r",
-        body: blocks(
-          "Millions of people make content every day. Most of them post it and hope. Viralyz makes the fixable problems visible — score before you post, explain what is wrong in plain language, and show what each fix is worth.\n\nViralyz is a Digiteq Holdings Limited company (16095214), built from Windsor, UK.",
-        ),
-      },
-      {
-        _type: "ctaSection",
-        _key: "c",
-        band: { _type: "reference", _ref: "cta-start-free" },
-      },
-    ],
-  });
-
-  console.log("Seed complete");
+  console.log(`Seeding Sanity project ${projectId}, dataset ${dataset}.`);
+  const tx = client!.transaction();
+  for (const doc of docs) tx.createOrReplace(doc);
+  await tx.commit();
+  console.log(`Wrote ${docs.length} documents (${summary}) and uploaded ${uploads.length} images.`);
+  console.log("The site picks the new content up within a few minutes.");
 }
 
 main().catch((err) => {
-  console.error(err);
+  console.error("Seed failed:", err instanceof Error ? err.message : err);
   process.exit(1);
 });

@@ -9,7 +9,8 @@
     "deploy": "sanity deploy",
     "schema:deploy": "sanity schema deploy",
     "typegen": "sanity schema extract --enforce-required-fields && sanity typegen generate",
-    "seed": "tsx scripts/seed.ts"
+    "seed": "tsx --tsconfig ../web/tsconfig.json scripts/seed.ts",
+    "seed:dry": "tsx --tsconfig ../web/tsconfig.json scripts/seed.ts --dry"
   },
   "dependencies": {
     "@sanity/vision": "^5.31.1",

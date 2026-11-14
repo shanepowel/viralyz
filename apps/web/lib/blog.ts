@@ -11,6 +11,8 @@ export type BlogPostCard = {
   publishedAt: string;
   scoreBadge?: string | null;
   coverGradient: string;
+  /** A cover that ships with the site, for notes not yet in Sanity. */
+  cover?: { src: string; alt: string } | null;
   category: BlogCategory;
   readMinutes: number;
 };
@@ -32,6 +34,7 @@ export const PLACEHOLDER_POSTS: BlogPost[] = [
     _id: "note-safe-zones",
     title: "Why your Story button is invisible: safe zones by placement",
     slug: "safe-zones-by-placement",
+    cover: { src: "/notes/safe-zones.png", alt: "A story ad with the safe zone ruled in blue and the button marked in red below it" },
     excerpt:
       "Stories, Reels and TikTok draw their own controls over the top and bottom of your ad. Here is how much room each one takes.",
     publishedAt: "2026-11-13T09:00:00.000Z",
@@ -55,6 +58,7 @@ export const PLACEHOLDER_POSTS: BlogPost[] = [
     _id: "note-contrast",
     title: "Contrast that survives a phone in daylight",
     slug: "contrast-on-a-phone-in-daylight",
+    cover: { src: "/notes/contrast.png", alt: "The same headline at 2.2 to 1 and at 6.0 to 1 contrast, with 4.5 to 1 as the minimum" },
     excerpt:
       "An ad that reads well on your monitor can vanish on a phone outdoors. One number tells you in advance.",
     publishedAt: "2026-11-13T09:00:00.000Z",
@@ -78,6 +82,7 @@ export const PLACEHOLDER_POSTS: BlogPost[] = [
     _id: "note-policy",
     title: "The claims that get ad creative rejected",
     slug: "claims-that-get-ads-rejected",
+    cover: { src: "/notes/policy.png", alt: "Three ad claims struck through in red, each with a compliant rewording in green" },
     excerpt:
       "Most rejected ads are not rejected for the picture. They are rejected for one sentence.",
     publishedAt: "2026-11-13T09:00:00.000Z",

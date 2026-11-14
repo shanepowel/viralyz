@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import Image from "next/image";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { stegaClean } from "@sanity/client/stega";
@@ -128,6 +129,17 @@ export default async function BlogPostPage({
               {fallback.title}
             </h1>
             <p className="m-0 mt-5 max-w-[680px] text-[19px] text-ink-2">{fallback.excerpt}</p>
+            {fallback.cover ? (
+              <Image
+                src={fallback.cover.src}
+                alt={fallback.cover.alt}
+                width={1600}
+                height={900}
+                priority
+                sizes="(max-width: 1320px) 100vw, 1200px"
+                className="mt-8 block h-auto w-full border border-rule"
+              />
+            ) : null}
             <div className="mt-8 grid grid-cols-1 gap-x-8 gap-y-4 border-t border-rule pt-6 md:grid-cols-[200px_1fr]">
               <p className="m-0 font-mono text-[12px] text-muted">
                 {formatPostDate(fallback.publishedAt)}
@@ -207,7 +219,7 @@ export default async function BlogPostPage({
             </div>
 
             {post.coverImage ? (
-              <div className="mt-10 overflow-hidden rounded-card">
+              <div className="mt-10 overflow-hidden border border-rule">
                 <SanityImage
                   value={post.coverImage as never}
                   width={1600}

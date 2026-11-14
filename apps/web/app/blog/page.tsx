@@ -1,6 +1,8 @@
 import type { Metadata } from "next";
+import Image from "next/image";
 import Link from "next/link";
 import { MarketingShell } from "@/components/marketing/marketing-shell";
+import { SanityImage } from "@/components/media/SanityImage";
 import { Container } from "@/components/ui/Container";
 import { SectionHeader } from "@/components/ui/SectionHeader";
 import { cn } from "@/lib/cn";
@@ -33,6 +35,7 @@ type PostCard = {
   category?: { title?: string; slug?: string } | null;
   author?: { name?: string; avatar?: unknown } | null;
   coverImage?: unknown;
+  cover?: { src: string; alt: string } | null;
   readingTime?: number | null;
 };
 
@@ -77,6 +80,7 @@ export default async function BlogPage({
       category: p.category,
       readingTime: p.readMinutes,
       coverImage: null,
+      cover: p.cover ?? null,
     }));
     total = list.length;
     cats = BLOG_CATEGORIES;
@@ -133,7 +137,7 @@ export default async function BlogPage({
               <li key={post._id} className="border-b border-line">
                 <Link
                   href={`/blog/${post.slug}`}
-                  className="group grid grid-cols-1 gap-x-8 gap-y-2 py-7 md:grid-cols-[200px_1fr]"
+                  className="group grid grid-cols-1 gap-x-8 gap-y-3 py-7 md:grid-cols-[200px_1fr_minmax(0,300px)]"
                 >
                   <p className="m-0 pt-1.5 font-mono text-[12px] text-muted">
                     {formatPostDate(post.publishedAt)}
@@ -148,6 +152,24 @@ export default async function BlogPage({
                       <p className="m-0 mt-2 font-mono text-[12px] text-muted">{post.readingTime} min read</p>
                     ) : null}
                   </div>
+                  {post.coverImage ? (
+                    <SanityImage
+                      value={post.coverImage as never}
+                      width={600}
+                      height={338}
+                      sizes="(max-width: 768px) 100vw, 300px"
+                      className="border border-rule"
+                    />
+                  ) : post.cover ? (
+                    <Image
+                      src={post.cover.src}
+                      alt={post.cover.alt}
+                      width={1600}
+                      height={900}
+                      sizes="(max-width: 768px) 100vw, 300px"
+                      className="block h-auto w-full border border-rule"
+                    />
+                  ) : null}
                 </Link>
               </li>
             ))}

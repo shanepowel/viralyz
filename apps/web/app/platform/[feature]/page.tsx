@@ -1,3 +1,4 @@
+import Image from "next/image";
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { stegaClean } from "@sanity/client/stega";
@@ -158,13 +159,23 @@ export default async function FeaturePage({ params }: { params: Params }) {
                 sizes="100vw"
               />
             </div>
+          ) : fallback?.screenshot ? (
+            <Image
+              src={fallback.screenshot.src}
+              alt={fallback.screenshot.alt}
+              width={1600}
+              height={1000}
+              priority
+              sizes="(max-width: 1320px) 100vw, 1200px"
+              className="block h-auto w-full border border-line"
+            />
           ) : (
             <FeatureShowcase slug={slug} />
           )}
         </DotPanel>
         {hasMedia ? null : (
           <p className="mb-0 mt-3 font-mono text-[11px] text-muted">
-            {showcaseCaption(slug)}
+            {fallback?.screenshot ? "The app, with sample data and a fictional brand." : showcaseCaption(slug)}
           </p>
         )}
       </Container>
