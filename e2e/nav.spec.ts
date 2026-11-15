@@ -27,8 +27,14 @@ test("mobile nav wraps without horizontal scroll", async ({ page }) => {
 
 test("theme choice persists across reloads", async ({ page }) => {
   await page.goto("/");
-  await page.getByRole("radio", { name: "Dark theme" }).click();
+  // Light is the default, whatever the device prefers.
+  await expect(page.locator("html")).toHaveAttribute("data-theme", "light");
+  // The switch in the top bar.
+  await page.getByRole("button", { name: "Switch to the dark theme" }).click();
   await expect(page.locator("html")).toHaveAttribute("data-theme", "dark");
   await page.reload();
   await expect(page.locator("html")).toHaveAttribute("data-theme", "dark");
+  // The full control in the footer.
+  await page.getByRole("radio", { name: "Light", exact: true }).click();
+  await expect(page.locator("html")).toHaveAttribute("data-theme", "light");
 });

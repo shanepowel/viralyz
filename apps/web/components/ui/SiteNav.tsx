@@ -5,6 +5,7 @@ import { usePathname } from "next/navigation";
 import { chromeLinks, mainNav } from "@/config/nav";
 import { ButtonLink } from "@/components/ui/Button";
 import { Logo } from "@/components/ui/Logo";
+import { ThemeSwitch } from "@/components/ui/ThemeSwitch";
 import { cn } from "@/lib/cn";
 import { track } from "@/lib/analytics";
 
@@ -50,6 +51,7 @@ export function SiteNav() {
           })}
         </ul>
         <div className="flex items-center gap-2">
+          <ThemeSwitch />
           <a
             href={chromeLinks.signIn}
             className="inline-flex min-h-11 items-center px-3 text-[15px] hover:text-muted"

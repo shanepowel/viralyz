@@ -2,33 +2,24 @@
 
 import { useEffect, useState } from "react";
 import { useTheme } from "next-themes";
-import { Monitor, Moon, Sun } from "lucide-react";
 import { cn } from "@/lib/cn";
 
 const OPTIONS = [
-  { value: "light", label: "Light theme", icon: Sun },
-  { value: "dark", label: "Dark theme", icon: Moon },
-  { value: "system", label: "Match system theme", icon: Monitor },
+  { value: "light", label: "Light" },
+  { value: "dark", label: "Dark" },
+  { value: "system", label: "Match device" },
 ] as const;
 
-/** Light / dark / system. next-themes stores the choice and applies it before paint. */
+/** Light / Dark / Match device, in words. next-themes stores the choice and applies it before paint. */
 export function ThemeToggle({ className }: { className?: string }) {
   const { theme, setTheme } = useTheme();
   const [mounted, setMounted] = useState(false);
   useEffect(() => setMounted(true), []);
-  const current = mounted ? (theme ?? "system") : null;
+  const current = mounted ? (theme ?? "light") : null;
 
   return (
-    <div
-      role="radiogroup"
-      aria-label="Colour theme"
-      className={cn(
-        "inline-flex items-center gap-0.5 rounded-inner border border-line p-0.5",
-        className,
-      )}
-    >
-      {OPTIONS.map((opt) => {
-        const Icon = opt.icon;
+    <div role="radiogroup" aria-label="Colour theme" className={cn("inline-flex border border-rule", className)}>
+      {OPTIONS.map((opt, i) => {
         const checked = current === opt.value;
         return (
           <button
@@ -36,14 +27,14 @@ export function ThemeToggle({ className }: { className?: string }) {
             type="button"
             role="radio"
             aria-checked={checked}
-            aria-label={opt.label}
             onClick={() => setTheme(opt.value)}
             className={cn(
-              "inline-flex h-11 w-11 items-center justify-center rounded-inner transition-colors",
-              checked ? "bg-panel text-ink" : "text-muted hover:text-ink",
+              "min-h-11 cursor-pointer border-0 px-3 text-[13px] font-medium",
+              i > 0 && "border-l border-rule",
+              checked ? "bg-ink text-bg" : "bg-transparent text-ink hover:bg-panel",
             )}
           >
-            <Icon className="h-4 w-4" aria-hidden="true" />
+            {opt.label}
           </button>
         );
       })}
