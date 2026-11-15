@@ -13,7 +13,7 @@ export function Eyebrow({
     <p
       className={cn(
         "kicker flex w-fit items-center gap-2",
-        tone === "inverse" ? "text-inv-muted" : "",
+        tone === "inverse" ? "text-inv-muted" : "text-brand",
         className,
       )}
       {...props}

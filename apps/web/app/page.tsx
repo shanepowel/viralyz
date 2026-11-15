@@ -127,7 +127,7 @@ export default async function HomePage() {
         <div className="min-w-0">
           <p className="kicker m-0">Ad creative for Meta and TikTok, checked before you spend</p>
           <h1 className="m-0 mt-4 font-display text-[clamp(42px,5.4vw,72px)]">
-            Make the ad. Mark it up. Then spend on it.
+            Make the ad. <span className="hl">Mark it up.</span> Then spend on it.
           </h1>
           <p className="m-0 mt-6 max-w-[540px] text-[19px] text-ink-2">
             Viralyz makes on-brand ads for every placement and measures each
@@ -154,7 +154,7 @@ export default async function HomePage() {
             />
             <button
               type="submit"
-              className="min-h-13 flex-none cursor-pointer rounded-inner border border-btn bg-btn px-[22px] text-[15px] font-semibold text-btn-ink hover:opacity-85"
+              className="min-h-13 flex-none cursor-pointer rounded-inner border border-btn bg-btn px-[22px] text-[15px] font-semibold text-btn-ink shadow-[5px_5px_0_var(--vz-accent)] hover:opacity-85"
             >
               Make and check
             </button>
@@ -166,11 +166,12 @@ export default async function HomePage() {
         <ProofDemo />
       </Container>
 
-      {/* A batch, as a contact sheet */}
-      <Container className="pb-20">
+      {/* A batch, as a contact sheet, on the tinted band */}
+      <div className="border-y border-line bg-tint">
+      <Container className="py-16">
         <SectionHeader
           eyebrow="One batch"
-          title="Every placement, each with its verdict"
+          title={<>Every placement, each with <span className="hl">its verdict</span></>}
           lede="A batch comes back as a contact sheet. Green is cleared. Red says what to change. Nothing is hidden behind a score."
         />
         <div className="grid grid-cols-2 items-end gap-x-4 gap-y-6 sm:grid-cols-3 lg:grid-cols-5">
@@ -195,12 +196,13 @@ export default async function HomePage() {
           {placements.join(", ")}.
         </p>
       </Container>
+      </div>
 
       {/* How it works */}
-      <Container className="pb-20">
+      <Container className="py-20">
         <SectionHeader
           eyebrow="How it works"
-          title="Five steps, and the check sits in the middle"
+          title={<>Five steps, and the check sits <span className="hl">in the middle</span></>}
           lede="Between making the ad and paying for it. That is the step other tools skip."
         />
         <div className="grid grid-cols-1 gap-x-8 md:grid-cols-[200px_1fr]">
@@ -233,7 +235,7 @@ export default async function HomePage() {
       <InversePanel className="flex flex-wrap items-center gap-12">
         <div className="flex min-w-0 flex-[1_1_380px] flex-col gap-[18px]">
           <Eyebrow tone="inverse">Results</Eyebrow>
-          <h2 className="m-0 font-display text-[clamp(34px,4.6vw,56px)]">
+          <h2 className="m-0 font-display text-[clamp(34px,4.6vw,56px)] text-accent">
             No chart until there’s data to draw it.
           </h2>
           <p className="m-0 text-inv-muted">

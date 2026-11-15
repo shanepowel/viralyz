@@ -34,7 +34,7 @@ export function FinalCtaBand({
         )}
       >
         <div>
-        <h2 className="m-0 max-w-[860px] font-display text-[clamp(34px,5vw,64px)] text-balance">
+        <h2 className={cn("m-0 max-w-[860px] font-display text-[clamp(34px,5vw,64px)] text-balance", inverse && "text-accent")}>
           {title}
         </h2>
         {subtitle ? (

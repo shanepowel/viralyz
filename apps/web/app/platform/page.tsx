@@ -87,7 +87,7 @@ export default async function PlatformPage() {
       <Container className="flex flex-col items-start gap-[22px] pb-12 pt-[clamp(48px,7vw,88px)]">
         <Eyebrow>Platform</Eyebrow>
         <h1 className="m-0 max-w-[1000px] font-display text-[clamp(42px,6.2vw,80px)]">
-          Five steps, and every ad is checked before you see it.
+          Five steps, and every ad is <span className="hl">checked before you see it.</span>
         </h1>
         <p className="m-0 max-w-[600px] text-[19px] text-muted">
           Discover, Brand, Studio, Pre-flight, Results. What you see below is the product, drawn with fictional brands.

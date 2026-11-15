@@ -17,7 +17,7 @@ export function Section({
       id={id}
       className={cn(
         "py-14 md:py-20",
-        tone === "sunken" && "border-y border-line bg-panel",
+        tone === "sunken" && "border-y border-line bg-tint",
         className,
       )}
       {...props}

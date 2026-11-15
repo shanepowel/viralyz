@@ -35,7 +35,7 @@ export async function GET(req: NextRequest) {
           display: "flex",
           flexDirection: "column",
           justifyContent: "space-between",
-          background: "#F4F4F1",
+          background: "#F5EFE2",
           color: "#111110",
           padding: "64px 72px",
           fontFamily: display ? "Schibsted Grotesk" : "sans-serif",
@@ -53,7 +53,7 @@ export async function GET(req: NextRequest) {
             }}
           >
             <svg width="24" height="24" viewBox="0 0 14 14">
-              <path d="M2 7.5l3.2 3.2L12 3.5" fill="none" stroke="#0B6F3F" strokeWidth="2.4" strokeLinecap="square" />
+              <path d="M2 7.5l3.2 3.2L12 3.5" fill="none" stroke="#0A6338" strokeWidth="2.4" strokeLinecap="square" />
             </svg>
           </div>
           <div style={{ fontSize: 40, fontWeight: 800, letterSpacing: "-0.035em" }}>viralyz</div>
@@ -80,7 +80,7 @@ export async function GET(req: NextRequest) {
               fontSize: 22,
               letterSpacing: "0.06em",
               textTransform: "uppercase",
-              color: "#62625E",
+              color: "#5C574C",
               fontFamily: mono ? "IBM Plex Mono" : "sans-serif",
             }}
           >

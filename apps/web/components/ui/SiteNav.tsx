@@ -41,10 +41,9 @@ export function SiteNav() {
                   aria-current={active ? "page" : undefined}
                   className={cn(
                     "inline-flex min-h-11 items-center hover:text-muted",
-                    active && "font-semibold",
                   )}
                 >
-                  {link.label}
+                  <span className={cn(active && "hl font-semibold")}>{link.label}</span>
                 </Link>
               </li>
             );

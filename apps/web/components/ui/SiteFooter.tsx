@@ -18,7 +18,8 @@ export function SiteFooter() {
   const [state, action, pending] = useActionState(submitNewsletter, initial);
 
   return (
-    <footer className="mx-auto flex max-w-site flex-col gap-10 border-t border-rule px-[clamp(16px,4vw,40px)] pb-10 pt-12">
+    <footer className="border-t border-rule bg-panel">
+      <div className="mx-auto flex max-w-site flex-col gap-10 px-[clamp(16px,4vw,40px)] pb-10 pt-12">
       <div className="grid grid-cols-[repeat(auto-fit,minmax(160px,1fr))] gap-8 text-[15px]">
         <div className="flex flex-col gap-2 sm:col-span-2 lg:col-span-1">
           <Logo className="self-start" />
@@ -84,6 +85,7 @@ export function SiteFooter() {
         <span>Not affiliated with Meta or TikTok</span>
         <ThemeToggle />
       </div>
+    </div>
     </footer>
   );
 }
