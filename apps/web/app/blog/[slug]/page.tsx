@@ -8,11 +8,7 @@ import { MarketingShell } from "@/components/marketing/marketing-shell";
 import { PortableBody } from "@/components/media/PortableBody";
 import { SanityImage } from "@/components/media/SanityImage";
 import { JsonLd } from "@/components/seo/JsonLd";
-import { Breadcrumbs } from "@/components/ui/Breadcrumbs";
 import { Container } from "@/components/ui/Container";
-import { Eyebrow } from "@/components/ui/Eyebrow";
-import { Num } from "@/components/ui/Num";
-import { Section } from "@/components/ui/Section";
 import { formatPostDate, getPostBySlug, PLACEHOLDER_POSTS } from "@/lib/blog";
 import { pageMeta } from "@/lib/meta";
 import { routes, SITE_URL } from "@/lib/site";
@@ -186,76 +182,40 @@ export default async function BlogPostPage({
   return (
     <MarketingShell>
       <JsonLd data={jsonLd} />
-      <Section className="pt-20 md:pt-28 pb-8">
-        <Container>
-          <article>
-            <div className="max-w-2xl">
-              <Breadcrumbs
-                items={[
-                  { label: "Home", href: routes.home },
-                  { label: "Blog", href: routes.blog },
-                  { label: post.title },
-                ]}
-              />
-              <Eyebrow className="mt-6">
-                {post.category?.title ?? "Post"}
-              </Eyebrow>
-              <h1 className="mt-3 font-display text-4xl font-semibold tracking-tight md:text-5xl">
-                {post.title}
-              </h1>
-              <p className="mt-4 text-base leading-relaxed text-muted">
-                {post.excerpt}
-              </p>
-              <p className="mt-3 text-sm text-muted">
-                {formatPostDate(post.publishedAt)}
-                {post.readingTime ? (
-                  <>
-                    {" "}
-                    · <Num>{post.readingTime}</Num> min read
-                  </>
-                ) : null}
-                {post.author?.name ? ` · ${post.author.name}` : " · Viralyz Team"}
-              </p>
+      <Container className="pb-20 pt-[clamp(40px,6vw,80px)]">
+        <article>
+          <p className="m-0 mb-4 font-mono text-[12px] text-muted">
+            <Link href={routes.blog} className="underline underline-offset-4 hover:text-ink">
+              Notes
+            </Link>{" "}
+            / {post.category?.title ?? "Note"}
+          </p>
+          <h1 className="m-0 max-w-[900px] font-display text-[clamp(34px,5vw,60px)] text-balance">{post.title}</h1>
+          <p className="m-0 mt-5 max-w-[680px] text-[19px] text-ink-2">{post.excerpt}</p>
+
+          {post.coverImage ? (
+            <div className="mt-8 border border-rule">
+              <SanityImage value={post.coverImage as never} width={1600} height={900} priority sizes="100vw" className="w-full" />
             </div>
+          ) : null}
 
-            {post.coverImage ? (
-              <div className="mt-10 overflow-hidden border border-rule">
-                <SanityImage
-                  value={post.coverImage as never}
-                  width={1600}
-                  height={900}
-                  priority
-                  sizes="100vw"
-                  className="w-full"
-                />
-              </div>
-            ) : null}
-
-            <div className="mt-10 max-w-prose">
-              <PortableBody value={post.body} />
-            </div>
-
-            <div className="mt-12 max-w-prose rounded-inner border border-line bg-card p-5">
-              <p className="text-sm font-medium text-ink">
-                {post.author?.name ?? "Viralyz Team"}
-              </p>
-              <p className="mt-1 text-sm text-muted">
-                {post.author?.bio ??
-                  "Notes from building and checking ad creative."}
-              </p>
-            </div>
-
-            <p className="mt-10">
-              <Link
-                href={routes.blog}
-                className="text-sm text-ink underline underline-offset-4"
-              >
-                All notes
-              </Link>
+          <div className="mt-8 grid grid-cols-1 gap-x-8 gap-y-4 border-t border-rule pt-6 md:grid-cols-[200px_1fr]">
+            <p className="m-0 font-mono text-[12px] text-muted">
+              {formatPostDate(post.publishedAt)}
+              {post.readingTime ? <span className="block">{post.readingTime} min read</span> : null}
+              <span className="block">{post.author?.name ?? "Viralyz"}</span>
             </p>
-          </article>
-        </Container>
-      </Section>
+            <div className="max-w-[680px] text-[18px] leading-[1.6]">
+              <PortableBody value={post.body} />
+              <p className="m-0 mt-10 border-t border-line pt-4 text-[15px]">
+                <Link href={routes.blog} className="font-semibold underline underline-offset-4">
+                  All notes
+                </Link>
+              </p>
+            </div>
+          </div>
+        </article>
+      </Container>
       <FinalCtaBand
         title="Check your next ad before it costs you."
         subtitle="10 free credits on signup. No card required."

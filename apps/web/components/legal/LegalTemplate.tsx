@@ -22,6 +22,12 @@ function extractHeadings(body: unknown): Heading[] {
     .filter((h) => h.text);
 }
 
+/** Sanity stores an ISO date; the page shows "13 November 2026". */
+function formatUpdated(value: string) {
+  if (!/^\d{4}-\d{2}-\d{2}/.test(value)) return value;
+  return new Date(value).toLocaleDateString("en-GB", { day: "numeric", month: "long", year: "numeric", timeZone: "UTC" });
+}
+
 function slug(text: string, i: number) {
   return `s-${i + 1}-${text.toLowerCase().replace(/[^a-z0-9]+/g, "-").slice(0, 40)}`;
 }
@@ -55,7 +61,7 @@ export function LegalTemplate({
         as="h1"
         eyebrow="Legal"
         title={title}
-        lede={lastUpdated ? `Last updated ${lastUpdated}.` : undefined}
+        lede={lastUpdated ? `Last updated ${formatUpdated(lastUpdated)}.` : undefined}
       />
       <div className="grid grid-cols-1 gap-x-8 gap-y-8 border-t border-rule pt-6 md:grid-cols-[200px_1fr]">
         {headings.length ? (

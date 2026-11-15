@@ -45,6 +45,7 @@ const POST_CARD = `{
   publishedAt,
   scoreBadge,
   "coverGradient": coalesce(coverImage.asset->url, ""),
+  "coverAlt": coverImage.alt,
   "category": category->{title, "slug": slug.current}
 }`;
 
@@ -58,12 +59,15 @@ export async function fetchPostsFromSanity(): Promise<BlogPost[]> {
       publishedAt: string;
       scoreBadge?: string;
       coverGradient?: string;
+      coverAlt?: string;
       category: { title: string; slug: string };
     }>
   >(`*[_type == "post" && defined(slug.current)] | order(publishedAt desc) ${POST_CARD}`);
   if (!rows?.length) return [];
   return rows.map((r) => ({
     ...r,
+    // The cover as an image the notes list can show, not only as a background.
+    cover: r.coverGradient ? { src: r.coverGradient, alt: r.coverAlt ?? "" } : null,
     coverGradient: r.coverGradient
       ? `center / cover url(${r.coverGradient})`
       : "var(--vz-panel)",
@@ -83,6 +87,7 @@ export async function fetchPostBySlugFromSanity(
     publishedAt: string;
     scoreBadge?: string;
     coverGradient?: string;
+    coverAlt?: string;
     category: { title: string; slug: string };
     author?: { name: string; role?: string };
     seoTitle?: string;
@@ -92,6 +97,7 @@ export async function fetchPostBySlugFromSanity(
     `*[_type == "post" && slug.current == $slug][0]{
       _id, title, "slug": slug.current, excerpt, publishedAt, scoreBadge,
       "coverGradient": coalesce(coverImage.asset->url, ""),
+      "coverAlt": coverImage.alt,
       "category": category->{title, "slug": slug.current},
       "author": author->{name, role},
       seoTitle, seoDescription,
@@ -112,6 +118,7 @@ export async function fetchPostBySlugFromSanity(
     excerpt: row.excerpt,
     publishedAt: row.publishedAt,
     scoreBadge: row.scoreBadge,
+    cover: row.coverGradient ? { src: row.coverGradient, alt: row.coverAlt ?? "" } : null,
     coverGradient: row.coverGradient
       ? `center / cover url(${row.coverGradient})`
       : "var(--vz-panel)",

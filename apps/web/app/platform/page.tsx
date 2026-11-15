@@ -101,16 +101,6 @@ export default async function PlatformPage() {
               autoplayLoop
             />
           </div>
-        ) : list[0]?.screenshot ? (
-          <div className="mt-6 w-full overflow-hidden border border-rule">
-            <SanityImage
-              value={list[0].screenshot as never}
-              width={1400}
-              height={800}
-              priority
-              sizes="100vw"
-            />
-          </div>
         ) : null}
       </Container>
 
