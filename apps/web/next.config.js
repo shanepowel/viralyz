@@ -47,6 +47,14 @@ const nextConfig = {
       ].map((slug) => ({ source: `/blog/${slug}`, destination: "/blog", permanent: true })),
       { source: "/tools/engagement-calculator", destination: "/tools/safe-zone-checker", permanent: true },
       { source: "/tools/thumbnail-checker", destination: "/tools/ad-readability-checker", permanent: true },
+      // Creator-era tools and pages Search Console still reports as 404.
+      ...["best-time-to-post", "influencer-price-calculator", "fake-follower-checker"].map((slug) => ({
+        source: `/tools/${slug}`,
+        destination: "/tools",
+        permanent: true,
+      })),
+      { source: "/platform/viral-score", destination: "/platform/pre-flight", permanent: true },
+      { source: "/modern-slavery", destination: "/trust", permanent: true },
       {
         source: "/report",
         destination: "/platform",
